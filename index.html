@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Improve Your Mood 5</title>
+  <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.6.1/clipboard.min.js"></script>
+  <script src="assets/js/ngclipboard.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+  <script src="assets/js/moodEngine.js"></script>
+</head>
+
+<body class="center" ng-app="ImproveYourMood" ng-controller="moodEngine" ng-style="{'background-color': randomColour}" ng-cloak>
+  <h2 id="logo">improve your mood <span id="version">5</span></h2>
+  <main ng-click="reloadEngine()">
+    <br>
+    <div class="container">
+      <p id="quote-text">{{ randomQuote }}</p>
+    </div><br>
+  </main>
+  <div class="fixed-action-btn horizontal">
+    <a class="btn-floating btn-large white">
+      <i class="large material-icons black-text">menu</i>
+    </a>
+    <ul>
+      <li><a class="btn-floating white copy" ngclipboard data-clipboard-text="{{ randomQuote }}"><i class="material-icons" ng-style="{'color': randomColour}">content_copy</i></a></li>
+      <li id="enable-auto-reload"><a class="btn-floating white"><i class="material-icons" ng-style="{'color': randomColour}">autorenew</i></a></li>
+      <li id="disable-auto-reload" class="hide"><a class="btn-floating white"><i class="material-icons" ng-style="{'color': randomColour}">close</i></a></li>
+    </ul>
+  </div>
+  <footer class="page-footer transparent">
+    <div class="footer-copyright transparent">
+      <div class="container">
+        V5 Build 5100 | &copy; {{ date | date:'yyyy' }} <a href="https://deanlevinson.com.au" target="_blank">Dean Levinson</a>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>
