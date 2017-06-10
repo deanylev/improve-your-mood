@@ -86,8 +86,6 @@ $(document).ready(function() {
 
   new Clipboard('.copy');
 
-  Materialize.toast('Click anywhere (or press spacebar) to reload!', 800);
-
   window.setInterval(function() {
 
     $('.auto-reload').click();
