@@ -74,6 +74,9 @@ app.controller('moodEngine', ['$scope', function($scope) {
 
 $(document).ready(function() {
 
+  meSpeak.loadConfig('assets/js/meSpeak/mespeak_config.json');
+  meSpeak.loadVoice('assets/js/meSpeak/en-us.json');
+
   $(this).keypress(function(e) {
 
     if (e.which == 32) {
@@ -98,21 +101,22 @@ $(document).ready(function() {
 
   });
 
-  $('#enable-auto-reload').click(function() {
+  $('#toggle-auto-reload').click(function() {
 
-    Materialize.toast('Auto Reload Enabled!', 2500);
-    $('main').addClass('auto-reload');
-    $('#disable-auto-reload').removeClass('hide');
-    $('#enable-auto-reload').addClass('hide');
+    Materialize.toast('Auto Reload Toggled!', 2500);
+    $('main').toggleClass('auto-reload');
+    $('#disable-auto-reload-icon').toggleClass('hide');
+    $('#enable-auto-reload-icon').toggleClass('hide');
 
   });
 
-  $('#disable-auto-reload').click(function() {
+  $('#speak-quote').click(function() {
 
-    Materialize.toast('Auto Reload Disabled!', 2500);
-    $('main').removeClass('auto-reload');
-    $('#disable-auto-reload').addClass('hide');
-    $('#enable-auto-reload').removeClass('hide');
+    $('.voice-toast').remove();
+    Materialize.toast('Text Spoken!', 2500, 'voice-toast');
+    var text = $('#quote-text').text();
+    meSpeak.stop();
+    meSpeak.speak(text);
 
   });
 

@@ -14,6 +14,7 @@
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.6.1/clipboard.min.js"></script>
   <script src="assets/js/ngclipboard.min.js"></script>
+  <script src="assets/js/meSpeak/mespeak.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
   <script src="assets/js/moodEngine.js"></script>
@@ -32,15 +33,15 @@
       <i class="large material-icons black-text">menu</i>
     </a>
     <ul>
-      <li><a class="btn-floating white copy" ngclipboard data-clipboard-text="{{ randomQuote }}"><i class="material-icons" ng-style="{'color': randomColour}">content_copy</i></a></li>
-      <li id="enable-auto-reload"><a class="btn-floating white"><i class="material-icons" ng-style="{'color': randomColour}">autorenew</i></a></li>
-      <li id="disable-auto-reload" class="hide"><a class="btn-floating white"><i class="material-icons" ng-style="{'color': randomColour}">close</i></a></li>
+      <li><a class="btn-floating white copy waves-effect" ngclipboard data-clipboard-text="{{ randomQuote }}" title="Copy Text"><i class="material-icons" ng-style="{'color': randomColour}">content_copy</i></a></li>
+      <li><a class="btn-floating white waves-effect" id="toggle-auto-reload" title="Toggle Auto Reload"><i class="material-icons" ng-style="{'color': randomColour}" id="enable-auto-reload-icon">autorenew</i><i class="material-icons hide" ng-style="{'color': randomColour}" id="disable-auto-reload-icon">close</i></a></li>
+      <li><a class="btn-floating white waves-effect" id="speak-quote" title="Speak Text"><i class="material-icons" ng-style="{'color': randomColour}">volume_up</i><i class="material-icons hide" ng-style="{'color': randomColour}" id="disable-auto-reload-icon">close</i></a></li>
     </ul>
   </div>
   <footer class="page-footer transparent">
     <div class="footer-copyright transparent">
       <div class="container">
-        V5 Build 5100 | &copy; {{ date | date:'yyyy' }} <a href="https://deanlevinson.com.au" target="_blank">Dean Levinson</a>
+        V5 Build 5200 | &copy; {{ date | date:'yyyy' }} <a href="https://deanlevinson.com.au" target="_blank">Dean Levinson</a>
       </div>
     </div>
   </footer>
