@@ -1,4 +1,8 @@
-@import url('https://fonts.googleapis.com/css?family=Oxygen|Raleway:400|Material+Icons');
+@font-face {
+  font-family: 'RT Raleway';
+  src: url('fonts/RTRaleway-Regular.ttf');
+}
+
 body {
   display: flex;
   min-height: 100vh;
@@ -21,8 +25,7 @@ a:hover {
 }
 
 #logo {
-  font-family: 'Raleway';
-  font-feature-settings: 'lnum' 1;
+  font-family: 'RT Raleway';
 }
 
 #reload-button {
