@@ -37,7 +37,7 @@ main {
 @media only screen and (max-width: 599px) {
   #quote {
     font-size: 30px !important;
-    margin-top: 35%;
+    margin-top: 25%;
   }
   #logo {
     font-size: 36px;
