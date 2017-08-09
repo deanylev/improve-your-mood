@@ -21,3 +21,8 @@ input[name="content"] {
   font-family: 'Oxygen';
   padding-top: 75px;
 }
+
+.action-button {
+  width: 75px;
+  margin: 2px;
+}

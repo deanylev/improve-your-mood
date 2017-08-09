@@ -82,13 +82,20 @@
 
                         <?php } ?>
 
-                        <input type="submit" value="Edit" class="btn btn-primary">
+                        <input type="submit" value="Edit" class="btn btn-primary action-button">
+                      </form>
+                    </td>
+                    <td>
+                      <form action="active.php" method="POST">
+                        <input type="hidden" name="id" value="<?php echo $row["id"]; ?>">
+                        <input type="hidden" name="action" value="<?php echo !$row["active"]; ?>">
+                        <input type="submit" value="<?php echo $row["active"] ? "Inactive" : "Active"; ?>" class="btn btn-primary action-button">
                       </form>
                     </td>
                     <td>
                       <form action="delete.php" method="POST">
                         <input type="hidden" name="id" value="<?php echo $row["id"]; ?>">
-                        <input type="submit" value="Delete" class="btn btn-primary">
+                        <input type="submit" value="Delete" class="btn btn-primary action-button">
                       </form>
                     </td>
                   </tr>
