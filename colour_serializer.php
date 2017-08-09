@@ -5,7 +5,7 @@
 
   include("sql.php");
 
-  $sql = "SELECT * FROM yourmood.colours";
+  $sql = "SELECT * FROM yourmood.colours WHERE `active` = 1";
   $result = $conn->query($sql);
 
   $colours = array();

@@ -5,7 +5,7 @@
 
   include("sql.php");
 
-  $sql = "SELECT * FROM yourmood.decrease";
+  $sql = "SELECT * FROM yourmood.decrease WHERE `active` = 1";
   $result = $conn->query($sql);
 
   $quotes = array();
