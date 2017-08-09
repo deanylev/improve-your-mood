@@ -4,7 +4,7 @@
   $id = $_POST["id"];
   $content = $_POST["content"];
   include("../../sql.php");
-  $sql = "INSERT INTO yourmood.decrease (quote) VALUES ('$content')";
+  $sql = "INSERT INTO yourmood.decrease (active, quote) VALUES (1, '$content')";
   if ($conn->query($sql) === false) {
       echo "Error: " . $sql . "<br>" . $conn->error;
   }
