@@ -33,6 +33,7 @@
           <li class="<?php if ($title == "quote" && isset($version) && $version == "improve") { echo "active"; } ?>"><a href="../improve_quotes">Improve Quotes</a></li>
           <li class="<?php if ($title == "quote" && isset($version) && $version == "decrease") { echo "active"; } ?>"><a href="../decrease_quotes">Decrease Quotes</a></li>
           <li class="<?php if ($title == "colour") { echo "active"; } ?>"><a href="../colours">Colours</a></li>
+          <li class="<?php if ($title == "setting") { echo "active"; } ?>"><a href="../settings">Settings</a></li>
           <li><a href="../preview">Preview</a></li>
         </ul>
       </div>
@@ -51,9 +52,19 @@
     <h1>New <?php echo ucwords($title); ?></h1>
     <form action="new.php" method="POST">
       <input type="text" name="content" placeholder="Enter a <?php echo $title; ?>" id="new-input">
+
       <?php if ($title == "colour") { ?>
+
         <div class="colour-preview" id="colour-preview"></div>
+
       <?php } ?>
+
+      <?php if ($title == "setting") { ?>
+
+        <input type="text" name="value" placeholder="Enter a value">
+
+      <?php } ?>
+
       <input type="submit" value="Save" class="btn btn-primary">
     </form>
     <br>
@@ -79,6 +90,12 @@
                         <?php if ($title == "colour") { ?>
 
                           <div class="colour-preview" style="background-color: #<?php echo $row["colour"]; ?>"></div>
+
+                        <?php } ?>
+
+                        <?php if ($title == "setting") { ?>
+
+                          <input type="text" name="value" value="<?php echo $row["value"]; ?>">
 
                         <?php } ?>
 

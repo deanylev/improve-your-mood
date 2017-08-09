@@ -1,5 +1,6 @@
 var whatQuotes;
 var whatColours;
+var whatSettings;
 
 $(document).ready(function() {
 
@@ -75,7 +76,49 @@ $(document).ready(function() {
 
     };
 
+    $(document).keypress(function(e) {
+
+      if (settings['reload_keys'].includes(e.which) && $('main').hasClass('manual-reload')) {
+
+        reloadEngine();
+
+      }
+
+    });
+
     reloadColour();
+
+  });
+
+  var settings;
+
+  $.getJSON('settings_serializer.php', function(data) {
+
+    settings = {};
+
+    $.each(data, function(key, val) {
+
+      settings[key] = val;
+
+    });
+
+    window.setInterval(function() {
+
+      if ($('#auto-reload-disabled').hasClass('hide')) {
+
+        reloadEngine();
+
+      }
+
+    }, settings['reload_interval']);
+
+    $('#toggle-auto-reload').click(function() {
+
+      $('.auto-reload-icon').toggleClass('hide');
+      $('main').toggleClass('manual-reload');
+      Materialize.toast('Auto Reload Toggled!', settings['toast_interval']);
+
+    });
 
   });
 
@@ -96,38 +139,9 @@ $(document).ready(function() {
 
   });
 
-  $(this).keypress(function(e) {
-
-    if (e.which === 32 && $('main').hasClass('manual-reload')) {
-
-      reloadEngine();
-
-    }
-
-
-  });
-
   $('#logo').hover(function() {
 
     $('#build-version').toggleClass('hide');
-
-  });
-
-  window.setInterval(function() {
-
-    if ($('#auto-reload-disabled').hasClass('hide')) {
-
-      reloadEngine();
-
-    }
-
-  }, 3500);
-
-  $('#toggle-auto-reload').click(function() {
-
-    $('.auto-reload-icon').toggleClass('hide');
-    $('main').toggleClass('manual-reload');
-    Materialize.toast('Auto Reload Toggled!', 1000);
 
   });
 
@@ -140,6 +154,12 @@ $(document).ready(function() {
   whatColours = function() {
 
     console.log(colours);
+
+  };
+
+  whatSettings = function() {
+
+    console.log(settings);
 
   };
 
