@@ -17,7 +17,7 @@ $(document).ready(function() {
   var quoteNum;
   var colourNum;
 
-  $.getJSON(version + '_quote_serializer.php', function(data) {
+  $.getJSON(version.toLowerCase() + '_quote_serializer.php', function(data) {
 
     quotes = [];
 
