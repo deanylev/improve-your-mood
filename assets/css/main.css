@@ -1,14 +1,10 @@
-@import url('https://fonts.googleapis.com/css?family=Material+Icons|Oxygen');
-
-@font-face {
-  font-family: 'RT Raleway';
-  src: url('fonts/RTRaleway-Regular.ttf');
-}
-
+@import url('https://fonts.googleapis.com/css?family=Material+Icons|Raleway|Oxygen');
 body {
   display: flex;
   min-height: 100vh;
   flex-direction: column;
+  color: white;
+  text-align: center;
   overflow: hidden;
 }
 
@@ -16,50 +12,34 @@ main {
   flex: 1 0 auto;
 }
 
-a:hover {
-  text-decoration: underline;
-}
-
-#quote-text {
-  font-size: 43px;
-  font-family: 'Oxygen';
-  margin-top: 150px;
-}
-
-#logo {
-  font-family: 'RT Raleway';
-}
-
-#reload-button {
-  margin: 55px 0px 100px 0px;
-}
-
-#reload-button-icon {
-  margin-left: -15px;
-}
-
-#reload-button-text {
-  margin: 0 -10px 0 -10px;
-}
-
-a, #logo, #quote-text, .footer-copyright {
+.footer-copyright {
   color: white !important;
 }
 
+#logo {
+  font-family: 'Raleway', Helvetica, Arial;
+}
+
+#quote {
+  font-family: 'Oxygen', Helvetica, Arial;
+  font-size: 43px;
+  margin-top: 200px;
+}
+
+#personal-link {
+  color: white;
+}
+
+#personal-link:hover {
+  text-decoration: underline;
+}
+
 @media only screen and (max-width: 599px) {
-  #quote-text {
+  #quote {
     font-size: 30px !important;
+    margin-top: 35%;
   }
   #logo {
     font-size: 40px;
-  }
-  #reload-button {
-    margin: 20px 0px 50px 0px !important;
-  }
-  #version {
-    display: none;
-  }
-  footer {
-    display: none;
   }
 }

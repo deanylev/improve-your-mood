@@ -5,44 +5,33 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <meta name="description" content="Gives you randomly chosen compliments across randomly chosen beautiful colours to improve your mood!">
-  <title>Improve Your Mood 5</title>
+  <title>Loading...</title>
   <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
   <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css">
   <link rel="stylesheet" href="assets/css/main.css">
-  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.6.1/clipboard.min.js"></script>
-  <script src="assets/js/ngclipboard.min.js"></script>
-  <script src="assets/js/meSpeak/mespeak.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
-  <script src="assets/js/moodEngine.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>
   <script src="assets/js/main.js"></script>
 </head>
 
-<body class="center" ng-app="ImproveYourMood" ng-controller="moodEngine" ng-style="{'background-color': randomColour}" ng-cloak>
-  <h2 id="logo">improve your mood <span id="version">5</span></h2>
-  <main ng-click="reloadEngine()">
-    <br>
-    <div class="container">
-      <p id="quote-text">{{ randomQuote }}</p>
-    </div><br>
+<body>
+  <h2 id="logo"><span id="logo-version"></span> your mood<span class="hide" id="build-version"> 6</span></h2>
+  <main class="container manual-reload">
+    <p id="quote"></p>
   </main>
   <div class="fixed-action-btn horizontal">
-    <a class="btn-floating btn-large white">
-      <i class="large material-icons black-text">menu</i>
+    <a class="btn-floating btn-large white" id="toggle-auto-reload">
+      <i class="large material-icons black-text auto-reload-icon" id="auto-reload-disabled">autorenew</i>
+      <i class="large material-icons black-text auto-reload-icon hide">close</i>
     </a>
-    <ul>
-      <li><a class="btn-floating white copy waves-effect" ngclipboard data-clipboard-text="{{ randomQuote }}" title="Copy Text"><i class="material-icons" ng-style="{'color': randomColour}">content_copy</i></a></li>
-      <li><a class="btn-floating white waves-effect" id="toggle-auto-reload" title="Toggle Auto Reload"><i class="material-icons" ng-style="{'color': randomColour}" id="enable-auto-reload-icon">autorenew</i><i class="material-icons hide" ng-style="{'color': randomColour}" id="disable-auto-reload-icon">close</i></a></li>
-      <li><a class="btn-floating white waves-effect" id="speak-quote" title="Speak Text"><i class="material-icons" ng-style="{'color': randomColour}">volume_up</i><i class="material-icons hide" ng-style="{'color': randomColour}" id="disable-auto-reload-icon">close</i></a></li>
-    </ul>
   </div>
-  <footer class="page-footer transparent">
+  <footer class="page-footer transparent hide-on-med-and-down">
     <div class="footer-copyright transparent">
       <div class="container">
-        V5 Build 5200 | &copy; {{ date | date:'yyyy' }} <a href="https://deanlevinson.com.au" target="_blank">Dean Levinson</a>
+        <span id="footer-version"></span> Your Mood 6 | &copy;
+        <span id="year"></span>
+        <a href="https://deanlevinson.com.au" target="_blank" id="personal-link">Dean Levinson</a>
       </div>
     </div>
   </footer>

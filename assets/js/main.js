@@ -1,49 +1,146 @@
+var whatQuotes;
+var whatColours;
+
 $(document).ready(function() {
 
-  meSpeak.loadConfig('assets/js/meSpeak/mespeak_config.json');
-  meSpeak.loadVoice('assets/js/meSpeak/en-us.json');
+  var version = 'Improve';
 
-  $(this).keypress(function(e) {
+  $('title').text(version + ' Your Mood');
+  $('#logo-version').text(version.toLowerCase());
+  $('#footer-version').text(version);
 
-    if (e.which == 32) {
+  $('#year').text(new Date().getFullYear());
 
-      $('main').click();
+  var quotes;
+  var reloadQuote;
+  var reloadColour;
+  var quoteNum;
+  var colourNum;
+
+  $.getJSON(version + '_quote_serializer.php', function(data) {
+
+    quotes = [];
+
+    $.each(data, function(key, val) {
+
+      quotes.push(val);
+
+    });
+
+    reloadQuote = function() {
+
+      lastNum = quoteNum;
+      quoteNum = Math.floor(quotes.length * Math.random());
+
+      while (lastNum === quoteNum) {
+
+        quoteNum = Math.floor(quotes.length * Math.random());
+
+      }
+
+      let quote = quotes[quoteNum];
+
+      $('#quote').text(quote);
+
+    };
+
+    reloadQuote();
+
+  });
+
+  $.getJSON('colour_serializer.php', function(data) {
+
+    colours = [];
+
+    $.each(data, function(key, val) {
+
+      colours.push(val);
+
+    });
+
+    reloadColour = function() {
+
+      lastNum = colourNum;
+      colourNum = Math.floor(colours.length * Math.random());
+
+      while (lastNum === colourNum) {
+
+        colourNum = Math.floor(colours.length * Math.random());
+
+      }
+
+      let colour = colours[colourNum];
+
+      $('body').css('background-color', '#' + colour);
+
+    };
+
+    reloadColour();
+
+  });
+
+  function reloadEngine() {
+
+    reloadQuote();
+    reloadColour();
+
+  }
+
+  $('main').click(function() {
+
+    if ($(this).hasClass('manual-reload')) {
+
+      reloadEngine();
 
     }
 
   });
 
-  new Clipboard('.copy');
+  $(this).keypress(function(e) {
+
+    if (e.which === 32 && $('main').hasClass('manual-reload')) {
+
+      reloadEngine();
+
+    }
+
+
+  });
+
+  $('#logo').hover(function() {
+
+    $('#build-version').toggleClass('hide');
+
+  });
 
   window.setInterval(function() {
 
-    $('.auto-reload').click();
+    if ($('#auto-reload-disabled').hasClass('hide')) {
+
+      reloadEngine();
+
+    }
 
   }, 3500);
 
-  $('.copy').click(function() {
-
-    Materialize.toast('Text Copied!', 2500);
-
-  });
-
   $('#toggle-auto-reload').click(function() {
 
-    Materialize.toast('Auto Reload Toggled!', 2500);
-    $('main').toggleClass('auto-reload');
-    $('#disable-auto-reload-icon').toggleClass('hide');
-    $('#enable-auto-reload-icon').toggleClass('hide');
+    $('.auto-reload-icon').toggleClass('hide');
+    $('main').toggleClass('manual-reload');
+    Materialize.toast('Auto Reload Toggled!', 1000);
 
   });
 
-  $('#speak-quote').click(function() {
+  whatQuotes = function() {
 
-    $('.voice-toast').remove();
-    Materialize.toast('Text Spoken!', 2500, 'voice-toast');
-    var text = $('#quote-text').text();
-    meSpeak.stop();
-    meSpeak.speak(text);
+    console.log(quotes);
 
-  });
+  };
+
+  whatColours = function() {
+
+    console.log(colours);
+
+  };
 
 });

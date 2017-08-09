@@ -1,0 +1,23 @@
+@import url('https://fonts.googleapis.com/css?family=Oxygen');
+input[name="content"] {
+  width: 600px;
+}
+
+.colour-preview {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+}
+
+.full-preview {
+  margin-top: 20px;
+  background-color: black;
+  height: 300px;
+}
+
+.full-preview p {
+  font-size: 43px;
+  color: white;
+  font-family: 'Oxygen';
+  padding-top: 75px;
+}
