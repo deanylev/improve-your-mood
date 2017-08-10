@@ -76,16 +76,6 @@ $(document).ready(function() {
 
     };
 
-    $(document).keypress(function(e) {
-
-      if (settings['reload_keys'].includes(e.which) && $('main').hasClass('manual-reload')) {
-
-        reloadEngine();
-
-      }
-
-    });
-
     reloadColour();
 
   });
@@ -117,6 +107,16 @@ $(document).ready(function() {
       $('.auto-reload-icon').toggleClass('hide');
       $('main').toggleClass('manual-reload');
       Materialize.toast('Auto Reload Toggled!', settings['toast_interval']);
+
+    });
+
+    $(document).keypress(function(e) {
+
+      if (settings['reload_keys'].includes(e.which) && $('main').hasClass('manual-reload')) {
+
+        reloadEngine();
+
+      }
 
     });
 
