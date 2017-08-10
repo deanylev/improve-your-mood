@@ -3,7 +3,7 @@ var whatColours;
 var whatSettings;
 var usedQuotes = [];
 var usedColours = [];
-var version = 'Improve';
+var version = $('html').attr('data-version');
 var quotes = [];
 var colours = [];
 
