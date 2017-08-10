@@ -3,6 +3,8 @@ var whatColours;
 var whatSettings;
 var usedQuotes = [];
 var usedColours = [];
+var quoteHistory = [];
+var colourHistory = [];
 var version = $('html').attr('data-version');
 var quotes = [];
 var colours = [];
@@ -75,6 +77,7 @@ $(document).ready(function() {
       }
 
       usedQuotes.push(quoteNum);
+      quoteHistory.push(quoteNum);
 
       let quote = quotes[quoteNum];
 
@@ -96,6 +99,7 @@ $(document).ready(function() {
       }
 
       usedColours.push(colourNum);
+      colourHistory.push(colourNum);
 
       let colour = colours[colourNum];
 
@@ -123,11 +127,36 @@ $(document).ready(function() {
 
     });
 
+    var backPressed;
+
     $(document).keypress(function(e) {
 
       if (settings['reload_keys'].includes(e.which) && $('main').hasClass('manual-reload')) {
 
         reloadEngine();
+
+      }
+
+      if (settings['back_key'].includes(e.which) && $('main').hasClass('manual-reload') && usedQuotes.length > 1) {
+
+        if (!backPressed) {
+
+          Materialize.toast('Press again to go to the previous quote/colour.', settings['toast_interval']);
+          backPressed = true;
+
+        }
+
+        quoteNum = quoteHistory.pop();
+
+        let quote = quotes[quoteNum];
+
+        $('#quote').text(quote);
+
+        colourNum = colourHistory.pop();
+
+        let colour = colours[colourNum];
+
+        $('body').css('background-color', '#' + colour);
 
       }
 
