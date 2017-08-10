@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Aug 09, 2017 at 02:12 PM
+-- Generation Time: Aug 10, 2017 at 12:37 PM
 -- Server version: 10.1.24-MariaDB
 -- PHP Version: 7.1.6
 
@@ -207,6 +207,29 @@ INSERT INTO `improve` (`id`, `active`, `quote`) VALUES
 (64, 1, 'You\'re really something special.'),
 (65, 1, 'You\'re a gift to those around you.');
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `settings`
+--
+
+CREATE TABLE `settings` (
+  `id` int(11) NOT NULL,
+  `active` tinyint(1) NOT NULL,
+  `setting` varchar(20) NOT NULL,
+  `value` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `settings`
+--
+
+INSERT INTO `settings` (`id`, `active`, `setting`, `value`) VALUES
+(1, 1, 'reload_interval', '3000'),
+(4, 1, 'toast_interval', '1000'),
+(10, 1, 'reload_keys', '[32, 13]'),
+(11, 1, 'no_repeats', 'true');
+
 --
 -- Indexes for dumped tables
 --
@@ -230,6 +253,12 @@ ALTER TABLE `improve`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `settings`
+--
+ALTER TABLE `settings`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -237,7 +266,7 @@ ALTER TABLE `improve`
 -- AUTO_INCREMENT for table `colours`
 --
 ALTER TABLE `colours`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=97;
 --
 -- AUTO_INCREMENT for table `decrease`
 --
@@ -247,7 +276,12 @@ ALTER TABLE `decrease`
 -- AUTO_INCREMENT for table `improve`
 --
 ALTER TABLE `improve`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;COMMIT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
+--
+-- AUTO_INCREMENT for table `settings`
+--
+ALTER TABLE `settings`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
