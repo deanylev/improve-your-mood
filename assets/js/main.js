@@ -1,6 +1,8 @@
 var whatQuotes;
 var whatColours;
 var whatSettings;
+var usedQuotes = [];
+var usedColours = [];
 
 $(document).ready(function() {
 
@@ -33,11 +35,19 @@ $(document).ready(function() {
       lastNum = quoteNum;
       quoteNum = Math.floor(quotes.length * Math.random());
 
-      while (lastNum === quoteNum) {
+      if (usedQuotes.length === quotes.length) {
+
+        usedQuotes = [];
+
+      }
+
+      while (lastNum === quoteNum || usedQuotes.includes(quoteNum)) {
 
         quoteNum = Math.floor(quotes.length * Math.random());
 
       }
+
+      usedQuotes.push(quoteNum);
 
       let quote = quotes[quoteNum];
 
@@ -69,6 +79,8 @@ $(document).ready(function() {
         colourNum = Math.floor(colours.length * Math.random());
 
       }
+
+      usedColours.push(colourNum);
 
       let colour = colours[colourNum];
 
