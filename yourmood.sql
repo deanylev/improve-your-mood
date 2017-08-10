@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Aug 10, 2017 at 12:37 PM
+-- Generation Time: Aug 10, 2017 at 01:30 PM
 -- Server version: 10.1.24-MariaDB
 -- PHP Version: 7.1.6
 
@@ -228,7 +228,8 @@ INSERT INTO `settings` (`id`, `active`, `setting`, `value`) VALUES
 (1, 1, 'reload_interval', '3000'),
 (4, 1, 'toast_interval', '1000'),
 (10, 1, 'reload_keys', '[32, 13]'),
-(11, 1, 'no_repeats', 'true');
+(11, 1, 'no_repeats', 'true'),
+(15, 1, 'back_key', '[97]');
 
 --
 -- Indexes for dumped tables
@@ -281,7 +282,7 @@ ALTER TABLE `improve`
 -- AUTO_INCREMENT for table `settings`
 --
 ALTER TABLE `settings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;COMMIT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
