@@ -3,10 +3,31 @@ var whatColours;
 var whatSettings;
 var usedQuotes = [];
 var usedColours = [];
+var version = 'Improve';
+var quotes = [];
+var colours = [];
+
+$.getJSON(version.toLowerCase() + '_quote_serializer.php', function(data) {
+
+  $.each(data, function(key, val) {
+
+    quotes.push(val);
+
+  });
+
+});
+
+$.getJSON('colour_serializer.php', function(data) {
+
+  $.each(data, function(key, val) {
+
+    colours.push(val);
+
+  });
+
+});
 
 $(document).ready(function() {
-
-  var version = 'Improve';
 
   $('title').text(version + ' Your Mood');
   $('#logo-version').text(version.toLowerCase());
@@ -14,19 +35,20 @@ $(document).ready(function() {
 
   $('#year').text(new Date().getFullYear());
 
-  var quotes;
   var reloadQuote;
   var reloadColour;
   var quoteNum;
   var colourNum;
 
-  $.getJSON(version.toLowerCase() + '_quote_serializer.php', function(data) {
+  var settings;
 
-    quotes = [];
+  $.getJSON('settings_serializer.php', function(data) {
+
+    settings = {};
 
     $.each(data, function(key, val) {
 
-      quotes.push(val);
+      settings[key] = val;
 
     });
 
@@ -35,13 +57,13 @@ $(document).ready(function() {
       lastNum = quoteNum;
       quoteNum = Math.floor(quotes.length * Math.random());
 
-      if (usedQuotes.length === quotes.length) {
+      if (usedQuotes.length === quotes.length && settings['no_repeats']) {
 
         usedQuotes = [];
 
       }
 
-      while (lastNum === quoteNum || usedQuotes.includes(quoteNum)) {
+      while (lastNum === quoteNum || settings['no_repeats'] && usedQuotes.includes(quoteNum)) {
 
         quoteNum = Math.floor(quotes.length * Math.random());
 
@@ -56,18 +78,6 @@ $(document).ready(function() {
     };
 
     reloadQuote();
-
-  });
-
-  $.getJSON('colour_serializer.php', function(data) {
-
-    colours = [];
-
-    $.each(data, function(key, val) {
-
-      colours.push(val);
-
-    });
 
     reloadColour = function() {
 
@@ -89,20 +99,6 @@ $(document).ready(function() {
     };
 
     reloadColour();
-
-  });
-
-  var settings;
-
-  $.getJSON('settings_serializer.php', function(data) {
-
-    settings = {};
-
-    $.each(data, function(key, val) {
-
-      settings[key] = val;
-
-    });
 
     window.setInterval(function() {
 
