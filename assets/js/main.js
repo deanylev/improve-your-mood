@@ -15,6 +15,8 @@ $.getJSON(version.toLowerCase() + '_quote_serializer.php', function(data) {
 
   });
 
+  console.log('Successfully pulled ' + quotes.length + ' quotes from backend.');
+
 });
 
 $.getJSON('colour_serializer.php', function(data) {
@@ -24,6 +26,8 @@ $.getJSON('colour_serializer.php', function(data) {
     colours.push(val);
 
   });
+
+  console.log('Successfully pulled ' + colours.length + ' colours from backend.');
 
 });
 
@@ -50,6 +54,8 @@ $(document).ready(function() {
       settings[key] = val;
 
     });
+
+    console.log('Successfully pulled ' + Object.keys(settings).length + ' settings from backend.');
 
     reloadQuote = function() {
 
