@@ -39,7 +39,6 @@ $(document).ready(function() {
   var reloadColour;
   var quoteNum;
   var colourNum;
-
   var settings;
 
   $.getJSON('settings_serializer.php', function(data) {
@@ -144,12 +143,6 @@ $(document).ready(function() {
       reloadEngine();
 
     }
-
-  });
-
-  $('#logo').hover(function() {
-
-    $('#build-version').toggleClass('hide');
 
   });
 

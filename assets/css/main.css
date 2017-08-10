@@ -42,7 +42,4 @@ main {
   #logo {
     font-size: 36px;
   }
-  #build-version {
-    display: none;
-  }
 }
