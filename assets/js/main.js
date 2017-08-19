@@ -146,13 +146,13 @@ $(document).ready(function() {
 
         }
 
-        quoteNum = quoteHistory.pop();
+        quoteNum = quoteHistory.length > 1 ? quoteHistory.pop() : quoteHistory[0];
 
         let quote = quotes[quoteNum];
 
         $('#quote').text(quote);
 
-        colourNum = colourHistory.pop();
+        colourNum = colourHistory.length > 1 ? colourHistory.pop() : colourHistory[0];
 
         let colour = colours[colourNum];
 
