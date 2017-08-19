@@ -8,30 +8,7 @@ var colourHistory = [];
 var version = $('html').attr('data-version');
 var quotes = [];
 var colours = [];
-
-$.getJSON(version.toLowerCase() + '_quote_serializer.php', function(data) {
-
-  $.each(data, function(key, val) {
-
-    quotes.push(val);
-
-  });
-
-  console.log('Successfully pulled ' + quotes.length + ' quotes from backend.');
-
-});
-
-$.getJSON('colour_serializer.php', function(data) {
-
-  $.each(data, function(key, val) {
-
-    colours.push(val);
-
-  });
-
-  console.log('Successfully pulled ' + colours.length + ' colours from backend.');
-
-});
+var appError;
 
 $(document).ready(function() {
 
@@ -41,162 +18,229 @@ $(document).ready(function() {
 
   $('#year').text(new Date().getFullYear());
 
-  var reloadQuote;
-  var reloadColour;
-  var quoteNum;
-  var colourNum;
-  var settings;
+  $('#retry-button').click(function() {
 
-  $.getJSON('settings_serializer.php', function(data) {
+    window.location.reload();
 
-    settings = {};
+  });
+
+});
+
+function engineError(display, log) {
+
+    appError = true;
+    $('body').css('background-color', 'black');
+    $('#quote').text(display);
+    console.log(log);
+
+}
+
+$.getJSON('http://improveyourmood.xyz/' + version.toLowerCase() + '_quote_serializer.php')
+
+  .done(function(data) {
 
     $.each(data, function(key, val) {
 
-      settings[key] = val;
+      quotes.push(val);
 
     });
 
-    console.log('Successfully pulled ' + Object.keys(settings).length + ' settings from backend.');
+    console.log('Successfully pulled ' + quotes.length + ' quotes from backend.');
 
-    reloadQuote = function() {
+    $.getJSON('http://improveyourmood.xyz/' + 'colour_serializer.php')
 
-      lastNum = quoteNum;
-      quoteNum = Math.floor(quotes.length * Math.random());
+      .done(function(data) {
 
-      if (usedQuotes.length === quotes.length && settings['no_repeats']) {
+        $.each(data, function(key, val) {
 
-        usedQuotes = [];
+          colours.push(val);
 
-      }
+        });
 
-      while (lastNum === quoteNum || settings['no_repeats'] && usedQuotes.includes(quoteNum)) {
+        console.log('Successfully pulled ' + colours.length + ' colours from backend.');
 
-        quoteNum = Math.floor(quotes.length * Math.random());
+        var reloadQuote;
+        var reloadColour;
+        var quoteNum;
+        var colourNum;
+        var settings;
 
-      }
+        $.getJSON('http://improveyourmood.xyz/' + 'settings_serializer.php')
 
-      usedQuotes.push(quoteNum);
-      quoteHistory.push(quoteNum);
+          .done(function(data) {
 
-      let quote = quotes[quoteNum];
+            settings = {};
 
-      $('#quote').text(quote);
+            $.each(data, function(key, val) {
 
-    };
+              settings[key] = val;
 
-    reloadQuote();
+            });
 
-    reloadColour = function() {
+            console.log('Successfully pulled ' + Object.keys(settings).length + ' settings from backend.');
 
-      lastNum = colourNum;
-      colourNum = Math.floor(colours.length * Math.random());
+            reloadQuote = function() {
 
-      while (lastNum === colourNum) {
+              lastNum = quoteNum;
+              quoteNum = Math.floor(quotes.length * Math.random());
 
-        colourNum = Math.floor(colours.length * Math.random());
+              if (usedQuotes.length === quotes.length && settings['no_repeats']) {
 
-      }
+                usedQuotes = [];
 
-      usedColours.push(colourNum);
-      colourHistory.push(colourNum);
+              }
 
-      let colour = colours[colourNum];
+              while (lastNum === quoteNum || settings['no_repeats'] && usedQuotes.includes(quoteNum)) {
 
-      $('body').css('background-color', '#' + colour);
+                quoteNum = Math.floor(quotes.length * Math.random());
 
-    };
+              }
 
-    reloadColour();
+              usedQuotes.push(quoteNum);
+              quoteHistory.push(quoteNum);
 
-    window.setInterval(function() {
+              let quote = quotes[quoteNum];
 
-      if ($('#auto-reload-disabled').hasClass('hide')) {
+              $('#quote').text(quote);
 
-        reloadEngine();
+            };
 
-      }
+            reloadQuote();
 
-    }, settings['reload_interval']);
+            reloadColour = function() {
 
-    $('#toggle-auto-reload').click(function() {
+              lastNum = colourNum;
+              colourNum = Math.floor(colours.length * Math.random());
 
-      $('.auto-reload-icon').toggleClass('hide');
-      $('main').toggleClass('manual-reload');
-      Materialize.toast('Auto Reload Toggled!', settings['toast_interval']);
+              while (lastNum === colourNum) {
 
-    });
+                colourNum = Math.floor(colours.length * Math.random());
 
-    var backPressed;
+              }
 
-    $(document).keypress(function(e) {
+              usedColours.push(colourNum);
+              colourHistory.push(colourNum);
 
-      if (settings['reload_keys'].includes(e.which) && $('main').hasClass('manual-reload')) {
+              let colour = colours[colourNum];
 
-        reloadEngine();
+              $('body').css('background-color', '#' + colour);
 
-      }
+            };
 
-      if (settings['back_key'].includes(e.which) && $('main').hasClass('manual-reload') && usedQuotes.length > 1) {
+            reloadColour();
 
-        if (!backPressed) {
+            window.setInterval(function() {
 
-          Materialize.toast('Press again to go to the previous quote/colour.', settings['toast_interval']);
-          backPressed = true;
+              if ($('#auto-reload-disabled').hasClass('hide')) {
+
+                reloadEngine();
+
+              }
+
+            }, settings['reload_interval']);
+
+            $('#toggle-auto-reload').click(function() {
+
+              $('.auto-reload-icon').toggleClass('hide');
+              $('main').toggleClass('manual-reload');
+              Materialize.toast('Auto Reload Toggled!', settings['toast_interval']);
+
+            });
+
+            var backPressed;
+
+            $(document).keypress(function(e) {
+
+              if (settings['reload_keys'].includes(e.which) && $('main').hasClass('manual-reload')) {
+
+                reloadEngine();
+
+              }
+
+              if (settings['back_key'].includes(e.which) && $('main').hasClass('manual-reload') && usedQuotes.length > 1) {
+
+                if (!backPressed) {
+
+                  Materialize.toast('Press again to go to the previous quote/colour.', settings['toast_interval']);
+                  backPressed = true;
+
+                }
+
+                quoteNum = quoteHistory.length > 1 ? quoteHistory.pop() : quoteHistory[0];
+
+                let quote = quotes[quoteNum];
+
+                $('#quote').text(quote);
+
+                colourNum = colourHistory.length > 1 ? colourHistory.pop() : colourHistory[0];
+
+                let colour = colours[colourNum];
+
+                $('body').css('background-color', '#' + colour);
+
+              }
+
+            });
+
+          })
+
+          .fail(function(data) {
+
+            engineError('Failed to contact server. Try again later.', 'Failed to pull settings from backend.');
+
+          });
+
+        function reloadEngine() {
+
+          if (!appError) {
+
+            reloadQuote();
+            reloadColour();
+
+          }
 
         }
 
-        quoteNum = quoteHistory.length > 1 ? quoteHistory.pop() : quoteHistory[0];
+        $('main').click(function() {
 
-        let quote = quotes[quoteNum];
+          if ($(this).hasClass('manual-reload')) {
 
-        $('#quote').text(quote);
+            reloadEngine();
 
-        colourNum = colourHistory.length > 1 ? colourHistory.pop() : colourHistory[0];
+          }
 
-        let colour = colours[colourNum];
+        });
 
-        $('body').css('background-color', '#' + colour);
+        whatQuotes = function() {
 
-      }
+          console.log(quotes);
 
-    });
+        };
+
+        whatColours = function() {
+
+          console.log(colours);
+
+        };
+
+        whatSettings = function() {
+
+          console.log(settings);
+
+        };
+
+      })
+
+      .fail(function(data) {
+
+        engineError('Failed to contact server. Try again later.', 'Failed to pull colours from backend.');
+
+      });
+
+  })
+
+  .fail(function(data) {
+
+    engineError('Failed to contact server. Try again later.', 'Failed to pull quotes from backend.');
 
   });
-
-  function reloadEngine() {
-
-    reloadQuote();
-    reloadColour();
-
-  }
-
-  $('main').click(function() {
-
-    if ($(this).hasClass('manual-reload')) {
-
-      reloadEngine();
-
-    }
-
-  });
-
-  whatQuotes = function() {
-
-    console.log(quotes);
-
-  };
-
-  whatColours = function() {
-
-    console.log(colours);
-
-  };
-
-  whatSettings = function() {
-
-    console.log(settings);
-
-  };
-
-});

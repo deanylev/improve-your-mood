@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Material+Icons|Raleway|Oxygen');
 body {
+  background-color: black;
   display: flex;
   min-height: 100vh;
   flex-direction: column;
