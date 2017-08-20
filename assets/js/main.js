@@ -149,7 +149,7 @@ $.getJSON('http://improveyourmood.xyz/' + version.toLowerCase() + '_quote_serial
 
             window.setInterval(function() {
 
-              if ($('#auto-reload-disabled').hasClass('hide')) {
+              if (!$('main').hasClass('manual-reload')) {
 
                 reloadEngine();
 
@@ -159,7 +159,7 @@ $.getJSON('http://improveyourmood.xyz/' + version.toLowerCase() + '_quote_serial
 
             $('#toggle-auto-reload').click(function() {
 
-              $('.auto-reload-icon').toggleClass('hide');
+              $('#auto-reload-icon').text($('#auto-reload-icon').text() === 'autorenew' ? 'close' : 'autorenew');
               $('main').toggleClass('manual-reload');
               Materialize.toast('Auto Reload Toggled!', settings['toast_interval']);
 
