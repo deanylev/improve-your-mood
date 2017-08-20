@@ -24,12 +24,19 @@
       <h4>Settings</h4>
       <br>
       <div class="row">
-        <form class="col s12">
+        <form class="col s12" id="settings-form">
           <div class="row">
             <div class="input-field col s12">
               <input type="number" name="reload_interval" class="settings-input" id="reload_interval">
               <label for="reload_interval">Auto Reload Interval</label>
-              <button type="button" class="btn black waves-effect waves-light default-button" data-setting="reload_interval">Default</button>
+              <a class="black-text default-button" data-setting="reload_interval">Default</a>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s12">
+              <input type="text" name="reload_keys" class="settings-input" id="reload_keys">
+              <label for="reload_keys">Reload Keyboard Shortcuts</label>
+              <a class="black-text default-button" data-setting="reload_keys">Default</a>
             </div>
           </div>
           <br>

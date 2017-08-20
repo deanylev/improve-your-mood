@@ -17,8 +17,12 @@ main {
   color: black;
 }
 
-.footer-copyright {
-  color: white !important;
+.default-button {
+  cursor: pointer;
+}
+
+.default-button:hover {
+  text-decoration: underline;
 }
 
 .input-field label {
@@ -32,6 +36,10 @@ main {
 .input-field input:focus {
   border-bottom: 1px solid black !important;
   box-shadow: 0 1px 0 0 black !important;
+}
+
+.footer-copyright {
+  color: white !important;
 }
 
 #logo {

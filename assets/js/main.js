@@ -198,7 +198,9 @@ $.getJSON(`http://improveyourmood.xyz/${version.toLowerCase()}_quote_serializer.
 
             $(document).keypress(function(e) {
 
-              if (settings['reload_keys'].includes(e.which) && $('main').hasClass('manual-reload')) {
+              let shortcuts = localStorage.getItem('reload_keys') ? localStorage.getItem('reload_keys') : settings['reload_keys'];
+
+              if (shortcuts.includes(e.which) && $('main').hasClass('manual-reload')) {
 
                 reloadEngine();
 
@@ -304,6 +306,12 @@ $.getJSON(`http://improveyourmood.xyz/${version.toLowerCase()}_quote_serializer.
             window.location.reload();
 
           });
+
+        });
+
+        $('#settings-form').submit(function() {
+
+          return false;
 
         });
 
