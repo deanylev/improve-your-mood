@@ -19,6 +19,25 @@
 </head>
 
 <body>
+  <div id="settings-modal" class="modal">
+    <div class="modal-content">
+      <h4>Settings</h4>
+      <br>
+      <div class="row">
+        <form class="col s12">
+          <div class="row">
+            <div class="input-field col s12">
+              <input type="number" name="reload_interval" class="settings-input" id="reload_interval">
+              <label for="reload_interval">Auto Reload Interval</label>
+              <button type="button" class="btn black waves-effect waves-light default-button" data-setting="reload_interval">Default</button>
+            </div>
+          </div>
+          <br>
+          <button type="button" class="btn black waves-effect waves-light" id="save-settings-button">Save</button>
+        </form>
+      </div>
+    </div>
+  </div>
   <div class="container">
     <h2 id="logo"><span id="logo-version"></span> your mood</h2>
   </div>
@@ -26,9 +45,12 @@
     <p id="quote">Loading...</p>
     <p id="error-code"></p>
   </main>
-  <div class="fixed-action-btn horizontal">
-    <a class="btn-floating btn-large white waves-effect hide" id="toggle-auto-reload">
+  <div class="fixed-action-btn horizontal hide">
+    <a class="btn-floating btn-large white waves-effect" id="toggle-auto-reload">
       <i class="large material-icons black-text" id="auto-reload-icon">autorenew</i>
+    </a>
+    <a class="btn-floating btn-large white waves-effect modal-trigger" id="settings-button" data-target="settings-modal">
+      <i class="large material-icons black-text">settings</i>
     </a>
   </div>
   <footer class="page-footer transparent hide-on-med-and-down">

@@ -12,6 +12,8 @@ var appError;
 
 $(document).ready(function() {
 
+  $('.modal').modal();
+
   $('title').text(`${version} Your Mood`);
   $('#logo-version').text(version.toLowerCase());
   $('#footer-version').text(version);
@@ -155,7 +157,16 @@ $.getJSON(`http://improveyourmood.xyz/${version.toLowerCase()}_quote_serializer.
 
               }
 
-            }, settings['reload_interval']);
+            }, localStorage.getItem('reload_interval') ? localStorage.getItem('reload_interval') : settings['reload_interval']);
+
+            $('.settings-input').each(function() {
+
+              let setting = $(this).attr('name');
+              let value = localStorage.getItem(setting) ? localStorage.getItem(setting) : settings[setting];
+              $(this).val(value);
+              $(this).parent().find('label').addClass('active');
+
+            });
 
             $('#toggle-auto-reload').click(function() {
 
@@ -173,7 +184,7 @@ $.getJSON(`http://improveyourmood.xyz/${version.toLowerCase()}_quote_serializer.
 
                 reloadQuote();
                 reloadColour();
-                $('#toggle-auto-reload').removeClass('hide');
+                $('.fixed-action-btn').removeClass('hide');
                 console.log('MoodEngine initialized.');
 
               } catch (error) {
@@ -245,6 +256,54 @@ $.getJSON(`http://improveyourmood.xyz/${version.toLowerCase()}_quote_serializer.
             reloadEngine();
 
           }
+
+        });
+
+        $('#save-settings-button').click(function() {
+
+          let local_settings = {};
+
+          $('.settings-input').each(function() {
+
+            local_settings[$(this).attr('name')] = $(this).val();
+
+          });
+
+          if ($('.settings-input').val()) {
+
+            try {
+
+              $.each(local_settings, function(key, val) {
+
+                localStorage.setItem(key, val);
+
+              });
+
+              Materialize.toast('Settings Saved!', settings['toast_interval']);
+              window.location.reload();
+
+
+            } catch (error) {
+
+              Materialize.toast('Unable To Save Settings. An Error Occured.', settings['toast_interval']);
+              console.error('Couldn\'t save settings.');
+
+            }
+
+            $('#settings-modal').modal('close');
+
+          }
+
+        });
+
+        $('.default-button').each(function() {
+
+          $(this).click(function() {
+
+            localStorage.removeItem($(this).attr('data-setting'));
+            window.location.reload();
+
+          });
 
         });
 
