@@ -28,10 +28,10 @@ $(document).ready(function() {
 
 function engineError(display, log) {
 
-    appError = true;
-    $('body').css('background-color', 'black');
-    $('#quote').text(display);
-    console.log(log);
+  appError = true;
+  $('body').css('background-color', 'black');
+  $('#quote').text(display);
+  console.log(log);
 
 }
 
@@ -64,6 +64,7 @@ $.getJSON('http://improveyourmood.xyz/' + version.toLowerCase() + '_quote_serial
         var quoteNum;
         var colourNum;
         var settings;
+        var backPressed;
 
         $.getJSON('http://improveyourmood.xyz/' + 'settings_serializer.php')
 
@@ -147,8 +148,6 @@ $.getJSON('http://improveyourmood.xyz/' + version.toLowerCase() + '_quote_serial
 
             });
 
-            var backPressed;
-
             $(document).keypress(function(e) {
 
               if (settings['reload_keys'].includes(e.which) && $('main').hasClass('manual-reload')) {
@@ -196,6 +195,7 @@ $.getJSON('http://improveyourmood.xyz/' + version.toLowerCase() + '_quote_serial
 
             reloadQuote();
             reloadColour();
+            backPressed = false;
 
           }
 
