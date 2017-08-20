@@ -14,6 +14,10 @@ $(document).ready(function() {
 
   $('.modal').modal();
 
+  $('.tooltipped').tooltip({
+    html: true
+  });
+
   $('title').text(`${version} Your Mood`);
   $('#logo-version').text(version.toLowerCase());
   $('#footer-version').text(version);
@@ -264,14 +268,16 @@ $.getJSON(`http://improveyourmood.xyz/${version.toLowerCase()}_quote_serializer.
         $('#save-settings-button').click(function() {
 
           let local_settings = {};
+          let has_input = false;
 
           $('.settings-input').each(function() {
 
             local_settings[$(this).attr('name')] = $(this).val();
+            has_input = $(this).val() ? true : false;
 
           });
 
-          if ($('.settings-input').val()) {
+          if (has_input) {
 
             try {
 
