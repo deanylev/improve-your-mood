@@ -12,7 +12,7 @@ var appError;
 
 $(document).ready(function() {
 
-  $('title').text(version + ' Your Mood');
+  $('title').text(`${version} Your Mood`);
   $('#logo-version').text(version.toLowerCase());
   $('#footer-version').text(version);
 
@@ -31,14 +31,14 @@ function engineError(display, log, code) {
   appError = true;
   $('body').css('background-color', 'black');
   $('#quote').text(display);
-  $('#error-code').text('Error code ' + code);
+  $('#error-code').text(`Error code ${code}`);
   console.error(log);
 
 }
 
 console.log('Pulling quotes from backend...');
 
-$.getJSON('http://improveyourmood.xyz/' + version.toLowerCase() + '_quote_serializer.php')
+$.getJSON(`http://improveyourmood.xyz/${version.toLowerCase()}_quote_serializer.php`)
 
   .done(function(data) {
 
@@ -48,11 +48,11 @@ $.getJSON('http://improveyourmood.xyz/' + version.toLowerCase() + '_quote_serial
 
     });
 
-    console.log('Successfully pulled ' + quotes.length + ' quotes from backend.');
+    console.log(`Successfully pulled ${quotes.length} quotes from backend.`);
 
     console.log('Pulling colours from backend...');
 
-    $.getJSON('http://improveyourmood.xyz/' + 'colour_serializer.php')
+    $.getJSON('http://improveyourmood.xyz/colour_serializer.php')
 
       .done(function(data) {
 
@@ -62,7 +62,7 @@ $.getJSON('http://improveyourmood.xyz/' + version.toLowerCase() + '_quote_serial
 
         });
 
-        console.log('Successfully pulled ' + colours.length + ' colours from backend.');
+        console.log(`Successfully pulled ${colours.length} colours from backend.`);
 
         var reloadQuote;
         var reloadColour;
@@ -73,7 +73,7 @@ $.getJSON('http://improveyourmood.xyz/' + version.toLowerCase() + '_quote_serial
 
         console.log('Pulling settings from backend...');
 
-        $.getJSON('http://improveyourmood.xyz/' + 'settings_serializer.php')
+        $.getJSON('http://improveyourmood.xyz/settings_serializer.php')
 
           .done(function(data) {
 
@@ -85,7 +85,7 @@ $.getJSON('http://improveyourmood.xyz/' + version.toLowerCase() + '_quote_serial
 
             });
 
-            console.log('Successfully pulled ' + Object.keys(settings).length + ' settings from backend.');
+            console.log(`Successfully pulled ${Object.keys(settings).length} settings from backend.`);
 
             reloadQuote = function() {
 
@@ -143,7 +143,7 @@ $.getJSON('http://improveyourmood.xyz/' + version.toLowerCase() + '_quote_serial
 
               let colour = colours[colourNum];
 
-              $('body').css('background-color', '#' + colour);
+              $('body').css('background-color', `#${colour}`);
 
             };
 
@@ -212,7 +212,7 @@ $.getJSON('http://improveyourmood.xyz/' + version.toLowerCase() + '_quote_serial
 
                 let colour = colours[colourNum];
 
-                $('body').css('background-color', '#' + colour);
+                $('body').css('background-color', `#${colour}`);
 
               }
 
