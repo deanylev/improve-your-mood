@@ -26,14 +26,17 @@ $(document).ready(function() {
 
 });
 
-function engineError(display, log) {
+function engineError(display, log, code) {
 
   appError = true;
   $('body').css('background-color', 'black');
   $('#quote').text(display);
-  console.log(log);
+  $('#error-code').text('Error code ' + code);
+  console.error(log);
 
 }
+
+console.log('Pulling quotes from backend...');
 
 $.getJSON('http://improveyourmood.xyz/' + version.toLowerCase() + '_quote_serializer.php')
 
@@ -46,6 +49,8 @@ $.getJSON('http://improveyourmood.xyz/' + version.toLowerCase() + '_quote_serial
     });
 
     console.log('Successfully pulled ' + quotes.length + ' quotes from backend.');
+
+    console.log('Pulling colours from backend...');
 
     $.getJSON('http://improveyourmood.xyz/' + 'colour_serializer.php')
 
@@ -66,6 +71,8 @@ $.getJSON('http://improveyourmood.xyz/' + version.toLowerCase() + '_quote_serial
         var settings;
         var backPressed;
 
+        console.log('Pulling settings from backend...');
+
         $.getJSON('http://improveyourmood.xyz/' + 'settings_serializer.php')
 
           .done(function(data) {
@@ -81,6 +88,13 @@ $.getJSON('http://improveyourmood.xyz/' + version.toLowerCase() + '_quote_serial
             console.log('Successfully pulled ' + Object.keys(settings).length + ' settings from backend.');
 
             reloadQuote = function() {
+
+              if (quotes.length === 0) {
+
+                console.warn('There are no quotes!')
+                throw new Error();
+
+              }
 
               lastNum = quoteNum;
               quoteNum = Math.floor(quotes.length * Math.random());
@@ -106,9 +120,14 @@ $.getJSON('http://improveyourmood.xyz/' + version.toLowerCase() + '_quote_serial
 
             };
 
-            reloadQuote();
-
             reloadColour = function() {
+
+              if (colours.length === 0) {
+
+                console.warn('There are no colours!')
+                throw new Error();
+
+              }
 
               lastNum = colourNum;
               colourNum = Math.floor(colours.length * Math.random());
@@ -128,8 +147,6 @@ $.getJSON('http://improveyourmood.xyz/' + version.toLowerCase() + '_quote_serial
 
             };
 
-            reloadColour();
-
             window.setInterval(function() {
 
               if ($('#auto-reload-disabled').hasClass('hide')) {
@@ -147,6 +164,26 @@ $.getJSON('http://improveyourmood.xyz/' + version.toLowerCase() + '_quote_serial
               Materialize.toast('Auto Reload Toggled!', settings['toast_interval']);
 
             });
+
+            if (!appError) {
+
+              console.log('Initializing MoodEngine...');
+
+              try {
+
+                reloadQuote();
+                reloadColour();
+                $('#toggle-auto-reload').removeClass('hide');
+                console.log('MoodEngine initialized.');
+
+              } catch (error) {
+
+                var message = 'Failed to initialize MoodEngine.';
+                engineError(message, message, 3);
+
+              }
+
+            }
 
             $(document).keypress(function(e) {
 
@@ -185,7 +222,7 @@ $.getJSON('http://improveyourmood.xyz/' + version.toLowerCase() + '_quote_serial
 
           .fail(function(data) {
 
-            engineError('Failed to contact server. Try again later.', 'Failed to pull settings from backend.');
+            engineError('Failed to contact server. Try again later.', 'Failed to pull settings from backend.', '1c');
 
           });
 
@@ -233,7 +270,7 @@ $.getJSON('http://improveyourmood.xyz/' + version.toLowerCase() + '_quote_serial
 
       .fail(function(data) {
 
-        engineError('Failed to contact server. Try again later.', 'Failed to pull colours from backend.');
+        engineError('Failed to contact server. Try again later.', 'Failed to pull colours from backend.', '1b');
 
       });
 
@@ -241,6 +278,6 @@ $.getJSON('http://improveyourmood.xyz/' + version.toLowerCase() + '_quote_serial
 
   .fail(function(data) {
 
-    engineError('Failed to contact server. Try again later.', 'Failed to pull quotes from backend.');
+    engineError('Failed to contact server. Try again later.', 'Failed to pull quotes from backend.', '1a');
 
   });
