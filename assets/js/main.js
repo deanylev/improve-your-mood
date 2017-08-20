@@ -283,7 +283,15 @@ $.getJSON(`http://improveyourmood.xyz/${version.toLowerCase()}_quote_serializer.
 
               $.each(local_settings, function(key, val) {
 
-                localStorage.setItem(key, val);
+                if (val === settings[key]) {
+
+                  localStorage.removeItem(key);
+
+                } else {
+
+                  localStorage.setItem(key, val);
+
+                }
 
               });
 
