@@ -18,7 +18,7 @@ $(document).ready(function() {
 
   });
 
-  $(this).keypress(function(e) {
+  $(this).keydown(function(e) {
 
     $('#keycode').text(e.which);
 
