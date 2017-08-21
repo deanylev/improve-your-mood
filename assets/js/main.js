@@ -209,8 +209,8 @@ $.getJSON(`http://improveyourmood.xyz/${version.toLowerCase()}_quote_serializer.
             $('.tooltipped').each(function() {
 
               // Add the text about the default to the current text
-              
-              let value = `${$(this).attr('data-tooltip')} The default is ${settings[$(this).attr('data-setting')]}.`
+
+              let value = `${$(this).attr('data-tooltip')}<br>The default is ${settings[$(this).attr('data-setting')]}.`
               $(this).attr('data-tooltip', value);
 
               // Initialize the Materialize tooltip plugin
