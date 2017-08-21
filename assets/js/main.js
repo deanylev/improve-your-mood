@@ -226,11 +226,17 @@ $.getJSON(`http://improveyourmood.xyz/${version.toLowerCase()}_quote_serializer.
 
             // Toggle auto reload when the button is clicked
 
-            $('#toggle-auto-reload').click(function() {
+            function toggleAutoReload() {
 
               $('#auto-reload-icon').text($('#auto-reload-icon').text() === 'autorenew' ? 'close' : 'autorenew');
               $('main').toggleClass('manual-reload');
               Materialize.toast('Auto Reload Toggled!', settings['toast_interval']);
+
+            }
+
+            $('#toggle-auto-reload').click(function() {
+
+              toggleAutoReload();
 
             });
 
@@ -292,6 +298,12 @@ $.getJSON(`http://improveyourmood.xyz/${version.toLowerCase()}_quote_serializer.
                 let colour = colours[colourNum];
 
                 $('body').css('background-color', `#${colour}`);
+
+              }
+
+              if (settings['auto_reload_keys'].includes(e.which)) {
+
+                toggleAutoReload();
 
               }
 
