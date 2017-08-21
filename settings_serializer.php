@@ -13,12 +13,6 @@
   if ($result->num_rows > 0) {
       while ($row = $result->fetch_assoc()) {
           $key = $row["setting"];
-          if ($row["value"] == "true") {
-            $row["value"] = true;
-          }
-          elseif ($row["value"] == "false") {
-            $row["value"] = false;
-          }
           $settings->$key = $row["value"];
       }
   }

@@ -95,7 +95,17 @@ $.getJSON(`http://improveyourmood.xyz/${version.toLowerCase()}_quote_serializer.
 
             $.each(data, function(key, val) {
 
-              settings[key] = val;
+              // If JSON parsable, parse
+
+              try {
+
+                settings[key] = JSON.parse(val)
+
+              } catch (error) {
+
+                settings[key] = val;
+
+              }
 
             });
 
@@ -266,13 +276,23 @@ $.getJSON(`http://improveyourmood.xyz/${version.toLowerCase()}_quote_serializer.
 
             $(document).keydown(function(e) {
 
-              let shortcuts = localStorage.getItem('reload_keys') ? localStorage.getItem('reload_keys') : settings['reload_keys'];
+              let reload_shortcuts = localStorage.getItem('reload_keys') ? localStorage.getItem('reload_keys') : settings['reload_keys'];
 
               // If a key in the reload keys array is pressed, reload
 
-              if (shortcuts.includes(e.which) && $('main').hasClass('manual-reload')) {
+              if (reload_shortcuts.includes(e.which) && $('main').hasClass('manual-reload')) {
 
                 reloadEngine();
+
+              }
+
+              // If a key in the auto reload keys array is pressed, toggle auto reload
+
+              if (settings['auto_reload_keys'].includes(e.which)) {
+
+                console.log('Auto Reload Key Pressed');
+
+                toggleAutoReload();
 
               }
 
@@ -298,12 +318,6 @@ $.getJSON(`http://improveyourmood.xyz/${version.toLowerCase()}_quote_serializer.
                 let colour = colours[colourNum];
 
                 $('body').css('background-color', `#${colour}`);
-
-              }
-
-              if (settings['auto_reload_keys'].includes(e.which)) {
-
-                toggleAutoReload();
 
               }
 
