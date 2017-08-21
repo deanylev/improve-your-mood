@@ -272,7 +272,7 @@ $.getJSON(`http://improveyourmood.xyz/${version.toLowerCase()}_quote_serializer.
 
               // If a key in the back keys array is pressed, go back by generating quotes from the history arrays
 
-              if (settings['back_key'].includes(e.which) && $('main').hasClass('manual-reload') && usedQuotes.length > 1) {
+              if (settings['back_keys'].includes(e.which) && $('main').hasClass('manual-reload') && usedQuotes.length > 1) {
 
                 if (!backPressed) {
 
