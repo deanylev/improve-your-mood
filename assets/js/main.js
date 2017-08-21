@@ -185,15 +185,18 @@ $.getJSON(`http://improveyourmood.xyz/${version.toLowerCase()}_quote_serializer.
 
             // Auto reload
 
+            var time_setting = localStorage.getItem('reload_interval') ? localStorage.getItem('reload_interval') : settings['reload_interval'];
+
             window.setInterval(function() {
 
               if (!$('main').hasClass('manual-reload')) {
 
                 reloadEngine();
+                console.log(`Auto reloaded after ${time_setting}ms`);
 
               }
 
-            }, localStorage.getItem('reload_interval') ? localStorage.getItem('reload_interval') : settings['reload_interval']);
+            }, time_setting);
 
             // Set the correct values in the settings inputs and tooltips
 
@@ -255,7 +258,7 @@ $.getJSON(`http://improveyourmood.xyz/${version.toLowerCase()}_quote_serializer.
 
             }
 
-            $(document).keypress(function(e) {
+            $(document).keydown(function(e) {
 
               let shortcuts = localStorage.getItem('reload_keys') ? localStorage.getItem('reload_keys') : settings['reload_keys'];
 
