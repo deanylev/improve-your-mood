@@ -16,10 +16,6 @@ $(document).ready(function() {
 
   $('.modal').modal();
 
-  $('.tooltipped').tooltip({
-    html: true
-  });
-
   // Put in correct text / year
 
   $('title').text(`${version} Your Mood`);
@@ -199,7 +195,7 @@ $.getJSON(`http://improveyourmood.xyz/${version.toLowerCase()}_quote_serializer.
 
             }, localStorage.getItem('reload_interval') ? localStorage.getItem('reload_interval') : settings['reload_interval']);
 
-            // Set the correct values in the settings inputs
+            // Set the correct values in the settings inputs and tooltips
 
             $('.settings-input').each(function() {
 
@@ -207,6 +203,21 @@ $.getJSON(`http://improveyourmood.xyz/${version.toLowerCase()}_quote_serializer.
               let value = localStorage.getItem(setting) ? localStorage.getItem(setting) : settings[setting];
               $(this).val(value);
               $(this).parent().find('label').addClass('active');
+
+            });
+
+            $('.tooltipped').each(function() {
+
+              // Add the text about the default to the current text
+              
+              let value = `${$(this).attr('data-tooltip')} The default is ${settings[$(this).attr('data-setting')]}.`
+              $(this).attr('data-tooltip', value);
+
+              // Initialize the Materialize tooltip plugin
+
+              $('.tooltipped').tooltip({
+                html: true
+              });
 
             });
 
