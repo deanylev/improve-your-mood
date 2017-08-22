@@ -278,11 +278,13 @@ $.getJSON(`http://improveyourmood.xyz/${version.toLowerCase()}_quote_serializer.
 
             }
 
+            // Keyboard shortcuts
+
             $(document).keydown(function(e) {
 
-              let reload_shortcuts = localStorage.getItem('reload_keys') ? localStorage.getItem('reload_keys') : settings['reload_keys'];
+              // Reload
 
-              // If a key in the reload keys array is pressed, reload
+              let reload_shortcuts = localStorage.getItem('reload_keys') ? localStorage.getItem('reload_keys') : settings['reload_keys'];
 
               if (reload_shortcuts.includes(e.which) && $('main').hasClass('manual-reload')) {
 
@@ -290,19 +292,21 @@ $.getJSON(`http://improveyourmood.xyz/${version.toLowerCase()}_quote_serializer.
 
               }
 
-              // If a key in the auto reload keys array is pressed, toggle auto reload
+              // Toggle auto reload
 
-              if (settings['auto_reload_keys'].includes(e.which)) {
+              let auto_reload_shortcuts = localStorage.getItem('auto_reload_keys') ? localStorage.getItem('auto_reload_keys') : settings['auto_reload_keys']
 
-                console.log('Auto Reload Key Pressed');
+              if (auto_reload_shortcuts.includes(e.which)) {
 
                 toggleAutoReload();
 
               }
 
-              // If a key in the back keys array is pressed, go back by generating quotes from the history arrays
+              // Go back
 
-              if (settings['back_keys'].includes(e.which) && $('main').hasClass('manual-reload') && usedQuotes.length > 1) {
+              let back_shortcuts = localStorage.getItem('back_keys') ? localStorage.getItem('back_keys') : settings['back_keys'];
+
+              if (back_shortcuts.includes(e.which) && $('main').hasClass('manual-reload') && usedQuotes.length > 1) {
 
                 if (!backPressed) {
 
