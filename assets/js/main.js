@@ -1,6 +1,4 @@
-var whatQuotes;
-var whatColours;
-var whatSettings;
+var what;
 var usedQuotes = [];
 var usedColours = [];
 var quoteHistory = [];
@@ -8,6 +6,7 @@ var colourHistory = [];
 var version = $('html').attr('data-version');
 var quotes = [];
 var colours = [];
+var settings = {};
 var appError;
 
 $(document).ready(function() {
@@ -78,7 +77,6 @@ $.getJSON(`http://improveyourmood.xyz/${version.toLowerCase()}_quote_serializer.
         var reloadColour;
         var quoteNum;
         var colourNum;
-        var settings;
         var backPressed;
 
         // Pull settings from backend
@@ -90,8 +88,6 @@ $.getJSON(`http://improveyourmood.xyz/${version.toLowerCase()}_quote_serializer.
           // Move on to next step
 
           .done(function(data) {
-
-            settings = {};
 
             $.each(data, function(key, val) {
 
@@ -110,6 +106,14 @@ $.getJSON(`http://improveyourmood.xyz/${version.toLowerCase()}_quote_serializer.
             });
 
             console.log(`Successfully pulled ${Object.keys(settings).length} settings from backend.`);
+
+            // Function to check what was pulled from the backend in the console
+
+            what = function(json) {
+
+              console.log(json);
+
+            };
 
             // Function for reloading the quote
 
@@ -444,14 +448,6 @@ $.getJSON(`http://improveyourmood.xyz/${version.toLowerCase()}_quote_serializer.
           return false;
 
         });
-
-        // Functions to check what was pulled from the backend in the console
-
-        what = function(json) {
-
-          console.log(json);
-
-        };
 
       })
 
