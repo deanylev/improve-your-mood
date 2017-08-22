@@ -8,6 +8,7 @@ var quotes = [];
 var colours = [];
 var settings = {};
 var appError;
+var networkReported;
 var settingsOpen = false;
 
 $(document).ready(function() {
@@ -35,17 +36,35 @@ $(document).ready(function() {
 
   $('#year').text(new Date().getFullYear());
 
+  // Retry button needs to work straight away
+
+  $('#retry-button').click(function() {
+
+    window.location.reload();
+
+  });
+
 });
 
 // Function for displaying and logging errors
 
 function engineError(display, log, code) {
 
-  appError = true;
-  $('body').css('background-color', 'black');
-  $('#quote').text(display);
-  $('#error-code').text(`Error code ${code}`);
-  console.error(log);
+  if (navigator.onLine) {
+
+    appError = true;
+    $('body').css('background-color', 'black');
+    $('#quote').text(display);
+    $('#error-code').text(`Error code ${code}`);
+    console.error(log);
+
+  } else if (!networkReported) {
+
+    networkReported = true;
+    $('#quote').text('You are not connected to the internet.');
+    console.log('No internet connection.');
+
+  }
 
 }
 
@@ -278,6 +297,7 @@ $.getJSON(`http://improveyourmood.xyz/${version.toLowerCase()}_quote_serializer.
 
                 reloadQuote();
                 reloadColour();
+                $('#retry-button').hide();
                 $('.fixed-action-btn').removeClass('hide');
                 console.log('MoodEngine initialized.');
 
