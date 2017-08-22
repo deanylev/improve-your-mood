@@ -11,6 +11,8 @@ var appError;
 var networkReported;
 var settingsOpen = false;
 
+// Platform specific stuff
+
 if (platform === 'web') {
 
   var version = window.location.href.includes('decreaseyourmood') ? 'Decrease' : 'Improve';
