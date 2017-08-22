@@ -3,7 +3,7 @@ var usedQuotes = [];
 var usedColours = [];
 var quoteHistory = [];
 var colourHistory = [];
-var version = $('html').attr('data-version');
+var version = window.location.href === 'http://decreaseyourmood.xyz/' ? 'Decrease' : 'Improve';
 var quotes = [];
 var colours = [];
 var settings = {};
@@ -51,7 +51,7 @@ $(document).ready(function() {
 function engineError(display, log, code) {
 
   // If network connection is detected
-  
+
   if (navigator.onLine) {
 
     appError = true;
