@@ -447,21 +447,9 @@ $.getJSON(`http://improveyourmood.xyz/${version.toLowerCase()}_quote_serializer.
 
         // Functions to check what was pulled from the backend in the console
 
-        whatQuotes = function() {
+        what = function(json) {
 
-          console.log(quotes);
-
-        };
-
-        whatColours = function() {
-
-          console.log(colours);
-
-        };
-
-        whatSettings = function() {
-
-          console.log(settings);
+          console.log(json);
 
         };
 
