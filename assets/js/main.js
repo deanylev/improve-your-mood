@@ -8,12 +8,24 @@ var quotes = [];
 var colours = [];
 var settings = {};
 var appError;
+var settingsOpen = false;
 
 $(document).ready(function() {
 
   // Initialize Materialize Plugins
 
-  $('.modal').modal();
+  $('#settings-modal').modal({
+    ready: function(modal, trigger) {
+
+      settingsOpen = true;
+
+    },
+    complete: function() {
+
+      settingsOpen = false;
+
+    }
+  });
 
   // Put in correct text / year
 
@@ -299,6 +311,16 @@ $.getJSON(`http://improveyourmood.xyz/${version.toLowerCase()}_quote_serializer.
               if (auto_reload_shortcuts.includes(e.which)) {
 
                 toggleAutoReload();
+
+              }
+
+              // Open / close settings panel
+
+              let settings_shortcuts = localStorage.getItem('settings_keys') ? localStorage.getItem('settings_keys') : settings['settings_keys'];
+
+              if (settings_shortcuts.includes(e.which)) {
+
+                settingsOpen ? $('#settings-modal').modal('close') : $('#settings-modal').modal('open');
 
               }
 
