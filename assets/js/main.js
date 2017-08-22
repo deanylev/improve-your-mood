@@ -296,60 +296,67 @@ $.getJSON(`http://improveyourmood.xyz/${version.toLowerCase()}_quote_serializer.
 
             $(document).keydown(function(e) {
 
-              // Reload
+              // If the user is not typing into an input
 
-              let reload_shortcuts = localStorage.getItem('reload_keys') ? localStorage.getItem('reload_keys') : settings['reload_keys'];
+              if (!$('#settings-modal input:focus').length) {
 
-              if (reload_shortcuts.includes(e.which) && $('main').hasClass('manual-reload')) {
 
-                reloadEngine();
+                // Reload
 
-              }
+                let reload_shortcuts = localStorage.getItem('reload_keys') ? localStorage.getItem('reload_keys') : settings['reload_keys'];
 
-              // Toggle auto reload
+                if (reload_shortcuts.includes(e.which) && $('main').hasClass('manual-reload')) {
 
-              let auto_reload_shortcuts = localStorage.getItem('auto_reload_keys') ? localStorage.getItem('auto_reload_keys') : settings['auto_reload_keys']
-
-              if (auto_reload_shortcuts.includes(e.which)) {
-
-                toggleAutoReload();
-
-              }
-
-              // Open / close settings panel
-
-              let settings_shortcuts = localStorage.getItem('settings_keys') ? localStorage.getItem('settings_keys') : settings['settings_keys'];
-
-              if (settings_shortcuts.includes(e.which)) {
-
-                settingsOpen ? $('#settings-modal').modal('close') : $('#settings-modal').modal('open');
-
-              }
-
-              // Go back
-
-              let back_shortcuts = localStorage.getItem('back_keys') ? localStorage.getItem('back_keys') : settings['back_keys'];
-
-              if (back_shortcuts.includes(e.which) && $('main').hasClass('manual-reload') && usedQuotes.length > 1) {
-
-                if (!backPressed) {
-
-                  Materialize.toast('Press again to go to the previous quote/colour.', settings['toast_interval']);
-                  backPressed = true;
+                  reloadEngine();
 
                 }
 
-                quoteNum = quoteHistory.length > 1 ? quoteHistory.pop() : quoteHistory[0];
+                // Toggle auto reload
 
-                let quote = quotes[quoteNum];
+                let auto_reload_shortcuts = localStorage.getItem('auto_reload_keys') ? localStorage.getItem('auto_reload_keys') : settings['auto_reload_keys']
 
-                $('#quote').text(quote);
+                if (auto_reload_shortcuts.includes(e.which)) {
 
-                colourNum = colourHistory.length > 1 ? colourHistory.pop() : colourHistory[0];
+                  toggleAutoReload();
 
-                let colour = colours[colourNum];
+                }
 
-                $('body').css('background-color', `#${colour}`);
+                // Open / close settings panel
+
+                let settings_shortcuts = localStorage.getItem('settings_keys') ? localStorage.getItem('settings_keys') : settings['settings_keys'];
+
+                if (settings_shortcuts.includes(e.which)) {
+
+                  settingsOpen ? $('#settings-modal').modal('close') : $('#settings-modal').modal('open');
+
+                }
+
+                // Go back
+
+                let back_shortcuts = localStorage.getItem('back_keys') ? localStorage.getItem('back_keys') : settings['back_keys'];
+
+                if (back_shortcuts.includes(e.which) && $('main').hasClass('manual-reload') && usedQuotes.length > 1) {
+
+                  if (!backPressed) {
+
+                    Materialize.toast('Press again to go to the previous quote/colour.', settings['toast_interval']);
+                    backPressed = true;
+
+                  }
+
+                  quoteNum = quoteHistory.length > 1 ? quoteHistory.pop() : quoteHistory[0];
+
+                  let quote = quotes[quoteNum];
+
+                  $('#quote').text(quote);
+
+                  colourNum = colourHistory.length > 1 ? colourHistory.pop() : colourHistory[0];
+
+                  let colour = colours[colourNum];
+
+                  $('body').css('background-color', `#${colour}`);
+
+                }
 
               }
 
