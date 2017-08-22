@@ -254,9 +254,11 @@ $.getJSON(`http://improveyourmood.xyz/${version.toLowerCase()}_quote_serializer.
 
             function toggleAutoReload() {
 
+              let toggle = $('main').hasClass('manual-reload') ? 'Enabled' : 'Disabled';
+
               $('#auto-reload-icon').text($('#auto-reload-icon').text() === 'autorenew' ? 'close' : 'autorenew');
               $('main').toggleClass('manual-reload');
-              Materialize.toast('Auto Reload Toggled!', settings['toast_interval']);
+              Materialize.toast(`Auto Reload ${toggle}!`, settings['toast_interval']);
 
             }
 
