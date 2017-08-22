@@ -3,13 +3,23 @@ var usedQuotes = [];
 var usedColours = [];
 var quoteHistory = [];
 var colourHistory = [];
-var version = window.location.href === 'http://decreaseyourmood.xyz/' ? 'Decrease' : 'Improve';
+var platform = $('html').attr('data-platform');
 var quotes = [];
 var colours = [];
 var settings = {};
 var appError;
 var networkReported;
 var settingsOpen = false;
+
+if (platform === 'web') {
+
+  var version = window.location.href === 'http://decreaseyourmood.xyz/' ? 'Decrease' : 'Improve';
+
+} else if (platform === 'app') {
+
+  var version = $('html').attr('data-version');
+
+}
 
 $(document).ready(function() {
 
