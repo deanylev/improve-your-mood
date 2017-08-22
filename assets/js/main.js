@@ -50,6 +50,8 @@ $(document).ready(function() {
 
 function engineError(display, log, code) {
 
+  // If network connection is detected
+  
   if (navigator.onLine) {
 
     appError = true;
