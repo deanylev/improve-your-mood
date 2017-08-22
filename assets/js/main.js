@@ -13,7 +13,7 @@ var settingsOpen = false;
 
 if (platform === 'web') {
 
-  var version = window.location.href === 'http://decreaseyourmood.xyz/' ? 'Decrease' : 'Improve';
+  var version = window.location.href.includes('decreaseyourmood') ? 'Decrease' : 'Improve';
 
 } else if (platform === 'app') {
 
