@@ -337,7 +337,7 @@ $.getJSON(`http://improveyourmood.xyz/${version.toLowerCase()}_quote_serializer.
 
                 // Reload
 
-                let reload_shortcuts = localStorage.getItem('reload_keys') ? localStorage.getItem('reload_keys') : settings['reload_keys'];
+                let reload_shortcuts = localStorage.getItem('reload_keys') ? JSON.parse(`[${localStorage.getItem('reload_keys')}]`) : settings['reload_keys'];
 
                 if (reload_shortcuts.includes(e.which) && $('main').hasClass('manual-reload')) {
 
@@ -347,7 +347,7 @@ $.getJSON(`http://improveyourmood.xyz/${version.toLowerCase()}_quote_serializer.
 
                 // Toggle auto reload
 
-                let auto_reload_shortcuts = localStorage.getItem('auto_reload_keys') ? localStorage.getItem('auto_reload_keys') : settings['auto_reload_keys']
+                let auto_reload_shortcuts = localStorage.getItem('auto_reload_keys') ? JSON.parse(`[${localStorage.getItem('auto_reload_keys')}]`) : settings['auto_reload_keys']
 
                 if (auto_reload_shortcuts.includes(e.which)) {
 
@@ -357,7 +357,7 @@ $.getJSON(`http://improveyourmood.xyz/${version.toLowerCase()}_quote_serializer.
 
                 // Open / close settings panel
 
-                let settings_shortcuts = localStorage.getItem('settings_keys') ? localStorage.getItem('settings_keys') : settings['settings_keys'];
+                let settings_shortcuts = localStorage.getItem('settings_keys') ? JSON.parse(`[${localStorage.getItem('settings_keys')}]`) : settings['settings_keys'];
 
                 if (settings_shortcuts.includes(e.which)) {
 
@@ -367,7 +367,7 @@ $.getJSON(`http://improveyourmood.xyz/${version.toLowerCase()}_quote_serializer.
 
                 // Go back
 
-                let back_shortcuts = localStorage.getItem('back_keys') ? localStorage.getItem('back_keys') : settings['back_keys'];
+                let back_shortcuts = localStorage.getItem('back_keys') ? JSON.parse(`[${localStorage.getItem('back_keys')}]`) : settings['back_keys'];
 
                 if (back_shortcuts.includes(e.which) && $('main').hasClass('manual-reload') && usedQuotes.length > 1) {
 

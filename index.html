@@ -28,19 +28,48 @@
           <div class="row">
             <div class="input-field col s12">
               <input type="number" name="reload_interval" class="settings-input" id="reload_interval">
-              <label for="reload_interval">Auto Reload Interval</label>
+              <label for="reload_interval">Auto Reload Interval (ms)</label>
               <a class="black-text default-button" data-setting="reload_interval"><b>Set to Default</b></a>
               <br>
               <span class="tooltipped" data-setting="reload_interval" data-position="bottom" data-delay="50" data-tooltip="How often the auto reload will function, in milliseconds.">What's this?</span>
             </div>
           </div>
-          <div class="row hide-on-med-and-down">
-            <div class="input-field col s12">
-              <input type="text" name="reload_keys" class="settings-input" id="reload_keys">
-              <label for="reload_keys">Reload Keyboard Shortcuts</label>
-              <a class="black-text default-button" data-setting="reload_keys"><b>Set to Default</b></a>
-              <br>
-              <span class="tooltipped" data-setting="reload_keys" data-position="bottom" data-delay="50" data-tooltip="Which keys will activate a reload, in a JavaScript KeyDown KeyCode array.<br>Go to a KeyCode testing site to find out what KeyDown value your desired keys have.">What's this?</span>
+          <div class="hide-on-med-and-down">
+            <div class="row">
+              <div class="input-field col s12">
+                <input type="text" name="reload_keys" class="settings-input" id="reload_keys">
+                <label for="reload_keys">Reload Keyboard Shortcuts</label>
+                <a class="black-text default-button" data-setting="reload_keys"><b>Set to Default</b></a>
+                <br>
+                <span class="tooltipped" data-setting="reload_keys" data-position="bottom" data-delay="50" data-tooltip="Which keys will activate a reload, in a JavaScript KeyDown KeyCode array.<br>Go to a KeyCode testing site to find out what KeyDown value your desired keys have.">What's this?</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <input type="text" name="back_keys" class="settings-input" id="back_keys">
+                <label for="back_keys">Back Keyboard Shortcuts</label>
+                <a class="black-text default-button" data-setting="back_keys"><b>Set to Default</b></a>
+                <br>
+                <span class="tooltipped" data-setting="back_keys" data-position="bottom" data-delay="50" data-tooltip="Which keys will go back to the previous quote/colour, in a JavaScript KeyDown KeyCode array.<br>Go to a KeyCode testing site to find out what KeyDown value your desired keys have.">What's this?</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <input type="text" name="auto_reload_keys" class="settings-input" id="auto_reload_keys">
+                <label for="auto_reload_keys">Auto Reload Keyboard Shortcuts</label>
+                <a class="black-text default-button" data-setting="auto_reload_keys"><b>Set to Default</b></a>
+                <br>
+                <span class="tooltipped" data-setting="auto_reload_keys" data-position="bottom" data-delay="50" data-tooltip="Which keys will toggle auto reloading, in a JavaScript KeyDown KeyCode array.<br>Go to a KeyCode testing site to find out what KeyDown value your desired keys have.">What's this?</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <input type="text" name="settings_keys" class="settings-input" id="settings_keys">
+                <label for="settings_keys">Toggle Settings Panel Keyboard Shortcuts</label>
+                <a class="black-text default-button" data-setting="settings_keys"><b>Set to Default</b></a>
+                <br>
+                <span class="tooltipped" data-setting="settings_keys" data-position="bottom" data-delay="50" data-tooltip="Which keys will toggle the settings panel, in a JavaScript KeyDown KeyCode array.<br>Go to a KeyCode testing site to find out what KeyDown value your desired keys have.">What's this?</span>
+              </div>
             </div>
           </div>
           <br>
