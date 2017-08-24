@@ -56,6 +56,10 @@ $(document).ready(function() {
 
   });
 
+  // Hacky method to make quote top margin correct
+
+  $('#quote').css('margin-top', $(document).height() / 4.5);
+
 });
 
 // Function for displaying and logging errors
