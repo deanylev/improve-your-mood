@@ -17,11 +17,11 @@ main {
   color: black;
 }
 
-.default-button {
+.settings-link {
   cursor: pointer;
 }
 
-.default-button:hover {
+.settings-link:hover {
   text-decoration: underline;
 }
 
@@ -42,6 +42,10 @@ main {
   color: white !important;
 }
 
+.underline {
+  text-decoration: underline;
+}
+
 #logo {
   font-family: 'Raleway', Helvetica, Arial;
 }
@@ -58,6 +62,10 @@ main {
 
 #personal-link:hover {
   text-decoration: underline;
+}
+
+#advanced-settings {
+  display: none;
 }
 
 @media only screen and (max-width: 599px) {

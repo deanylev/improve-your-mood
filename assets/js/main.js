@@ -23,6 +23,10 @@ if (platform === 'web') {
 
 }
 
+var backend_address = localStorage.getItem('backend_address') ? localStorage.getItem('backend_address') : 'improveyourmood.xyz';
+
+full_backend_address = `http://${backend_address}/`;
+
 $(document).ready(function() {
 
   // Initialize Materialize Plugins
@@ -48,10 +52,21 @@ $(document).ready(function() {
 
   $('#year').text(new Date().getFullYear());
 
-  // Retry button needs to work straight away
+  // Some buttons needs to work straight away
+
+  // Retry loading
 
   $('#retry-button').click(function() {
 
+    window.location.reload();
+
+  });
+
+  // Clear all settings
+
+  $('#reset-backend-address').click(function() {
+
+    localStorage.removeItem('backend_address');
     window.location.reload();
 
   });
@@ -84,13 +99,19 @@ function engineError(display, log, code) {
 
   }
 
+  if (localStorage.getItem('backend_address')) {
+
+    $('#reset-backend-address').removeClass('hide');
+
+  }
+
 }
 
 // Pull quotes from backend
 
 console.log('Pulling quotes from backend...');
 
-$.getJSON(`http://improveyourmood.xyz/${version.toLowerCase()}_quote_serializer.php`)
+$.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`)
 
   // Move on to next step
 
@@ -108,7 +129,7 @@ $.getJSON(`http://improveyourmood.xyz/${version.toLowerCase()}_quote_serializer.
 
     console.log('Pulling colours from backend...');
 
-    $.getJSON('http://improveyourmood.xyz/colour_serializer.php')
+    $.getJSON(`${full_backend_address}colour_serializer.php`)
 
       // Move on to next step
 
@@ -132,7 +153,7 @@ $.getJSON(`http://improveyourmood.xyz/${version.toLowerCase()}_quote_serializer.
 
         console.log('Pulling settings from backend...');
 
-        $.getJSON('http://improveyourmood.xyz/settings_serializer.php')
+        $.getJSON(`${full_backend_address}settings_serializer.php`)
 
           // Move on to next step
 
@@ -272,9 +293,14 @@ $.getJSON(`http://improveyourmood.xyz/${version.toLowerCase()}_quote_serializer.
 
             });
 
-            $('.tooltipped').each(function() {
 
-              // Add the text about the default to the current text
+            // Set value for backend address input
+
+            $('#backend_address').val(backend_address);
+
+            // Add the text about the default to the current text
+
+            $('.tooltipped').each(function() {
 
               let value = `${$(this).attr('data-tooltip')}<br>The default is ${settings[$(this).attr('data-setting')]}.`
               $(this).attr('data-tooltip', value);
@@ -524,6 +550,15 @@ $.getJSON(`http://improveyourmood.xyz/${version.toLowerCase()}_quote_serializer.
         $('#settings-form').submit(function() {
 
           return false;
+
+        });
+
+        // Toggle Advanced Settings
+
+        $('#advanced-settings-button').click(function() {
+
+          $(this).toggleClass('underline');
+          $('#advanced-settings').slideToggle();
 
         });
 

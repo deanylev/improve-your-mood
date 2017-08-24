@@ -23,14 +23,14 @@
     <div class="modal-content">
       <h4>Settings</h4>
       <button class="btn black waves-effect waves-light" id="save-settings-button">Save</button>
-      <br>
+      <br><br>
       <div class="row">
         <form class="col s12" id="settings-form">
           <div class="row">
             <div class="input-field col s12">
               <input type="number" name="reload_interval" class="settings-input" id="reload_interval">
               <label for="reload_interval">Auto Reload Interval (ms)</label>
-              <a class="black-text default-button" data-setting="reload_interval"><b>Set to Default</b></a>
+              <a class="black-text settings-link default-button" data-setting="reload_interval"><b>Set to Default</b></a>
               <br>
               <span class="tooltipped" data-setting="reload_interval" data-position="bottom" data-delay="50" data-tooltip="How often the auto reload will function, in milliseconds.">What's this?</span>
             </div>
@@ -40,7 +40,7 @@
               <div class="input-field col s12">
                 <input type="text" name="reload_keys" class="settings-input" id="reload_keys">
                 <label for="reload_keys">Reload Keyboard Shortcuts</label>
-                <a class="black-text default-button" data-setting="reload_keys"><b>Set to Default</b></a>
+                <a class="black-text settings-link default-button" data-setting="reload_keys"><b>Set to Default</b></a>
                 <br>
                 <span class="tooltipped" data-setting="reload_keys" data-position="bottom" data-delay="50" data-tooltip="Which keys will activate a reload, in a JavaScript KeyDown KeyCode array.<br>Go to a KeyCode testing site to find out what KeyDown value your desired keys have.">What's this?</span>
               </div>
@@ -49,7 +49,7 @@
               <div class="input-field col s12">
                 <input type="text" name="back_keys" class="settings-input" id="back_keys">
                 <label for="back_keys">Back Keyboard Shortcuts</label>
-                <a class="black-text default-button" data-setting="back_keys"><b>Set to Default</b></a>
+                <a class="black-text settings-link default-button" data-setting="back_keys"><b>Set to Default</b></a>
                 <br>
                 <span class="tooltipped" data-setting="back_keys" data-position="bottom" data-delay="50" data-tooltip="Which keys will go back to the previous quote/colour, in a JavaScript KeyDown KeyCode array.<br>Go to a KeyCode testing site to find out what KeyDown value your desired keys have.">What's this?</span>
               </div>
@@ -58,7 +58,7 @@
               <div class="input-field col s12">
                 <input type="text" name="auto_reload_keys" class="settings-input" id="auto_reload_keys">
                 <label for="auto_reload_keys">Auto Reload Keyboard Shortcuts</label>
-                <a class="black-text default-button" data-setting="auto_reload_keys"><b>Set to Default</b></a>
+                <a class="black-text settings-link default-button" data-setting="auto_reload_keys"><b>Set to Default</b></a>
                 <br>
                 <span class="tooltipped" data-setting="auto_reload_keys" data-position="bottom" data-delay="50" data-tooltip="Which keys will toggle auto reloading, in a JavaScript KeyDown KeyCode array.<br>Go to a KeyCode testing site to find out what KeyDown value your desired keys have.">What's this?</span>
               </div>
@@ -67,9 +67,23 @@
               <div class="input-field col s12">
                 <input type="text" name="settings_keys" class="settings-input" id="settings_keys">
                 <label for="settings_keys">Toggle Settings Panel Keyboard Shortcuts</label>
-                <a class="black-text default-button" data-setting="settings_keys"><b>Set to Default</b></a>
+                <a class="black-text settings-link default-button" data-setting="settings_keys"><b>Set to Default</b></a>
                 <br>
                 <span class="tooltipped" data-setting="settings_keys" data-position="bottom" data-delay="50" data-tooltip="Which keys will toggle the settings panel, in a JavaScript KeyDown KeyCode array.<br>Go to a KeyCode testing site to find out what KeyDown value your desired keys have.">What's this?</span>
+              </div>
+            </div>
+          </div>
+          <br>
+          <a class="black-text settings-link" id="advanced-settings-button">Advanced Settings</a>
+          <br><br>
+          <div id="advanced-settings">
+            <div class="row">
+              <div class="input-field col s12">
+                <input type="text" name="backend_address" class="settings-input" id="backend_address">
+                <label for="backend_address">Custom Back-End Address</label>
+                <a class="black-text settings-link default-button" data-setting="backend_address"><b>Set to Default</b></a>
+                <br>
+                <span class="tooltipped" data-setting="backend_address" data-position="bottom" data-delay="50" data-tooltip="Define a custom back-end address, rather than using the live one. Used for development purposes.">What's this?</span>
               </div>
             </div>
           </div>
@@ -83,6 +97,7 @@
   <main class="container manual-reload">
     <p id="quote">Loading...</p>
     <p id="error-code"></p>
+    <button class="btn white black-text waves-effect hide" id="reset-backend-address">Reset Back-End Address</button>
   </main>
   <div class="fixed-action-btn horizontal hide">
     <a class="btn-floating btn-large white waves-effect" id="toggle-auto-reload">
