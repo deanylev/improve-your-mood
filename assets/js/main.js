@@ -77,6 +77,10 @@ $(document).ready(function() {
 
   $('#quote').css('margin-top', $(document).height() / 4.5);
 
+  // Scale in any elements that need to be
+
+  $('.scale-out').addClass('scale-in');
+
 });
 
 // Function for displaying and logging errors
