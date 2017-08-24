@@ -443,7 +443,7 @@ $.getJSON(`http://improveyourmood.xyz/${version.toLowerCase()}_quote_serializer.
         $('#save-settings-button').click(function() {
 
           let local_settings = {};
-          let has_input = false;
+          let has_input = true;
 
           $('.settings-input').each(function() {
 
@@ -451,7 +451,12 @@ $.getJSON(`http://improveyourmood.xyz/${version.toLowerCase()}_quote_serializer.
             local_settings[$(this).attr('name')] = $(this).val();
 
             // Detect if input is blank
-            has_input = $(this).val() ? true : false;
+
+            if (!$(this).val()) {
+
+              has_input = false;
+
+            }
 
           });
 
