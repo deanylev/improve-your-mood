@@ -10,6 +10,8 @@ var settings = {};
 var appError;
 var networkReported;
 var settingsOpen = false;
+var start_time;
+var pull_time = {};
 
 // Platform specific stuff
 
@@ -25,7 +27,7 @@ if (platform === 'web') {
 
 var backend_address = localStorage.getItem('backend_address') ? localStorage.getItem('backend_address') : 'improveyourmood.xyz';
 
-full_backend_address = `http://${backend_address}/`;
+var full_backend_address = `http://${backend_address}/`;
 
 $(document).ready(function() {
 
@@ -109,6 +111,8 @@ function engineError(display, log, code) {
 
 // Pull quotes from backend
 
+start_time = performance.now();
+
 console.log('Pulling quotes from backend...');
 
 $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`)
@@ -117,15 +121,19 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
   .done(function(data) {
 
+    pull_time['quotes'] = Math.ceil(performance.now() - start_time);
+
     $.each(data, function(key, val) {
 
       quotes.push(val);
 
     });
 
-    console.log(`Successfully pulled ${quotes.length} quotes from backend.`);
+    console.log(`Successfully pulled ${quotes.length} quotes from backend in ${pull_time['quotes']}ms.`);
 
     // Pull colours from backend
+
+    start_time = performance.now();
 
     console.log('Pulling colours from backend...');
 
@@ -135,13 +143,15 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
       .done(function(data) {
 
+        pull_time['colours'] = Math.ceil(performance.now() - start_time);
+
         $.each(data, function(key, val) {
 
           colours.push(val);
 
         });
 
-        console.log(`Successfully pulled ${colours.length} colours from backend.`);
+        console.log(`Successfully pulled ${colours.length} colours from backend in ${pull_time['colours']}ms.`);
 
         var reloadQuote;
         var reloadColour;
@@ -151,6 +161,8 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
         // Pull settings from backend
 
+        start_time = performance.now();
+
         console.log('Pulling settings from backend...');
 
         $.getJSON(`${full_backend_address}settings_serializer.php`)
@@ -158,6 +170,8 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
           // Move on to next step
 
           .done(function(data) {
+
+            pull_time['settings'] = Math.ceil(performance.now() - start_time);
 
             $.each(data, function(key, val) {
 
@@ -175,7 +189,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             });
 
-            console.log(`Successfully pulled ${Object.keys(settings).length} settings from backend.`);
+            console.log(`Successfully pulled ${Object.keys(settings).length} settings from backend in ${pull_time['settings']}ms.`);
 
             // Function to check what was pulled from the backend in the console
 
