@@ -1,7 +1,6 @@
 <?php
 
   session_start();
-  $id = $_POST["id"];
   $content = $_POST["content"];
   include("../../sql.php");
   $sql = "INSERT INTO yourmood.improve (active, quote) VALUES (1, '$content')";

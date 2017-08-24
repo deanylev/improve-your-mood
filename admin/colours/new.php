@@ -1,7 +1,6 @@
 <?php
 
   session_start();
-  $id = $_POST["id"];
   $content = strtoupper($_POST["content"]);
   include("../../sql.php");
   $sql = "INSERT INTO yourmood.colours (active, colour) VALUES (1, '$content')";

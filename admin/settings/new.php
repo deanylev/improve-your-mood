@@ -1,7 +1,6 @@
 <?php
 
   session_start();
-  $id = $_POST["id"];
   $content = $_POST["content"];
   $value = $_POST["value"];
   include("../../sql.php");
