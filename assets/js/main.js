@@ -97,19 +97,20 @@ function engineError(display, log, code) {
     $('#error-code').text(`Error code ${code}`);
     console.error(log);
 
+    if (localStorage.getItem('backend_address')) {
+
+      $('#reset-backend-address').removeClass('hide');
+
+    }
+
   } else if (!networkReported) {
 
     networkReported = true;
     $('#quote').text('You are not connected to the internet.');
     $('#quote').addClass('scale-in');
     $('.preloader-wrapper').addClass('hide');
+    $('#retry-button').removeClass('hide');
     console.log('No internet connection.');
-
-  }
-
-  if (localStorage.getItem('backend_address')) {
-
-    $('#reset-backend-address').removeClass('hide');
 
   }
 
