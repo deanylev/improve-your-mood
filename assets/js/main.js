@@ -484,7 +484,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
         // When user trys to save settings
 
-        $('#save-settings-button').click(function() {
+        function saveSettings() {
 
           let local_settings = {};
           let has_input = true;
@@ -547,6 +547,26 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
             $('#settings-modal').modal('close');
 
           }
+
+        }
+
+        $('#save-settings-button').click(function() {
+
+          saveSettings();
+
+        });
+
+        $('.settings-input').each(function() {
+
+          $(this).keydown(function(e) {
+
+            if (settings['save_settings_keys'].includes(e.which)) {
+
+              saveSettings();
+
+            }
+
+          });
 
         });
 
