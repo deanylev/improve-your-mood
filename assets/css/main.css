@@ -46,6 +46,10 @@ main {
   text-decoration: underline;
 }
 
+.spinner-layer {
+  border-color: white;
+}
+
 #logo {
   font-family: 'Raleway', Helvetica, Arial;
 }

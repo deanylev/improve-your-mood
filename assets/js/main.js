@@ -75,13 +75,9 @@ $(document).ready(function() {
 
   });
 
-  // Hacky method to make quote top margin correct
+  // Calculate proper top margin for certain elements
 
-  $('#quote').css('margin-top', $(document).height() / 4.5);
-
-  // Scale in any elements that need to be
-
-  $('.scale-out').addClass('scale-in');
+  $('.js-margin').css('margin-top', $(document).height() / 4.5);
 
 });
 
@@ -96,6 +92,8 @@ function engineError(display, log, code) {
     appError = true;
     $('body').css('background-color', 'black');
     $('#quote').text(display);
+    $('#quote').addClass('scale-in');
+    $('.preloader-wrapper').addClass('hide');
     $('#error-code').text(`Error code ${code}`);
     console.error(log);
 
@@ -103,6 +101,8 @@ function engineError(display, log, code) {
 
     networkReported = true;
     $('#quote').text('You are not connected to the internet.');
+    $('#quote').addClass('scale-in');
+    $('.preloader-wrapper').addClass('hide');
     console.log('No internet connection.');
 
   }
@@ -361,6 +361,8 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 reloadQuote();
                 reloadColour();
+                $('#quote').addClass('scale-in');
+                $('.preloader-wrapper').addClass('hide');
                 $('#retry-button').hide();
                 $('.fixed-action-btn').removeClass('hide');
                 console.log('MoodEngine initialized.');
