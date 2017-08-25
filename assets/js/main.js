@@ -218,7 +218,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               }
 
-              lastNum = quoteNum;
+              lastNum = localStorage.getItem('lastQuote');
               quoteNum = Math.floor(quotes.length * Math.random());
 
               // If all quotes are used and no repeats is enabled, start again
@@ -231,16 +231,17 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               // If MoodEngine trys to use the same quote twice, or one that has already been used, generate a new one
 
-              while (lastNum === quoteNum || settings['no_repeats'] && usedQuotes.includes(quoteNum)) {
+              while (lastNum == quoteNum || settings['no_repeats'] && usedQuotes.includes(quoteNum)) {
 
                 quoteNum = Math.floor(quotes.length * Math.random());
 
               }
 
-              // Add quote to used quotes and quote history
+              // Add quote to used quotes, quote history and localStorage
 
               usedQuotes.push(quoteNum);
               quoteHistory.push(quoteNum);
+              localStorage.setItem('lastQuote', quoteNum);
 
               let quote = quotes[quoteNum];
 
@@ -263,21 +264,22 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               }
 
-              lastNum = colourNum;
+              lastNum = localStorage.getItem('lastColour');
               colourNum = Math.floor(colours.length * Math.random());
 
               // If MoodEngine trys to use the same colour twice, generate a new one
 
-              while (lastNum === colourNum) {
+              while (lastNum == colourNum) {
 
                 colourNum = Math.floor(colours.length * Math.random());
 
               }
 
-              // Add colour to used quotes and quote history
+              // Add colour to used colours, colour history and localStorage
 
               usedColours.push(colourNum);
               colourHistory.push(colourNum);
+              localStorage.setItem('lastColour', quoteNum);
 
               let colour = colours[colourNum];
 
