@@ -50,6 +50,10 @@ main {
   border-color: white;
 }
 
+.error-button {
+  margin-top: 30px;
+}
+
 #logo {
   font-family: 'Raleway', Helvetica, Arial;
 }
