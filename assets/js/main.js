@@ -12,6 +12,8 @@ var networkReported;
 var settingsOpen = false;
 var start_time;
 var pull_time = {};
+var reloadEngine;
+var manualReload;
 
 // Platform specific stuff
 
@@ -456,7 +458,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
         // Function to reload both quotes and colour
 
-        function reloadEngine() {
+        reloadEngine = function() {
 
           if (!appError) {
 
@@ -467,6 +469,13 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
             backPressed = false;
 
           }
+
+        }
+
+        manualReload = function(text, colour) {
+
+          $('#quote').text(text);
+          $('body').css('background-color', `#${colour}`);
 
         }
 
