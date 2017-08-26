@@ -18,7 +18,7 @@
   <script src="assets/js/main.js"></script>
 </head>
 
-<body>
+<body class="coloured">
   <div id="settings-modal" class="modal">
     <div class="modal-content">
       <h4>Settings</h4>
@@ -113,12 +113,14 @@
     <button class="btn white black-text waves-effect error-button hide" id="reset-backend-address">Reset Back-End Address</button>
   </main>
   <div class="fixed-action-btn horizontal hide">
-    <a class="btn-floating btn-large white waves-effect" id="toggle-auto-reload">
-      <i class="large material-icons black-text" id="auto-reload-icon">autorenew</i>
+    <a class="btn-floating btn-large transparent">
+      <i class="large material-icons">menu</i>
     </a>
-    <a class="btn-floating btn-large white waves-effect modal-trigger" id="settings-button" data-target="settings-modal">
-      <i class="large material-icons black-text">settings</i>
-    </a>
+    <ul>
+      <li><a class="btn-floating waves-effect transparent" id="toggle-auto-reload"><i class="material-icons">autorenew</i></a></li>
+      <li><a class="btn-floating waves-effect transparent modal-trigger" id="settings-button" data-target="settings-modal"><i class="material-icons">settings</i></a></li>
+      <li><a class="btn-floating waves-effect transparent" id="go-back-button"><i class="material-icons">arrow_back</i></a></li>
+    </ul>
   </div>
   <footer class="page-footer transparent hide-on-med-and-down">
     <div class="footer-copyright transparent">

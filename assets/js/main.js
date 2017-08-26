@@ -90,7 +90,7 @@ function engineError(display, log, code) {
   if (navigator.onLine) {
 
     appError = true;
-    $('body').css('background-color', 'black');
+    $('.coloured').css('background-color', 'black');
     $('#quote').text(display);
     $('#quote').addClass('scale-in');
     $('.preloader-wrapper').addClass('hide');
@@ -286,7 +286,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               // Apply colour to background
 
-              $('body').css('background-color', `#${colour}`);
+              $('.coloured').css('background-color', `#${colour}`);
 
             };
 
@@ -296,12 +296,13 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             window.setInterval(function() {
 
-              if (!$('main').hasClass('manual-reload')) {
+              if (!notAutoReloading()) {
 
-                reloadEngine();
+                reloadEngine('Auto');
                 console.log(`Auto reloaded after ${time_setting}ms`);
 
               }
+
 
             }, time_setting);
 
@@ -340,9 +341,11 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             function toggleAutoReload() {
 
-              let toggle = $('main').hasClass('manual-reload') ? 'Enabled' : 'Disabled';
+              let toggle = notAutoReloading() ? 'Enabled' : 'Disabled';
+              let icon = $('#toggle-auto-reload').find('i');
+              let icon_text = icon.text() === 'autorenew' ? 'close' : 'autorenew';
 
-              $('#auto-reload-icon').text($('#auto-reload-icon').text() === 'autorenew' ? 'close' : 'autorenew');
+              icon.text(icon_text);
               $('main').toggleClass('manual-reload');
               Materialize.toast(`Auto Reload ${toggle}!`, settings['toast_interval']);
 
@@ -353,6 +356,49 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
               toggleAutoReload();
 
             });
+
+            // Go back when the button is clicked
+
+            function goBack(action) {
+
+              if (notAutoReloading()) {
+
+                if (!backPressed) {
+
+                  Materialize.toast(`${action} again to go to the previous quote/colour.`, settings['toast_interval']);
+                  backPressed = true;
+
+                }
+
+                quoteNum = quoteHistory.length > 1 ? quoteHistory.pop() : quoteHistory[0];
+
+                let quote = quotes[quoteNum];
+
+                $('#quote').text(quote);
+
+                colourNum = colourHistory.length > 1 ? colourHistory.pop() : colourHistory[0];
+
+                let colour = colours[colourNum];
+
+                $('.coloured').css('background-color', `#${colour}`);
+
+              }
+
+            }
+
+            $('#go-back-button').click(function() {
+
+              goBack('Click');
+
+            });
+
+            // Reload transitions
+
+            if (settings['reload_transitions']) {
+
+              $('.coloured').css('transition', '.3s ease-out');
+
+            }
 
             // Try to initialize the MoodEngine if there are no errors
 
@@ -381,6 +427,30 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             }
 
+            // Touch gestures
+
+            var bodyGestures = new Hammer($('body')[0]);
+
+            bodyGestures.on('swipeleft', function(ev) {
+
+              reloadEngine();
+
+            });
+
+            bodyGestures.on('swiperight', function(ev) {
+
+              goBack('Swipe');
+
+            });
+
+            var mainGestures = new Hammer($('main')[0]);
+
+            mainGestures.on('tap', function(ev) {
+
+              reloadEngine();
+
+            });
+
             // Keyboard shortcuts
 
             $(document).keydown(function(e) {
@@ -389,12 +459,11 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               if (!$('#settings-modal input:focus').length) {
 
-
                 // Reload
 
                 let reload_shortcuts = localStorage.getItem('reload_keys') ? JSON.parse(`[${localStorage.getItem('reload_keys')}]`) : settings['reload_keys'];
 
-                if (reload_shortcuts.includes(e.which) && $('main').hasClass('manual-reload')) {
+                if (reload_shortcuts.includes(e.which)) {
 
                   reloadEngine();
 
@@ -424,26 +493,9 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 let back_shortcuts = localStorage.getItem('back_keys') ? JSON.parse(`[${localStorage.getItem('back_keys')}]`) : settings['back_keys'];
 
-                if (back_shortcuts.includes(e.which) && $('main').hasClass('manual-reload') && usedQuotes.length > 1) {
+                if (back_shortcuts.includes(e.which) && usedQuotes.length > 1) {
 
-                  if (!backPressed) {
-
-                    Materialize.toast('Press again to go to the previous quote/colour.', settings['toast_interval']);
-                    backPressed = true;
-
-                  }
-
-                  quoteNum = quoteHistory.length > 1 ? quoteHistory.pop() : quoteHistory[0];
-
-                  let quote = quotes[quoteNum];
-
-                  $('#quote').text(quote);
-
-                  colourNum = colourHistory.length > 1 ? colourHistory.pop() : colourHistory[0];
-
-                  let colour = colours[colourNum];
-
-                  $('body').css('background-color', `#${colour}`);
+                  goBack('Press');
 
                 }
 
@@ -463,9 +515,15 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
         // Function to reload both quotes and colour
 
-        reloadEngine = function() {
+        function notAutoReloading() {
 
-          if (!appError) {
+          return $('main').hasClass('manual-reload');
+
+        }
+
+        reloadEngine = function(method) {
+
+          if (!appError && (notAutoReloading() || method === 'Auto')) {
 
             reloadQuote();
             reloadColour();
@@ -480,21 +538,9 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
         manualReload = function(text, colour) {
 
           $('#quote').text(text);
-          $('body').css('background-color', `#${colour}`);
+          $('.coloured').css('background-color', `#${colour}`);
 
         }
-
-        $('main').click(function() {
-
-          // Reload when main element is clicked (which is most of DOM)
-
-          if ($(this).hasClass('manual-reload')) {
-
-            reloadEngine();
-
-          }
-
-        });
 
         // When user trys to save settings
 
