@@ -91,6 +91,7 @@ function engineError(display, log, code) {
 
     appError = true;
     $('.coloured').css('background-color', 'black');
+    $('meta[name="theme-color"]').attr('content', `#${colour}`);
     $('#quote').text(display);
     $('#quote').addClass('scale-in');
     $('.preloader-wrapper').addClass('hide');
@@ -382,6 +383,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
                 let colour = colours[colourNum];
 
                 $('.coloured').css('background-color', `#${colour}`);
+                $('meta[name="theme-color"]').attr('content', `#${colour}`);
 
               }
 
@@ -540,6 +542,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
           $('#quote').text(text);
           $('.coloured').css('background-color', `#${colour}`);
+          $('meta[name="theme-color"]').attr('content', `#${colour}`);
 
         }
 
