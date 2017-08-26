@@ -287,6 +287,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
               // Apply colour to background
 
               $('.coloured').css('background-color', `#${colour}`);
+              $('meta[name="theme-color"]').attr('content', `#${colour}`);
 
             };
 

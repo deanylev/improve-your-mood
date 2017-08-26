@@ -1,4 +1,13 @@
 @import url('https://fonts.googleapis.com/css?family=Material+Icons|Raleway|Oxygen');
+* {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 body {
   background-color: black;
   display: flex;
