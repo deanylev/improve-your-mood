@@ -30,6 +30,18 @@
         <form class="col s12" id="settings-form">
           <div class="row">
             <div class="input-field col s12">
+              <select class="settings-input" name="reload_transitions">
+                <option value="false">No</option>
+                <option value="true">Yes</option>
+              </select>
+              <label>Reload Transitions</label>
+              <a class="black-text settings-link default-button" data-setting="reload_transitions"><b>Set to Default</b></a>
+              <br>
+              <span class="tooltipped" data-setting="reload_transitions" data-position="bottom" data-delay="50" data-tooltip="Whether the colours will have a fade transition when reloading.">What's this?</span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s12">
               <input type="number" name="reload_interval" class="settings-input" id="reload_interval">
               <label for="reload_interval">Auto Reload Interval (ms)</label>
               <a class="black-text settings-link default-button" data-setting="reload_interval"><b>Set to Default</b></a>

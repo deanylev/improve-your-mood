@@ -325,8 +325,9 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               let setting = $(this).attr('name');
               let value = localStorage.getItem(setting) || settings[setting];
-              $(this).val(value);
-              $(this).parent().find('label').addClass('active');
+              $(this).is('select') ? $(this).val(JSON.stringify(value)) : $(this).val(value);
+              $(this).is('input') ? $(this).parent().find('label').addClass('active') : '';
+              $('select').material_select();
 
             });
 
@@ -409,7 +410,9 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             // Reload transitions
 
-            if (settings['reload_transitions']) {
+            let reload_transitions_settings = localStorage.getItem('reload_transitions') ? JSON.parse(localStorage.getItem('reload_transitions')) : settings['reload_transitions'];
+
+            if (reload_transitions_settings) {
 
               $('.coloured').css('transition', '.3s ease-out');
 
@@ -575,13 +578,14 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
           $('.settings-input').each(function() {
 
             // Construct the object using values
+
             local_settings[$(this).attr('name')] = $(this).val();
 
             // Detect if input is blank
 
             if (!$(this).val()) {
 
-              has_input = false;
+              //has_input = false;
 
             }
 
