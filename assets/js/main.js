@@ -542,7 +542,16 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
             reloadColour();
 
             // Set backpressed to false for going back
+
             backPressed = false;
+
+            // Log quote/colour in console (for fun)
+
+            if (settings['extra_logging'].includes('reload') && platform === 'web') {
+
+              console.log(`%c${quotes[quoteNum]}`, `padding: 2px 5px; font-size: 20px; font-family: 'Oxygen'; color: white; background-color: #${colours[colourNum]}`);
+
+            }
 
           }
 
