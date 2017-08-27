@@ -91,7 +91,7 @@ function engineError(display, log, code) {
 
     appError = true;
     $('.coloured').css('background-color', 'black');
-    $('meta[name="theme-color"]').attr('content', `#${colour}`);
+    $('meta[name="theme-color"]').attr('content', 'black');
     $('#quote').text(display);
     $('#quote').addClass('scale-in');
     $('.preloader-wrapper').addClass('hide');
@@ -344,10 +344,11 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
             function toggleAutoReload() {
 
               let toggle = notAutoReloading() ? 'Enabled' : 'Disabled';
+              let icon_text = notAutoReloading() ? 'close' : 'autorenew';
               let icon = $('#toggle-auto-reload').find('i');
-              let icon_text = icon.text() === 'autorenew' ? 'close' : 'autorenew';
 
               icon.text(icon_text);
+              $('#go-back-button').attr('disabled', notAutoReloading());
               $('main').toggleClass('manual-reload');
               Materialize.toast(`Auto Reload ${toggle}!`, settings['toast_interval']);
 
