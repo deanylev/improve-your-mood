@@ -79,6 +79,14 @@ $(document).ready(function() {
 
   $('.js-margin').css('margin-top', $(document).height() / 4.5);
 
+  // Do it on resize too
+  
+  $(window).resize(function() {
+
+    $('.js-margin').css('margin-top', $(document).height() / 4.5);
+
+  });
+
 });
 
 // Function for displaying and logging errors
