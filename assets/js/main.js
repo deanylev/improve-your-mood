@@ -430,25 +430,23 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             }
 
-            // Touch gestures
+            // Touch / click gestures
 
-            var bodyGestures = new Hammer($('body')[0]);
+            var hammertime = new Hammer($('body')[0]);
 
-            bodyGestures.on('swipeleft', function(ev) {
+            hammertime.on('swipeleft', function(ev) {
 
               reloadEngine();
 
             });
 
-            bodyGestures.on('swiperight', function(ev) {
+            hammertime.on('swiperight', function(ev) {
 
               goBack('Swipe');
 
             });
 
-            var mainGestures = new Hammer($('main')[0]);
-
-            mainGestures.on('tap', function(ev) {
+            $('main').click(function() {
 
               reloadEngine();
 
