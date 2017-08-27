@@ -27,7 +27,7 @@ if (platform === 'web') {
 
 }
 
-var backend_address = localStorage.getItem('backend_address') ? localStorage.getItem('backend_address') : 'improveyourmood.xyz';
+var backend_address = localStorage.getItem('backend_address') || 'improveyourmood.xyz';
 
 var full_backend_address = `http://${backend_address}/`;
 
@@ -294,7 +294,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             // Auto reload
 
-            var time_setting = localStorage.getItem('reload_interval') ? localStorage.getItem('reload_interval') : settings['reload_interval'];
+            var time_setting = localStorage.getItem('reload_interval') || settings['reload_interval'];
 
             window.setInterval(function() {
 
@@ -313,7 +313,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
             $('.settings-input').each(function() {
 
               let setting = $(this).attr('name');
-              let value = localStorage.getItem(setting) ? localStorage.getItem(setting) : settings[setting];
+              let value = localStorage.getItem(setting) || settings[setting];
               $(this).val(value);
               $(this).parent().find('label').addClass('active');
 
