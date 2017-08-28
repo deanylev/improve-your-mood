@@ -585,7 +585,14 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
         $('.set-all-default').click(function() {
 
+          let lastQuote = localStorage.getItem('lastQuote');
+          let lastColour = localStorage.getItem('lastColour');
+
           localStorage.clear();
+
+          localStorage.setItem('lastQuote', lastQuote);
+          localStorage.setItem('lastColour', lastColour);
+
           window.location.reload();
 
         });
