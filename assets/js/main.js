@@ -45,6 +45,18 @@ $(document).ready(function() {
 
       settingsOpen = false;
 
+      $('.settings-input').each(function() {
+
+        let setting = $(this).attr('name');
+        let value = localStorage.getItem(setting) || settings[setting];
+        $(this).is('select') ? $(this).val(JSON.stringify(value)) : $(this).val(value);
+        $(this).is('input') ? $(this).parent().find('label').addClass('active') : '';
+        $('select').material_select();
+
+      });
+
+      console.log('Reset settings due to modal close.')
+
     }
   });
 
@@ -319,7 +331,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             }, time_setting);
 
-            // Set the correct values in the settings inputs and tooltips
+            // Set the correct values in the settings inputs
 
             $('.settings-input').each(function() {
 
@@ -336,7 +348,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             $('#backend_address').val(backend_address);
 
-            // Add the text about the default to the current text
+            // Add defaults to tooltips
 
             $('.tooltipped').each(function() {
 
