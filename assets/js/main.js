@@ -491,7 +491,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 let reload_shortcuts = localStorage.getItem('reload_keys') ? JSON.parse(`[${localStorage.getItem('reload_keys')}]`) : settings['reload_keys'];
 
-                if (reload_shortcuts.includes(e.which)) {
+                if (reload_shortcuts.includes(e.which) && !settingsOpen) {
 
                   reloadEngine();
 
@@ -501,7 +501,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 let auto_reload_shortcuts = localStorage.getItem('auto_reload_keys') ? JSON.parse(`[${localStorage.getItem('auto_reload_keys')}]`) : settings['auto_reload_keys']
 
-                if (auto_reload_shortcuts.includes(e.which)) {
+                if (auto_reload_shortcuts.includes(e.which) && !settingsOpen) {
 
                   toggleAutoReload();
 
@@ -521,7 +521,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 let back_shortcuts = localStorage.getItem('back_keys') ? JSON.parse(`[${localStorage.getItem('back_keys')}]`) : settings['back_keys'];
 
-                if (back_shortcuts.includes(e.which) && usedQuotes.length > 1) {
+                if (back_shortcuts.includes(e.which) && !settingsOpen && usedQuotes.length > 1) {
 
                   goBack('Press');
 
