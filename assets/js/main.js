@@ -601,7 +601,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 // If the set value is the same as the default, just remove it from localStorage and use backend value
 
-                if (val === settings[key]) {
+                if (val === settings[key] || val === JSON.stringify(settings[key])) {
 
                   localStorage.removeItem(key);
 
