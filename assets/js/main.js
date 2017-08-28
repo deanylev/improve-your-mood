@@ -568,6 +568,15 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
         }
 
+        // Set all settings to default
+
+        $('.set-all-default').click(function() {
+
+          localStorage.clear();
+          window.location.reload();
+
+        });
+
         // When user trys to save settings
 
         function saveSettings() {
