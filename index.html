@@ -32,23 +32,44 @@
         <form class="col s12" id="settings-form">
           <div class="row">
             <div class="input-field col s12">
-              <select class="settings-input" name="reload_transitions">
+              <select class="settings-input" name="colour_reload_transitions">
                 <option value="false">No</option>
                 <option value="true">Yes</option>
               </select>
-              <label>Reload Transitions</label>
-              <a class="black-text settings-link default-button" data-setting="reload_transitions"><b>Set to Default</b></a>
+              <label>Colour Reload Transitions</label>
+              <a class="black-text settings-link default-button" data-setting="colour_reload_transitions"><b>Set to Default</b></a>
               <br>
-              <span class="tooltipped" data-setting="reload_transitions" data-position="bottom" data-delay="50" data-tooltip="Whether the colours will have a fade transition when reloading.">What's this?</span>
+              <span class="tooltipped" data-setting="colour_reload_transitions" data-position="bottom" data-delay="50" data-tooltip="Whether the background colour will have a fade transition when changing.">What's this?</span>
             </div>
           </div>
           <div class="row">
             <div class="input-field col s12">
-              <input type="number" name="reload_transition_time" class="settings-input" id="reload_transition_time">
-              <label for="reload_transition_time">Reload Transition Time (ms)</label>
-              <a class="black-text settings-link default-button" data-setting="reload_transition_time"><b>Set to Default</b></a>
+              <input type="number" name="colour_reload_transition_time" class="settings-input" id="colour_reload_transition_time">
+              <label for="colour_reload_transition_time">Colour Reload Transition Time (ms)</label>
+              <a class="black-text settings-link default-button" data-setting="colour_reload_transition_time"><b>Set to Default</b></a>
               <br>
-              <span class="tooltipped" data-setting="reload_transition_time" data-position="bottom" data-delay="50" data-tooltip="How long the colour fade transitions will take to complete, in milliseconds.">What's this?</span>
+              <span class="tooltipped" data-setting="colour_reload_transition_time" data-position="bottom" data-delay="50" data-tooltip="How long the colour reload transitions will take to complete, in milliseconds.">What's this?</span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s12">
+              <select class="settings-input" name="text_reload_transitions">
+                <option value="false">No</option>
+                <option value="true">Yes</option>
+              </select>
+              <label>Text Reload Transitions</label>
+              <a class="black-text settings-link default-button" data-setting="text_reload_transitions"><b>Set to Default</b></a>
+              <br>
+              <span class="tooltipped" data-setting="text_reload_transitions" data-position="bottom" data-delay="50" data-tooltip="Whether the text will have a fade transition when changing.">What's this?</span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s12">
+              <input type="number" name="text_reload_transition_time" class="settings-input" id="text_reload_transition_time">
+              <label for="text_reload_transition_time">Text Reload Transition Time (ms)</label>
+              <a class="black-text settings-link default-button" data-setting="text_reload_transition_time"><b>Set to Default</b></a>
+              <br>
+              <span class="tooltipped" data-setting="text_reload_transition_time" data-position="bottom" data-delay="50" data-tooltip="How long the text reload transitions will take to complete, in milliseconds.">What's this?</span>
             </div>
           </div>
           <div class="row">
@@ -133,7 +154,7 @@
         </div>
       </div>
     </div>
-    <p id="quote" class="scale-transition scale-out js-margin">Loading...</p>
+    <p id="quote" class="scale-transition scale-out js-margin"></p>
     <p id="error-code"></p>
     <button class="btn white black-text waves-effect error-button hide" id="reset-backend-address">Reset Back-End Address</button>
   </main>

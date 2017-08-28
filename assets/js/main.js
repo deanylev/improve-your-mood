@@ -55,8 +55,6 @@ $(document).ready(function() {
 
       });
 
-      console.log('Reset settings due to modal close.');
-
     }
   });
 
@@ -272,11 +270,26 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               // Display quote on the text element
 
-              $('#quote').text(quote);
+              let text_reload_transitions_settings = localStorage.getItem('text_reload_transitions') ? JSON.parse(localStorage.getItem('text_reload_transitions')) : settings['text_reload_transitions'];
+              let text_reload_transition_time = localStorage.getItem('text_reload_transition_time') ? JSON.parse(localStorage.getItem('text_reload_transition_time')) : settings['text_reload_transition_time'];
+
+              if (text_reload_transitions_settings) {
+
+                $('#quote').fadeOut(text_reload_transition_time / 2, function() {
+
+                  $(this).text(quote).fadeIn(text_reload_transition_time / 2);
+
+                });
+
+              } else {
+
+                $('#quote').text(quote);
+
+              }
 
             };
 
-            // Function for reloading the colour
+            // Function for reloading the text
 
             reloadColour = function() {
 
@@ -390,18 +403,26 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               if (notAutoReloading()) {
 
-                if (!backPressed) {
-
-                  Materialize.toast(`${action} again to go to the previous quote/colour.`, settings['toast_interval']);
-                  backPressed = true;
-
-                }
-
                 quoteNum = quoteHistory.length > 1 ? quoteHistory.pop() : quoteHistory[0];
 
                 let quote = quotes[quoteNum];
 
-                $('#quote').text(quote);
+                let text_reload_transitions_settings = localStorage.getItem('text_reload_transitions') ? JSON.parse(localStorage.getItem('text_reload_transitions')) : settings['text_reload_transitions'];
+                let text_reload_transition_time = localStorage.getItem('text_reload_transition_time') ? JSON.parse(localStorage.getItem('text_reload_transition_time')) : settings['text_reload_transition_time'];
+
+                if (text_reload_transitions_settings && backPressed) {
+
+                  $('#quote').fadeOut(text_reload_transition_time / 2, function() {
+
+                    $(this).text(quote).fadeIn(text_reload_transition_time / 2);
+
+                  });
+
+                } else {
+
+                  $('#quote').text(quote);
+
+                }
 
                 colourNum = colourHistory.length > 1 ? colourHistory.pop() : colourHistory[0];
 
@@ -409,6 +430,13 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 $('.coloured').css('background-color', `#${colour}`);
                 $('meta[name="theme-color"]').attr('content', `#${colour}`);
+
+                if (!backPressed) {
+
+                  Materialize.toast(`${action} again to go to the previous quote/colour.`, settings['toast_interval']);
+                  backPressed = true;
+
+                }
 
               }
 
@@ -422,12 +450,12 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             // Reload transitions
 
-            let reload_transitions_settings = localStorage.getItem('reload_transitions') ? JSON.parse(localStorage.getItem('reload_transitions')) : settings['reload_transitions'];
-            let reload_transition_time = localStorage.getItem('reload_transition_time') ? JSON.parse(localStorage.getItem('reload_transition_time')) : settings['reload_transition_time'];
+            let colour_reload_transitions_settings = localStorage.getItem('colour_reload_transitions') ? JSON.parse(localStorage.getItem('colour_reload_transitions')) : settings['colour_reload_transitions'];
+            let colour_reload_transition_time = localStorage.getItem('colour_reload_transition_time') ? JSON.parse(localStorage.getItem('colour_reload_transition_time')) : settings['colour_reload_transition_time'];
 
-            if (reload_transitions_settings) {
+            if (colour_reload_transitions_settings) {
 
-              $('.coloured').css('transition', `${reload_transition_time}ms ease-out`);
+              $('.coloured').css('transition', `${colour_reload_transition_time}ms ease-out`);
 
             }
 
@@ -575,7 +603,23 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
         manualReload = function(text, colour) {
 
-          $('#quote').text(text);
+          let text_reload_transitions_settings = localStorage.getItem('text_reload_transitions') ? JSON.parse(localStorage.getItem('text_reload_transitions')) : settings['text_reload_transitions'];
+          let text_reload_transition_time = localStorage.getItem('text_reload_transition_time') ? JSON.parse(localStorage.getItem('text_reload_transition_time')) : settings['text_reload_transition_time'];
+
+          if (text_reload_transitions_settings) {
+
+            $('#quote').fadeOut(text_reload_transition_time / 2, function() {
+
+              $(this).text(text).fadeIn(text_reload_transition_time / 2);
+
+            });
+
+          } else {
+
+            $('#quote').text(text);
+
+          }
+
           $('.coloured').css('background-color', `#${colour}`);
           $('meta[name="theme-color"]').attr('content', `#${colour}`);
 
