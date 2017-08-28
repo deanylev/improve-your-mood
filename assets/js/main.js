@@ -55,7 +55,7 @@ $(document).ready(function() {
 
       });
 
-      console.log('Reset settings due to modal close.')
+      console.log('Reset settings due to modal close.');
 
     }
   });
@@ -423,10 +423,11 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
             // Reload transitions
 
             let reload_transitions_settings = localStorage.getItem('reload_transitions') ? JSON.parse(localStorage.getItem('reload_transitions')) : settings['reload_transitions'];
+            let reload_transition_time = localStorage.getItem('reload_transition_time') ? JSON.parse(localStorage.getItem('reload_transition_time')) : settings['reload_transition_time'];
 
             if (reload_transitions_settings) {
 
-              $('.coloured').css('transition', '.3s ease-out');
+              $('.coloured').css('transition', `${reload_transition_time}ms ease-out`);
 
             }
 
