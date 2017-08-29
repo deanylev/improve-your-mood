@@ -128,6 +128,11 @@
      <br>
      <span><?php echo $count; ?> total</span>
    </main>
+   <footer class="footer">
+     <div class="container">
+       <p class="text-muted">MoodBackend v1.0 | &copy; 2017 <a href="https://deanlevinson.com.au">Dean Levinson</a></p>
+     </div>
+   </footer>
 </body>
 
 </html>

@@ -337,7 +337,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
               if (!notAutoReloading()) {
 
                 reloadEngine('Auto');
-                console.log(`Auto reloaded after ${time_setting}ms`);
+                console.log(`Auto reloaded after ${time_setting}ms.`);
 
               }
 

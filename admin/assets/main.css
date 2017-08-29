@@ -1,6 +1,23 @@
 @import url('https://fonts.googleapis.com/css?family=Oxygen');
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
 input[name="content"] {
   width: 600px;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 60px;
+  text-align: center;
 }
 
 .colour-preview {
