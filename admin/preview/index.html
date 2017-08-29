@@ -7,9 +7,11 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Admin Panel - Preview</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.css">
   <link rel="stylesheet" href="../assets/main.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.js"></script>
   <script src="../assets/main.js"></script>
 </head>
 
@@ -38,19 +40,10 @@
     </div>
   </nav>
   <div class="container text-center">
-    <form>
-      <div class="form-group">
-        <label>Text:</label>
-        <input type="text" class="form-control" value="Your Text Here" id="full-preview-text">
-      </div>
-      <div class="form-group">
-        <label>Colour:</label>
-        <input type="text" class="form-control" value="000000" id="full-preview-colour">
-      </div>
-      <div class="full-preview">
-        <p>Your Text Here</p>
-      </div>
-    </form>
+    <input type="text" id="full-preview-colour">
+    <div class="full-preview">
+      <p contenteditable>Your Text Here</p>
+    </div>
     <br><br>
     <h1>KeyCode Tester</h1>
     <h3 id="keycode"></h3>
