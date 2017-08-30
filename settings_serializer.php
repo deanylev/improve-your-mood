@@ -13,7 +13,10 @@
   if ($result->num_rows > 0) {
       while ($row = $result->fetch_assoc()) {
           $key = $row["setting"];
-          $settings->$key = $row["value"];
+          $array = array();
+          $array[] = $row["value"];
+          $array[] = $row["description"];
+          $settings->$key = $array;
       }
   }
 

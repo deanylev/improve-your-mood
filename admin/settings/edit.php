@@ -2,10 +2,15 @@
 
   session_start();
   $id = $_POST["id"];
-  $content = $_POST["content"];
-  $value = $_POST["value"];
+  if (isset($_POST["edit_item"])) {
+    $content = $_POST["content"];
+    $value = $_POST["value"];
+    $sql = "UPDATE yourmood.settings SET setting='$content', value = '$value' WHERE id='$id'";
+  } elseif (isset($_POST["edit_description"])) {
+    $description = $_POST["description"];
+    $sql = "UPDATE yourmood.settings SET description='$description' WHERE id='$id'";
+  }
   include("../../sql.php");
-  $sql = "UPDATE yourmood.settings SET setting='$content', value = '$value' WHERE id='$id'";
   if ($conn->query($sql) === false) {
       echo "Error: " . $sql . "<br>" . $conn->error;
   }

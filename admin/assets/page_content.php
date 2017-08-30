@@ -11,9 +11,9 @@
   <link rel="stylesheet" href="../assets/main.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <?php if ($title == "colour") { ?>
+  <?php if ($title == "colour"): ?>
 <script src="../assets/main.js"></script>
-  <?php } ?>
+  <?php endif; ?>
 </head>
 <body>
   <nav class="navbar navbar-inverse">
@@ -30,17 +30,25 @@
       <div class="collapse navbar-collapse" id="nav">
         <ul class="nav navbar-nav">
           <li><a href="../../">Home</a></li>
-          <li class="<?php if ($title == "quote" && isset($version) && $version == "improve") { echo "active"; } ?>"><a href="../improve_quotes">Improve Quotes</a></li>
-          <li class="<?php if ($title == "quote" && isset($version) && $version == "decrease") { echo "active"; } ?>"><a href="../decrease_quotes">Decrease Quotes</a></li>
-          <li class="<?php if ($title == "colour") { echo "active"; } ?>"><a href="../colours">Colours</a></li>
-          <li class="<?php if ($title == "setting") { echo "active"; } ?>"><a href="../settings">Settings</a></li>
+          <li class="<?php if ($title == "quote" && isset($version) && $version == "improve") {
+    echo "active";
+} ?>"><a href="../improve_quotes">Improve Quotes</a></li>
+          <li class="<?php if ($title == "quote" && isset($version) && $version == "decrease") {
+    echo "active";
+} ?>"><a href="../decrease_quotes">Decrease Quotes</a></li>
+          <li class="<?php if ($title == "colour") {
+    echo "active";
+} ?>"><a href="../colours">Colours</a></li>
+          <li class="<?php if ($title == "setting") {
+    echo "active";
+} ?>"><a href="../settings">Settings</a></li>
           <li><a href="../preview">Preview</a></li>
         </ul>
       </div>
     </div>
   </nav>
   <main class="container">
-    <?php if (isset($_SESSION["alert"])) { ?>
+    <?php if (isset($_SESSION["alert"])): ?>
       <br>
       <div class="alert alert-success">
         <?php echo $_SESSION["alert"]; ?>
@@ -48,37 +56,36 @@
       </div>
     <?php
       session_destroy();
-    } ?>
+    endif; ?>
     <h1>New <?php echo ucwords($title); ?></h1>
     <form action="new.php" method="POST">
       <input type="text" name="content" placeholder="Enter a <?php echo $title; ?>" id="new-input">
 
-      <?php if ($title == "colour") { ?>
+      <?php if ($title == "colour"): ?>
 
         <div class="colour-preview" id="colour-preview"></div>
 
-      <?php } ?>
+      <?php endif; ?>
 
-      <?php if ($title == "setting") { ?>
+      <?php if ($title == "setting"): ?>
 
         <input type="text" name="value" placeholder="Enter a value">
 
-      <?php } ?>
+      <?php endif; ?>
 
       <input type="submit" value="Save" class="btn btn-primary">
     </form>
     <br>
     <h1><?php echo ucwords($title); ?>s</h1>
     <table>
-      <thead>
       <tbody>
 
         <?php
 
           $count = 0;
 
-          if ($result->num_rows > 0) {
-              while ($row = $result->fetch_assoc()) {
+          if ($result->num_rows > 0):
+              while ($row = $result->fetch_assoc()):
                 $count += 1; ?>
 
                   <tr>
@@ -87,19 +94,19 @@
                         <input type="hidden" name="id" value="<?php echo $row["id"]; ?>">
                         <input type="text" name="content" value="<?php echo $row[$title]; ?>">
 
-                        <?php if ($title == "colour") { ?>
+                        <?php if ($title == "colour"): ?>
 
                           <div class="colour-preview" style="background-color: #<?php echo $row["colour"]; ?>"></div>
 
-                        <?php } ?>
+                        <?php endif; ?>
 
-                        <?php if ($title == "setting") { ?>
+                        <?php if ($title == "setting"): ?>
 
                           <input type="text" name="value" value="<?php echo $row["value"]; ?>">
 
-                        <?php } ?>
+                        <?php endif; ?>
 
-                        <input type="submit" value="Edit" class="btn btn-primary action-button">
+                        <input type="submit" name="edit_item" value="Edit" class="btn btn-primary action-button">
                       </form>
                     </td>
                     <td>
@@ -117,9 +124,25 @@
                     </td>
                   </tr>
 
+                  <?php if ($title == "setting"): ?>
+
+                    <tr>
+                      <td>
+                        <form action="edit.php" method="POST">
+                          <input type="hidden" name="id" value="<?php echo $row["id"]; ?>">
+                          <textarea name="description" rows="4" cols="82"><?php echo $row["description"]; ?></textarea>
+                          <br>
+                          <input type="submit" name="edit_description" value="Edit" class="btn btn-primary action-button">
+                          <br><br>
+                        </form>
+                      </td>
+                    </tr>
+
+                  <?php endif ?>
+
                   <?php
-              }
-          }
+              endwhile;
+          endif;
 
          ?>
 
@@ -130,7 +153,7 @@
    </main>
    <footer class="footer">
      <div class="container">
-       <p class="text-muted">MoodBackend v1.0 | &copy; 2017 <a href="https://deanlevinson.com.au">Dean Levinson</a></p>
+       <p class="text-muted">MoodBackend v1.1 | &copy; 2017 <a href="https://deanlevinson.com.au">Dean Levinson</a></p>
      </div>
    </footer>
 </body>

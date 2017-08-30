@@ -7,6 +7,7 @@ var platform = $('html').attr('data-platform');
 var quotes = [];
 var colours = [];
 var settings = {};
+var settings_desc = {};
 var appError;
 var networkReported;
 var settingsOpen = false;
@@ -208,13 +209,15 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               try {
 
-                settings[key] = JSON.parse(val)
+                settings[key] = JSON.parse(val[0]);
 
               } catch (error) {
 
-                settings[key] = val;
+                settings[key] = val[0];
 
               }
+
+              settings_desc[key] = val[1];
 
             });
 
@@ -365,7 +368,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             $('.tooltipped').each(function() {
 
-              let value = `${$(this).attr('data-tooltip')}<br>The default is ${settings[$(this).attr('data-setting')]}.`
+              let value = `${settings_desc[$(this).attr('data-setting')]}.<br>The default is ${settings[$(this).attr('data-setting')]}.`
               $(this).attr('data-tooltip', value);
 
               // Initialize the Materialize tooltip plugin
