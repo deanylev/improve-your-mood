@@ -539,11 +539,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             $('.container').click(function(e) {
 
-              // if ($(e.target).hasClass('container')) {
-
-                reloadEngine();
-
-              // }
+              reloadEngine();
 
             });
 
