@@ -62,6 +62,8 @@
       <?php if ($title == "setting"): ?>
 
         <input type="text" name="value" placeholder="Enter a value">
+        <textarea name="description" rows="4" cols="82" placeholder="Enter a description"></textarea>
+        <br>
 
       <?php endif; ?>
 
