@@ -30,18 +30,10 @@
       <div class="collapse navbar-collapse" id="nav">
         <ul class="nav navbar-nav">
           <li><a href="../../">Home</a></li>
-          <li class="<?php if ($title == "quote" && isset($version) && $version == "improve") {
-    echo "active";
-} ?>"><a href="../improve_quotes">Improve Quotes</a></li>
-          <li class="<?php if ($title == "quote" && isset($version) && $version == "decrease") {
-    echo "active";
-} ?>"><a href="../decrease_quotes">Decrease Quotes</a></li>
-          <li class="<?php if ($title == "colour") {
-    echo "active";
-} ?>"><a href="../colours">Colours</a></li>
-          <li class="<?php if ($title == "setting") {
-    echo "active";
-} ?>"><a href="../settings">Settings</a></li>
+          <li class="<?php if ($title == "quote" && isset($version) && $version == "improve") { echo "active"; } ?>"><a href="../improve_quotes">Improve Quotes</a></li>
+          <li class="<?php if ($title == "quote" && isset($version) && $version == "decrease") { echo "active"; } ?>"><a href="../decrease_quotes">Decrease Quotes</a></li>
+          <li class="<?php if ($title == "colour") { echo "active"; } ?>"><a href="../colours">Colours</a></li>
+          <li class="<?php if ($title == "setting") { echo "active"; } ?>"><a href="../settings">Settings</a></li>
           <li><a href="../preview">Preview</a></li>
         </ul>
       </div>
@@ -89,6 +81,9 @@
                 $count += 1; ?>
 
                   <tr>
+                    <?php if ($title != "setting"): ?>
+                      <td><span><?php echo $count; ?>.</span></td>
+                    <?php endif; ?>
                     <td>
                       <form action="edit.php" method="POST">
                         <input type="hidden" name="id" value="<?php echo $row["id"]; ?>">
