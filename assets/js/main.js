@@ -34,31 +34,6 @@ var full_backend_address = `http://${backend_address}/`;
 
 $(document).ready(function() {
 
-  // Initialize Materialize Plugins
-
-  $('#settings-modal').modal({
-    ready: function(modal, trigger) {
-
-      settingsOpen = true;
-
-    },
-    complete: function() {
-
-      settingsOpen = false;
-
-      $('.settings-input').each(function() {
-
-        let setting = $(this).attr('name');
-        let value = localStorage.getItem(setting) || settings[setting];
-        $(this).is('select') ? $(this).val(JSON.stringify(value)) : $(this).val(value);
-        $(this).is('input') ? $(this).parent().find('label').addClass('active') : '';
-        $('select').material_select();
-
-      });
-
-    }
-  });
-
   // Put in correct text / year
 
   $('title').text(`${version} Your Mood`);
@@ -205,23 +180,61 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             $.each(data, function(key, val) {
 
+              settings[key] = {};
+
               // If JSON parsable, parse
 
               try {
 
-                settings[key] = JSON.parse(val[0]);
+                settings[key]['value'] = JSON.parse(val['value']);
 
               } catch (error) {
 
-                settings[key] = val[0];
+                settings[key]['value'] = val['value'];
 
               }
 
-              settings_desc[key] = val[1];
+              settings[key]['description'] = val['description'];
 
             });
 
             console.log(`Successfully pulled ${Object.keys(settings).length} settings from backend in ${pull_time['settings']}ms.`);
+
+            // Initialize modal plugin
+
+            $('#settings-modal').modal({
+              ready: function(modal, trigger) {
+
+                settingsOpen = true;
+
+              },
+              complete: function() {
+
+                settingsOpen = false;
+
+                $('.settings-input').each(function() {
+
+                  let setting = $(this).attr('name');
+
+                  // For some reason the select elements return undefined which breaks stuff, so this is a crappy workaround
+
+                  try {
+
+                    let value = localStorage.getItem(setting) || settings[setting]['value'];
+                    $(this).is('select') ? $(this).val(JSON.stringify(value)) : $(this).val(value);
+                    $(this).is('input') ? $(this).parent().find('label').addClass('active') : '';
+                    $('select').material_select();
+
+                  } catch (error) {
+
+                    return;
+
+                  }
+
+                });
+
+              }
+            });
 
             // Function to check what was pulled from the backend in the console
 
@@ -249,7 +262,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               // If all quotes are used and no repeats is enabled, start again
 
-              if (usedQuotes.length === quotes.length && settings['no_repeats']) {
+              if (usedQuotes.length === quotes.length && settings['no_repeats']['value']) {
 
                 usedQuotes = [];
 
@@ -257,7 +270,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               // If MoodEngine trys to use the same quote twice, or one that has already been used, generate a new one
 
-              while (lastNum == quoteNum || settings['no_repeats'] && usedQuotes.includes(quoteNum)) {
+              while (lastNum == quoteNum || settings['no_repeats']['value'] && usedQuotes.includes(quoteNum)) {
 
                 quoteNum = Math.floor(quotes.length * Math.random());
 
@@ -273,8 +286,8 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               // Display quote on the text element
 
-              let text_reload_transitions_settings = localStorage.getItem('text_reload_transitions') ? JSON.parse(localStorage.getItem('text_reload_transitions')) : settings['text_reload_transitions'];
-              let text_reload_transition_time = localStorage.getItem('text_reload_transition_time') ? JSON.parse(localStorage.getItem('text_reload_transition_time')) : settings['text_reload_transition_time'];
+              let text_reload_transitions_settings = localStorage.getItem('text_reload_transitions') ? JSON.parse(localStorage.getItem('text_reload_transitions')) : settings['text_reload_transitions']['value'];
+              let text_reload_transition_time = localStorage.getItem('text_reload_transition_time') ? JSON.parse(localStorage.getItem('text_reload_transition_time')) : settings['text_reload_transition_time']['value'];
 
               if (text_reload_transitions_settings) {
 
@@ -333,7 +346,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             // Auto reload
 
-            var time_setting = localStorage.getItem('reload_interval') || settings['reload_interval'];
+            var time_setting = localStorage.getItem('reload_interval') || settings['reload_interval']['value'];
 
             window.setInterval(function() {
 
@@ -352,7 +365,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
             $('.settings-input').each(function() {
 
               let setting = $(this).attr('name');
-              let value = localStorage.getItem(setting) || settings[setting];
+              let value = localStorage.getItem(setting) || settings[setting]['value'];
               $(this).is('select') ? $(this).val(JSON.stringify(value)) : $(this).val(value);
               $(this).is('input') ? $(this).parent().find('label').addClass('active') : '';
               $('select').material_select();
@@ -368,7 +381,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             $('.tooltipped').each(function() {
 
-              let value = `${settings_desc[$(this).attr('data-setting')]}.<br>The default is ${settings[$(this).attr('data-setting')]}.`
+              let value = `${settings[$(this).attr('data-setting')]['description']}.<br>The default is ${settings[$(this).attr('data-setting')]['value']}.`
               $(this).attr('data-tooltip', value);
 
               // Initialize the Materialize tooltip plugin
@@ -390,7 +403,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
               icon.text(icon_text);
               $('#go-back-button').attr('disabled', notAutoReloading());
               $('main').toggleClass('manual-reload');
-              Materialize.toast(`Auto Reload ${toggle}!`, settings['toast_interval']);
+              Materialize.toast(`Auto Reload ${toggle}!`, settings['toast_interval']['value']);
 
             }
 
@@ -410,8 +423,8 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 let quote = quotes[quoteNum];
 
-                let text_reload_transitions_settings = localStorage.getItem('text_reload_transitions') ? JSON.parse(localStorage.getItem('text_reload_transitions')) : settings['text_reload_transitions'];
-                let text_reload_transition_time = localStorage.getItem('text_reload_transition_time') ? JSON.parse(localStorage.getItem('text_reload_transition_time')) : settings['text_reload_transition_time'];
+                let text_reload_transitions_settings = localStorage.getItem('text_reload_transitions') ? JSON.parse(localStorage.getItem('text_reload_transitions')) : settings['text_reload_transitions']['value'];
+                let text_reload_transition_time = localStorage.getItem('text_reload_transition_time') ? JSON.parse(localStorage.getItem('text_reload_transition_time')) : settings['text_reload_transition_time']['value'];
 
                 if (text_reload_transitions_settings && backPressed) {
 
@@ -436,7 +449,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 if (!backPressed) {
 
-                  Materialize.toast(`${action} again to go to the previous quote/colour.`, settings['toast_interval']);
+                  Materialize.toast(`${action} again to go to the previous quote/colour.`, settings['toast_interval']['value']);
                   backPressed = true;
 
                 }
@@ -453,8 +466,8 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             // Reload transitions
 
-            let colour_reload_transitions_settings = localStorage.getItem('colour_reload_transitions') ? JSON.parse(localStorage.getItem('colour_reload_transitions')) : settings['colour_reload_transitions'];
-            let colour_reload_transition_time = localStorage.getItem('colour_reload_transition_time') ? JSON.parse(localStorage.getItem('colour_reload_transition_time')) : settings['colour_reload_transition_time'];
+            let colour_reload_transitions_settings = localStorage.getItem('colour_reload_transitions') ? JSON.parse(localStorage.getItem('colour_reload_transitions')) : settings['colour_reload_transitions']['value'];
+            let colour_reload_transition_time = localStorage.getItem('colour_reload_transition_time') ? JSON.parse(localStorage.getItem('colour_reload_transition_time')) : settings['colour_reload_transition_time']['value'];
 
             if (colour_reload_transitions_settings) {
 
@@ -521,7 +534,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 // Reload
 
-                let reload_shortcuts = localStorage.getItem('reload_keys') ? JSON.parse(`[${localStorage.getItem('reload_keys')}]`) : settings['reload_keys'];
+                let reload_shortcuts = localStorage.getItem('reload_keys') ? JSON.parse(`[${localStorage.getItem('reload_keys')}]`) : settings['reload_keys']['value'];
 
                 if (reload_shortcuts.includes(e.which) && !settingsOpen) {
 
@@ -531,7 +544,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 // Toggle auto reload
 
-                let auto_reload_shortcuts = localStorage.getItem('auto_reload_keys') ? JSON.parse(`[${localStorage.getItem('auto_reload_keys')}]`) : settings['auto_reload_keys']
+                let auto_reload_shortcuts = localStorage.getItem('auto_reload_keys') ? JSON.parse(`[${localStorage.getItem('auto_reload_keys')}]`) : settings['auto_reload_keys']['value'];
 
                 if (auto_reload_shortcuts.includes(e.which) && !settingsOpen) {
 
@@ -541,7 +554,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 // Open / close settings panel
 
-                let settings_shortcuts = localStorage.getItem('settings_keys') ? JSON.parse(`[${localStorage.getItem('settings_keys')}]`) : settings['settings_keys'];
+                let settings_shortcuts = localStorage.getItem('settings_keys') ? JSON.parse(`[${localStorage.getItem('settings_keys')}]`) : settings['settings_keys']['value'];
 
                 if (settings_shortcuts.includes(e.which)) {
 
@@ -551,7 +564,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 // Go back
 
-                let back_shortcuts = localStorage.getItem('back_keys') ? JSON.parse(`[${localStorage.getItem('back_keys')}]`) : settings['back_keys'];
+                let back_shortcuts = localStorage.getItem('back_keys') ? JSON.parse(`[${localStorage.getItem('back_keys')}]`) : settings['back_keys']['value'];
 
                 if (back_shortcuts.includes(e.which) && !settingsOpen && usedQuotes.length > 1) {
 
@@ -594,7 +607,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             // Log quote/colour in console (for fun)
 
-            if (settings['extra_logging'].includes('reload') && platform === 'web') {
+            if (settings['extra_logging']['value'].includes('reload') && platform === 'web') {
 
               console.log(`%c${quotes[quoteNum]}`, `padding: 2px 5px; font-size: 20px; font-family: 'Oxygen'; color: white; background-color: #${colours[colourNum]}`);
 
@@ -606,8 +619,8 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
         manualReload = function(text, colour) {
 
-          let text_reload_transitions_settings = localStorage.getItem('text_reload_transitions') ? JSON.parse(localStorage.getItem('text_reload_transitions')) : settings['text_reload_transitions'];
-          let text_reload_transition_time = localStorage.getItem('text_reload_transition_time') ? JSON.parse(localStorage.getItem('text_reload_transition_time')) : settings['text_reload_transition_time'];
+          let text_reload_transitions_settings = localStorage.getItem('text_reload_transitions') ? JSON.parse(localStorage.getItem('text_reload_transitions')) : settings['text_reload_transitions']['value'];
+          let text_reload_transition_time = localStorage.getItem('text_reload_transition_time') ? JSON.parse(localStorage.getItem('text_reload_transition_time')) : settings['text_reload_transition_time']['value'];
 
           if (text_reload_transitions_settings) {
 
@@ -677,7 +690,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 // If the set value is the same as the default, just remove it from localStorage and use backend value
 
-                if (val === settings[key] || val === JSON.stringify(settings[key])) {
+                if (val === settings[key]['value'] || val === JSON.stringify(settings[key]['value'])) {
 
                   localStorage.removeItem(key);
 
@@ -693,14 +706,14 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               // Reload the page for settings to come into effect
 
-              Materialize.toast('Settings Saved!', settings['toast_interval']);
+              Materialize.toast('Settings Saved!', settings['toast_interval']['value']);
               window.location.reload();
 
               // Catch any unexpected errors and display/log them
 
             } catch (error) {
 
-              Materialize.toast('Unable To Save Settings. An Error Occured.', settings['toast_interval']);
+              Materialize.toast('Unable To Save Settings. An Error Occured.', settings['toast_interval']['value']);
               console.error('Couldn\'t save settings.');
 
             }
@@ -723,7 +736,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
           $(this).keydown(function(e) {
 
-            if (settings['save_settings_keys'].includes(e.which)) {
+            if (settings['save_settings_keys']['value'].includes(e.which)) {
 
               saveSettings();
 
