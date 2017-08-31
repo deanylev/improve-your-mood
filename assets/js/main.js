@@ -7,7 +7,6 @@ var platform = $('html').attr('data-platform');
 var quotes = [];
 var colours = [];
 var settings = {};
-var settings_desc = {};
 var appError;
 var networkReported;
 var settingsOpen = false;
