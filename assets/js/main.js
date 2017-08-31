@@ -364,10 +364,21 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
             $('.settings-input').each(function() {
 
               let setting = $(this).attr('name');
-              let value = localStorage.getItem(setting) || settings[setting]['value'];
-              $(this).is('select') ? $(this).val(JSON.stringify(value)) : $(this).val(value);
-              $(this).is('input') ? $(this).parent().find('label').addClass('active') : '';
-              $('select').material_select();
+
+              // For some reason the select elements return undefined which breaks stuff, so this is a crappy workaround
+
+              try {
+
+                let value = localStorage.getItem(setting) || settings[setting]['value'];
+                $(this).is('select') ? $(this).val(JSON.stringify(value)) : $(this).val(value);
+                $(this).is('input') ? $(this).parent().find('label').addClass('active') : '';
+                $('select').material_select();
+
+              } catch (error) {
+
+                return;
+
+              }
 
             });
 
@@ -683,6 +694,8 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
           if (has_input) {
 
+            delete local_settings[undefined];
+
             try {
 
               $.each(local_settings, function(key, val) {
@@ -713,7 +726,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
             } catch (error) {
 
               Materialize.toast('Unable To Save Settings. An Error Occured.', settings['toast_interval']['value']);
-              console.error('Couldn\'t save settings.');
+              console.error(`Couldn't save settings. Error: ${error}.`);
 
             }
 
