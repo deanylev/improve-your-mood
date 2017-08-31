@@ -14,6 +14,7 @@ var start_time;
 var pull_time = {};
 var reloadEngine;
 var manualReload;
+var app_version = $('html').attr('data-app-version');
 
 // Platform specific stuff
 
@@ -198,6 +199,14 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
             });
 
             console.log(`Successfully pulled ${Object.keys(settings).length} settings from backend in ${pull_time['settings']}ms.`);
+
+            // Check app version
+
+            if (platform === 'app' && settings['app_update_reminder']['value'] && settings['app_version']['value'] !== app_version) {
+
+              Materialize.toast(settings['app_update_reminder']['description'], settings['toast_interval']['value']);
+
+            }
 
             // Initialize modal plugin
 
@@ -514,7 +523,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             // Touch / click gestures
 
-            var hammertime = new Hammer($('body')[0]);
+            var hammertime = new Hammer($('html')[0]);
 
             hammertime.on('swipeleft', function(ev) {
 
@@ -528,9 +537,13 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             });
 
-            $('main').click(function() {
+            $('.container').click(function(e) {
 
-              reloadEngine();
+              // if ($(e.target).hasClass('container')) {
+
+                reloadEngine();
+
+              // }
 
             });
 
