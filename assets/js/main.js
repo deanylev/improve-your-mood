@@ -157,7 +157,6 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
         var reloadColour;
         var quoteNum;
         var colourNum;
-        var backPressed;
 
         // Pull settings from backend
 
@@ -431,13 +430,17 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             function goBack(action) {
 
-              if (notAutoReloading()) {
+              if (notAutoReloading() && quoteHistory.length > 1) {
 
-                quoteNum = quoteHistory.length > 1 ? quoteHistory.pop() : quoteHistory[0];
+                quoteNum = quoteHistory.length - 2;
+                quoteHistory.pop();
 
-                let quote = quotes[quoteNum];
+                colourNum = colourHistory.length - 2;
+                colourHistory.pop();
 
-                if (text_reload_transitions_settings && backPressed) {
+                let quote = quotes[quoteHistory[quoteNum]];
+
+                if (text_reload_transitions_settings) {
 
                   $('#quote').fadeOut(text_reload_transition_time / 2, function() {
 
@@ -451,19 +454,10 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 }
 
-                colourNum = colourHistory.length > 1 ? colourHistory.pop() : colourHistory[0];
-
-                let colour = colours[colourNum];
+                let colour = colours[colourHistory[colourNum]];
 
                 $('.coloured').css('background-color', `#${colour}`);
                 $('meta[name="theme-color"]').attr('content', `#${colour}`);
-
-                if (!backPressed) {
-
-                  Materialize.toast(`${action} again to go to the previous quote/colour.`, settings['toast_interval']['value']);
-                  backPressed = true;
-
-                }
 
               }
 
@@ -611,10 +605,6 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             reloadQuote();
             reloadColour();
-
-            // Set backpressed to false for going back
-
-            backPressed = false;
 
             // Log quote/colour in console (for fun)
 
