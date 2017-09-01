@@ -1,4 +1,4 @@
-var what;
+var what, appError, networkReported, start_time, reloadEngine, manualReload, text_reload_transitions_settings, text_reload_transitions_time;
 var usedQuotes = [];
 var usedColours = [];
 var quoteHistory = [];
@@ -7,13 +7,8 @@ var platform = $('html').attr('data-platform');
 var quotes = [];
 var colours = [];
 var settings = {};
-var appError;
-var networkReported;
 var settingsOpen = false;
-var start_time;
 var pull_time = {};
-var reloadEngine;
-var manualReload;
 var app_version = $('html').attr('data-app-version');
 
 // Platform specific stuff
@@ -252,6 +247,9 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             };
 
+            text_reload_transitions_settings = localStorage.getItem('text_reload_transitions') ? JSON.parse(localStorage.getItem('text_reload_transitions')) : settings['text_reload_transitions']['value'];
+            text_reload_transition_time = localStorage.getItem('text_reload_transition_time') ? JSON.parse(localStorage.getItem('text_reload_transition_time')) : settings['text_reload_transition_time']['value'];
+
             // Function for reloading the quote
 
             reloadQuote = function() {
@@ -293,9 +291,6 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
               let quote = quotes[quoteNum];
 
               // Display quote on the text element
-
-              let text_reload_transitions_settings = localStorage.getItem('text_reload_transitions') ? JSON.parse(localStorage.getItem('text_reload_transitions')) : settings['text_reload_transitions']['value'];
-              let text_reload_transition_time = localStorage.getItem('text_reload_transition_time') ? JSON.parse(localStorage.getItem('text_reload_transition_time')) : settings['text_reload_transition_time']['value'];
 
               if (text_reload_transitions_settings) {
 
@@ -441,9 +436,6 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
                 quoteNum = quoteHistory.length > 1 ? quoteHistory.pop() : quoteHistory[0];
 
                 let quote = quotes[quoteNum];
-
-                let text_reload_transitions_settings = localStorage.getItem('text_reload_transitions') ? JSON.parse(localStorage.getItem('text_reload_transitions')) : settings['text_reload_transitions']['value'];
-                let text_reload_transition_time = localStorage.getItem('text_reload_transition_time') ? JSON.parse(localStorage.getItem('text_reload_transition_time')) : settings['text_reload_transition_time']['value'];
 
                 if (text_reload_transitions_settings && backPressed) {
 
@@ -637,9 +629,6 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
         }
 
         manualReload = function(text, colour) {
-
-          let text_reload_transitions_settings = localStorage.getItem('text_reload_transitions') ? JSON.parse(localStorage.getItem('text_reload_transitions')) : settings['text_reload_transitions']['value'];
-          let text_reload_transition_time = localStorage.getItem('text_reload_transition_time') ? JSON.parse(localStorage.getItem('text_reload_transition_time')) : settings['text_reload_transition_time']['value'];
 
           if (text_reload_transitions_settings) {
 
