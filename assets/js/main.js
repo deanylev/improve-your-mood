@@ -428,7 +428,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             // Go back when the button is clicked
 
-            function goBack(action) {
+            function goBack() {
 
               if (notAutoReloading() && quoteHistory.length > 1) {
 
@@ -439,6 +439,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
                 colourHistory.pop();
 
                 let quote = quotes[quoteHistory[quoteNum]];
+                let colour = colours[colourHistory[colourNum]];
 
                 if (text_reload_transitions_settings) {
 
@@ -453,8 +454,6 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
                   $('#quote').text(quote);
 
                 }
-
-                let colour = colours[colourHistory[colourNum]];
 
                 $('.coloured').css('background-color', `#${colour}`);
                 $('meta[name="theme-color"]').attr('content', `#${colour}`);
