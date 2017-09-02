@@ -130,20 +130,20 @@
                             <option value="1" <?php echo $row["user"] ? "selected" : ""; ?>>True</option>
                           </select>
                           <select name="advanced">
-                            <option disabled <?php echo $row["user"] ? "" : "selected"; ?>>Advanced</option>
-                            <option value="0" <?php echo !$row["advanced"] && $row["user"] ? "selected" : ""; ?>>False</option>
-                            <option value="1" <?php echo $row["advanced"] && $row["user"] ? "selected" : ""; ?>>True</option>
+                            <option disabled>Advanced</option>
+                            <option value="0" <?php echo $row["advanced"] ? "" : "selected"; ?>>False</option>
+                            <option value="1" <?php echo $row["advanced"] ? "selected" : ""; ?>>True</option>
                           </select>
                           <select name="mobile">
-                            <option disabled <?php echo $row["user"] ? "" : "selected"; ?>>Mobile</option>
-                            <option value="0" <?php echo !$row["mobile"] && $row["user"] ? "selected" : ""; ?>>False</option>
-                            <option value="1" <?php echo $row["mobile"] && $row["user"] ? "selected" : ""; ?>>True</option>
+                            <option disabled>Mobile</option>
+                            <option value="0" <?php echo $row["mobile"] ? "" : "selected"; ?>>False</option>
+                            <option value="1" <?php echo $row["mobile"] ? "selected" : ""; ?>>True</option>
                           </select>
                           <select name="input">
-                            <option disabled <?php echo $row["user"] ? "" : "selected"; ?>>Input Type</option>
-                            <option value="number" <?php echo $row["input"] == "number" && $row["user"] ? "selected" : ""; ?>>Number</option>
-                            <option value="text" <?php echo $row["input"] == "text" && $row["user"] ? "selected" : ""; ?>>Text</option>
-                            <option value="select" <?php echo $row["input"] == "select" && $row["user"] ? "selected" : ""; ?>>Select</option>
+                            <option disabled>>Input Type</option>
+                            <option value="number" <?php echo $row["input"] == "number" ? "selected" : ""; ?>>Number</option>
+                            <option value="text" <?php echo $row["input"] == "text" ? "selected" : ""; ?>>Text</option>
+                            <option value="select" <?php echo $row["input"] == "select" ? "selected" : ""; ?>>Select</option>
                           </select>
 
                         <?php endif; ?>
