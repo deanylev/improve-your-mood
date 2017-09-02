@@ -79,7 +79,7 @@
         </select>
         <select name="input">
           <option selected disabled>Input Type</option>
-          <option value="num">Num</option>
+          <option value="number">Number</option>
           <option value="text">Text</option>
           <option value="select">Select</option>
         </select>
@@ -141,7 +141,7 @@
                           </select>
                           <select name="input" <?php echo $row["user"] ? "" : "disabled"; ?>>
                             <option disabled <?php echo $row["user"] ? "" : "selected"; ?>>Input Type</option>
-                            <option value="num" <?php echo $row["input"] == "num" && $row["user"] ? "selected" : ""; ?>>Num</option>
+                            <option value="number" <?php echo $row["input"] == "number" && $row["user"] ? "selected" : ""; ?>>Number</option>
                             <option value="text" <?php echo $row["input"] == "text" && $row["user"] ? "selected" : ""; ?>>Text</option>
                             <option value="select" <?php echo $row["input"] == "select" && $row["user"] ? "selected" : ""; ?>>Select</option>
                           </select>
