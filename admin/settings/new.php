@@ -7,9 +7,10 @@
   $advanced = $_POST["advanced"];
   $mobile = $_POST["mobile"];
   $input = $_POST["input"];
+  $label = $_POST["label"];
   $description = $_POST["description"];
   include("../../sql.php");
-  $sql = "INSERT INTO yourmood.settings (active, setting, value, user, advanced, mobile, input, description) VALUES (1, '$content', '$value', '$user', '$advanced', '$mobile', '$input', '$description')";
+  $sql = "INSERT INTO yourmood.settings (active, setting, value, user, advanced, mobile, input, label, description) VALUES (1, '$content', '$value', '$user', '$advanced', '$mobile', '$input', '$label', '$description')";
   if ($conn->query($sql) === false) {
       echo "Error: " . $sql . "<br>" . $conn->error;
   }

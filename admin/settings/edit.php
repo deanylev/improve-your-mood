@@ -11,8 +11,9 @@
     $input = $_POST["input"];
     $sql = "UPDATE yourmood.settings SET setting='$content', value = '$value', user = '$user', advanced = '$advanced', mobile = '$mobile', input = '$input' WHERE id='$id'";
   } elseif (isset($_POST["edit_description"])) {
+    $label = $_POST["label"];
     $description = $_POST["description"];
-    $sql = "UPDATE yourmood.settings SET description='$description' WHERE id='$id'";
+    $sql = "UPDATE yourmood.settings SET label='$label', description='$description' WHERE id='$id'";
   }
   include("../../sql.php");
   if ($conn->query($sql) === false) {

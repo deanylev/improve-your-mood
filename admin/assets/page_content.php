@@ -84,6 +84,8 @@
           <option value="select">Select</option>
         </select>
         <br>
+        <input type="text" name="label" placeholder="Enter a label">
+        <br>
         <textarea name="description" rows="4" cols="82" placeholder="Enter a description"></textarea>
         <br>
 
@@ -170,6 +172,8 @@
                       <td>
                         <form action="edit.php" method="POST">
                           <input type="hidden" name="id" value="<?php echo $row["id"]; ?>">
+                          <input type="text" name="label" value="<?php echo $row["label"]; ?>">
+                          <br>
                           <textarea name="description" rows="4" cols="82"><?php echo $row["description"]; ?></textarea>
                           <br>
                           <input type="submit" name="edit_description" value="Edit" class="btn btn-primary action-button">
