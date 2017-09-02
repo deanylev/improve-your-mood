@@ -129,17 +129,17 @@
                             <option value="0" <?php echo $row["user"] ? "" : "selected"; ?>>False</option>
                             <option value="1" <?php echo $row["user"] ? "selected" : ""; ?>>True</option>
                           </select>
-                          <select name="advanced" <?php echo $row["user"] ? "" : "disabled"; ?>>
+                          <select name="advanced">
                             <option disabled <?php echo $row["user"] ? "" : "selected"; ?>>Advanced</option>
                             <option value="0" <?php echo !$row["advanced"] && $row["user"] ? "selected" : ""; ?>>False</option>
                             <option value="1" <?php echo $row["advanced"] && $row["user"] ? "selected" : ""; ?>>True</option>
                           </select>
-                          <select name="mobile" <?php echo $row["user"] ? "" : "disabled"; ?>>
+                          <select name="mobile">
                             <option disabled <?php echo $row["user"] ? "" : "selected"; ?>>Mobile</option>
                             <option value="0" <?php echo !$row["mobile"] && $row["user"] ? "selected" : ""; ?>>False</option>
                             <option value="1" <?php echo $row["mobile"] && $row["user"] ? "selected" : ""; ?>>True</option>
                           </select>
-                          <select name="input" <?php echo $row["user"] ? "" : "disabled"; ?>>
+                          <select name="input">
                             <option disabled <?php echo $row["user"] ? "" : "selected"; ?>>Input Type</option>
                             <option value="number" <?php echo $row["input"] == "number" && $row["user"] ? "selected" : ""; ?>>Number</option>
                             <option value="text" <?php echo $row["input"] == "text" && $row["user"] ? "selected" : ""; ?>>Text</option>
