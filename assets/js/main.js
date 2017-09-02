@@ -466,7 +466,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             $('#go-back-button').click(function() {
 
-              goBack('Click');
+              goBack();
 
             });
 
@@ -520,7 +520,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             hammertime.on('swiperight', function(ev) {
 
-              goBack('Swipe');
+              goBack();
 
             });
 
@@ -574,7 +574,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 if (back_shortcuts.includes(e.which) && !settingsOpen && usedQuotes.length > 1) {
 
-                  goBack('Press');
+                  goBack();
 
                 }
 
