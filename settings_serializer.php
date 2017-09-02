@@ -16,6 +16,10 @@
           $object = (object)array();
           $object->value = $row["value"];
           $object->description = $row["description"];
+          $object->user = $row["user"];
+          $object->advanced = $row["advanced"];
+          $object->mobile = $row["mobile"];
+          $object->input = $row["input"];
           $settings->$key = $object;
       }
   }

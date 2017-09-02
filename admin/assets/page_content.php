@@ -62,6 +62,28 @@
       <?php if ($title == "setting"): ?>
 
         <input type="text" name="value" placeholder="Enter a value">
+        <select name="user">
+          <option selected disabled>User Setting</option>
+          <option value="0">False</option>
+          <option value="1">True</option>
+        </select>
+        <select name="advanced">
+          <option selected disabled>Advanced</option>
+          <option value="0">False</option>
+          <option value="1">True</option>
+        </select>
+        <select name="mobile">
+          <option selected disabled>Mobile</option>
+          <option value="0">False</option>
+          <option value="1">True</option>
+        </select>
+        <select name="input">
+          <option selected disabled>Input Type</option>
+          <option value="num">Num</option>
+          <option value="text">Text</option>
+          <option value="select">Select</option>
+        </select>
+        <br>
         <textarea name="description" rows="4" cols="82" placeholder="Enter a description"></textarea>
         <br>
 
@@ -100,6 +122,27 @@
                         <?php if ($title == "setting"): ?>
 
                           <input type="text" name="value" value="<?php echo $row["value"]; ?>">
+                          <select name="user">
+                            <option disabled>User Setting</option>
+                            <option value="0" <?php echo $row["user"] ? "" : "selected"; ?>>False</option>
+                            <option value="1" <?php echo $row["user"] ? "selected" : ""; ?>>True</option>
+                          </select>
+                          <select name="advanced" <?php echo $row["user"] ? "" : "disabled"; ?>>
+                            <option disabled <?php echo $row["user"] ? "" : "selected"; ?>>Advanced</option>
+                            <option value="0" <?php echo !$row["advanced"] && $row["user"] ? "selected" : ""; ?>>False</option>
+                            <option value="1" <?php echo $row["advanced"] && $row["user"] ? "selected" : ""; ?>>True</option>
+                          </select>
+                          <select name="mobile" <?php echo $row["user"] ? "" : "disabled"; ?>>
+                            <option disabled <?php echo $row["user"] ? "" : "selected"; ?>>Mobile</option>
+                            <option value="0" <?php echo !$row["mobile"] && $row["user"] ? "selected" : ""; ?>>False</option>
+                            <option value="1" <?php echo $row["mobile"] && $row["user"] ? "selected" : ""; ?>>True</option>
+                          </select>
+                          <select name="input" <?php echo $row["user"] ? "" : "disabled"; ?>>
+                            <option disabled <?php echo $row["user"] ? "" : "selected"; ?>>Input Type</option>
+                            <option value="num" <?php echo $row["input"] == "num" && $row["user"] ? "selected" : ""; ?>>Num</option>
+                            <option value="text" <?php echo $row["input"] == "text" && $row["user"] ? "selected" : ""; ?>>Text</option>
+                            <option value="select" <?php echo $row["input"] == "select" && $row["user"] ? "selected" : ""; ?>>Select</option>
+                          </select>
 
                         <?php endif; ?>
 
@@ -121,7 +164,7 @@
                     </td>
                   </tr>
 
-                  <?php if ($title == "setting"): ?>
+                  <?php if ($title == "setting" && $row["user"]): ?>
 
                     <tr>
                       <td>
