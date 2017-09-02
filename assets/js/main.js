@@ -262,7 +262,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               }
 
-              lastNum = localStorage.getItem('lastQuote');
+              let lastNum = localStorage.getItem('lastQuote');
               quoteNum = Math.floor(quotes.length * Math.random());
 
               // If all quotes are used and no repeats is enabled, start again
@@ -320,7 +320,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               }
 
-              lastNum = localStorage.getItem('lastColour');
+              let lastNum = localStorage.getItem('lastColour');
               colourNum = Math.floor(colours.length * Math.random());
 
               // If MoodEngine trys to use the same colour twice, generate a new one
@@ -434,9 +434,11 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 quoteNum = quoteHistory.length - 2;
                 quoteHistory.pop();
+                localStorage.setItem('lastQuote', quoteHistory[quoteNum]);
 
                 colourNum = colourHistory.length - 2;
                 colourHistory.pop();
+                localStorage.setItem('lastColour', colourHistory[colourNum]);
 
                 let quote = quotes[quoteHistory[quoteNum]];
                 let colour = colours[colourHistory[colourNum]];
