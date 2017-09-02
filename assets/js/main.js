@@ -182,7 +182,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                   object[key] = JSON.parse(val);
 
-                } catch(error) {
+                } catch (error) {
 
                   object[key] = val;
 
@@ -364,6 +364,84 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             }, time_setting);
 
+            // Construct settings panel
+
+            var fullHTML = '';
+            var fullAdvancedHTML = '';
+
+            $.each(settings, function(key, val) {
+
+              if (settings[key]['user']) {
+
+                if (settings[key]['input'] === 'select') {
+
+                  var input = `
+                  <select class="settings-input" name="${key}">
+                    <option value="false">No</option>
+                    <option value="true">Yes</option>
+                  </select>
+                  `;
+
+                  var label = `
+                  <label>${settings[key]['label']}</label>
+                  `;
+
+                } else {
+
+                  var input = `
+                  <input type="${settings[key]['input']}" name="${key}" class="settings-input" id="${key}">
+                  `;
+
+                  var label = `
+                  <label for="${key}">${settings[key]['label']}</label>
+                  `;
+
+                }
+
+                var mobile = settings[key]['mobile'] ? '' : 'hide-on-med-and-down';
+
+                let html = `
+                <div class="row ${mobile}">
+                  <div class="input-field col s12">
+                    ${input}
+                    ${label}
+                    <a class="black-text settings-link default-button" data-setting="${key}"><b>Set to Default</b></a>
+                    <br>
+                    <span class="tooltipped" data-setting="${key}" data-position="bottom" data-delay="50">What's this?</span>
+                  </div>
+                </div>
+                `;
+
+                settings[key]['advanced'] ? fullAdvancedHTML += html : fullHTML += html;
+
+              }
+
+            });
+
+            $('#settings-form').prepend(fullHTML);
+            $('#advanced-settings').append(fullAdvancedHTML);
+
+            // Set desired settings to default using the attr on the default button
+
+            $('.default-button').click(function() {
+
+              localStorage.removeItem($(this).attr('data-setting'));
+              window.location.reload();
+
+            });
+
+            // Save settings when pressing enter
+
+            $('.settings-input').keydown(function(e) {
+
+              if (settings['save_settings_keys']['value'].includes(e.which)) {
+
+                saveSettings();
+
+              }
+
+            });
+
             // Set the correct values in the settings inputs
 
             $('.settings-input').each(function() {
@@ -386,11 +464,6 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
               }
 
             });
-
-
-            // Set value for backend address input
-
-            $('#backend_address').val(backend_address);
 
             // Add defaults to tooltips
 
@@ -693,7 +766,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 // If the set value is the same as the default, just remove it from localStorage and use backend value
 
-                if (val === settings[key]['value'] || val === JSON.stringify(settings[key]['value'])) {
+                if (val === settings[key]['value'] || val === JSON.stringify(settings[key]['value']) || `[${val}]` === JSON.stringify(settings[key]['value'])) {
 
                   localStorage.removeItem(key);
 
@@ -732,33 +805,6 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
         $('#save-settings-button').click(function() {
 
           saveSettings();
-
-        });
-
-        $('.settings-input').each(function() {
-
-          $(this).keydown(function(e) {
-
-            if (settings['save_settings_keys']['value'].includes(e.which)) {
-
-              saveSettings();
-
-            }
-
-          });
-
-        });
-
-        // Set desired settings to default using the attr on the default button
-
-        $('.default-button').each(function() {
-
-          $(this).click(function() {
-
-            localStorage.removeItem($(this).attr('data-setting'));
-            window.location.reload();
-
-          });
 
         });
 
