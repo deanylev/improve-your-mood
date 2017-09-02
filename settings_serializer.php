@@ -15,6 +15,7 @@
           $key = $row["setting"];
           $object = (object)array();
           $object->value = $row["value"];
+          $object->value = $row["label"]
           $object->description = $row["description"];
           $object->user = $row["user"];
           $object->advanced = $row["advanced"];
