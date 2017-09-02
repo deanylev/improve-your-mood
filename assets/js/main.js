@@ -174,21 +174,23 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             $.each(data, function(key, val) {
 
-              settings[key] = {};
+              let object = {};
 
-              // If JSON parsable, parse
+              $.each(val, function(key, val) {
 
-              try {
+                try {
 
-                settings[key]['value'] = JSON.parse(val['value']);
+                  object[key] = JSON.parse(val);
 
-              } catch (error) {
+                } catch(error) {
 
-                settings[key]['value'] = val['value'];
+                  object[key] = val;
 
-              }
+                }
 
-              settings[key]['description'] = val['description'];
+              });
+
+              settings[key] = object;
 
             });
 
