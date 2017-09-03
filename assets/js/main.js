@@ -225,7 +225,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
                   try {
 
                     let value = localStorage.getItem(setting) || settings[setting]['value'];
-                    $(this).is('select') ? $(this).val(JSON.stringify(value)) : $(this).val(value);
+                    $(this).is('select') && !localStorage.getItem(setting) ? $(this).val(JSON.stringify(value)) : $(this).val(value);
                     $(this).is('input') ? $(this).parent().find('label').addClass('active') : '';
                     $('select').material_select();
 
@@ -453,7 +453,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
               try {
 
                 let value = localStorage.getItem(setting) || settings[setting]['value'];
-                $(this).is('select') ? $(this).val(JSON.stringify(value)) : $(this).val(value);
+                $(this).is('select') && !localStorage.getItem(setting) ? $(this).val(JSON.stringify(value)) : $(this).val(value);
                 $(this).is('input') ? $(this).parent().find('label').addClass('active') : '';
                 $('select').material_select();
 
