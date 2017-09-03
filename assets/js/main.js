@@ -543,7 +543,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               setTimeout(function() {
 
-                if (!$('main').hasClass('manual-reload')) {
+                if (!notAutoReloading()) {
 
                   reloadEngine('Auto');
                   console.log(`Auto reloaded after ${fullSettings['reload_interval']}ms.`);
