@@ -248,6 +248,12 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
                 $('#settings-modal').modal('close');
                 Materialize.toast(toast, fullSettings['toast_interval']);
 
+                if (fullSettings['require_settings_reload']) {
+
+                  window.location.reload();
+
+                }
+
               }
 
             }
