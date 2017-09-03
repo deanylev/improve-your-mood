@@ -113,6 +113,7 @@ function engineError(display, log, code) {
 // Pull quotes from backend
 
 start_time = performance.now();
+total_time = performance.now();
 
 console.log('Pulling quotes from backend...');
 
@@ -136,7 +137,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
     start_time = performance.now();
 
-    console.log('Pulling colours from backend...');
+    console.log('\nPulling colours from backend...');
 
     $.getJSON(`${full_backend_address}colour_serializer.php`)
 
@@ -163,7 +164,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
         start_time = performance.now();
 
-        console.log('Pulling settings from backend...');
+        console.log('\nPulling settings from backend...');
 
         $.getJSON(`${full_backend_address}settings_serializer.php`)
 
@@ -627,7 +628,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             if (!appError) {
 
-              console.log('Initializing MoodEngine...');
+              console.log('\nInitializing MoodEngine...');
 
               try {
 
@@ -638,6 +639,8 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
                 $('#retry-button').hide();
                 $('.fixed-action-btn').removeClass('hide');
                 console.log('MoodEngine initialized.');
+                let totalLoadTime = Math.ceil(performance.now() - total_time);
+                console.log(`\nTotal load time: ${totalLoadTime}ms.`);
 
                 // If an error, display/log it
 
