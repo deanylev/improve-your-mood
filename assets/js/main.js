@@ -364,6 +364,16 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             }, time_setting);
 
+            // Set correct icons
+
+            $('.material-icons').each(function() {
+
+              let icon = settings['button_icons']['value'][$(this).attr('data-icon')];
+
+              $(this).text(icon);
+
+            });
+
             // Construct settings panel
 
             var fullHTML = '';
@@ -587,13 +597,17 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             var hammertime = new Hammer($('html')[0]);
 
-            hammertime.on('swipeleft', function(ev) {
+            let swipeReverse = localStorage.getItem('reverse_swipe_direction') || settings['reverse_swipe_direction']['value'];
+            let reloadDirection = swipeReverse ? 'swiperight' : 'swipeleft';
+            let rewindDirection = swipeReverse ? 'swipeleft' : 'swiperight';
+
+            hammertime.on(reloadDirection, function(ev) {
 
               reloadEngine();
 
             });
 
-            hammertime.on('swiperight', function(ev) {
+            hammertime.on(rewindDirection, function(ev) {
 
               goBack();
 
