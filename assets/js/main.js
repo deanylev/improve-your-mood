@@ -243,31 +243,10 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               }
 
-              // Auto reload
-
-              function autoReload() {
-
-                setTimeout(function() {
-
-                  if (!$('main').hasClass('manual-reload')) {
-
-                    reloadEngine('Auto');
-                    console.log(`Auto reloaded after ${fullSettings['reload_interval']}ms.`);
-
-                    autoReload();
-
-                  }
-
-                }, fullSettings['reload_interval']);
-
-              }
-
-              autoReload();
-
               if (method !== 'initial') {
 
                 $('#settings-modal').modal('close');
-                Materialize.toast(toast, fullSettings['toast_interval'])
+                Materialize.toast(toast, fullSettings['toast_interval']);
 
               }
 
@@ -551,6 +530,27 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
               });
 
             });
+
+            // Auto reload
+
+            function autoReload() {
+
+              setTimeout(function() {
+
+                if (!$('main').hasClass('manual-reload')) {
+
+                  reloadEngine('Auto');
+                  console.log(`Auto reloaded after ${fullSettings['reload_interval']}ms.`);
+
+                }
+
+                autoReload();
+
+              }, fullSettings['reload_interval']);
+
+            }
+
+            autoReload();
 
             // Toggle auto reload when the button is clicked
 
