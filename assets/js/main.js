@@ -371,9 +371,9 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             $.each(settings, function(key, val) {
 
-              if (settings[key]['user']) {
+              if (val['user']) {
 
-                if (settings[key]['input'] === 'select') {
+                if (val['input'] === 'select') {
 
                   var input = `
                   <select class="settings-input" name="${key}">
@@ -383,22 +383,22 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
                   `;
 
                   var label = `
-                  <label>${settings[key]['label']}</label>
+                  <label>${val['label']}</label>
                   `;
 
                 } else {
 
                   var input = `
-                  <input type="${settings[key]['input']}" name="${key}" class="settings-input" id="${key}">
+                  <input type="${val['input']}" name="${key}" class="settings-input" id="${key}">
                   `;
 
                   var label = `
-                  <label for="${key}">${settings[key]['label']}</label>
+                  <label for="${key}">${val['label']}</label>
                   `;
 
                 }
 
-                var mobile = settings[key]['mobile'] ? '' : 'hide-on-med-and-down';
+                var mobile = val['mobile'] ? '' : 'hide-on-med-and-down';
 
                 let html = `
                 <div class="row ${mobile}">
@@ -412,7 +412,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
                 </div>
                 `;
 
-                settings[key]['advanced'] ? fullAdvancedHTML += html : fullHTML += html;
+                val['advanced'] ? fullAdvancedHTML += html : fullHTML += html;
 
               }
 
