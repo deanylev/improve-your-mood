@@ -716,6 +716,163 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             });
 
+            // Function to reload both quotes and colour
+
+            function notAutoReloading() {
+
+              return $('main').hasClass('manual-reload');
+
+            }
+
+            reloadEngine = function(method) {
+
+              if (!appError && (notAutoReloading() || method === 'Auto')) {
+
+                reloadQuote();
+                reloadColour();
+
+                // Log quote/colour in console (for fun)
+
+                if (fullSettings['extra_logging'].includes('reload') && platform === 'web') {
+
+                  console.log(`%c${quotes[quoteNum]}`, `padding: 2px 5px; font-size: 20px; font-family: 'Oxygen'; color: white; background-color: #${colours[colourNum]}`);
+
+                }
+
+              }
+
+            }
+
+            manualReload = function(text, colour) {
+
+              if (fullSettings['text_reload_transitions']) {
+
+                $('#quote').fadeOut(fullSettings['text_reload_transition_time'] / 2, function() {
+
+                  $(this).text(text).fadeIn(fullSettings['text_reload_transition_time'] / 2);
+
+                });
+
+              } else {
+
+                $('#quote').text(text);
+
+              }
+
+              $('.coloured').css('background-color', `#${colour}`);
+              $('meta[name="theme-color"]').attr('content', `#${colour}`);
+
+            }
+
+            // Set all settings to default
+
+            $('.set-all-default').click(function() {
+
+              let lastQuote = localStorage.getItem('lastQuote');
+              let lastColour = localStorage.getItem('lastColour');
+
+              localStorage.clear();
+
+              localStorage.setItem('lastQuote', lastQuote);
+              localStorage.setItem('lastColour', lastColour);
+
+              setSettings(null, 'Set All Settings to Default!');
+
+            });
+
+            // When user trys to save settings
+
+            function saveSettings() {
+
+              let local_settings = {};
+              let has_input = true;
+
+              $('.settings-input').each(function() {
+
+                // Construct the object using values
+
+                local_settings[$(this).attr('name')] = $(this).val();
+
+                // Detect if input is blank
+
+                if (!$(this).val()) {
+
+                  //has_input = false;
+
+                }
+
+              });
+
+              // If all inputs are not blank
+
+              if (has_input) {
+
+                delete local_settings[undefined];
+
+                try {
+
+                  $.each(local_settings, function(key, val) {
+
+                    // If the set value is the same as the default, just remove it from localStorage and use backend value
+
+                    if (val === settings[key]['value'] || val === JSON.stringify(settings[key]['value']) || `[${val}]` === JSON.stringify(settings[key]['value'])) {
+
+                      localStorage.removeItem(key);
+
+                      // Otherwise set it in localStorage
+
+                    } else {
+
+                      localStorage.setItem(key, val);
+
+                    }
+
+                  });
+
+                  // Reload the page for settings to come into effect
+
+                  setSettings(null, 'Settings Saved!');
+
+                  // Catch any unexpected errors and display/log them
+
+                } catch (error) {
+
+                  Materialize.toast('Unable To Save Settings. An Error Occured.', fullSettings['toast_interval']);
+                  console.error(`Couldn't save settings. Error: ${error}.`);
+
+                }
+
+                // Close the modal no matter what
+
+                $('#settings-modal').modal('close');
+
+              }
+
+            }
+
+            $('#save-settings-button').click(function() {
+
+              saveSettings();
+
+            });
+
+            // The form is just for show, don't allow submitting
+
+            $('#settings-form').submit(function() {
+
+              return false;
+
+            });
+
+            // Toggle Advanced Settings
+
+            $('#advanced-settings-button').click(function() {
+
+              $(this).toggleClass('underline');
+              $('#advanced-settings').slideToggle();
+
+            });
+
           })
 
           // If pulling settings from backend fails, display/log the error
@@ -725,163 +882,6 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
             engineError('Failed to contact server. Try again later.', 'Failed to pull settings from backend.', '1c');
 
           });
-
-        // Function to reload both quotes and colour
-
-        function notAutoReloading() {
-
-          return $('main').hasClass('manual-reload');
-
-        }
-
-        reloadEngine = function(method) {
-
-          if (!appError && (notAutoReloading() || method === 'Auto')) {
-
-            reloadQuote();
-            reloadColour();
-
-            // Log quote/colour in console (for fun)
-
-            if (fullSettings['extra_logging'].includes('reload') && platform === 'web') {
-
-              console.log(`%c${quotes[quoteNum]}`, `padding: 2px 5px; font-size: 20px; font-family: 'Oxygen'; color: white; background-color: #${colours[colourNum]}`);
-
-            }
-
-          }
-
-        }
-
-        manualReload = function(text, colour) {
-
-          if (fullSettings['text_reload_transitions']) {
-
-            $('#quote').fadeOut(fullSettings['text_reload_transition_time'] / 2, function() {
-
-              $(this).text(quote).fadeIn(fullSettings['text_reload_transition_time'] / 2);
-
-            });
-
-          } else {
-
-            $('#quote').text(quote);
-
-          }
-
-          $('.coloured').css('background-color', `#${colour}`);
-          $('meta[name="theme-color"]').attr('content', `#${colour}`);
-
-        }
-
-        // Set all settings to default
-
-        $('.set-all-default').click(function() {
-
-          let lastQuote = localStorage.getItem('lastQuote');
-          let lastColour = localStorage.getItem('lastColour');
-
-          localStorage.clear();
-
-          localStorage.setItem('lastQuote', lastQuote);
-          localStorage.setItem('lastColour', lastColour);
-
-          setSettings(null, 'Set All Settings to Default!');
-
-        });
-
-        // When user trys to save settings
-
-        function saveSettings() {
-
-          let local_settings = {};
-          let has_input = true;
-
-          $('.settings-input').each(function() {
-
-            // Construct the object using values
-
-            local_settings[$(this).attr('name')] = $(this).val();
-
-            // Detect if input is blank
-
-            if (!$(this).val()) {
-
-              //has_input = false;
-
-            }
-
-          });
-
-          // If all inputs are not blank
-
-          if (has_input) {
-
-            delete local_settings[undefined];
-
-            try {
-
-              $.each(local_settings, function(key, val) {
-
-                // If the set value is the same as the default, just remove it from localStorage and use backend value
-
-                if (val === settings[key]['value'] || val === JSON.stringify(settings[key]['value']) || `[${val}]` === JSON.stringify(settings[key]['value'])) {
-
-                  localStorage.removeItem(key);
-
-                  // Otherwise set it in localStorage
-
-                } else {
-
-                  localStorage.setItem(key, val);
-
-                }
-
-              });
-
-              // Reload the page for settings to come into effect
-
-              setSettings(null, 'Settings Saved!');
-
-              // Catch any unexpected errors and display/log them
-
-            } catch (error) {
-
-              Materialize.toast('Unable To Save Settings. An Error Occured.', fullSettings['toast_interval']);
-              console.error(`Couldn't save settings. Error: ${error}.`);
-
-            }
-
-            // Close the modal no matter what
-
-            $('#settings-modal').modal('close');
-
-          }
-
-        }
-
-        $('#save-settings-button').click(function() {
-
-          saveSettings();
-
-        });
-
-        // The form is just for show, don't allow submitting
-
-        $('#settings-form').submit(function() {
-
-          return false;
-
-        });
-
-        // Toggle Advanced Settings
-
-        $('#advanced-settings-button').click(function() {
-
-          $(this).toggleClass('underline');
-          $('#advanced-settings').slideToggle();
-
-        });
 
       })
 
