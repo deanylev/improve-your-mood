@@ -123,7 +123,7 @@
 
                         <?php if ($title == "setting"): ?>
 
-                          <input type="text" name="value" value="<?php echo $row["value"]; ?>">
+                          <input type="text" name="value" value="<?php echo htmlspecialchars($row["value"]); ?>">
                           <select name="user">
                             <option disabled>User Setting</option>
                             <option value="0" <?php echo $row["user"] ? "" : "selected"; ?>>False</option>
