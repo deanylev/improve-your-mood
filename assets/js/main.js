@@ -1,4 +1,4 @@
-var what, appError, networkReported, start_time, reloadEngine, manualReload, text_reload_transitions_settings, text_reload_transitions_time;
+var what, appError, networkReported, start_time, reloadEngine, manualReload, setSettings;
 var usedQuotes = [];
 var usedColours = [];
 var quoteHistory = [];
@@ -10,6 +10,7 @@ var settings = {};
 var settingsOpen = false;
 var pull_time = {};
 var app_version = $('html').attr('data-app-version');
+var fullSettings = {};
 
 // Platform specific stuff
 
@@ -196,11 +197,89 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             console.log(`Successfully pulled ${Object.keys(settings).length} settings from backend in ${pull_time['settings']}ms.`);
 
+            // Construct settings object from backend or local
+
+            setSettings = function(method, toast) {
+
+              $.each(settings, function(key, val) {
+
+                if (localStorage.getItem(key)) {
+
+                  try {
+
+                    fullSettings[key] = JSON.parse(localStorage.getItem(key));
+
+                  } catch (error) {
+
+                    try {
+
+                      fullSettings[key] = JSON.parse(`[${localStorage.getItem(key)}]`);
+
+                    } catch (error) {
+
+                      fullSettings[key] = localStorage.getItem(key);
+
+                    }
+
+                  }
+
+                } else {
+
+                  fullSettings[key] = settings[key]['value'];
+
+                }
+
+              });
+
+              // Reload transitions
+
+              if (fullSettings['colour_reload_transitions']) {
+
+                $('.coloured').css('transition', `${fullSettings['colour_reload_transition_time']}ms ease-out`);
+
+              } else {
+
+                $('.coloured').css('transition', 'none')
+
+              }
+
+              // Auto reload
+
+              function autoReload() {
+
+                setTimeout(function() {
+
+                  if (!$('main').hasClass('manual-reload')) {
+
+                    reloadEngine('Auto');
+                    console.log(`Auto reloaded after ${fullSettings['reload_interval']}ms.`);
+
+                    autoReload();
+
+                  }
+
+                }, fullSettings['reload_interval']);
+
+              }
+
+              autoReload();
+
+              if (method !== 'initial') {
+
+                $('#settings-modal').modal('close');
+                Materialize.toast(toast, fullSettings['toast_interval'])
+
+              }
+
+            }
+
+            setSettings('initial');
+
             // Check app version
 
-            if (platform === 'app' && settings['app_update_reminder']['value'] && settings['app_version']['value'] !== app_version) {
+            if (platform === 'app' && fullSettings['app_update_reminder'] && fullSettings['app_version'] !== app_version) {
 
-              Materialize.toast(settings['app_update_reminder']['description'], settings['toast_interval']['value']);
+              Materialize.toast(settings['app_update_reminder']['description'], fullSettings['toast_interval']);
 
             }
 
@@ -224,7 +303,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                   try {
 
-                    let value = localStorage.getItem(setting) || settings[setting]['value'];
+                    let value = fullSettings[setting];
                     $(this).is('select') && !localStorage.getItem(setting) ? $(this).val(JSON.stringify(value)) : $(this).val(value);
                     $(this).is('input') ? $(this).parent().find('label').addClass('active') : '';
                     $('select').material_select();
@@ -246,10 +325,8 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               console.log(json);
 
-            };
+            }
 
-            text_reload_transitions_settings = localStorage.getItem('text_reload_transitions') ? JSON.parse(localStorage.getItem('text_reload_transitions')) : settings['text_reload_transitions']['value'];
-            text_reload_transition_time = localStorage.getItem('text_reload_transition_time') ? JSON.parse(localStorage.getItem('text_reload_transition_time')) : settings['text_reload_transition_time']['value'];
 
             // Function for reloading the quote
 
@@ -269,7 +346,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               // If all quotes are used and no repeats is enabled, start again
 
-              if (usedQuotes.length === quotes.length && settings['no_repeats']['value']) {
+              if (usedQuotes.length === quotes.length && fullSettings['no_repeats']) {
 
                 usedQuotes = [];
 
@@ -277,7 +354,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               // If MoodEngine trys to use the same quote twice, or one that has already been used, generate a new one
 
-              while (lastNum == quoteNum || settings['no_repeats']['value'] && usedQuotes.includes(quoteNum)) {
+              while (lastNum == quoteNum || fullSettings['no_repeats'] && usedQuotes.includes(quoteNum)) {
 
                 quoteNum = Math.floor(quotes.length * Math.random());
 
@@ -293,11 +370,11 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               // Display quote on the text element
 
-              if (text_reload_transitions_settings) {
+              if (fullSettings['text_reload_transitions']) {
 
-                $('#quote').fadeOut(text_reload_transition_time / 2, function() {
+                $('#quote').fadeOut(fullSettings['text_reload_transition_time'] / 2, function() {
 
-                  $(this).text(quote).fadeIn(text_reload_transition_time / 2);
+                  $(this).text(quote).fadeIn(fullSettings['text_reload_transition_time'] / 2);
 
                 });
 
@@ -348,27 +425,11 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             };
 
-            // Auto reload
-
-            var time_setting = localStorage.getItem('reload_interval') || settings['reload_interval']['value'];
-
-            window.setInterval(function() {
-
-              if (!notAutoReloading()) {
-
-                reloadEngine('Auto');
-                console.log(`Auto reloaded after ${time_setting}ms.`);
-
-              }
-
-
-            }, time_setting);
-
             // Set correct icons
 
             $('.material-icons').each(function() {
 
-              let icon = settings['button_icons']['value'][$(this).attr('data-icon')];
+              let icon = fullSettings['button_icons'][$(this).attr('data-icon')];
 
               $(this).text(icon);
 
@@ -435,8 +496,9 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             $('.default-button').click(function() {
 
-              localStorage.removeItem($(this).attr('data-setting'));
-              window.location.reload();
+              let setting = $(this).attr('data-setting');
+              localStorage.removeItem(setting);
+              setSettings(null, `Set ${setting} to ${settings[setting]['value']}!`);
 
             });
 
@@ -444,7 +506,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             $('.settings-input').keydown(function(e) {
 
-              if (settings['save_settings_keys']['value'].includes(e.which)) {
+              if (fullSettings['save_settings_keys'].includes(e.which)) {
 
                 saveSettings();
 
@@ -501,7 +563,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
               icon.text(icon_text);
               $('#go-back-button').attr('disabled', notAutoReloading());
               $('main').toggleClass('manual-reload');
-              Materialize.toast(`Auto Reload ${toggle}!`, settings['toast_interval']['value']);
+              Materialize.toast(`Auto Reload ${toggle}!`, fullSettings['toast_interval']);
 
             }
 
@@ -528,11 +590,11 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
                 let quote = quotes[quoteHistory[quoteNum]];
                 let colour = colours[colourHistory[colourNum]];
 
-                if (text_reload_transitions_settings) {
+                if (fullSettings['text_reload_transitions']) {
 
-                  $('#quote').fadeOut(text_reload_transition_time / 2, function() {
+                  $('#quote').fadeOut(fullSettings['text_reload_transition_time'] / 2, function() {
 
-                    $(this).text(quote).fadeIn(text_reload_transition_time / 2);
+                    $(this).text(quote).fadeIn(fullSettings['text_reload_transition_time'] / 2);
 
                   });
 
@@ -554,17 +616,6 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
               goBack();
 
             });
-
-            // Reload transitions
-
-            let colour_reload_transitions_settings = localStorage.getItem('colour_reload_transitions') ? JSON.parse(localStorage.getItem('colour_reload_transitions')) : settings['colour_reload_transitions']['value'];
-            let colour_reload_transition_time = localStorage.getItem('colour_reload_transition_time') ? JSON.parse(localStorage.getItem('colour_reload_transition_time')) : settings['colour_reload_transition_time']['value'];
-
-            if (colour_reload_transitions_settings) {
-
-              $('.coloured').css('transition', `${colour_reload_transition_time}ms ease-out`);
-
-            }
 
             // Try to initialize the MoodEngine if there are no errors
 
@@ -597,17 +648,13 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             var hammertime = new Hammer($('html')[0]);
 
-            let swipeReverse = localStorage.getItem('reverse_swipe_direction') || settings['reverse_swipe_direction']['value'];
-            let reloadDirection = swipeReverse ? 'swiperight' : 'swipeleft';
-            let rewindDirection = swipeReverse ? 'swipeleft' : 'swiperight';
-
-            hammertime.on(reloadDirection, function(ev) {
+            hammertime.on(fullSettings['reverse_swipe_direction'] ? 'swiperight' : 'swipeleft', function(ev) {
 
               reloadEngine();
 
             });
 
-            hammertime.on(rewindDirection, function(ev) {
+            hammertime.on(fullSettings['reverse_swipe_direction'] ? 'swipeleft' : 'swiperight', function(ev) {
 
               goBack();
 
@@ -629,9 +676,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 // Reload
 
-                let reload_shortcuts = localStorage.getItem('reload_keys') ? JSON.parse(`[${localStorage.getItem('reload_keys')}]`) : settings['reload_keys']['value'];
-
-                if (reload_shortcuts.includes(e.which) && !settingsOpen) {
+                if (fullSettings['reload_keys'].includes(e.which) && !settingsOpen) {
 
                   reloadEngine();
 
@@ -639,9 +684,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 // Toggle auto reload
 
-                let auto_reload_shortcuts = localStorage.getItem('auto_reload_keys') ? JSON.parse(`[${localStorage.getItem('auto_reload_keys')}]`) : settings['auto_reload_keys']['value'];
-
-                if (auto_reload_shortcuts.includes(e.which) && !settingsOpen) {
+                if (fullSettings['auto_reload_keys'].includes(e.which) && !settingsOpen) {
 
                   toggleAutoReload();
 
@@ -649,9 +692,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 // Open / close settings panel
 
-                let settings_shortcuts = localStorage.getItem('settings_keys') ? JSON.parse(`[${localStorage.getItem('settings_keys')}]`) : settings['settings_keys']['value'];
-
-                if (settings_shortcuts.includes(e.which)) {
+                if (fullSettings['settings_keys'].includes(e.which)) {
 
                   settingsOpen ? $('#settings-modal').modal('close') : $('#settings-modal').modal('open');
 
@@ -659,9 +700,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 // Go back
 
-                let back_shortcuts = localStorage.getItem('back_keys') ? JSON.parse(`[${localStorage.getItem('back_keys')}]`) : settings['back_keys']['value'];
-
-                if (back_shortcuts.includes(e.which) && !settingsOpen && usedQuotes.length > 1) {
+                if (fullSettings['back_keys'].includes(e.which) && !settingsOpen && usedQuotes.length > 1) {
 
                   goBack();
 
@@ -698,7 +737,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             // Log quote/colour in console (for fun)
 
-            if (settings['extra_logging']['value'].includes('reload') && platform === 'web') {
+            if (fullSettings['extra_logging'].includes('reload') && platform === 'web') {
 
               console.log(`%c${quotes[quoteNum]}`, `padding: 2px 5px; font-size: 20px; font-family: 'Oxygen'; color: white; background-color: #${colours[colourNum]}`);
 
@@ -710,17 +749,17 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
         manualReload = function(text, colour) {
 
-          if (text_reload_transitions_settings) {
+          if (fullSettings['text_reload_transitions']) {
 
-            $('#quote').fadeOut(text_reload_transition_time / 2, function() {
+            $('#quote').fadeOut(fullSettings['text_reload_transition_time'] / 2, function() {
 
-              $(this).text(text).fadeIn(text_reload_transition_time / 2);
+              $(this).text(quote).fadeIn(fullSettings['text_reload_transition_time'] / 2);
 
             });
 
           } else {
 
-            $('#quote').text(text);
+            $('#quote').text(quote);
 
           }
 
@@ -741,7 +780,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
           localStorage.setItem('lastQuote', lastQuote);
           localStorage.setItem('lastColour', lastColour);
 
-          window.location.reload();
+          setSettings(null, 'Set All Settings to Default!');
 
         });
 
@@ -796,14 +835,13 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               // Reload the page for settings to come into effect
 
-              Materialize.toast('Settings Saved!', settings['toast_interval']['value']);
-              window.location.reload();
+              setSettings(null, 'Settings Saved!');
 
               // Catch any unexpected errors and display/log them
 
             } catch (error) {
 
-              Materialize.toast('Unable To Save Settings. An Error Occured.', settings['toast_interval']['value']);
+              Materialize.toast('Unable To Save Settings. An Error Occured.', fullSettings['toast_interval']);
               console.error(`Couldn't save settings. Error: ${error}.`);
 
             }
