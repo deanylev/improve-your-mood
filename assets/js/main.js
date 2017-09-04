@@ -568,7 +568,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
               let icon = $('#toggle-auto-reload').find('i');
 
               icon.text(icon_text);
-              $('#go-back-button').attr('disabled', notAutoReloading());
+              $('#go-back-button').toggleClass('disabled');
               $('main').toggleClass('manual-reload');
               Materialize.toast(`Auto Reload ${toggle}!`, fullSettings['toast_interval']);
 
@@ -712,6 +712,16 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
                 if (fullSettings['back_keys'].includes(e.which) && !settingsOpen && usedQuotes.length > 1) {
 
                   goBack();
+
+                }
+
+                // Menu
+
+                if (fullSettings['menu_keys'].includes(e.which) && usedQuotes.length > 1) {
+
+                  var fabOpen = $('.fixed-action-btn').hasClass('active') ? true : false;
+
+                  fabOpen ? $('.fixed-action-btn').closeFAB() : $('.fixed-action-btn').openFAB();
 
                 }
 

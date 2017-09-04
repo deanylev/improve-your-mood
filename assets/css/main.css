@@ -67,10 +67,6 @@ main {
   margin-top: 30px;
 }
 
-.btn-floating[disabled="disabled"] i {
-  color: grey;
-}
-
 #logo {
   font-family: 'Raleway', Helvetica, Arial;
 }
@@ -78,7 +74,7 @@ main {
 #quote {
   font-family: 'Oxygen', Helvetica, Arial;
   font-size: 43px;
-  margin-top: 200px; // Just in case the JS fails
+  margin-top: 200px; // For before the JS loads
 }
 
 #personal-link {
