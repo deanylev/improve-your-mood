@@ -67,6 +67,11 @@ main {
   margin-top: 30px;
 }
 
+.darken, .darken:hover {
+  opacity: 0.4 !important;
+  background-color: black !important;
+}
+
 #logo {
   font-family: 'Raleway', Helvetica, Arial;
 }
