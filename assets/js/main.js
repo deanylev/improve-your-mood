@@ -244,6 +244,29 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               }
 
+              // Touch / click gestures
+
+              var hammertime = new Hammer($('html')[0]);
+
+              hammertime.off('swipeleft');
+              hammertime.off('swiperight');
+
+              hammertime.on(fullSettings['reverse_swipe_direction'] ? 'swiperight' : 'swipeleft', function(ev) {
+
+                let direction = fullSettings['reverse_swipe_direction'] ? 'right' : 'left';
+                console.log(`Swiped ${direction} to reload.`);
+                reloadEngine();
+
+              });
+
+              hammertime.on(fullSettings['reverse_swipe_direction'] ? 'swipeleft' : 'swiperight', function(ev) {
+
+                let direction = fullSettings['reverse_swipe_direction'] ? 'left' : 'right';
+                console.log(`Swiped ${direction} to rewind.`);
+                goBack();
+
+              });
+
               if (method !== 'initial') {
 
                 $('#settings-modal').modal('close');
@@ -660,22 +683,6 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
               }
 
             }
-
-            // Touch / click gestures
-
-            var hammertime = new Hammer($('html')[0]);
-
-            hammertime.on(fullSettings['reverse_swipe_direction'] ? 'swiperight' : 'swipeleft', function(ev) {
-
-              reloadEngine();
-
-            });
-
-            hammertime.on(fullSettings['reverse_swipe_direction'] ? 'swipeleft' : 'swiperight', function(ev) {
-
-              goBack();
-
-            });
 
             $('.container').click(function(e) {
 
