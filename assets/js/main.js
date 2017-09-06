@@ -88,7 +88,7 @@ function engineError(display, log, code) {
     $('#quote').text(display);
     $('#quote').addClass('scale-in');
     $('.preloader-wrapper').addClass('hide');
-    $('#error-code').text(`Error code ${code}`);
+    $('#error-code').text(`Message: ${log} (${code})`);
     console.error(log);
 
     if (localStorage.getItem('backend_address')) {
@@ -343,10 +343,9 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               // If backend has no quotes, throw an error
 
-              if (quotes.length === 0) {
+              if (quotes.length) {
 
-                console.warn('There are no quotes!')
-                throw new Error();
+                throw new Error('There are no quotes.');
 
               }
 
@@ -401,10 +400,9 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               // If backend has no colours, throw an error
 
-              if (colours.length === 0) {
+              if (!colours.length) {
 
-                console.warn('There are no colours!')
-                throw new Error();
+                throw new Error('There are no quotes.');
 
               }
 
@@ -669,8 +667,8 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               } catch (error) {
 
-                var message = 'Failed to initialize MoodEngine.';
-                engineError(message, message, 3);
+                error = error.toString().slice(7);
+                engineError('Failed to initialize MoodEngine.', error, 3);
 
               }
 
