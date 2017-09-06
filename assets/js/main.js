@@ -82,6 +82,24 @@ function engineError(display, log, code) {
 
   if (navigator.onLine) {
 
+    if (!display) {
+
+      display = 'An error occured.';
+
+    }
+
+    if (!log) {
+
+      log = 'An error occured.';
+
+    }
+
+    if (code) {
+
+      $('#error-message').text(`Message: ${log} (${code})`);
+
+    }
+
     appError = true;
     $('.coloured').css('background-color', 'black');
     $('meta[name="theme-color"]').attr('content', 'black');
@@ -89,17 +107,7 @@ function engineError(display, log, code) {
     $('#quote').addClass('scale-in');
     $('.preloader-wrapper').addClass('hide');
 
-    if (log) {
-
-      if (code) {
-
-        $('#error-message').text(`Message: ${log} (${code})`);
-
-      }
-
-      console.error(log);
-
-    }
+    console.error(log);
 
     if (localStorage.getItem('backend_address')) {
 
