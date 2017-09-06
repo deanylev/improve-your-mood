@@ -21,6 +21,6 @@
   if ($conn->query($sql) === false) {
       echo "Error: " . $sql . "<br>" . $conn->error;
   }
-  
+
   $conn->close();
-  //header("location: .");
+  header("location: .");
