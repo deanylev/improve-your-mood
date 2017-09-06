@@ -315,6 +315,16 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
             $('#settings-modal').modal({
               ready: function(modal, trigger) {
 
+                // Scroll to the top of the modal
+
+                if (fullSettings['scroll_settings'] && $('#settings-modal').scrollTop) {
+
+                  $('#settings-modal').animate({
+                    scrollTop: 0
+                  }, 200);
+
+                }
+
                 settingsOpen = true;
 
               },
@@ -458,7 +468,17 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             $('.material-icons').each(function() {
 
-              let icon = fullSettings['button_icons'][$(this).attr('data-icon')];
+              if (fullSettings['button_icons']) {
+
+                var icon = fullSettings['button_icons'][$(this).attr('data-icon')];
+
+              } else {
+
+                console.warn('Server has no icons, falling back to defaults...');
+
+                var icon = $(this).attr('data-default');
+
+              }
 
               $(this).text(icon);
 
@@ -727,7 +747,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 // Reload
 
-                if (fullSettings['reload_keys'].includes(e.which) && !settingsOpen) {
+                if (fullSettings['reload_keys'] && fullSettings['reload_keys'].includes(e.which) && !settingsOpen) {
 
                   reloadEngine();
 
@@ -735,7 +755,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 // Toggle auto reload
 
-                if (fullSettings['auto_reload_keys'].includes(e.which) && !settingsOpen) {
+                if (fullSettings['auto_reload_keys'] && fullSettings['auto_reload_keys'].includes(e.which) && !settingsOpen) {
 
                   toggleAutoReload();
 
@@ -743,7 +763,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 // Open / close settings panel
 
-                if (fullSettings['settings_keys'].includes(e.which)) {
+                if (fullSettings['settings_keys'] && fullSettings['settings_keys'].includes(e.which)) {
 
                   settingsOpen ? $('#settings-modal').modal('close') : $('#settings-modal').modal('open');
 
@@ -751,7 +771,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 // Go back
 
-                if (fullSettings['back_keys'].includes(e.which) && !settingsOpen && usedQuotes.length > 1) {
+                if (fullSettings['back_keys'] && fullSettings['back_keys'].includes(e.which) && !settingsOpen && usedQuotes.length > 1) {
 
                   goBack();
 
@@ -759,7 +779,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 // Menu
 
-                if (fullSettings['menu_keys'].includes(e.which) && usedQuotes.length > 1) {
+                if (fullSettings['menu_keys'] && fullSettings['menu_keys'].includes(e.which) && usedQuotes.length > 1) {
 
                   var fabOpen = $('.fixed-action-btn').hasClass('active') ? true : false;
 
