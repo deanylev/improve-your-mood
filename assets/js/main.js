@@ -88,8 +88,18 @@ function engineError(display, log, code) {
     $('#quote').text(display);
     $('#quote').addClass('scale-in');
     $('.preloader-wrapper').addClass('hide');
-    $('#error-code').text(`Message: ${log} (${code})`);
-    console.error(log);
+
+    if (log) {
+
+      if (code) {
+
+        $('#error-message').text(`Message: ${log} (${code})`);
+
+      }
+
+      console.error(log);
+
+    }
 
     if (localStorage.getItem('backend_address')) {
 
@@ -349,6 +359,10 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               }
 
+              // Clear error message in case there is one
+
+              $('#error-message').text('');
+
               let lastNum = localStorage.getItem('lastQuote');
               quoteNum = Math.floor(quotes.length * Math.random());
 
@@ -505,7 +519,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               let setting = $(this).attr('data-setting');
               localStorage.removeItem(setting);
-              setSettings(null, `Set ${setting} to ${settings[setting]['value']}!`);
+              setSettings(null, `Set ${settings[setting]['label']} to ${settings[setting]['value']}!`);
 
             });
 
@@ -588,8 +602,17 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
               let icon_text = notAutoReloading() ? 'close' : 'autorenew';
               let icon = $('#toggle-auto-reload').find('i');
 
+              if (notAutoReloading()) {
+
+                $('#go-back-button').addClass('disabled');
+
+              } else if (quoteHistory.length > 1) {
+
+                $('#go-back-button').removeClass('disabled');
+
+              }
+
               icon.text(icon_text);
-              $('#go-back-button').toggleClass('disabled');
               $('main').toggleClass('manual-reload');
               Materialize.toast(`Auto Reload ${toggle}!`, fullSettings['toast_interval']);
 
@@ -634,6 +657,12 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 $('.coloured').css('background-color', `#${colour}`);
                 $('meta[name="theme-color"]').attr('content', `#${colour}`);
+
+              }
+
+              if (quoteHistory.length === 1 || !notAutoReloading()) {
+
+                $('#go-back-button').addClass('disabled');
 
               }
 
@@ -748,6 +777,12 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 reloadQuote();
                 reloadColour();
+
+                if (method !== 'Auto') {
+
+                  $('#go-back-button').removeClass('disabled');
+
+                }
 
                 // Log quote/colour in console (for fun)
 
