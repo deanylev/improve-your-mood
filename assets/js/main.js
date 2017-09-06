@@ -343,7 +343,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               // If backend has no quotes, throw an error
 
-              if (quotes.length) {
+              if (!quotes.length) {
 
                 throw new Error('There are no quotes.');
 
