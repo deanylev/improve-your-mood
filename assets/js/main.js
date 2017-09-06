@@ -28,6 +28,12 @@ var backend_address = localStorage.getItem('backend_address') || 'improveyourmoo
 
 var full_backend_address = `http://${backend_address}/`;
 
+$(window).on('error', function(error) {
+
+  engineError();
+
+});
+
 $(document).ready(function() {
 
   // Put in correct text / year
@@ -76,7 +82,7 @@ $(document).ready(function() {
 
 // Function for displaying and logging errors
 
-function engineError(display, log, code) {
+function engineError(display, log, code, type) {
 
   // If network connection is detected
 
@@ -109,7 +115,7 @@ function engineError(display, log, code) {
 
     console.error(log);
 
-    if (localStorage.getItem('backend_address')) {
+    if (type === 'backend' && localStorage.getItem('backend_address')) {
 
       $('#reset-backend-address').removeClass('hide');
 
@@ -960,7 +966,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
           .fail(function(data) {
 
-            engineError('Failed to contact server. Try again later.', 'Failed to pull settings from backend.', '1c');
+            engineError('Failed to contact server. Try again later.', 'Failed to pull settings from backend.', '1c', 'backend');
 
           });
 
@@ -970,7 +976,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
       .fail(function(data) {
 
-        engineError('Failed to contact server. Try again later.', 'Failed to pull colours from backend.', '1b');
+        engineError('Failed to contact server. Try again later.', 'Failed to pull colours from backend.', '1b', 'backend');
 
       });
 
@@ -980,6 +986,6 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
   .fail(function(data) {
 
-    engineError('Failed to contact server. Try again later.', 'Failed to pull quotes from backend.', '1a');
+    engineError('Failed to contact server. Try again later.', 'Failed to pull quotes from backend.', '1a', 'backend');
 
   });
