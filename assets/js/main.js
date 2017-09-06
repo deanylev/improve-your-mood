@@ -603,14 +603,6 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             });
 
-            // Darken menu button when clicked
-
-            $('#menu-button').click(function() {
-
-              $(this).toggleClass('darken');
-
-            });
-
             // Go back when the button is clicked
 
             function goBack() {
@@ -733,8 +725,6 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
                 // Menu
 
                 if (fullSettings['menu_keys'].includes(e.which) && usedQuotes.length > 1) {
-
-                  $('#menu-button').toggleClass('darken');
 
                   var fabOpen = $('.fixed-action-btn').hasClass('active') ? true : false;
 
