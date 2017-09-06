@@ -23,4 +23,4 @@
   }
   
   $conn->close();
-  header("location: .");
+  //header("location: .");
