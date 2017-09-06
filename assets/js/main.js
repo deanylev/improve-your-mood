@@ -112,6 +112,7 @@ function engineError(display, log, code, type) {
     $('#quote').text(display);
     $('#quote').addClass('scale-in');
     $('.preloader-wrapper').addClass('hide');
+    $('.fixed-action-btn').addClass('hide');
 
     console.error(log);
 
@@ -613,7 +614,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               setTimeout(function() {
 
-                if (!notAutoReloading()) {
+                if (!notAutoReloading() && !appError) {
 
                   reloadEngine('Auto');
                   console.log(`Auto reloaded after ${fullSettings['reload_interval']}ms.`);
@@ -632,23 +633,27 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             function toggleAutoReload() {
 
-              let toggle = notAutoReloading() ? 'Enabled' : 'Disabled';
-              let icon_text = notAutoReloading() ? 'close' : 'autorenew';
-              let icon = $('#toggle-auto-reload').find('i');
+              if (!appError) {
 
-              if (notAutoReloading()) {
+                let toggle = notAutoReloading() ? 'Enabled' : 'Disabled';
+                let icon_text = notAutoReloading() ? 'close' : 'autorenew';
+                let icon = $('#toggle-auto-reload').find('i');
 
-                $('#go-back-button').addClass('disabled');
+                if (notAutoReloading()) {
 
-              } else if (quoteHistory.length > 1) {
+                  $('#go-back-button').addClass('disabled');
 
-                $('#go-back-button').removeClass('disabled');
+                } else if (quoteHistory.length > 1) {
+
+                  $('#go-back-button').removeClass('disabled');
+
+                }
+
+                icon.text(icon_text);
+                $('main').toggleClass('manual-reload');
+                Materialize.toast(`Auto Reload ${toggle}!`, fullSettings['toast_interval']);
 
               }
-
-              icon.text(icon_text);
-              $('main').toggleClass('manual-reload');
-              Materialize.toast(`Auto Reload ${toggle}!`, fullSettings['toast_interval']);
 
             }
 
@@ -662,7 +667,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             function goBack() {
 
-              if (notAutoReloading() && quoteHistory.length > 1) {
+              if (notAutoReloading() && quoteHistory.length > 1 && !appError) {
 
                 quoteNum = quoteHistory.length - 2;
                 quoteHistory.pop();
@@ -747,9 +752,9 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             $(document).keydown(function(e) {
 
-              // If the user is not typing into an input
+              // If the user is not typing into an input and no errors
 
-              if (!$('#settings-modal input:focus').length) {
+              if (!$('#settings-modal input:focus').length && !appError) {
 
                 // Reload
 
@@ -811,6 +816,8 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 reloadQuote();
                 reloadColour();
+
+                $('.fixed-action-btn').removeClass('hide');
 
                 if (method !== 'Auto') {
 
