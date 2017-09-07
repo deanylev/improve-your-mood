@@ -947,7 +947,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 if (!$(this).val()) {
 
-                  //has_input = false;
+                  has_input = false;
 
                 }
 
