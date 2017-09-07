@@ -935,9 +935,9 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
             function saveSettings() {
 
               let local_settings = {};
-              let has_input = true;
+              var has_input = true;
 
-              $('.settings-input').each(function() {
+              $('.settings-input:not(.select-wrapper)').each(function() {
 
                 // Construct the object using values
 
