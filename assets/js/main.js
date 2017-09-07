@@ -347,24 +347,14 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 settingsOpen = false;
 
-                $('.settings-input').each(function() {
+                $('.settings-input:not(.select-wrapper)').each(function() {
 
                   let setting = $(this).attr('name');
+                  let value = fullSettings[setting];
 
-                  // For some reason the select elements return undefined which breaks stuff, so this is a crappy workaround
-
-                  try {
-
-                    let value = fullSettings[setting];
-                    $(this).is('select') && !localStorage.getItem(setting) ? $(this).val(JSON.stringify(value)) : $(this).val(value);
-                    $(this).is('input') ? $(this).parent().find('label').addClass('active') : '';
-                    $('select').material_select();
-
-                  } catch (error) {
-
-                    return;
-
-                  }
+                  $(this).is('select') && !localStorage.getItem(setting) ? $(this).val(JSON.stringify(value)) : $(this).val(value);
+                  $(this).is('input') ? $(this).parent().find('label').addClass('active') : '';
+                  $('select').material_select();
 
                 });
 
@@ -519,7 +509,9 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
             $('#button-menu').sortable({
               stop: function(event, ui) {
 
-                var array = $('#button-menu').sortable('toArray', { attribute: 'data-button' });
+                var array = $('#button-menu').sortable('toArray', {
+                  attribute: 'data-button'
+                });
                 localStorage.setItem('button_order', JSON.stringify(array));
 
               }
@@ -626,24 +618,14 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             // Set the correct values in the settings inputs
 
-            $('.settings-input').each(function() {
+            $('.settings-input:not(.select-wrapper)').each(function() {
 
               let setting = $(this).attr('name');
+              let value = fullSettings[setting];
 
-              // For some reason the select elements return undefined which breaks stuff, so this is a crappy workaround
-
-              try {
-
-                let value = localStorage.getItem(setting) || settings[setting]['value'];
-                $(this).is('select') && !localStorage.getItem(setting) ? $(this).val(JSON.stringify(value)) : $(this).val(value);
-                $(this).is('input') ? $(this).parent().find('label').addClass('active') : '';
-                $('select').material_select();
-
-              } catch (error) {
-
-                return;
-
-              }
+              $(this).is('select') && !localStorage.getItem(setting) ? $(this).val(JSON.stringify(value)) : $(this).val(value);
+              $(this).is('input') ? $(this).parent().find('label').addClass('active') : '';
+              $('select').material_select();
 
             });
 
