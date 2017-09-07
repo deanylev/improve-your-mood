@@ -16,6 +16,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
   <link rel="stylesheet" href="assets/css/main.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
   <script src="assets/js/main.js"></script>
 </head>
@@ -63,11 +65,7 @@
     <a class="btn-floating btn-large waves-effect transparent" id="menu-button">
       <i class="large material-icons" data-icon="menu" data-default="menu"></i>
     </a>
-    <ul>
-      <li><a class="btn-floating waves-effect transparent" id="toggle-auto-reload"><i class="material-icons" data-icon="autoreload" data-default="autorenew"></i></a></li>
-      <li><a class="btn-floating waves-effect transparent modal-trigger" id="settings-button" data-target="settings-modal"><i class="material-icons" data-icon="settings" data-default="settings"></i></a></li>
-      <li><a class="btn-floating waves-effect transparent disabled" id="go-back-button"><i class="material-icons" data-icon="rewind" data-default="skip_previous"></i></a></li>
-    </ul>
+    <ul id="button-menu"></ul>
   </div>
   <footer class="page-footer transparent hide-on-med-and-down">
     <div class="footer-copyright transparent">
