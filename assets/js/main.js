@@ -108,6 +108,7 @@ function engineError(display, log, code, type) {
 
     appError = true;
     $('.coloured').css('background-color', 'black');
+    $('.theme-text').css('color', 'white');
     $('meta[name="theme-color"]').attr('content', 'black');
     $('#quote').text(display);
     $('#quote').addClass('scale-in');
@@ -256,6 +257,10 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
                 }
 
               });
+
+              // Theme colour
+
+              $('.theme-text').css('cssText', `color: ${fullSettings['theme_colour']} !important`);
 
               // Reload transitions
 
@@ -485,13 +490,13 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
               switch (val) {
 
                 case 'autoreload':
-                  var html = '<li data-button="autoreload"><a class="btn-floating waves-effect transparent" id="toggle-auto-reload"><i class="material-icons" data-icon="autoreload" data-default="autorenew"></i></a></li>';
+                  var html = '<li data-button="autoreload"><a class="btn-floating waves-effect transparent" id="toggle-auto-reload"><i class="material-icons theme-text" data-icon="autoreload" data-default="autorenew"></i></a></li>';
                   break;
                 case 'settings':
-                  var html = '<li data-button="settings"><a class="btn-floating waves-effect transparent modal-trigger" id="settings-button" data-target="settings-modal"><i class="material-icons" data-icon="settings" data-default="settings"></i></a></li>';
+                  var html = '<li data-button="settings"><a class="btn-floating waves-effect transparent modal-trigger" id="settings-button" data-target="settings-modal"><i class="material-icons theme-text" data-icon="settings" data-default="settings"></i></a></li>';
                   break;
                 case 'rewind':
-                  var html = '<li data-button="rewind"><a class="btn-floating waves-effect transparent disabled" id="go-back-button"><i class="material-icons" data-icon="rewind" data-default="skip_previous"></i></a></li>';
+                  var html = '<li data-button="rewind"><a class="btn-floating waves-effect transparent disabled" id="go-back-button"><i class="material-icons theme-text" data-icon="rewind" data-default="skip_previous"></i></a></li>';
                   break;
                 default:
                   console.warn(`Unknown value '${val}' in button order, skipping...`);
@@ -504,6 +509,10 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             $('#button-menu').html(menuHTML);
 
+            // Set settings again to set proper colours for button menu
+
+            setSettings('initial');
+
             // Initialize sortable menu
 
             $('#button-menu').sortable({
@@ -512,6 +521,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
                 var array = $('#button-menu').sortable('toArray', {
                   attribute: 'data-button'
                 });
+
                 localStorage.setItem('button_order', JSON.stringify(array));
 
               }
