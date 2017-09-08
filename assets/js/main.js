@@ -359,6 +359,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                   $(this).is('select') && !localStorage.getItem(setting) ? $(this).val(JSON.stringify(value)) : $(this).val(value);
                   $(this).is('input') ? $(this).parent().find('label').addClass('active') : '';
+                  $(this).removeClass('invalid');
                   $('select').material_select();
 
                 });
@@ -927,7 +928,8 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
             function saveSettings() {
 
               let local_settings = {};
-              var has_input = true;
+              let has_input = true;
+              let empty_inputs = [];
 
               $('.settings-input:not(.select-wrapper)').each(function() {
 
@@ -937,9 +939,16 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 // Detect if input is blank
 
-                if (!$(this).val()) {
+                if (!$(this).val() || $(this).val() === 'null' || $(this).val().indexOf(' ') >= 0) {
 
+                  $(this).addClass('invalid');
+
+                  empty_inputs.push(` ${$(this).parent().find('label').text()}`);
                   has_input = false;
+
+                } else {
+
+                  $(this).removeClass('invalid');
 
                 }
 
@@ -979,7 +988,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 } catch (error) {
 
-                  Materialize.toast('Unable To Save Settings. An Error Occured.', fullSettings['toast_interval']);
+                  Materialize.toast('Unable to Save Settings. An Error Occurred.', fullSettings['toast_interval']);
                   console.error(`Couldn't save settings. Error: ${error}.`);
 
                 }
@@ -987,6 +996,22 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
                 // Close the modal no matter what
 
                 $('#settings-modal').modal('close');
+
+              } else {
+
+                if (empty_inputs.length === 1) {
+
+                  Materialize.toast(`${empty_inputs} Is Empty.`, fullSettings['toast_interval']);
+
+                } else if (empty_inputs.length < 4) {
+
+                  Materialize.toast(`${empty_inputs} Are Empty.`, fullSettings['toast_interval']);
+
+                } else {
+
+                  Materialize.toast(`${empty_inputs.length} Fields Are Empty.`, fullSettings['toast_interval']);
+
+                }
 
               }
 
