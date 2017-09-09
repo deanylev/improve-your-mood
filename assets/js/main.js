@@ -276,12 +276,9 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               // Touch / click gestures
 
-              var hammertime = new Hammer($('html')[0]);
+              $(document.body).hammer().off();
 
-              hammertime.off('swipeleft');
-              hammertime.off('swiperight');
-
-              hammertime.on(fullSettings['reverse_swipe_direction'] ? 'swiperight' : 'swipeleft', function(ev) {
+              $(document.body).hammer().on(fullSettings['reverse_swipe_direction'] ? 'swiperight' : 'swipeleft', function(ev) {
 
                 let direction = fullSettings['reverse_swipe_direction'] ? 'right' : 'left';
                 console.log(`Swiped ${direction} to reload.`);
@@ -289,7 +286,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               });
 
-              hammertime.on(fullSettings['reverse_swipe_direction'] ? 'swipeleft' : 'swiperight', function(ev) {
+              $(document.body).hammer().on(fullSettings['reverse_swipe_direction'] ? 'swipeleft' : 'swiperight', function(ev) {
 
                 let direction = fullSettings['reverse_swipe_direction'] ? 'left' : 'right';
                 console.log(`Swiped ${direction} to rewind.`);
@@ -357,7 +354,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
                   let setting = $(this).attr('name');
                   let value = fullSettings[setting];
 
-                  $(this).is('select') && !localStorage.getItem(setting) ? $(this).val(JSON.stringify(value)) : $(this).val(value);
+                  $(this).is('select') ? $(this).val(JSON.stringify(value)) : $(this).val(value);
                   $(this).is('input') ? $(this).parent().find('label').addClass('active') : '';
                   $(this).removeClass('invalid');
                   $('select').material_select();
@@ -634,7 +631,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
               let setting = $(this).attr('name');
               let value = fullSettings[setting];
 
-              $(this).is('select') && !localStorage.getItem(setting) ? $(this).val(JSON.stringify(value)) : $(this).val(value);
+              $(this).is('select') ? $(this).val(JSON.stringify(value)) : $(this).val(value);
               $(this).is('input') ? $(this).parent().find('label').addClass('active') : '';
               $('select').material_select();
 
