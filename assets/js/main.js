@@ -977,7 +977,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                   });
 
-                  // Reload the page for settings to come into effect
+                  // Set settings for new ones to come into effect
 
                   setSettings(null, 'Settings Saved!');
 
