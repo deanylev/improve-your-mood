@@ -276,9 +276,9 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               // Touch / click gestures
 
-              $(document.body).hammer().off();
+              $('html').hammer().off();
 
-              $(document.body).hammer().on(fullSettings['reverse_swipe_direction'] ? 'swiperight' : 'swipeleft', function(ev) {
+              $('html').hammer().on(fullSettings['reverse_swipe_direction'] ? 'swiperight' : 'swipeleft', function(ev) {
 
                 let direction = fullSettings['reverse_swipe_direction'] ? 'right' : 'left';
                 console.log(`Swiped ${direction} to reload.`);
@@ -286,7 +286,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               });
 
-              $(document.body).hammer().on(fullSettings['reverse_swipe_direction'] ? 'swipeleft' : 'swiperight', function(ev) {
+              $('html').hammer().on(fullSettings['reverse_swipe_direction'] ? 'swipeleft' : 'swiperight', function(ev) {
 
                 let direction = fullSettings['reverse_swipe_direction'] ? 'left' : 'right';
                 console.log(`Swiped ${direction} to rewind.`);
