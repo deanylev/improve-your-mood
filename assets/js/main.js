@@ -296,7 +296,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               // Clear array of menu buttons if the amount of buttons from server is different
 
-              if (fullSettings['button_order'] && fullSettings['button_order'].length != settings['button_order']['value'].length) {
+              if (fullSettings['button_order'] && settings['button_order'] && fullSettings['button_order'].length !== settings['button_order']['value'].length) {
 
                 localStorage.removeItem('button_order');
 
@@ -307,7 +307,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
                 $('#settings-modal').modal('close');
                 Materialize.toast(toast, fullSettings['toast_interval']);
 
-                if (fullSettings['require_settings_reload'] || fullSettings['backend_address'] !== 'improveyourmood.xyz') {
+                if (fullSettings['require_settings_reload'] || fullSettings['backend_address'] !== backend_address) {
 
                   window.location.reload();
 
@@ -527,6 +527,12 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             // Set correct icons
 
+            if (!fullSettings['button_icons']) {
+
+              console.warn('Server has no icons, falling back to defaults...');
+
+            }
+
             $('.material-icons').each(function() {
 
               if (fullSettings['button_icons']) {
@@ -534,8 +540,6 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
                 var icon = fullSettings['button_icons'][$(this).attr('data-icon')];
 
               } else {
-
-                console.warn('Server has no icons, falling back to defaults...');
 
                 var icon = $(this).attr('data-default');
 
@@ -600,7 +604,13 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
             });
 
             $('#settings-form').prepend(fullHTML);
-            $('#advanced-settings').html(fullAdvancedHTML);
+
+            if (fullAdvancedHTML) {
+
+              $('#advanced-settings-wrapper').removeClass('hide');
+              $('#advanced-settings').html(fullAdvancedHTML);
+
+            }
 
             // Set desired settings to default using the attr on the default button
 
@@ -655,6 +665,12 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
             // Auto reload
 
             function autoReload() {
+
+              if (!fullSettings['reload_interval']) {
+
+                fullSettings['reload_interval'] = 3000;
+
+              }
 
               setTimeout(function() {
 
@@ -846,13 +862,15 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             });
 
-            // Function to reload both quotes and colour
+            // Allows other functions to check if currently auto reloading
 
             function notAutoReloading() {
 
               return $('main').hasClass('manual-reload');
 
             }
+
+            // Function to reload both quotes and colour
 
             reloadEngine = function(method) {
 
@@ -871,7 +889,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 // Log quote/colour in console (for fun)
 
-                if (fullSettings['extra_logging'].includes('reload') && platform === 'web') {
+                if (fullSettings['extra_logging'] && fullSettings['extra_logging'].includes('reload') && platform === 'web') {
 
                   console.log(`%c${quotes[quoteNum]}`, `padding: 2px 5px; font-size: 20px; font-family: 'Oxygen'; color: white; background-color: #${colours[colourNum]}`);
 
