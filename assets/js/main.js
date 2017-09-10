@@ -1,4 +1,4 @@
-var what, appError, networkReported, start_time, reloadEngine, manualReload, setSettings;
+var what, appError, networkReported, start_time, reloadEngine, manualReload, setSettings, resetBackendAddress;
 var usedQuotes = [];
 var usedColours = [];
 var quoteHistory = [];
@@ -59,10 +59,16 @@ $(document).ready(function() {
 
   // Clear backend address
 
-  $('#reset-backend-address').click(function() {
+  resetBackendAddress = function() {
 
     localStorage.removeItem('backend_address');
     window.location.reload();
+
+  }
+
+  $('#reset-backend-address').click(function() {
+
+    resetBackendAddress();
 
   });
 
@@ -483,6 +489,18 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             }
 
+            var hasUserSettings = false;
+
+            $.each(settings, function(key, val) {
+
+              if (val['user']) {
+
+                hasUserSettings = true;
+
+              }
+
+            });
+
             $.each(fullSettings['button_order'], function(key, val) {
 
               switch (val) {
@@ -491,7 +509,8 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
                   var html = '<li data-button="autoreload"><a class="btn-floating waves-effect transparent" id="toggle-auto-reload"><i class="material-icons theme-text" data-icon="autoreload" data-default="autorenew"></i></a></li>';
                   break;
                 case 'settings':
-                  var html = '<li data-button="settings"><a class="btn-floating waves-effect transparent modal-trigger" id="settings-button" data-target="settings-modal"><i class="material-icons theme-text" data-icon="settings" data-default="settings"></i></a></li>';
+                  let hidden = hasUserSettings ? '' : 'hide';
+                  var html = `<li data-button="settings" class="${hidden}"><a class="btn-floating waves-effect transparent modal-trigger" id="settings-button" data-target="settings-modal"><i class="material-icons theme-text" data-icon="settings" data-default="settings"></i></a></li>`;
                   break;
                 case 'rewind':
                   var html = '<li data-button="rewind"><a class="btn-floating waves-effect transparent disabled" id="go-back-button"><i class="material-icons theme-text" data-icon="rewind" data-default="skip_previous"></i></a></li>';
@@ -513,17 +532,21 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             // Initialize sortable menu
 
-            $('#button-menu').sortable({
-              stop: function(event, ui) {
+            if (settings['button_order']) {
 
-                var array = $('#button-menu').sortable('toArray', {
-                  attribute: 'data-button'
-                });
+              $('#button-menu').sortable({
+                stop: function(event, ui) {
 
-                localStorage.setItem('button_order', JSON.stringify(array));
+                  var array = $('#button-menu').sortable('toArray', {
+                    attribute: 'data-button'
+                  });
 
-              }
-            });
+                  localStorage.setItem('button_order', JSON.stringify(array));
+
+                }
+              });
+
+            }
 
             // Set correct icons
 
