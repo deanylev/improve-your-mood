@@ -102,7 +102,7 @@ function engineError(display, log, code, type) {
 
     if (code) {
 
-      $('#error-message').text(`Message: ${log} (${code})`);
+      $('#error-message').text(`${log} (${code})`);
 
     }
 
@@ -779,7 +779,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               } catch (error) {
 
-                error = error.toString().slice(7);
+                error = error.toString();
                 engineError('Failed to initialize MoodEngine.', error, 3);
 
               }
