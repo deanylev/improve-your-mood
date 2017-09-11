@@ -149,7 +149,7 @@ function engineError(display, log, code, type) {
 start_time = performance.now();
 total_time = performance.now();
 
-console.log(`%c${version} Your Mood 6\n`, 'font-family: "Oxygen"; font-size: 20px;');
+console.log(`%c${version} Your Mood 6`, 'font-family: "Oxygen"; font-size: 20px;');
 console.log('――――――――――――――――――――――――――――――')
 console.log(`Pulling from: ${full_backend_address}`);
 
@@ -686,7 +686,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             function autoReload() {
 
-              if (!fullSettings['reload_interval']) {
+              if (!fullSettings['reload_interval'] && fullSettings['reload_interval'] !== 0) {
 
                 fullSettings['reload_interval'] = 3000;
 
