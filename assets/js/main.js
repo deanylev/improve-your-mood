@@ -324,95 +324,99 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               // Keyboard shortcuts
 
-              Mousetrap.reset();
+              if (platform === 'web') {
 
-              // Reload & Save Settings (because they share keys)
+                Mousetrap.reset();
 
-              if (fullSettings['reload_keys'] && typeof(fullSettings['reload_keys']) === 'object') {
+                // Reload & Save Settings (because they share keys)
 
-                Mousetrap.bind(fullSettings['reload_keys'], function(e, combo) {
+                if (fullSettings['reload_keys'] && typeof(fullSettings['reload_keys']) === 'object') {
 
-                  if (!appError) {
+                  Mousetrap.bind(fullSettings['reload_keys'], function(e, combo) {
 
-                    if (!settingsOpen) {
+                    if (!appError) {
 
-                      reloadEngine();
+                      if (!settingsOpen) {
 
-                    } else if ($('#settings-modal input:focus').length && fullSettings['save_settings_keys'].includes(combo)) {
+                        reloadEngine();
 
-                      saveSettings();
+                      } else if ($('#settings-modal input:focus').length && fullSettings['save_settings_keys'].includes(combo)) {
+
+                        saveSettings();
+
+                      }
 
                     }
 
-                  }
+                  });
 
-                });
+                }
 
-              }
+                // Rewind
 
-              // Rewind
+                if (fullSettings['back_keys'] && typeof(fullSettings['back_keys']) === 'object') {
 
-              if (fullSettings['back_keys'] && typeof(fullSettings['back_keys']) === 'object') {
+                  Mousetrap.bind(fullSettings['back_keys'], function(e) {
 
-                Mousetrap.bind(fullSettings['back_keys'], function(e) {
+                    if (!appError && !settingsOpen) {
 
-                  if (!appError && !settingsOpen) {
+                      goBack();
 
-                    goBack();
+                    }
 
-                  }
+                  });
 
-                });
+                }
 
-              }
+                // Toggle Auto Reload
 
-              // Toggle Auto Reload
+                if (fullSettings['auto_reload_keys'] && typeof(fullSettings['auto_reload_keys']) === 'object') {
 
-              if (fullSettings['auto_reload_keys'] && typeof(fullSettings['auto_reload_keys']) === 'object') {
+                  Mousetrap.bind(fullSettings['auto_reload_keys'], function(e) {
 
-                Mousetrap.bind(fullSettings['auto_reload_keys'], function(e) {
+                    if (!appError && !settingsOpen) {
 
-                  if (!appError && !settingsOpen) {
+                      toggleAutoReload();
 
-                    toggleAutoReload();
+                    }
 
-                  }
+                  });
 
-                });
+                }
 
-              }
+                // Toggle Button Menu
 
-              // Toggle Button Menu
+                if (fullSettings['menu_keys'] && typeof(fullSettings['menu_keys']) === 'object') {
 
-              if (fullSettings['menu_keys'] && typeof(fullSettings['menu_keys']) === 'object') {
+                  Mousetrap.bind(fullSettings['menu_keys'], function(e) {
 
-                Mousetrap.bind(fullSettings['menu_keys'], function(e) {
+                    if (!appError && !settingsOpen) {
 
-                  if (!appError && !settingsOpen) {
+                      var fabOpen = $('.fixed-action-btn').hasClass('active') ? true : false;
 
-                    var fabOpen = $('.fixed-action-btn').hasClass('active') ? true : false;
+                      fabOpen ? $('.fixed-action-btn').closeFAB() : $('.fixed-action-btn').openFAB();
 
-                    fabOpen ? $('.fixed-action-btn').closeFAB() : $('.fixed-action-btn').openFAB();
+                    }
 
-                  }
+                  });
 
-                });
+                }
 
-              }
+                // Toggle Settings Panel
 
-              // Toggle Settings Panel
+                if (fullSettings['settings_keys'] && typeof(fullSettings['settings_keys']) === 'object') {
 
-              if (fullSettings['settings_keys'] && typeof(fullSettings['settings_keys']) === 'object') {
+                  Mousetrap.bind(fullSettings['settings_keys'], function(e) {
 
-                Mousetrap.bind(fullSettings['settings_keys'], function(e) {
+                    if (!appError && !$('#settings-modal input:focus').length) {
 
-                  if (!appError && !$('#settings-modal input:focus').length) {
+                      settingsOpen ? $('#settings-modal').modal('close') : $('#settings-modal').modal('open');
 
-                    settingsOpen ? $('#settings-modal').modal('close') : $('#settings-modal').modal('open');
+                    }
 
-                  }
+                  });
 
-                });
+                }
 
               }
 
