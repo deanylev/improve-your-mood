@@ -86,6 +86,14 @@ $(document).ready(function() {
 
   });
 
+  // Button order in localStorage seems to break a lot...
+
+  if (localStorage.getItem('button_order') === 'null') {
+
+    localStorage.removeItem('button_order');
+
+  }
+
 });
 
 // Function for displaying and logging errors
