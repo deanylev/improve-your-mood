@@ -838,7 +838,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 // Reload
 
-                if (fullSettings['reload_keys'] && fullSettings['reload_keys'].includes(e.which) && !settingsOpen) {
+                if (fullSettings['reload_keys'] && typeof(fullSettings['reload_keys']) === 'object' && fullSettings['reload_keys'].includes(e.which) && !settingsOpen) {
 
                   reloadEngine();
 
@@ -846,7 +846,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 // Toggle auto reload
 
-                if (fullSettings['auto_reload_keys'] && fullSettings['auto_reload_keys'].includes(e.which) && !settingsOpen) {
+                if (fullSettings['auto_reload_keys'] && typeof(fullSettings['auto_reload_keys']) === 'object' && fullSettings['auto_reload_keys'].includes(e.which) && !settingsOpen) {
 
                   toggleAutoReload();
 
@@ -854,7 +854,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 // Open / close settings panel
 
-                if (fullSettings['settings_keys'] && fullSettings['settings_keys'].includes(e.which)) {
+                if (fullSettings['settings_keys'] && typeof(fullSettings['settings_keys']) === 'object' && fullSettings['settings_keys'].includes(e.which)) {
 
                   settingsOpen ? $('#settings-modal').modal('close') : $('#settings-modal').modal('open');
 
@@ -862,7 +862,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 // Go back
 
-                if (fullSettings['back_keys'] && fullSettings['back_keys'].includes(e.which) && !settingsOpen && usedQuotes.length > 1) {
+                if (fullSettings['back_keys'] && typeof(fullSettings['back_keys']) === 'object' && fullSettings['back_keys'].includes(e.which) && !settingsOpen && usedQuotes.length > 1) {
 
                   goBack();
 
@@ -870,7 +870,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 // Menu
 
-                if (fullSettings['menu_keys'] && fullSettings['menu_keys'].includes(e.which) && usedQuotes.length > 1) {
+                if (fullSettings['menu_keys'] && typeof(fullSettings['menu_keys']) === 'object' && fullSettings['menu_keys'].includes(e.which) && usedQuotes.length > 1) {
 
                   var fabOpen = $('.fixed-action-btn').hasClass('active') ? true : false;
 
