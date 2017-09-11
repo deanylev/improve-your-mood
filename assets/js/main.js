@@ -30,7 +30,9 @@ var full_backend_address = `http://${backend_address}/`;
 
 $(window).on('error', function(error) {
 
-  engineError();
+  let log = typeof(error) === 'string' ? error : null;
+
+  engineError(null, log);
 
 });
 
@@ -369,15 +371,6 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               }
             });
-
-            // Function to check what was pulled from the backend in the console
-
-            what = function(json) {
-
-              console.log(json);
-
-            }
-
 
             // Function for reloading the quote
 
