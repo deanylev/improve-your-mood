@@ -1,4 +1,4 @@
-var what, appError, networkReported, start_time, reloadEngine, manualReload, setSettings, resetBackendAddress;
+var what, appError, networkReported, start_time, reloadEngine, manualReload, setSettings, resetBackendAddress, toggleAutoReload, goBack;
 var usedQuotes = [];
 var usedColours = [];
 var quoteHistory = [];
@@ -149,7 +149,11 @@ function engineError(display, log, code, type) {
 start_time = performance.now();
 total_time = performance.now();
 
-console.log('Pulling quotes from backend...');
+console.log(`%c${version} Your Mood 6\n`, 'font-family: "Oxygen"; font-size: 20px;');
+console.log('――――――――――――――――――――――――――――――')
+console.log(`Pulling from: ${full_backend_address}`);
+
+console.log('\nPulling quotes from backend...');
 
 $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`)
 
@@ -707,7 +711,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             // Toggle auto reload when the button is clicked
 
-            function toggleAutoReload() {
+            toggleAutoReload = function() {
 
               if (!appError) {
 
@@ -741,7 +745,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             // Go back when the button is clicked
 
-            function goBack() {
+            goBack = function() {
 
               if (notAutoReloading() && quoteHistory.length > 1 && !appError) {
 
