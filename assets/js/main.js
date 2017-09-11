@@ -744,7 +744,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               let setting = $(this).attr('data-setting');
               localStorage.removeItem(setting);
-              setSettings(null, `Set ${settings[setting]['label']} to ${settings[setting]['value']}!`);
+              setSettings(null, `Set ${settings[setting]['label']} to Default!`);
 
             });
 
@@ -1076,15 +1076,11 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 if (empty_inputs.length === 1) {
 
-                  Materialize.toast(`${empty_inputs} Is Empty.`, fullSettings['toast_interval']);
-
-                } else if (empty_inputs.length < 4) {
-
-                  Materialize.toast(`${empty_inputs} Are Empty.`, fullSettings['toast_interval']);
+                  Materialize.toast(`${empty_inputs} Contains Spaces.`, fullSettings['toast_interval']);
 
                 } else {
 
-                  Materialize.toast(`${empty_inputs.length} Fields Are Empty.`, fullSettings['toast_interval']);
+                  Materialize.toast(`${empty_inputs.length} Fields Contain Spaces.`, fullSettings['toast_interval']);
 
                 }
 
