@@ -827,7 +827,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                 let toggle = notAutoReloading() ? 'Enabled' : 'Disabled';
                 let icon_text = notAutoReloading() ? 'close' : 'autorenew';
-                let icon = $('#toggle-auto-reload').find('i');
+                let icon = $('#toggle-auto-reload i');
 
                 if (notAutoReloading()) {
 
@@ -897,9 +897,9 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             }
 
-            $('#go-back-button').click(function() {
+            $('#go-back-button').click(function(e) {
 
-              goBack();
+              e.shiftKey ? fullRewind() : goBack();
 
             });
 
