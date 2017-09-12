@@ -1,4 +1,4 @@
-var what, appError, networkReported, start_time, reloadEngine, manualReload, setSettings, resetBackendAddress, toggleAutoReload, goBack, fullRewind;
+var what, appError, networkReported, start_time, reloadEngine, manualReload, setSettings, resetBackendAddress, toggleAutoReload, goBack, fullRewind, switchVersion;
 var usedQuotes = [];
 var usedColours = [];
 var quoteHistory = [];
@@ -512,7 +512,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               // Clear error message in case there is one
 
-              $('#error-message').text('');
+              $('#error-message').empty();
 
               let lastNum = localStorage.getItem('lastQuote');
               quoteNum = Math.floor(quotes.length * Math.random());
@@ -567,7 +567,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               if (!colours.length) {
 
-                throw new Error('There are no quotes.');
+                throw new Error('There are no colours.');
 
               }
 
@@ -855,9 +855,9 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             }
 
-            $('#toggle-auto-reload').click(function() {
+            $('#toggle-auto-reload').click(function(e) {
 
-              toggleAutoReload();
+              e.shiftKey ? switchVersion() : toggleAutoReload();
 
             });
 
@@ -1179,6 +1179,45 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
               $('#advanced-settings').slideToggle();
 
             });
+
+            // Switch Version
+
+            switchVersion = function() {
+
+              version = version === 'Improve' ? 'Decrease' : 'Improve';
+              quotes = [];
+              quoteHistory = [];
+              usedQuotes = [];
+
+              start_time = performance.now();
+
+              console.log(`\nSwitching version to ${version}...`);
+
+              $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`)
+
+                .done(function(data) {
+
+                  $.each(data, function(key, val) {
+
+                    quotes.push(val);
+
+                  });
+
+                  $('title').text(`${version} Your Mood`);
+                  $('#logo-version').text(version.toLowerCase());
+                  $('#footer-version').text(version);
+
+                  reloadEngine();
+                  goBack();
+
+                  pull_time['switch'] = Math.ceil(performance.now() - start_time);
+
+                  console.log(`Successfully switched to ${version} in ${pull_time['switch']}ms.`);
+                  Materialize.toast(`Switched to ${version} Your Mood!`, fullSettings['toast_interval']);
+
+                })
+
+            }
 
           })
 
