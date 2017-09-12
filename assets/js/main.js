@@ -1207,7 +1207,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
                   $('#logo-version').text(version.toLowerCase());
                   $('#footer-version').text(version);
 
-                  reloadEngine();
+                  reloadEngine('Auto');
                   goBack();
 
                   pull_time['switch'] = Math.ceil(performance.now() - start_time);
