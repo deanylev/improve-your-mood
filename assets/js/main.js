@@ -1212,7 +1212,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
                   pull_time['switch'] = Math.ceil(performance.now() - start_time);
 
-                  console.log(`Successfully switched to ${version} in ${pull_time['switch']}ms.`);
+                  console.log(`Successfully switched version to ${version} in ${pull_time['switch']}ms.`);
                   Materialize.toast(`Switched to ${version} Your Mood!`, fullSettings['toast_interval']);
 
                 })
