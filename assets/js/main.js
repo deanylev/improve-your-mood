@@ -629,7 +629,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
                   break;
                 case 'settings':
                   let hidden = hasUserSettings ? '' : 'hide';
-                  var html = `<li data-button="settings" class="${hidden}"><a class="btn-floating waves-effect transparent modal-trigger" id="settings-button" data-target="settings-modal"><i class="material-icons theme-text" data-icon="settings" data-default="settings"></i></a></li>`;
+                  var html = `<li data-button="settings" class="${hidden}"><a class="btn-floating waves-effect transparent" id="settings-button"><i class="material-icons theme-text" data-icon="settings" data-default="settings"></i></a></li>`;
                   break;
                 case 'rewind':
                   var html = '<li data-button="rewind"><a class="btn-floating waves-effect transparent disabled" id="go-back-button"><i class="material-icons theme-text" data-icon="rewind" data-default="skip_previous"></i></a></li>';
@@ -753,6 +753,14 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
               $('#advanced-settings').html(fullAdvancedHTML);
 
             }
+
+            // Settings button
+
+            $('#settings-button').click(function(e) {
+
+              e.shiftKey ? setAllDefault() : $('#settings-modal').modal('open');
+
+            });
 
             // Set desired settings to default using the attr on the default button
 
@@ -912,9 +920,11 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
                 let quote = quoteHistory[0];
                 let colour = colourHistory[0];
 
+                usedQuotes = [];
                 quoteHistory = [];
                 colourHistory = [];
 
+                usedQuotes[0] = quote;
                 quoteHistory[0] = quote;
                 colourHistory[0] = colour;
 
@@ -1035,7 +1045,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             // Set all settings to default
 
-            $('.set-all-default').click(function() {
+            function setAllDefault() {
 
               let lastQuote = localStorage.getItem('lastQuote');
               let lastColour = localStorage.getItem('lastColour');
@@ -1048,6 +1058,12 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
               localStorage.setItem('button_order', buttonOrder);
 
               setSettings(null, 'Set All Settings to Default!');
+
+            }
+
+            $('.set-all-default').click(function() {
+
+              setAllDefault();
 
             });
 
