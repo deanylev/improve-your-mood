@@ -100,6 +100,13 @@ $(document).ready(function() {
 
 function engineError(display, log, code, type) {
 
+  $('.coloured').css('background-color', 'black');
+  $('.theme-text').css('color', 'white');
+  $('meta[name="theme-color"]').attr('content', 'black');
+  $('#quote').addClass('scale-in');
+  $('.preloader-wrapper').addClass('hide');
+  $('.fixed-action-btn').addClass('hide');
+
   // If network connection is detected
 
   if (navigator.onLine) {
@@ -123,13 +130,7 @@ function engineError(display, log, code, type) {
     }
 
     appError = true;
-    $('.coloured').css('background-color', 'black');
-    $('.theme-text').css('color', 'white');
-    $('meta[name="theme-color"]').attr('content', 'black');
     $('#quote').text(display);
-    $('#quote').addClass('scale-in');
-    $('.preloader-wrapper').addClass('hide');
-    $('.fixed-action-btn').addClass('hide');
 
     console.error(log);
 
@@ -143,8 +144,6 @@ function engineError(display, log, code, type) {
 
     networkReported = true;
     $('#quote').text('You are not connected to the internet.');
-    $('#quote').addClass('scale-in');
-    $('.preloader-wrapper').addClass('hide');
     $('#retry-button').removeClass('hide');
     console.log('No internet connection.');
 
@@ -1216,6 +1215,12 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
                   Materialize.toast(`Switched to ${version} Your Mood!`, fullSettings['toast_interval']);
 
                 })
+
+                .fail(function(data) {
+
+                  engineError(`Failed to switch to ${version} Your Mood.`)
+
+                });
 
             }
 
