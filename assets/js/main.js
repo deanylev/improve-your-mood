@@ -1,4 +1,4 @@
-var what, appError, networkReported, start_time, reloadEngine, manualReload, setSettings, resetBackendAddress, toggleAutoReload, goBack;
+var what, appError, networkReported, start_time, reloadEngine, manualReload, setSettings, resetBackendAddress, toggleAutoReload, goBack, fullRewind;
 var usedQuotes = [];
 var usedColours = [];
 var quoteHistory = [];
@@ -361,6 +361,22 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
                     if (!appError && !settingsOpen) {
 
                       goBack();
+
+                    }
+
+                  });
+
+                }
+
+                // Rewind
+
+                if (fullSettings['full_rewind_keys'] && typeof(fullSettings['full_rewind_keys']) === 'object') {
+
+                  Mousetrap.bind(fullSettings['full_rewind_keys'], function(e) {
+
+                    if (!appError && !settingsOpen) {
+
+                      fullRewind();
 
                     }
 
@@ -886,6 +902,43 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
               goBack();
 
             });
+
+            // Go to starting quote & colour
+
+            fullRewind = function() {
+
+              if (quoteHistory.length > 1) {
+
+                let quote = quoteHistory[0];
+                let colour = colourHistory[0];
+
+                quoteHistory = [];
+                colourHistory = [];
+
+                quoteHistory[0] = quote;
+                colourHistory[0] = colour;
+
+                if (fullSettings['text_reload_transitions']) {
+
+                  $('#quote').fadeOut(fullSettings['text_reload_transition_time'] / 2, function() {
+
+                    $(this).text(quotes[quote]).fadeIn(fullSettings['text_reload_transition_time'] / 2);
+
+                  });
+
+                } else {
+
+                  $('#quote').text(quotes[quote]);
+
+                }
+
+                $('body').css('background-color', `#${colours[colour]}`);
+
+                $('#go-back-button').addClass('disabled');
+
+              }
+
+            }
 
             // Try to initialize the MoodEngine if there are no errors
 
