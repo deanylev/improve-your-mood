@@ -503,7 +503,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               // If backend has no quotes, throw an error
 
-              if (!quotes.length) {
+              if (quotes.length < 2) {
 
                 throw new Error('There are no quotes.');
 
@@ -564,7 +564,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               // If backend has no colours, throw an error
 
-              if (!colours.length) {
+              if (colours.length < 2) {
 
                 throw new Error('There are no colours.');
 
@@ -1199,6 +1199,8 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
               console.log(`\nSwitching version to ${version}...`);
 
+              appError = true;
+
               $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`)
 
                 .done(function(data) {
@@ -1212,6 +1214,8 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
                   $('title').text(`${version} Your Mood`);
                   $('#logo-version').text(version.toLowerCase());
                   $('#footer-version').text(version);
+
+                  appError = false;
 
                   reloadEngine('Auto');
                   goBack();
