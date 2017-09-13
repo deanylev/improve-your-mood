@@ -757,7 +757,11 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             $('#settings-button').click(function(e) {
 
-              e.shiftKey ? setAllDefault() : $('#settings-modal').modal('open');
+              if (!appError) {
+
+                e.shiftKey ? setAllDefault() : $('#settings-modal').modal('open');
+
+              }
 
             });
 
@@ -1156,9 +1160,11 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
 
             }
 
-            $('#save-settings-button').click(function() {
+            $('#save-settings-button').click(function(e) {
 
               saveSettings();
+
+              e.shiftKey ? window.location.reload() : '';
 
             });
 
@@ -1186,6 +1192,7 @@ $.getJSON(`${full_backend_address + version.toLowerCase()}_quote_serializer.php`
               version = version === 'Improve' ? 'Decrease' : 'Improve';
               quotes = [];
               quoteHistory = [];
+              colourHistory = [];
               usedQuotes = [];
 
               start_time = performance.now();
