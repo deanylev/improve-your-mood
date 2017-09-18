@@ -151,7 +151,7 @@ moodEngine.error = function(display, log, code, type) {
 // Pull quotes from backend
 
 startTime = performance.now();
-total_time = performance.now();
+totalTime = performance.now();
 
 console.log(`%c${version} Your Mood 6`, 'font-family: "Oxygen"; font-size: 20px;');
 console.log('――――――――――――――――――――――――――――――')
@@ -976,7 +976,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
           $('#retry-button').hide();
           $('.fixed-action-btn').removeClass('hide');
           console.log('MoodEngine initialized.');
-          let totalLoadTime = Math.ceil(performance.now() - total_time);
+          let totalLoadTime = Math.ceil(performance.now() - totalTime);
           console.log(`\nTotal load time: ${totalLoadTime}ms.`);
 
           // If an error, display/log it
