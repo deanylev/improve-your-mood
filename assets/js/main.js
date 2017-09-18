@@ -970,7 +970,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         try {
 
-          moodEngine.reload();
+          moodEngine.reload('Auto');
           $('#quote').addClass('scale-in');
           $('.preloader-wrapper').addClass('hide');
           $('#retry-button').hide();
