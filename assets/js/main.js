@@ -1,4 +1,4 @@
-var appError, startTime, settingsOpen, lastNum;
+var appError, startTime, settingsOpen, lastNum, totalTime;
 var quotes = [];
 var colours = [];
 var usedQuotes = [];
