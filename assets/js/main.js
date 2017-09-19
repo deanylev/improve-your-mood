@@ -697,6 +697,14 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
       setInputs();
 
+      // Clear chip input values when unfocused
+
+      $('.chips input').focusout(function() {
+
+        $(this).val('');
+
+      });
+
       // Add defaults to tooltips
 
       $('.tooltipped').each(function() {
