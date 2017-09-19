@@ -473,8 +473,17 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
             });
 
             // Materialize chips
+            
             $(`div[name="${name}"]`).material_chip({
               data: values
+            });
+
+            // Clear chip input values when unfocused
+
+            $('.chips input').focusout(function() {
+
+              $(this).val('');
+
             });
 
           }
@@ -696,14 +705,6 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
       // Set the correct values in the settings inputs on load
 
       setInputs();
-
-      // Clear chip input values when unfocused
-
-      $('.chips input').focusout(function() {
-
-        $(this).val('');
-
-      });
 
       // Add defaults to tooltips
 
