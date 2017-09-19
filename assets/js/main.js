@@ -715,9 +715,17 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         if (typeof(fullSettings[setting]) === 'object') {
 
-          text = fullSettings[setting].map((s) => {
-            return ` ${s}`;
-          });
+          try {
+
+            text = fullSettings[setting].map((s) => {
+              return ` ${s}`;
+            });
+
+          } catch (error) {
+
+            text = settings[setting]['value'];
+
+          }
 
         } else {
 
