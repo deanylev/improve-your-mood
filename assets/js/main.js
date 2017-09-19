@@ -1059,7 +1059,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
         localStorage.setItem('lastColour', lastColour);
         localStorage.setItem('button_order', buttonOrder);
 
-        if (!$('#advanced-settings-button').hasClass('underline')) {
+        if (backendAddress && !$('#advanced-settings-button').hasClass('underline')) {
 
           localStorage.setItem('backend_address', backendAddress);
 
