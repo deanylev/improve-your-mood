@@ -46,7 +46,7 @@ main {
   color: black !important;
 }
 
-.input-field input:focus {
+.input-field input:focus, .chips.focus {
   border-bottom: 1px solid black !important;
   box-shadow: 0 1px 0 0 black !important;
 }
@@ -72,10 +72,14 @@ main {
   background-color: black !important;
 }
 
-.settings-input.invalid:focus {
+.settings-input.invalid:focus, .chips.invalid {
   border-bottom: 1px solid #F44336 !important;
   box-shadow: 0 1px 0 0 #F44336 !important;
   -webkit-box-shadow: 0 1px 0 0 #F44336 !important;
+}
+
+.chip.selected {
+  background-color: black !important;
 }
 
 #logo {

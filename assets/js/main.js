@@ -390,7 +390,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
               if (!appError && !settingsOpen) {
 
-                var fabOpen = $('.fixed-action-btn').hasClass('active') ? true : false;
+                let fabOpen = $('.fixed-action-btn').hasClass('active');
 
                 fabOpen ? $('.fixed-action-btn').closeFAB() : $('.fixed-action-btn').openFAB();
 
@@ -443,6 +443,46 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
       }
 
+      // Set inputs in modal
+
+      function setInputs() {
+
+        $('.settings-input:not(.select-wrapper)').each(function() {
+
+          let setting = $(this).attr('name');
+          let value = fullSettings[setting];
+
+          $(this).is('select') || typeof(value) === 'object' ? $(this).val(JSON.stringify(value)) : $(this).val(value);
+          $(this).is('input') ? $(this).parent().find('label').addClass('active') : '';
+          $(this).removeClass('invalid');
+          $('select').material_select();
+
+          if ($(this).hasClass('chips')) {
+
+            let name = $(this).attr('name');
+            let values = [];
+
+            $.each(fullSettings[name], function(key, val) {
+
+              let object = {
+                tag: val
+              }
+
+              values.push(object);
+
+            });
+
+            // Materialize chips
+            $(`div[name="${name}"]`).material_chip({
+              data: values
+            });
+
+          }
+
+        });
+
+      }
+
       // Initialize modal plugin
 
       $('#settings-modal').modal({
@@ -465,17 +505,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           settingsOpen = false;
 
-          $('.settings-input:not(.select-wrapper)').each(function() {
-
-            let setting = $(this).attr('name');
-            let value = fullSettings[setting];
-
-            $(this).is('select') || typeof(value) === 'object' ? $(this).val(JSON.stringify(value)) : $(this).val(value);
-            $(this).is('input') ? $(this).parent().find('label').addClass('active') : '';
-            $(this).removeClass('invalid');
-            $('select').material_select();
-
-          });
+          setInputs();
 
         }
       });
@@ -598,13 +628,17 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           } else {
 
-            var input = `
-                  <input type="${val['input']}" name="${key}" class="settings-input mousetrap" id="${key}">
-                  `;
+            if (val['input'] === 'chips') {
 
-            var label = `
-                  <label for="${key}">${val['label']}</label>
-                  `;
+              var input = `<div class="chips left-align settings-input" name="${key}"></div>`;
+
+            } else {
+
+              var input = `<input type="${val['input']}" name="${key}" class="settings-input mousetrap" id="${key}">`;
+
+            }
+
+            var label = `<label for="${key}">${val['label']}</label>`;
 
           }
 
@@ -659,18 +693,9 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
       });
 
-      // Set the correct values in the settings inputs
+      // Set the correct values in the settings inputs on load
 
-      $('.settings-input:not(.select-wrapper)').each(function() {
-
-        let setting = $(this).attr('name');
-        let value = fullSettings[setting];
-
-        $(this).is('select') || typeof(value) === 'object' ? $(this).val(JSON.stringify(value)) : $(this).val(value);
-        $(this).is('input') ? $(this).parent().find('label').addClass('active') : '';
-        $('select').material_select();
-
-      });
+      setInputs();
 
       // Add defaults to tooltips
 
@@ -702,7 +727,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
           if (!moodEngine.notAutoReloading() && !appError) {
 
             moodEngine.reload('Auto');
-            console.log(`Auto reloaded after ${fullSettings['reload_interval']}ms.`);
+            console.log(`\nAuto reloaded after ${fullSettings['reload_interval']}ms.`);
 
           }
 
@@ -1026,12 +1051,19 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
         let lastQuote = localStorage.getItem('lastQuote');
         let lastColour = localStorage.getItem('lastColour');
         let buttonOrder = localStorage.getItem('button_order');
+        let backendAddress = localStorage.getItem('backend_address');
 
         localStorage.clear();
 
         localStorage.setItem('lastQuote', lastQuote);
         localStorage.setItem('lastColour', lastColour);
         localStorage.setItem('button_order', buttonOrder);
+
+        if (!$('#advanced-settings-button').hasClass('underline')) {
+
+          localStorage.setItem('backend_address', backendAddress);
+
+        }
 
         moodEngine.setSettings(null, 'Set All Settings to Default!');
 
@@ -1048,23 +1080,37 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
       moodEngine.saveSettings = function() {
 
         let local_settings = {};
-        let has_input = true;
         let empty_inputs = [];
 
         $('.settings-input:not(.select-wrapper)').each(function() {
 
           // Construct the object using values
 
-          local_settings[$(this).attr('name')] = $(this).val();
+          if ($(this).hasClass('chips')) {
+
+            let array = [];
+
+            $.each($(this).material_chip('data'), function(key, val) {
+
+              array.push(val.tag);
+
+            });
+
+            local_settings[$(this).attr('name')] = JSON.stringify(array);
+
+          } else {
+
+            local_settings[$(this).attr('name')] = $(this).val();
+
+          }
 
           // Detect if input is blank
 
-          if (!$(this).val() || $(this).val() === 'null' || $(this).val().indexOf(' ') >= 0) {
+          if (!$(this).val() || $(this).val() === 'null' || $(this).val().indexOf(' ') >= 0 || $(this).hasClass('chips') && !$(this).material_chip('data').length) {
 
             $(this).addClass('invalid');
 
             empty_inputs.push(` ${$(this).parent().find('label').text()}`);
-            has_input = false;
 
           } else {
 
@@ -1076,9 +1122,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         // If all inputs are not blank
 
-        if (has_input) {
-
-          delete local_settings[undefined];
+        if (!empty_inputs.length) {
 
           try {
 
