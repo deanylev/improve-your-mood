@@ -473,7 +473,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
             });
 
             // Materialize chips
-            
+
             $(`div[name="${name}"]`).material_chip({
               data: values
             });
@@ -710,7 +710,22 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
       $('.tooltipped').each(function() {
 
-        let value = `${settings[$(this).attr('data-setting')]['description']}.<br>The default is ${settings[$(this).attr('data-setting')]['value']}.`
+        let setting = $(this).attr('data-setting');
+        let text;
+
+        if (typeof(fullSettings[setting]) === 'object') {
+
+          text = fullSettings[setting].map((s) => {
+            return ` ${s}`;
+          });
+
+        } else {
+
+          text = settings[setting]['value'];
+
+        }
+
+        let value = `${settings[setting]['description']}.<br>The default is ${text}.`
         $(this).attr('data-tooltip', value);
 
         // Initialize the Materialize tooltip plugin
