@@ -82,6 +82,7 @@
           <option value="number">Number</option>
           <option value="text">Text</option>
           <option value="select">Select</option>
+          <option value="chips">Chips</option>
         </select>
         <br>
         <input type="text" name="label" placeholder="Enter a label">
@@ -140,10 +141,11 @@
                             <option value="1" <?php echo $row["mobile"] ? "selected" : ""; ?>>True</option>
                           </select>
                           <select name="input">
-                            <option disabled>>Input Type</option>
+                            <option disabled>Input Type</option>
                             <option value="number" <?php echo $row["input"] == "number" ? "selected" : ""; ?>>Number</option>
                             <option value="text" <?php echo $row["input"] == "text" ? "selected" : ""; ?>>Text</option>
                             <option value="select" <?php echo $row["input"] == "select" ? "selected" : ""; ?>>Select</option>
+                            <option value="chips" <?php echo $row["input"] == "chips" ? "selected" : ""; ?>>Chips</option>
                           </select>
 
                         <?php endif; ?>
