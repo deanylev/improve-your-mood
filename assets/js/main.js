@@ -744,6 +744,38 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
       });
 
+      // When chips are added, clean up values in array
+
+      $('.chips').on('chip.add', function(e, chip) {
+
+        let name = $(this).attr('name');
+
+        $('.chip').each(function() {
+
+          if ($(this).contents().get(0).nodeValue == false) {
+
+            $(this).remove();
+
+          }
+
+        });
+
+        $.each($(`.chips[name="${name}"]`).material_chip('data'), function(key, val) {
+
+          let newVal = $.trim(val.tag);
+
+          $('.chips').material_chip('data')[key].tag = newVal;
+
+          if (!newVal) {
+
+            $('.chips').material_chip('data').splice(key, 1);
+
+          }
+
+        });
+
+      });
+
       // Auto reload
 
       function autoReload() {
@@ -1138,7 +1170,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           // Detect if input is blank
 
-          if (!$(this).val() || $(this).val() === 'null' || $(this).val().indexOf(' ') >= 0 || $(this).hasClass('chips') && !$(this).material_chip('data').length) {
+          if ((!$(this).hasClass('chips') && !$(this).val() || $(this).val() === 'null' || $(this).val().indexOf(' ') >= 0) || $(this).hasClass('chips') && !$(this).material_chip('data').length) {
 
             $(this).addClass('invalid');
 
