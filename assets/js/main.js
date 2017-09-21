@@ -720,7 +720,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           try {
 
-            text = fullSettings[setting].map((s) => {
+            text = settings[setting]['value'].map((s) => {
               return ` ${s}`;
             });
 
