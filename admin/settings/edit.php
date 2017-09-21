@@ -6,10 +6,11 @@
     $content = $_POST["content"];
     $value = $_POST["value"];
     $user = $_POST["user"];
+    $optional = $_POST["optional"];
     $advanced = $_POST["advanced"];
     $mobile = $_POST["mobile"];
     $input = $_POST["input"];
-    $sql = "UPDATE yourmood.settings SET setting='$content', value = '$value', user = '$user', advanced = '$advanced', mobile = '$mobile', input = '$input' WHERE id='$id'";
+    $sql = "UPDATE yourmood.settings SET setting='$content', value = '$value', user = '$user', optional = '$optional', advanced = '$advanced', mobile = '$mobile', input = '$input' WHERE id='$id'";
   } elseif (isset($_POST["edit_description"])) {
     $label = $_POST["label"];
     $description = $_POST["description"];
