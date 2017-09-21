@@ -67,6 +67,11 @@
           <option value="0">False</option>
           <option value="1">True</option>
         </select>
+        <select name="optional">
+          <option selected disabled>Optional</option>
+          <option value="0">False</option>
+          <option value="1">True</option>
+        </select>
         <select name="advanced">
           <option selected disabled>Advanced</option>
           <option value="0">False</option>
@@ -129,6 +134,11 @@
                             <option disabled>User Setting</option>
                             <option value="0" <?php echo $row["user"] ? "" : "selected"; ?>>False</option>
                             <option value="1" <?php echo $row["user"] ? "selected" : ""; ?>>True</option>
+                          </select>
+                          <select name="optional">
+                            <option disabled>Optional</option>
+                            <option value="0" <?php echo $row["optional"] ? "" : "selected"; ?>>False</option>
+                            <option value="1" <?php echo $row["optional"] ? "selected" : ""; ?>>True</option>
                           </select>
                           <select name="advanced">
                             <option disabled>Advanced</option>
