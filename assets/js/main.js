@@ -622,6 +622,9 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         if (val['user']) {
 
+          var optional = !!val['optional'];
+          var indicator = optional || !fullSettings['optional_indicators'] ? '' : ' <b>*</b>'
+
           if (val['input'] === 'select') {
 
             var input = `
@@ -639,15 +642,15 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
             if (val['input'] === 'chips') {
 
-              var input = `<div class="chips left-align settings-input" name="${key}"></div>`;
+              var input = `<div class="chips left-align settings-input" name="${key}" data-optional="${optional}"></div>`;
 
             } else {
 
-              var input = `<input type="${val['input']}" name="${key}" class="settings-input mousetrap" id="${key}">`;
+              var input = `<input type="${val['input']}" name="${key}" class="settings-input mousetrap" id="${key}" data-optional="${optional}">`;
 
             }
 
-            var label = `<label for="${key}">${val['label']}</label>`;
+            var label = `<label for="${key}">${val['label']}${indicator}</label>`;
 
           }
 
@@ -1170,11 +1173,11 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           // Detect if input is blank
 
-          if ((!$(this).hasClass('chips') && !$(this).val() || $(this).val() === 'null' || $(this).val().indexOf(' ') >= 0) || $(this).hasClass('chips') && !$(this).material_chip('data').length) {
+          if ($(this).attr('data-optional') != 'true' && ((!$(this).hasClass('chips') && !$(this).val() || $(this).val() === 'null' || $(this).val().indexOf(' ') >= 0) || $(this).hasClass('chips') && !$(this).material_chip('data').length)) {
 
             $(this).addClass('invalid');
 
-            empty_inputs.push(` ${$(this).parent().find('label').text()}`);
+            empty_inputs.push(` ${settings[$(this).attr('name')]['label']}`);
 
           } else {
 

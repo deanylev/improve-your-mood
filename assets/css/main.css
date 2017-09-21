@@ -22,6 +22,10 @@ main {
   flex: 1 0 auto;
 }
 
+label:not(.active) b {
+  display: none;
+}
+
 .dropdown-content li span {
   color: black;
 }
