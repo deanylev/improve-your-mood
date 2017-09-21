@@ -764,11 +764,11 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           let newVal = $.trim(val.tag);
 
-          $('.chips').material_chip('data')[key].tag = newVal;
+          $(`.chips[name="${name}"]`).material_chip('data')[key].tag = newVal;
 
           if (!newVal) {
 
-            $('.chips').material_chip('data').splice(key, 1);
+            $(`.chips[name="${name}"]`).material_chip('data').splice(key, 1);
 
           }
 
