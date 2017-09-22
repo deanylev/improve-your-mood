@@ -268,10 +268,6 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         });
 
-        // Theme colour
-
-        $('.theme-text').css('cssText', `color: ${fullSettings['theme_colour']} !important`);
-
         // Reload transitions
 
         if (fullSettings['colour_reload_transitions']) {
@@ -390,6 +386,10 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
           fabOpen ? $('.fixed-action-btn').openFAB() : $('.fixed-action-btn').closeFAB();
 
         }
+
+        // Theme colour
+
+        $('.theme-text').css('cssText', `color: ${fullSettings['theme_colour']} !important`);
 
         // Touch / click gestures
 
@@ -625,10 +625,6 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         }
       });
-
-      // Set settings again to set proper colours for button menu
-
-      moodEngine.setSettings('initial');
 
       // Initialize sortable menu
 
