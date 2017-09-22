@@ -230,6 +230,14 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
       moodEngine.setSettings = function(method, toast) {
 
+        let buttonOrder;
+
+        if (method !== 'initial') {
+
+          buttonOrder = fullSettings['button_order'];
+
+        }
+
         $.each(settings, function(key, val) {
 
           if (localStorage.getItem(key)) {
@@ -276,6 +284,113 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         }
 
+        // Build button menu
+
+        if (method === 'initial' || fullSettings['button_order'] != buttonOrder) {
+
+          let fabOpen = $('.fixed-action-btn').hasClass('active');
+
+          $('.fixed-action-btn').closeFAB();
+
+          var menuHTML = '';
+
+          if (!fullSettings['button_order']) {
+
+            console.warn('Server has no button order, falling back to defaults...');
+            fullSettings['button_order'] = ['autoreload', 'settings', 'rewind'];
+
+          }
+
+          var hasUserSettings = false;
+
+          $.each(settings, function(key, val) {
+
+            if (val['user']) {
+
+              hasUserSettings = true;
+
+            }
+
+          });
+
+          $.each(fullSettings['button_order'], function(key, val) {
+
+            switch (val) {
+
+              case 'autoreload':
+                var html = '<li data-button="autoreload"><a class="btn-floating waves-effect transparent" id="toggle-auto-reload"><i class="material-icons theme-text" data-icon="autoreload" data-default="autorenew"></i></a></li>';
+                break;
+              case 'settings':
+                let hidden = hasUserSettings ? '' : 'hide';
+                var html = `<li data-button="settings" class="${hidden}"><a class="btn-floating waves-effect transparent" id="settings-button"><i class="material-icons theme-text" data-icon="settings" data-default="settings"></i></a></li>`;
+                break;
+              case 'rewind':
+                var html = '<li data-button="rewind"><a class="btn-floating waves-effect transparent disabled" id="go-back-button"><i class="material-icons theme-text" data-icon="rewind" data-default="skip_previous"></i></a></li>';
+                break;
+              default:
+                var html = '';
+                console.warn(`Unknown value '${val}' in button order, skipping...`);
+
+            }
+
+            menuHTML += html;
+
+          });
+
+          $('#button-menu').html(menuHTML);
+
+          // Set correct icons
+
+          if (!fullSettings['button_icons']) {
+
+            console.warn('Server has no icons, falling back to defaults...');
+
+          }
+
+          $('.material-icons').each(function() {
+
+            if (fullSettings['button_icons']) {
+
+              var icon = fullSettings['button_icons'][$(this).attr('data-icon')];
+
+            } else {
+
+              var icon = $(this).attr('data-default');
+
+            }
+
+            $(this).text(icon);
+
+          });
+
+          // Bind menu buttons
+
+          $('#toggle-auto-reload').click(function(e) {
+
+            e.shiftKey ? moodEngine.switchVersion() : moodEngine.toggleAutoReload();
+
+          });
+
+          $('#settings-button').click(function(e) {
+
+            if (!appError) {
+
+              e.shiftKey ? moodEngine.setAllDefault() : $('#settings-modal').modal('open');
+
+            }
+
+          });
+
+          $('#go-back-button').click(function(e) {
+
+            e.shiftKey ? moodEngine.fullRewind() : moodEngine.rewind();
+
+          });
+
+          fabOpen ? $('.fixed-action-btn').openFAB() : $('.fixed-action-btn').closeFAB();
+
+        }
+
         // Touch / click gestures
 
         $('html').hammer().off();
@@ -295,7 +410,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
           moodEngine.rewind();
 
         });
-        
+
         // Keyboard shortcuts
 
         if (platform === 'web') {
@@ -511,55 +626,6 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
         }
       });
 
-      // Build button menu
-
-      var menuHTML = '';
-
-      if (!fullSettings['button_order']) {
-
-        console.warn('Server has no button order, falling back to defaults...');
-        fullSettings['button_order'] = ['autoreload', 'settings', 'rewind'];
-
-      }
-
-      var hasUserSettings = false;
-
-      $.each(settings, function(key, val) {
-
-        if (val['user']) {
-
-          hasUserSettings = true;
-
-        }
-
-      });
-
-      $.each(fullSettings['button_order'], function(key, val) {
-
-        switch (val) {
-
-          case 'autoreload':
-            var html = '<li data-button="autoreload"><a class="btn-floating waves-effect transparent" id="toggle-auto-reload"><i class="material-icons theme-text" data-icon="autoreload" data-default="autorenew"></i></a></li>';
-            break;
-          case 'settings':
-            let hidden = hasUserSettings ? '' : 'hide';
-            var html = `<li data-button="settings" class="${hidden}"><a class="btn-floating waves-effect transparent" id="settings-button"><i class="material-icons theme-text" data-icon="settings" data-default="settings"></i></a></li>`;
-            break;
-          case 'rewind':
-            var html = '<li data-button="rewind"><a class="btn-floating waves-effect transparent disabled" id="go-back-button"><i class="material-icons theme-text" data-icon="rewind" data-default="skip_previous"></i></a></li>';
-            break;
-          default:
-            var html = '';
-            console.warn(`Unknown value '${val}' in button order, skipping...`);
-
-        }
-
-        menuHTML += html;
-
-      });
-
-      $('#button-menu').html(menuHTML);
-
       // Set settings again to set proper colours for button menu
 
       moodEngine.setSettings('initial');
@@ -581,30 +647,6 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
         });
 
       }
-
-      // Set correct icons
-
-      if (!fullSettings['button_icons']) {
-
-        console.warn('Server has no icons, falling back to defaults...');
-
-      }
-
-      $('.material-icons').each(function() {
-
-        if (fullSettings['button_icons']) {
-
-          var icon = fullSettings['button_icons'][$(this).attr('data-icon')];
-
-        } else {
-
-          var icon = $(this).attr('data-default');
-
-        }
-
-        $(this).text(icon);
-
-      });
 
       // Construct settings panel
 
@@ -675,18 +717,6 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
         $('#advanced-settings').html(fullAdvancedHTML);
 
       }
-
-      // Settings button
-
-      $('#settings-button').click(function(e) {
-
-        if (!appError) {
-
-          e.shiftKey ? moodEngine.setAllDefault() : $('#settings-modal').modal('open');
-
-        }
-
-      });
 
       // Set desired settings to default using the attr on the default button
 
@@ -835,12 +865,6 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
       };
 
-      $('#toggle-auto-reload').click(function(e) {
-
-        e.shiftKey ? moodEngine.switchVersion() : moodEngine.toggleAutoReload();
-
-      });
-
       // Go back when the button is clicked
 
       moodEngine.rewind = function() {
@@ -884,12 +908,6 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
         }
 
       };
-
-      $('#go-back-button').click(function(e) {
-
-        e.shiftKey ? moodEngine.fullRewind() : moodEngine.rewind();
-
-      });
 
       // Go to starting quote & colour
 
