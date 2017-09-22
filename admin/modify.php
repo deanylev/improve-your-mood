@@ -12,6 +12,7 @@
   } elseif (isset($_POST["delete"])) {
       $sql = "DELETE FROM yourmood.{$table} WHERE id='{$id}'";
       $message = "Successfully deleted ${type}";
+      $url = "{$type}s?type=${table}";
   } elseif (isset($_POST["edit"])) {
       $statement = "";
       foreach ($_POST["values"] as $key => $val) {

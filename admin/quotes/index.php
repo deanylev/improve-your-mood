@@ -1,8 +1,8 @@
 <?php
 
   include("../../sql.php");
-  $version = $_GET["version"];
-  $table = $version;
+  $type = $_GET["type"];
+  $table = $type;
   $sql = "SELECT * FROM yourmood.${table}";
   $result = $conn->query($sql);
   $title = "quote";

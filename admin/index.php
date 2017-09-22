@@ -1,3 +1,3 @@
 <?php
 
-  header("location: settings");
+  header("location: home");

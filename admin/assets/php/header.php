@@ -37,14 +37,14 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand">MoodBackend</a>
+        <a href="../home" class="navbar-brand">MoodBackend</a>
       </div>
       <div class="collapse navbar-collapse" id="nav">
         <ul class="nav navbar-nav">
-          <li class=""><a href="../quotes?version=improve">Improve Quotes</a></li>
-          <li class=""><a href="../quotes?version=decrease">Decrease Quotes</a></li>
-          <li class=""><a href="../colours">Colours</a></li>
-          <li class=""><a href="../settings">Settings</a></li>
+          <li class="<?php echo $type === "improve" ? "active" : "" ?>"><a href="../quotes?type=improve">Improve Quotes</a></li>
+          <li class="<?php echo $type === "decrease" ? "active" : "" ?>"><a href="../quotes?type=decrease">Decrease Quotes</a></li>
+          <li class="<?php echo $title === "colour" ? "active" : "" ?>"><a href="../colours">Colours</a></li>
+          <li class="<?php echo $title === "setting" ? "active" : "" ?>"><a href="../settings">Settings</a></li>
         </ul>
       </div>
     </div>

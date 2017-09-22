@@ -8,6 +8,7 @@
   $row = $result->fetch_assoc();
   $title = $_GET["title"];
   include("../assets/php/header.php");
+
 ?>
 
 <h1 class="text-center">Edit <?php echo ucwords($title); ?></h1>
@@ -39,8 +40,9 @@
   {
       global $title;
       global $type;
-      header("location: ../{$title}s?version={$type}");
+      header("location: ../{$title}s?type={$type}");
   }
+
 ?>
 
   <input class="btn btn-lg btn-success" type="submit" name="edit" value="Save">
