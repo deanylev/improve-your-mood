@@ -642,6 +642,8 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
             });
 
             localStorage.setItem('button_order', JSON.stringify(array));
+            moodEngine.setSettings();
+            setInputs();
 
           }
         });
