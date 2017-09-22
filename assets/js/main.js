@@ -295,15 +295,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
           moodEngine.rewind();
 
         });
-
-        // Clear array of menu buttons if the amount of buttons from server is different
-
-        if (fullSettings['button_order'] && settings['button_order'] && fullSettings['button_order'].length !== settings['button_order']['value'].length) {
-
-          localStorage.removeItem('button_order');
-
-        }
-
+        
         // Keyboard shortcuts
 
         if (platform === 'web') {
@@ -557,6 +549,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
             var html = '<li data-button="rewind"><a class="btn-floating waves-effect transparent disabled" id="go-back-button"><i class="material-icons theme-text" data-icon="rewind" data-default="skip_previous"></i></a></li>';
             break;
           default:
+            var html = '';
             console.warn(`Unknown value '${val}' in button order, skipping...`);
 
         }
@@ -1124,11 +1117,18 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         localStorage.setItem('lastQuote', lastQuote);
         localStorage.setItem('lastColour', lastColour);
-        localStorage.setItem('button_order', buttonOrder);
 
-        if (backendAddress && !$('#advanced-settings-button').hasClass('underline')) {
+        let advancedClosed = !$('#advanced-settings-button').hasClass('underline')
+
+        if (backendAddress && advancedClosed) {
 
           localStorage.setItem('backend_address', backendAddress);
+
+        }
+
+        if (buttonOrder && advancedClosed) {
+
+          localStorage.setItem('button_order', buttonOrder);
 
         }
 
