@@ -1,7 +1,8 @@
 <?php
 
   include("../../sql.php");
-  $sql = "SELECT * FROM yourmood.colours";
+  $table = "colours";
+  $sql = "SELECT * FROM yourmood.{$table}";
   $result = $conn->query($sql);
   $title = "colour";
-  include("../assets/page_content.php");
+  include("../assets/php/page.php");

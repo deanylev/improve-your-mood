@@ -14,14 +14,11 @@
       while ($row = $result->fetch_assoc()) {
           $key = $row["setting"];
           $object = (object)array();
-          $object->value = $row["value"];
-          $object->label = $row["label"];
-          $object->description = $row["description"];
-          $object->user = $row["user"];
-          $object->optional = $row["optional"];
-          $object->advanced = $row["advanced"];
-          $object->mobile = $row["mobile"];
-          $object->input = $row["input"];
+          foreach ($row as $rowKey => $rowVal) {
+              if ($rowKey !== "id" && $rowKey !== "active") {
+                  $object->{$rowKey} = $rowVal;
+              }
+          }
           $settings->$key = $object;
       }
   }
