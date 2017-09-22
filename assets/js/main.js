@@ -234,7 +234,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         if (method !== 'initial') {
 
-          buttonOrder = fullSettings['button_order'];
+          buttonOrder = JSON.stringify(fullSettings['button_order']);
 
         }
 
@@ -286,7 +286,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         // Build button menu
 
-        if (method === 'initial' || fullSettings['button_order'] != buttonOrder) {
+        if (method === 'initial' || JSON.stringify(fullSettings['button_order']) != buttonOrder && method !== 'buttonsSorted') {
 
           let fabOpen = $('.fixed-action-btn').hasClass('active');
 
@@ -642,7 +642,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
             });
 
             localStorage.setItem('button_order', JSON.stringify(array));
-            moodEngine.setSettings();
+            moodEngine.setSettings('buttonsSorted');
             setInputs();
 
           }
