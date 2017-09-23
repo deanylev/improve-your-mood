@@ -13,6 +13,7 @@
   <thead>
     <tr>
       <th><?php echo ucwords($title); ?></th>
+      <?php echo isset($customHeadings) ? $customHeadings : ""; ?>
       <th>Actions</th>
     </tr>
   </thead>
@@ -27,6 +28,7 @@
 
     <tr>
       <td><p><?php echo $row[$title]; ?></p></td>
+      <?php isset($customFields) ? include($customFields) : ""; ?>
       <td>
         <form action="../modify.php" method="POST">
           <a class="btn btn-success" href="../view?type=<?php echo $table; ?>&amp;title=<?php echo $title; ?>&amp;id=<?php echo $row["id"]; ?>">View</a>

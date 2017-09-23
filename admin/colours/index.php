@@ -5,4 +5,6 @@
   $sql = "SELECT * FROM yourmood.{$table}";
   $result = $conn->query($sql);
   $title = "colour";
+  $customHeadings = "<th>Preview</th>";
+  $customFields = "../assets/php/colour_preview.php";
   include("../assets/php/page.php");
