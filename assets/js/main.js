@@ -14,8 +14,6 @@ var appVersion = $('html').attr('data-app-version');
 var backendAddress = localStorage.getItem('backend_address') || 'improveyourmood.xyz';
 var fullBackendAddress = `http://${backendAddress}/`;
 
-// Platform specific stuff
-
 if (platform === 'web') {
 
   var version = window.location.href.includes('decreaseyourmood') ? 'Decrease' : 'Improve';
@@ -36,11 +34,17 @@ $(window).on('error', function(error) {
 
 $(document).ready(function() {
 
-  // Put in correct text / year
+  // Put in correct text / favicon / year
 
   $('title').text(`${version} Your Mood`);
   $('#logo-version').text(version.toLowerCase());
   $('#footer-version').text(version);
+
+  if (platform === 'web') {
+
+    $('link[rel="icon"], link[rel="shortcut icon"]').attr('href', `assets/${version.toLowerCase()}_favicon.ico`);
+
+  }
 
   let meta_desc = version === 'Improve' ? 'Gives you randomly chosen compliments across randomly chosen beautiful colours to improve your mood!' : 'Gives you randomly chosen insults across randomly chosen beautiful colours to decrease your mood!'
   $('meta[name="description"]').attr('content', meta_desc)
