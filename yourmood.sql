@@ -1,15 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.0
--- https://www.phpmyadmin.net/
+-- version 4.5.4.1deb2ubuntu2
+-- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Aug 10, 2017 at 01:30 PM
--- Server version: 10.1.24-MariaDB
--- PHP Version: 7.1.6
+-- Generation Time: Sep 23, 2017 at 12:02 AM
+-- Server version: 5.7.19-0ubuntu0.16.04.1
+-- PHP Version: 7.0.22-0ubuntu0.16.04.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -45,12 +43,9 @@ INSERT INTO `colours` (`id`, `active`, `colour`) VALUES
 (26, 1, 'FF1493'),
 (27, 1, 'C71585'),
 (28, 1, 'DA70D6'),
-(30, 1, 'EE82EE'),
 (31, 1, '8B008B'),
-(32, 1, '800080'),
 (33, 1, 'BA55D3'),
 (34, 1, '9400D3'),
-(35, 1, '9932CC'),
 (36, 1, '4B0082'),
 (37, 1, '8A2BE2'),
 (38, 1, '9370DB'),
@@ -58,10 +53,7 @@ INSERT INTO `colours` (`id`, `active`, `colour`) VALUES
 (40, 1, '6A5ACD'),
 (41, 1, '483D8B'),
 (42, 1, '0000FF'),
-(43, 1, '0000CD'),
 (44, 1, '00008B'),
-(45, 1, '000080'),
-(46, 1, '191970'),
 (47, 1, '4169E1'),
 (51, 1, '1E90FF'),
 (52, 1, '4682B4'),
@@ -76,10 +68,8 @@ INSERT INTO `colours` (`id`, `active`, `colour`) VALUES
 (61, 1, '66CDAA'),
 (62, 1, '3CB371'),
 (63, 1, '2E8B57'),
-(64, 1, '8FBC8F'),
 (65, 1, '32CD32'),
 (67, 1, '228B22'),
-(68, 1, '008000'),
 (69, 1, '006400'),
 (70, 1, '556B2F'),
 (72, 1, '6B8E23'),
@@ -87,11 +77,9 @@ INSERT INTO `colours` (`id`, `active`, `colour`) VALUES
 (74, 1, 'DAA520'),
 (75, 1, 'B8860B'),
 (78, 1, 'FF8C00'),
-(79, 1, 'CD853F'),
 (80, 1, 'F4A460'),
 (81, 1, 'D2691E'),
 (82, 1, '8B4513'),
-(83, 1, 'A0522D'),
 (84, 1, 'E9967A'),
 (85, 1, 'FF6347'),
 (86, 1, 'FA8072'),
@@ -99,10 +87,9 @@ INSERT INTO `colours` (`id`, `active`, `colour`) VALUES
 (88, 1, 'BC8F8F'),
 (89, 1, 'CD5C5C'),
 (90, 1, 'FF0000'),
-(91, 1, 'A52A2A'),
 (92, 1, 'B22222'),
 (93, 1, '8B0000'),
-(94, 1, '800000');
+(95, 1, '1D89CB');
 
 -- --------------------------------------------------------
 
@@ -216,20 +203,47 @@ INSERT INTO `improve` (`id`, `active`, `quote`) VALUES
 CREATE TABLE `settings` (
   `id` int(11) NOT NULL,
   `active` tinyint(1) NOT NULL,
-  `setting` varchar(20) NOT NULL,
-  `value` varchar(20) NOT NULL
+  `setting` varchar(30) NOT NULL,
+  `value` text NOT NULL,
+  `user` tinyint(1) NOT NULL,
+  `optional` tinyint(1) NOT NULL,
+  `advanced` tinyint(1) NOT NULL,
+  `mobile` tinyint(1) NOT NULL,
+  `input` varchar(10) NOT NULL,
+  `label` text NOT NULL,
+  `description` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `settings`
 --
 
-INSERT INTO `settings` (`id`, `active`, `setting`, `value`) VALUES
-(1, 1, 'reload_interval', '3000'),
-(4, 1, 'toast_interval', '1000'),
-(10, 1, 'reload_keys', '[32, 13]'),
-(11, 1, 'no_repeats', 'true'),
-(15, 1, 'back_key', '[97]');
+INSERT INTO `settings` (`id`, `active`, `setting`, `value`, `user`, `optional`, `advanced`, `mobile`, `input`, `label`, `description`) VALUES
+(1, 1, 'reload_interval', '3000', 1, 0, 0, 1, 'number', 'Auto Reload Interval (ms)', 'How often the auto reload will function, in milliseconds'),
+(4, 1, 'toast_interval', '2000', 0, 0, 0, 0, 'number', '', '***NOT USER CHANGEABLE***'),
+(10, 1, 'reload_keys', '["space", "enter", "right", "d"]', 1, 1, 0, 0, 'chips', 'Reload Keyboard Shortcuts', 'Which keys will activate a reload, in a JavaScript KeyDown KeyCode array.<br>Go to a KeyCode testing site to find out what KeyDown value your desired keys have'),
+(11, 1, 'no_repeats', 'true', 0, 0, 0, 0, '', '', '***NOT USER CHANGEABLE***'),
+(15, 1, 'back_keys', '["backspace", "left", "a"]', 1, 1, 0, 0, 'chips', 'Rewind Keyboard Shortcuts', 'Which keys will go back to the previous quote/colour, in a JavaScript KeyDown KeyCode array.<br>Go to a KeyCode testing site to find out what KeyDown value your desired keys have'),
+(17, 1, 'auto_reload_keys', '["r"]', 1, 1, 0, 0, 'chips', 'Auto Reload Keyboard Shortcuts', 'Which keys will toggle auto reloading, in a JavaScript KeyDown KeyCode array.<br>Go to a KeyCode testing site to find out what KeyDown value your desired keys have'),
+(18, 1, 'settings_keys', '["s"]', 1, 1, 0, 0, 'chips', 'Toggle Settings Panel Keyboard Shortcuts', 'Which keys will toggle the settings panel, in a JavaScript KeyDown KeyCode array.<br>Go to a KeyCode testing site to find out what KeyDown value your desired keys have'),
+(19, 1, 'save_settings_keys', '["enter"]', 0, 0, 0, 0, 'chips', '', '***NOT USER CHANGEABLE***'),
+(20, 1, 'backend_address', 'improveyourmood.xyz', 1, 0, 1, 1, 'text', 'Custom Back-End Address', 'Define a custom back-end address, rather than using the live one. Used for development purposes'),
+(22, 1, 'colour_reload_transitions', 'true', 1, 0, 0, 1, 'select', 'Colour Reload Transitions', 'Whether the background colour will have a fade transition when changing'),
+(23, 1, 'extra_logging', '[]', 0, 0, 0, 0, '', '', '***NOT USER CHANGEABLE***'),
+(24, 1, 'colour_reload_transition_time', '1200', 1, 0, 0, 1, 'number', 'Colour Reload Transition Time (ms)', 'How long the colour reload transitions will take to complete, in milliseconds'),
+(25, 1, 'text_reload_transitions', 'true', 1, 0, 0, 1, 'select', 'Text Reload Transitions', 'Whether the text will have a fade transition when changing'),
+(26, 1, 'text_reload_transition_time', '400', 1, 0, 0, 1, 'number', 'Text Reload Transition Time (ms)', 'How long the text reload transitions will take to complete, in milliseconds'),
+(29, 1, 'app_version', '6.4.2', 0, 0, 0, 0, 'number', '', '***NOT USER CHANGEABLE***'),
+(30, 1, 'app_update_reminder', 'true', 0, 0, 0, 0, '', '', 'Please update to the latest version of the app.'),
+(33, 1, 'reverse_swipe_direction', 'false', 1, 0, 0, 1, 'select', 'Reverse Swipe Direction', 'Reverse the directions that you swipe to reload/rewind'),
+(34, 1, 'button_icons', '{"menu":"menu", "autoreload":"autorenew", "settings":"settings", "rewind":"skip_previous"}', 0, 0, 0, 0, 'chips', '', ''),
+(35, 1, 'require_settings_reload', 'false', 0, 0, 0, 0, 'select', '', ''),
+(36, 1, 'menu_keys', '["m"]', 0, 0, 0, 0, 'text', 'Menu Keyboard Shortcuts', 'Which keys will toggle the menu, in a JavaScript KeyDown KeyCode array.<br>Go to a KeyCode testing site to find out what KeyDown value your desired keys have'),
+(37, 1, 'scroll_settings', 'true', 0, 0, 0, 0, 'select', '', ''),
+(38, 1, 'button_order', '["autoreload", "settings", "rewind"]', 1, 0, 1, 1, 'chips', 'Button Menu Order', 'The order of the buttons in the button menu. Alternatively, these can be reordered by clicking and dragging them around. Any values that aren\'t apart of the default 3 will be ignored.'),
+(39, 1, 'theme_colour', 'white', 1, 0, 0, 1, 'text', 'Theme Colour', 'What colour the accents (text, icons) will appear. Needs to be a valid CSS colour (eg. white, black, red, orange, green, etc.)'),
+(40, 1, 'full_rewind_keys', '["shift+backspace"]', 0, 0, 0, 0, 'text', '', ''),
+(41, 1, 'optional_indicators', 'true', 0, 0, 0, 0, 'select', '', '');
 
 --
 -- Indexes for dumped tables
@@ -267,7 +281,7 @@ ALTER TABLE `settings`
 -- AUTO_INCREMENT for table `colours`
 --
 ALTER TABLE `colours`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=97;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
 --
 -- AUTO_INCREMENT for table `decrease`
 --
@@ -277,13 +291,12 @@ ALTER TABLE `decrease`
 -- AUTO_INCREMENT for table `improve`
 --
 ALTER TABLE `improve`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
 --
 -- AUTO_INCREMENT for table `settings`
 --
 ALTER TABLE `settings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;COMMIT;
-
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
