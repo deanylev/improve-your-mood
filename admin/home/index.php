@@ -1,5 +1,7 @@
 <?php
 
+  $singular = true;
+  $title = "home";
   include("../assets/php/header.php");
 
 ?>
