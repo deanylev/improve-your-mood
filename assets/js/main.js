@@ -38,7 +38,7 @@ $(window).on('error', function(error) {
 
       window.location.reload();
 
-    }, 2000)
+    }, 2000);
 
   }
 
@@ -70,21 +70,6 @@ $(document).ready(function() {
   $('#retry-button').click(function() {
 
     window.location.reload();
-
-  });
-
-  // Clear backend address
-
-  moodEngine.resetBackendAddress = function() {
-
-    localStorage.removeItem('backend_address');
-    window.location.reload();
-
-  };
-
-  $('#reset-backend-address').click(function() {
-
-    moodEngine.resetBackendAddress();
 
   });
 
@@ -142,13 +127,21 @@ moodEngine.error = function(display, log, code, type) {
       $('#error-message').text(`${log} (${code})`);
 
     }
+
     $('#quote').text(display);
 
     console.error(log);
 
     if (type === 'backend' && localStorage.getItem('backend_address')) {
 
-      $('#reset-backend-address').removeClass('hide');
+      localStorage.removeItem('backend_address');
+      $('#error-message').text('Back-end address reset, reloading in 2 seconds...');
+
+      setTimeout(function() {
+
+        window.location.reload();
+
+      }, 2000);
 
     }
 
