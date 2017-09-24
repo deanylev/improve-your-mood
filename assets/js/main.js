@@ -417,7 +417,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           if (fullSettings['reload_keys'] && typeof(fullSettings['reload_keys']) === 'object') {
 
-            Mousetrap.bind(fullSettings['reload_keys'], function(e, combo) {
+            Mousetrap.bindGlobal(fullSettings['reload_keys'], function(e, combo) {
 
               if (!appError) {
 
@@ -425,7 +425,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
                   moodEngine.reload();
 
-                } else if ($('#settings-modal input:focus').length && fullSettings['save_settings_keys'].includes(combo)) {
+                } else if (fullSettings['save_settings_keys'].includes(combo) && (!$('#settings-modal input:focus').parent().hasClass('chips') || !$('#settings-modal input:focus').val())) {
 
                   moodEngine.saveSettings();
 
