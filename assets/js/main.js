@@ -167,11 +167,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
   pullTime['quotes'] = Math.ceil(performance.now() - startTime);
 
-  $.each(data, function(key, val) {
-
-    quotes.push(val);
-
-  });
+  quotes = data;
 
   console.log(`Successfully pulled ${quotes.length} quotes from backend in ${pullTime['quotes']}ms.`);
 
@@ -185,11 +181,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
     pullTime['colours'] = Math.ceil(performance.now() - startTime);
 
-    $.each(data, function(key, val) {
-
-      colours.push(val);
-
-    });
+    colours = data;
 
     console.log(`Successfully pulled ${colours.length} colours from backend in ${pullTime['colours']}ms.`);
 
@@ -556,7 +548,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
       // Set inputs in modal
 
-      function setInputs() {
+      moodEngine.setInputs = function() {
 
         $('.settings-input:not(.select-wrapper)').each(function() {
 
@@ -625,7 +617,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           settingsOpen = false;
 
-          setInputs();
+          moodEngine.setInputs();
 
         }
       });
@@ -643,7 +635,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
             localStorage.setItem('button_order', JSON.stringify(array));
             moodEngine.setSettings('buttonsSorted');
-            setInputs();
+            moodEngine.setInputs();
 
           }
         });
@@ -732,7 +724,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
       // Set the correct values in the settings inputs on load
 
-      setInputs();
+      moodEngine.setInputs();
 
       // Add defaults to tooltips
 
@@ -1166,8 +1158,9 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
       moodEngine.saveSettings = function() {
 
-        let local_settings = {};
-        let empty_inputs = [];
+        let localSettings = {};
+        let emptyInputs = [];
+        let invalidInputs = [];
 
         $('.settings-input:not(.select-wrapper)').each(function() {
 
@@ -1183,11 +1176,11 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
             });
 
-            local_settings[$(this).attr('name')] = JSON.stringify(array);
+            localSettings[$(this).attr('name')] = JSON.stringify(array);
 
           } else {
 
-            local_settings[$(this).attr('name')] = $(this).val();
+            localSettings[$(this).attr('name')] = $(this).val();
 
           }
 
@@ -1197,7 +1190,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
             $(this).addClass('invalid');
 
-            empty_inputs.push(` ${settings[$(this).attr('name')]['label']}`);
+            emptyInputs.push(` ${settings[$(this).attr('name')]['label']}`);
 
           } else {
 
@@ -1205,15 +1198,45 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           }
 
+          // Custom Validations
+
+          // Backend Address
+
+          if ($(this).attr('name') === 'backend_address' && $(this).val() != backendAddress) {
+
+            $.ajaxSetup({
+              async: false
+            });
+
+            $.getJSON(`http://${$(this).val()}/colour_serializer.php`).fail((data) => {
+
+              invalidInputs.push(`Back-End Address '${$(this).val()}' is Invalid.`);
+
+            });
+
+            $.ajaxSetup({
+              async: true
+            });
+
+          }
+
+          // Button Order
+
+          if ($(this).attr('name') === 'button_order' && !localSettings['button_order'].includes('settings')) {
+
+            invalidInputs.push('Button Order Needs to Include Settings');
+
+          }
+
         });
 
-        // If all inputs are not blank
+        // If all inputs are not blank nor invalid
 
-        if (!empty_inputs.length) {
+        if (!emptyInputs.length && !invalidInputs.length) {
 
           try {
 
-            $.each(local_settings, function(key, val) {
+            $.each(localSettings, function(key, val) {
 
               // If the set value is the same as the default, just remove it from localStorage and use backend value
 
@@ -1250,13 +1273,27 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         } else {
 
-          if (empty_inputs.length === 1) {
+          if (emptyInputs.length) {
 
-            Materialize.toast(`${empty_inputs} Contains Spaces.`, fullSettings['toast_interval']);
+            if (emptyInputs.length === 1) {
 
-          } else {
+              Materialize.toast(`${emptyInputs} Contains Spaces.`, fullSettings['toast_interval']);
 
-            Materialize.toast(`${empty_inputs.length} Fields Contain Spaces.`, fullSettings['toast_interval']);
+            } else {
+
+              Materialize.toast(`${emptyInputs.length} Fields Contain Spaces.`, fullSettings['toast_interval']);
+
+            }
+
+          }
+
+          if (invalidInputs.length) {
+
+            $.each(invalidInputs, function(key, val) {
+
+              Materialize.toast(val, fullSettings['toast_interval']);
+
+            });
 
           }
 
