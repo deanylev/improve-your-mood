@@ -1,4 +1,4 @@
-var appError, startTime, settingsOpen, lastNum, totalTime;
+var appError, startTime, lastNum, totalTime;
 var quotes = [];
 var colours = [];
 var usedQuotes = [];
@@ -429,7 +429,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
               if (!appError) {
 
-                if (!settingsOpen) {
+                if (!settingsOpen()) {
 
                   moodEngine.reload();
 
@@ -451,7 +451,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
             Mousetrap.bind(fullSettings['back_keys'], function(e) {
 
-              if (!appError && !settingsOpen) {
+              if (!appError && !settingsOpen()) {
 
                 moodEngine.rewind();
 
@@ -467,7 +467,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
             Mousetrap.bind(fullSettings['full_rewind_keys'], function(e) {
 
-              if (!appError && !settingsOpen) {
+              if (!appError && !settingsOpen()) {
 
                 moodEngine.fullRewind();
 
@@ -483,7 +483,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
             Mousetrap.bind(fullSettings['auto_reload_keys'], function(e) {
 
-              if (!appError && !settingsOpen) {
+              if (!appError && !settingsOpen()) {
 
                 moodEngine.toggleAutoReload();
 
@@ -499,7 +499,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
             Mousetrap.bind(fullSettings['menu_keys'], function(e) {
 
-              if (!appError && !settingsOpen) {
+              if (!appError && !settingsOpen()) {
 
                 let fabOpen = $('.fixed-action-btn').hasClass('active');
 
@@ -519,7 +519,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
               if (!appError && !$('#settings-modal input:focus').length) {
 
-                settingsOpen ? $('#settings-modal').modal('close') : $('#settings-modal').modal('open');
+                settingsOpen() ? $('#settings-modal').modal('close') : $('#settings-modal').modal('open');
 
               }
 
@@ -618,15 +618,6 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           }
 
-          settingsOpen = true;
-
-        },
-        complete: function() {
-
-          settingsOpen = false;
-
-          setInputs();
-
         }
       });
 
@@ -717,6 +708,14 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         $('#advanced-settings-wrapper').removeClass('hide');
         $('#advanced-settings').html(fullAdvancedHTML);
+
+      }
+
+      // Check if settings are open
+
+      function settingsOpen() {
+
+        return $('#settings-modal').hasClass('open');
 
       }
 
