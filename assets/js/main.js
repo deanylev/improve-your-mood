@@ -1210,7 +1210,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
             $.getJSON(`http://${$(this).val()}/colour_serializer.php`).fail((data) => {
 
-              invalidInputs.push(`Back-End Address '${$(this).val()}' is Invalid.`);
+              invalidInputs.push(`${settings[$(this).attr('name')]['label']} '${$(this).val()}' is Invalid.`);
 
             });
 
@@ -1224,7 +1224,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           if ($(this).attr('name') === 'button_order' && !localSettings['button_order'].includes('settings')) {
 
-            invalidInputs.push('Button Order Needs to Include Settings');
+            invalidInputs.push(`${settings[$(this).attr('name')]['label']} Needs to Include Settings`);
 
           }
 
