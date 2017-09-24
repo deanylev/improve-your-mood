@@ -26,9 +26,21 @@ if (platform === 'web') {
 
 $(window).on('error', function(error) {
 
-  let log = typeof(error) === 'string' ? error : null;
+  moodEngine.error();
 
-  moodEngine.error(null, log);
+  if (localStorage.length) {
+
+    localStorage.clear();
+
+    $('#error-message').text('Your settings have been cleared to try resolve the issue, reloading in 2 seconds...');
+
+    setTimeout(function() {
+
+      window.location.reload();
+
+    }, 2000)
+
+  }
 
 });
 
