@@ -111,7 +111,7 @@ moodEngine.error = function(display, log, code, type) {
 
   // If network connection is detected
 
-  if (navigator.onLine) {
+  if (navigator.onLine || type !== 'backend') {
 
     if (!display) {
 
@@ -1329,7 +1329,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         }).fail((data) => {
 
-          moodEngine.error(`Failed to switch to ${version} Your Mood.`)
+          moodEngine.error(`Failed to switch to ${version} Your Mood.`, null, null, 'backend');
 
         });
 
