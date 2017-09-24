@@ -425,7 +425,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
                   moodEngine.reload();
 
-                } else if (fullSettings['save_settings_keys'].includes(combo) && !$('#settings-modal input:focus').parent().hasClass('chips') || !$('#settings-modal input:focus').val()) {
+                } else if (fullSettings['save_settings_keys'].includes(combo) && (!$('#settings-modal input:focus').parent().hasClass('chips') || !$('#settings-modal input:focus').val())) {
 
                   moodEngine.saveSettings();
 
