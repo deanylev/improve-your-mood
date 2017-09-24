@@ -624,6 +624,9 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           moodEngine.setInputs();
 
+          $('#advanced-settings-button').toggleClass('underline');
+          $('#advanced-settings').hide();
+
         }
       });
 
