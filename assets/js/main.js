@@ -1222,7 +1222,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           // Button Order
 
-          if ($(this).attr('name') === 'button_order' && !localSettings['button_order'].includes('settings')) {
+          if ($(this).attr('name') === 'button_order' && settings['button_order']['value'].includes('settings') && !localSettings['button_order'].includes('settings')) {
 
             invalidInputs.push(`${settings[$(this).attr('name')]['label']} Needs to Include Settings`);
 
