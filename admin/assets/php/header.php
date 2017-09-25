@@ -49,6 +49,7 @@
           <li class="<?php echo isset($type) && $type === "decrease" ? "active" : "" ?>"><a href="../quotes?type=decrease">Decrease Quotes</a></li>
           <li class="<?php echo $title === "colour" ? "active" : "" ?>"><a href="../colours">Colours</a></li>
           <li class="<?php echo $title === "setting" ? "active" : "" ?>"><a href="../settings">Settings</a></li>
+          <li class="<?php echo $title === "log" ? "active" : "" ?>"><a href="../logs">Logs</a></li>
         </ul>
       </div>
     </div>
