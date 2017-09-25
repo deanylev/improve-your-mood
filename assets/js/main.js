@@ -173,6 +173,7 @@ moodEngine.error = function(display, log, code, type) {
     url: 'http://improveyourmood.xyz/api/create/log/index.php',
     data: {
       version: version,
+      platform: platform,
       log: JSON.stringify(moodLog)
     }
   });
