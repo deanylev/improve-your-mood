@@ -11,7 +11,7 @@
 
 ?>
 
-<h1 class="text-center">View <?php echo ucwords($title); ?></h1>
+<h1 class="text-center">Edit <?php echo ucwords($title); ?></h1>
 <br>
 
 <form class="form-group text-center container" action="../modify.php" method="POST">
@@ -27,7 +27,8 @@
 
 ?>
 
-    <p><b><?php echo $key; ?>:</b><br><?php echo $val; ?></p><br>
+    <label for="<?php echo $key; ?>"><?php echo $key; ?></label>
+    <textarea id="<?php echo $key; ?>" class="form-control" name="values[<?php echo $key; ?>]"><?php echo $val; ?></textarea><br>
 
 <?php
 
@@ -44,6 +45,8 @@
 
 ?>
 
+  <input class="btn btn-lg btn-success" type="submit" name="edit" value="Save">
+  <br><br>
   <input class="btn btn-lg btn-danger" type="submit" name="delete" value="Delete">
 </form>
 
