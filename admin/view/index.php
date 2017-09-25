@@ -9,6 +9,10 @@
   $title = $_GET["title"];
   include("../assets/php/header.php");
 
+  if (!in_array("view", $actions)) {
+    warning_handler(null, null);
+  }
+
 ?>
 
 <h1 class="text-center">View <?php echo ucwords($title); ?></h1>
@@ -33,6 +37,7 @@
 
     endif;
   }
+
   restore_error_handler();
 
   function warning_handler($errno, $errstr)
@@ -42,9 +47,23 @@
       header("location: ../{$title}s?type={$type}");
   }
 
+  if (in_array("edit", $actions)):
+
+?>
+
+  <a class="btn btn-lg btn-warning" href="../edit?type=<?php echo $type; ?>&amp;title=<?php echo $title; ?>&amp;id=<?php echo $row["id"]; ?>">Edit</a>
+
+<?php
+
+  endif;
+
+  if (in_array("delete", $actions)):
+
 ?>
 
   <input class="btn btn-lg btn-danger" type="submit" name="delete" value="Delete">
+
+<?php endif; ?>
 </form>
 
 <?php include("../assets/php/footer.php"); ?>

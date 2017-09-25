@@ -9,6 +9,10 @@
   $title = $_GET["title"];
   include("../assets/php/header.php");
 
+  if (!in_array("edit", $actions)) {
+    warning_handler(null, null);
+  }
+
 ?>
 
 <h1 class="text-center">Edit <?php echo ucwords($title); ?></h1>
@@ -46,8 +50,10 @@
 ?>
 
   <input class="btn btn-lg btn-success" type="submit" name="edit" value="Save">
-  <br><br>
-  <input class="btn btn-lg btn-danger" type="submit" name="delete" value="Delete">
+  <a class="btn btn-lg btn-primary" href="../view?type=<?php echo $type; ?>&amp;title=<?php echo $title; ?>&amp;id=<?php echo $row["id"]; ?>">Cancel</a>
+  <?php if (in_array("delete", $actions)): ?>
+    <input class="btn btn-lg btn-danger" type="submit" name="delete" value="Delete">
+  <?php endif; ?>
 </form>
 
 <?php include("../assets/php/footer.php"); ?>

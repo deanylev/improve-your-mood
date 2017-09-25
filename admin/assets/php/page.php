@@ -1,10 +1,4 @@
-<?php
-
-  include("header.php");
-
-  !isset($actions) ? $actions = array("create", "view", "edit", "delete") : "";
-
-?>
+<?php include("header.php"); ?>
 
 <h1 class="text-center"><?php echo ucwords($title); ?>s</h1>
 
