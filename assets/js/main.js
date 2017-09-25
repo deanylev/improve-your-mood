@@ -332,9 +332,9 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           var menuHTML = '';
 
-          if (!fullSettings['button_order']) {
+          if (!fullSettings['button_order'] || typeof(fullSettings['button_order']) !== 'object' || !fullSettings['button_order'].includes('settings')) {
 
-            moodEngine.log('warn', 'Server has no button order, falling back to defaults...');
+            moodEngine.log('warn', 'Invalid button order provided, falling back to defaults...');
             fullSettings['button_order'] = ['autoreload', 'settings', 'rewind'];
 
           }
