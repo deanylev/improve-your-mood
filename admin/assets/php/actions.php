@@ -2,7 +2,7 @@
 
 switch ($title) {
   case "log":
-    $actions = array("view", "delete");
+    $actions = array("view", "delete", "deleteall");
     break;
 
   case "quote":

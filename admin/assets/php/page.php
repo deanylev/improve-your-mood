@@ -8,6 +8,9 @@
   <?php if (in_array("create", $actions)): ?>
     <input class="btn btn-lg btn-primary" type="submit" name="new" value="New <?php echo ucwords($title); ?>">
   <?php endif; ?>
+  <?php if (in_array("deleteall", $actions)): ?>
+    <input class="btn btn-lg btn-danger" type="submit" name="deleteall" value="Delete All <?php echo ucwords($title); ?>s">
+  <?php endif; ?>
   <br><br>
 </form>
 

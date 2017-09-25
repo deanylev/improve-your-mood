@@ -21,6 +21,10 @@
       $statement = substr($statement, 0, -1);
       $sql = "UPDATE yourmood.${table} SET {$statement} WHERE id = '{$id}'";
       $message = "Successfully updated ${type}";
+  } elseif (isset($_POST["deleteall"])) {
+    $sql = "DELETE FROM yourmood.{$table}";
+    $message = "Successfully deleted all ${type}s";
+    $url = "{$type}s?type=${table}";
   }
 
 
