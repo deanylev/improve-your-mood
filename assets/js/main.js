@@ -1153,6 +1153,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
         }
 
         moodEngine.setSettings(null, 'Set All Settings to Default!');
+        moodEngine.setInputs();
 
       };
 
