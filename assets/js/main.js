@@ -167,7 +167,7 @@ moodEngine.error = function(display, log, code, type) {
 
   appError = true;
 
-  moodEngine.log('log', 'Sending error log to backend...');
+  console.log('Sending error log to backend...');
 
   $.ajax({
     type: 'POST',
