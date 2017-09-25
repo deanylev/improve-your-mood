@@ -1096,7 +1096,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           if (fullSettings['extra_logging'] && fullSettings['extra_logging'].includes('reload') && platform === 'web') {
 
-            moodEngine.log('log', `%c${quotes[quoteNum]}`, `padding: 2px 5px; font-size: 20px; font-family: 'Oxygen'; color: white; background-color: #${colours[colourNum]}`);
+            console.log(`%c${quotes[quoteNum]}`, `padding: 2px 5px; font-size: 20px; font-family: 'Oxygen'; color: white; background-color: #${colours[colourNum]}`);
 
           }
 
