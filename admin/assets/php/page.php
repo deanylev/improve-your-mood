@@ -12,7 +12,9 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th><?php echo ucwords($title); ?></th>
+      <?php if (!isset($notDefault)): ?>
+        <th><?php echo ucwords($title); ?></th>
+      <?php endif; ?>
       <?php echo isset($customHeadings) ? $customHeadings : ""; ?>
       <th>Actions</th>
     </tr>
@@ -27,7 +29,9 @@
 ?>
 
     <tr>
-      <td><p><?php echo $row[$title]; ?></p></td>
+      <?php if (!isset($notDefault)): ?>
+        <td><p><?php echo $row[$title]; ?></p></td>
+      <?php endif; ?>
       <?php isset($customFields) ? include($customFields) : ""; ?>
       <td>
         <form action="../modify.php" method="POST">
