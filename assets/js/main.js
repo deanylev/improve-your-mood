@@ -167,6 +167,8 @@ moodEngine.error = function(display, log, code, type) {
 
   appError = true;
 
+  moodEngine.log('log', 'Sending error log to backend...');
+
   $.ajax({
     type: 'POST',
     crossDomain: true,
@@ -175,6 +177,18 @@ moodEngine.error = function(display, log, code, type) {
       version: version,
       platform: platform,
       log: JSON.stringify(moodLog)
+    },
+    success: function(response) {
+
+      console.log('Error log sent to backend successfully.');
+      response ? `Response: ${response}` : '';
+
+    },
+    error: function(response) {
+
+      console.log('Failed to send error log to backend.');
+      response ? `Response: ${response}` : '';
+
     }
   });
 
