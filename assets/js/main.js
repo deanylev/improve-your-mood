@@ -34,7 +34,7 @@ moodEngine.log = function(type, log) {
 
 $(window).on('error', function(error) {
 
-  let message = error.originalEvent.message;
+  let message = `${error.originalEvent.message} (LINE NUMBER: ${error.originalEvent.lineno})`;
 
   moodLog.push(message);
 
