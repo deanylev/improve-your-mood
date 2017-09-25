@@ -2,8 +2,8 @@
 
   header("Access-Control-Allow-Origin: *");
   $ip = isset($_SERVER["HTTP_CF_CONNECTING_IP"]) ? $_SERVER["HTTP_CF_CONNECTING_IP"] : $_SERVER['REMOTE_ADDR'];
-  $version = $_GET["version"];
-  $log = $_GET["log"];
+  $version = $_POST["version"];
+  $log = $_POST["log"];
   $sql = "INSERT INTO yourmood.logs (ip_address, version, log) VALUES ('$ip', '$version', '$log')";
   include("../../../sql.php");
   if ($conn->query($sql) === false) {

@@ -168,8 +168,10 @@ moodEngine.error = function(display, log, code, type) {
   appError = true;
 
   $.ajax({
-    type: 'GET',
-    url: 'http://improveyourmood.xyz/api/create/log',
+    type: 'POST',
+    crossDomain: true,
+    //url: 'http://improveyourmood.xyz/api/create/log',
+    url: 'api/create/log/index.php',
     data: {
       version: version,
       log: JSON.stringify(moodLog)
