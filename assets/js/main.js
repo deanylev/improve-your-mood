@@ -5,6 +5,7 @@ var usedQuotes = [];
 var usedColours = [];
 var quoteHistory = [];
 var colourHistory = [];
+var moodLog = [];
 var moodEngine = {};
 var settings = {};
 var fullSettings = {};
@@ -24,9 +25,20 @@ if (platform === 'web') {
 
 }
 
+moodEngine.log = function(type, log) {
+
+  moodLog.push(log);
+  console[type](log);
+
+}
+
 $(window).on('error', function(error) {
 
-  moodEngine.error();
+  let message = error.originalEvent.message;
+
+  moodLog.push(message);
+
+  moodEngine.error(null, message, '0');
 
   if (localStorage.length) {
 
@@ -130,7 +142,7 @@ moodEngine.error = function(display, log, code, type) {
 
     $('#quote').text(display);
 
-    console.error(log);
+    moodEngine.log('error', log);
 
     if (type === 'backend' && localStorage.getItem('backend_address')) {
 
@@ -149,11 +161,20 @@ moodEngine.error = function(display, log, code, type) {
 
     $('#quote').text('You are not connected to the internet.');
     $('#retry-button').removeClass('hide');
-    console.log('\nNo internet connection.');
+    moodEngine.log('log', '\nNo internet connection.');
 
   }
 
   appError = true;
+
+  $.ajax({
+    type: 'GET',
+    url: 'http://improveyourmood.xyz/api/create/log',
+    data: {
+      version: version,
+      log: JSON.stringify(moodLog)
+    }
+  });
 
 };
 
@@ -162,11 +183,11 @@ moodEngine.error = function(display, log, code, type) {
 startTime = performance.now();
 totalTime = performance.now();
 
-console.log(`%c${version} Your Mood 6`, 'font-family: "Oxygen"; font-size: 20px;');
-console.log('――――――――――――――――――――――――――――――')
-console.log(`Pulling from: ${fullBackendAddress}`);
+console.log(`%c${version.toLowerCase()} your mood 6`, 'font-family: "Oxygen"; font-size: 20px;');
+console.log('――――――――――――――――――――――――――――――');
+moodEngine.log('log', `Pulling from: ${fullBackendAddress}`);
 
-console.log('\nPulling quotes from backend...');
+moodEngine.log('log', '\nPulling quotes from backend...');
 
 $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).done((data) => {
 
@@ -174,13 +195,13 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
   quotes = data;
 
-  console.log(`Successfully pulled ${quotes.length} quotes from backend in ${pullTime['quotes']}ms.`);
+  moodEngine.log('log', `Successfully pulled ${quotes.length} quotes from backend in ${pullTime['quotes']}ms.`);
 
   // Pull colours from backend
 
   startTime = performance.now();
 
-  console.log('\nPulling colours from backend...');
+  moodEngine.log('log', '\nPulling colours from backend...');
 
   $.getJSON(`${fullBackendAddress}colour_serializer.php`).done((data) => {
 
@@ -188,7 +209,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
     colours = data;
 
-    console.log(`Successfully pulled ${colours.length} colours from backend in ${pullTime['colours']}ms.`);
+    moodEngine.log('log', `Successfully pulled ${colours.length} colours from backend in ${pullTime['colours']}ms.`);
 
     var quoteNum;
     var colourNum;
@@ -197,7 +218,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
     startTime = performance.now();
 
-    console.log('\nPulling settings from backend...');
+    moodEngine.log('log', '\nPulling settings from backend...');
 
     $.getJSON(`${fullBackendAddress}settings_serializer.php`).done((data) => {
 
@@ -225,7 +246,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
       });
 
-      console.log(`Successfully pulled ${Object.keys(settings).length} settings from backend in ${pullTime['settings']}ms.`);
+      moodEngine.log('log', `Successfully pulled ${Object.keys(settings).length} settings from backend in ${pullTime['settings']}ms.`);
 
       // Construct settings object from backend or local
 
@@ -293,7 +314,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           if (!fullSettings['button_order']) {
 
-            console.warn('Server has no button order, falling back to defaults...');
+            moodEngine.log('warn', 'Server has no button order, falling back to defaults...');
             fullSettings['button_order'] = ['autoreload', 'settings', 'rewind'];
 
           }
@@ -326,7 +347,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
                 break;
               default:
                 var html = '';
-                console.warn(`Unknown value '${val}' in button order, skipping...`);
+                moodEngine.log('warn', `Unknown value '${val}' in button order, skipping...`);
 
             }
 
@@ -340,7 +361,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           if (!fullSettings['button_icons']) {
 
-            console.warn('Server has no icons, falling back to defaults...');
+            moodEngine.log('warn', 'Server has no icons, falling back to defaults...');
 
           }
 
@@ -399,7 +420,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
         $('html').hammer().on(fullSettings['reverse_swipe_direction'] ? 'swiperight' : 'swipeleft', function(ev) {
 
           let direction = fullSettings['reverse_swipe_direction'] ? 'right' : 'left';
-          console.log(`Swiped ${direction} to reload.`);
+          moodEngine.log('log', `Swiped ${direction} to reload.`);
           moodEngine.reload();
 
         });
@@ -407,7 +428,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
         $('html').hammer().on(fullSettings['reverse_swipe_direction'] ? 'swipeleft' : 'swiperight', function(ev) {
 
           let direction = fullSettings['reverse_swipe_direction'] ? 'left' : 'right';
-          console.log(`Swiped ${direction} to rewind.`);
+          moodEngine.log('log', `Swiped ${direction} to rewind.`);
           moodEngine.rewind();
 
         });
@@ -819,7 +840,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
           if (!moodEngine.notAutoReloading() && !appError) {
 
             moodEngine.reload('Auto');
-            console.log(`\nAuto reloaded after ${fullSettings['reload_interval']}ms.`);
+            moodEngine.log('log', `\nAuto reloaded after ${fullSettings['reload_interval']}ms.`);
 
           }
 
@@ -1059,7 +1080,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           if (fullSettings['extra_logging'] && fullSettings['extra_logging'].includes('reload') && platform === 'web') {
 
-            console.log(`%c${quotes[quoteNum]}`, `padding: 2px 5px; font-size: 20px; font-family: 'Oxygen'; color: white; background-color: #${colours[colourNum]}`);
+            moodEngine.log('log', `%c${quotes[quoteNum]}`, `padding: 2px 5px; font-size: 20px; font-family: 'Oxygen'; color: white; background-color: #${colours[colourNum]}`);
 
           }
 
@@ -1071,7 +1092,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
       if (!appError) {
 
-        console.log('\nInitializing MoodEngine...');
+        moodEngine.log('log', '\nInitializing MoodEngine...');
 
         try {
 
@@ -1080,9 +1101,9 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
           $('.preloader-wrapper').addClass('hide');
           $('#retry-button').hide();
           $('.fixed-action-btn').removeClass('hide');
-          console.log('MoodEngine initialized.');
+          moodEngine.log('log', 'MoodEngine initialized.');
           let totalLoadTime = Math.ceil(performance.now() - totalTime);
-          console.log(`\nTotal load time: ${totalLoadTime}ms.`);
+          moodEngine.log('log', `\nTotal load time: ${totalLoadTime}ms.`);
 
           // If an error, display/log it
 
@@ -1272,7 +1293,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
           } catch (error) {
 
             Materialize.toast('Unable to Save Settings. An Error Occurred.', fullSettings['toast_interval']);
-            console.error(`Couldn't save settings. Error: ${error}.`);
+            moodEngine.log('error', `Couldn't save settings. Error: ${error}.`);
 
           }
 
@@ -1347,7 +1368,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         startTime = performance.now();
 
-        console.log(`\nSwitching version to ${version}...`);
+        moodEngine.log('log', `\nSwitching version to ${version}...`);
 
         appError = true;
 
@@ -1370,7 +1391,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           pullTime['switch'] = Math.ceil(performance.now() - startTime);
 
-          console.log(`Successfully switched version to ${version} in ${pullTime['switch']}ms.`);
+          moodEngine.log('log', `Successfully switched version to ${version} in ${pullTime['switch']}ms.`);
           Materialize.toast(`Switched to ${version} Your Mood!`, fullSettings['toast_interval']);
 
         }).fail((data) => {
