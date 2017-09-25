@@ -6,6 +6,7 @@ var usedColours = [];
 var quoteHistory = [];
 var colourHistory = [];
 var moodLog = [];
+var cssColours = ['aliceblue', 'antiquewhite', 'aqua', 'aquamarine', 'azure', 'beige', 'bisque', 'black', 'blanchedalmond', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chartreuse', 'chocolate', 'coral', 'cornflowerblue', 'cornsilk', 'crimson', 'cyan', 'darkblue', 'darkcyan', 'darkgoldenrod', 'darkgray', 'darkgrey', 'darkgreen', 'darkkhaki', 'darkmagenta', 'darkolivegreen', 'darkorange', 'darkorchid', 'darkred', 'darksalmon', 'darkseagreen', 'darkslateblue', 'darkslategray', 'darkslategrey', 'darkturquoise', 'darkviolet', 'deeppink', 'deepskyblue', 'dimgray', 'dimgrey', 'dodgerblue', 'firebrick', 'floralwhite', 'forestgreen', 'fuchsia', 'gainsboro', 'ghostwhite', 'gold', 'goldenrod', 'gray', 'grey', 'green', 'greenyellow', 'honeydew', 'hotpink', 'indianred', 'indigo', 'ivory', 'khaki', 'lavender', 'lavenderblush', 'lawngreen', 'lemonchiffon', 'lightblue', 'lightcoral', 'lightcyan', 'lightgoldenrodyellow', 'lightgray', 'lightgrey', 'lightgreen', 'lightpink', 'lightsalmon', 'lightseagreen', 'lightskyblue', 'lightslategray', 'lightslategrey', 'lightsteelblue', 'lightyellow', 'lime', 'limegreen', 'linen', 'magenta', 'maroon', 'mediumaquamarine', 'mediumblue', 'mediumorchid', 'mediumpurple', 'mediumseagreen', 'mediumslateblue', 'mediumspringgreen', 'mediumturquoise', 'mediumvioletred', 'midnightblue', 'mintcream', 'mistyrose', 'moccasin', 'navajowhite', 'navy', 'oldlace', 'olive', 'olivedrab', 'orange', 'orangered', 'orchid', 'palegoldenrod', 'palegreen', 'paleturquoise', 'palevioletred', 'papayawhip', 'peachpuff', 'peru', 'pink', 'plum', 'powderblue', 'purple', 'red', 'rosybrown', 'royalblue', 'saddlebrown', 'salmon', 'sandybrown', 'seagreen', 'seashell', 'sienna', 'silver', 'skyblue', 'slateblue', 'slategray', 'slategrey', 'snow', 'springgreen', 'steelblue', 'tan', 'teal', 'thistle', 'tomato', 'turquoise', 'violet', 'wheat', 'white', 'whitesmoke', 'yellow', 'yellowgreen'];
 var moodEngine = {};
 var settings = {};
 var fullSettings = {};
@@ -27,7 +28,10 @@ if (platform === 'web') {
 
 moodEngine.log = function(type, log) {
 
-  moodLog.push({type: type, message: log});
+  moodLog.push({
+    type: type,
+    message: log
+  });
   console[type](log);
 
 }
@@ -617,7 +621,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
             });
 
-            // Materialize chips
+            // Materialize Chips
 
             $(`div[name="${name}"]`).material_chip({
               data: values
@@ -628,6 +632,16 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
             $('.chips input').focusout(function() {
 
               $(this).val('');
+
+            });
+
+            $('.chip').each(function() {
+
+              if ($(this).contents().get(0).nodeValue === 'settings') {
+
+                $(this).find('i').remove();
+
+              }
 
             });
 
@@ -821,6 +835,10 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
             $(this).remove();
 
+          } else if ($(this).contents().get(0).nodeValue === 'settings') {
+
+            $(this).find('i').remove();
+
           }
 
         });
@@ -838,6 +856,30 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
           }
 
         });
+
+      });
+
+      // Don't allow deleting the settings chip
+
+      $('.chips').on('chip.delete', function(e, chip) {
+
+        if (chip.tag === 'settings') {
+
+          $('.chips[name="button_order"]').material_chip('data').push({
+            tag: 'settings'
+          });
+
+          if ($('.chips[name="button_order"] .chip').length) {
+
+            $('<div class="chip">settings</div>').insertAfter($('.chips[name="button_order"] .chip').last());
+
+          } else {
+
+            $('.chips[name="button_order"]').prepend('<div class="chip">settings</div>');
+
+          }
+
+        }
 
       });
 
@@ -1245,6 +1287,14 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
           }
 
           // Custom Validations
+
+          // Theme Colour
+
+          if ($(this).attr('name') === 'theme_colour' && !cssColours.includes($(this).val().toLowerCase())) {
+
+            invalidInputs.push(`${$(this).val()} is not a valid CSS colour.`);
+
+          }
 
           // Backend Address
 
