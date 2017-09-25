@@ -27,7 +27,7 @@ if (platform === 'web') {
 
 moodEngine.log = function(type, log) {
 
-  moodLog.push(log);
+  moodLog.push({type: type, message: log});
   console[type](log);
 
 }
