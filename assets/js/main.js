@@ -170,7 +170,7 @@ moodEngine.error = function(display, log, code, type) {
   $.ajax({
     type: 'POST',
     crossDomain: true,
-    url: 'http://improveyourmood.xyz/api/create/log',
+    url: 'http://improveyourmood.xyz/api/create/log/index.php',
     data: {
       version: version,
       log: JSON.stringify(moodLog)
