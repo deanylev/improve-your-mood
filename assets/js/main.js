@@ -11,6 +11,7 @@ var moodEngine = {};
 var settings = {};
 var fullSettings = {};
 var pullTime = {};
+var versionQuotes = {};
 var platform = $('html').attr('data-platform');
 var appVersion = $('html').attr('data-app-version');
 var backendAddress = localStorage.getItem('backend_address') || 'improveyourmood.xyz';
@@ -19,10 +20,12 @@ var fullBackendAddress = `http://${backendAddress}/`;
 if (platform === 'web') {
 
   var version = window.location.href.includes('decreaseyourmood') ? 'Decrease' : 'Improve';
+  var otherVersion = window.location.href.includes('decreaseyourmood') ? 'Improve' : 'Decrease';
 
 } else {
 
-  var version = $('html').attr('data-version');
+  var version = $('html').attr('data-version') === 'Decrease' ? 'Decrease' : 'Improve';
+  var otherVersion = $('html').attr('data-version') === 'Decrease' ? 'Improve' : 'Decrease';
 
 }
 
@@ -214,6 +217,13 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
   pullTime['quotes'] = Math.ceil(performance.now() - startTime);
 
   quotes = data;
+  versionQuotes[version] = data;
+
+  $.getJSON(`${fullBackendAddress + otherVersion.toLowerCase()}_quote_serializer.php`).done((data) => {
+
+    versionQuotes[otherVersion] = data;
+
+  });
 
   moodEngine.log('log', `Successfully pulled ${quotes.length} quotes from backend in ${pullTime['quotes']}ms.`);
 
@@ -1427,44 +1437,21 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
       moodEngine.switchVersion = function() {
 
         version = version === 'Improve' ? 'Decrease' : 'Improve';
-        quotes = [];
+        otherVersion = version === 'Improve' ? 'Improve' : 'Decrease';
+        quotes = versionQuotes[otherVersion];
         quoteHistory = [];
         colourHistory = [];
         usedQuotes = [];
 
-        startTime = performance.now();
+        $('title').text(`${version} Your Mood`);
+        $('#logo-version').text(version.toLowerCase());
+        $('#footer-version').text(version);
 
-        moodEngine.log('log', `\nSwitching version to ${version}...`);
+        moodEngine.reload('Auto');
+        moodEngine.rewind();
 
-        appError = true;
-
-        $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).done((data) => {
-
-          $.each(data, function(key, val) {
-
-            quotes.push(val);
-
-          });
-
-          $('title').text(`${version} Your Mood`);
-          $('#logo-version').text(version.toLowerCase());
-          $('#footer-version').text(version);
-
-          appError = false;
-
-          moodEngine.reload('Auto');
-          moodEngine.rewind();
-
-          pullTime['switch'] = Math.ceil(performance.now() - startTime);
-
-          moodEngine.log('log', `Successfully switched version to ${version} in ${pullTime['switch']}ms.`);
-          Materialize.toast(`Switched to ${version} Your Mood!`, fullSettings['toast_interval']);
-
-        }).fail((data) => {
-
-          moodEngine.error(`Failed to switch to ${version} Your Mood.`, null, null, 'backend');
-
-        });
+        moodEngine.log('log', `\nSwitched version to ${version}.`);
+        Materialize.toast(`Switched to ${version} Your Mood!`, fullSettings['toast_interval']);
 
       };
 
