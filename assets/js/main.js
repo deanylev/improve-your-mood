@@ -615,9 +615,11 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
       // Set inputs in modal
 
-      moodEngine.setInputs = function() {
+      moodEngine.setInputs = function(input) {
 
-        $('.settings-input:not(.select-wrapper)').each(function() {
+        let target = input ? `.settings-input[name="${input}"]` : '.settings-input:not(.select-wrapper)';
+
+        $(target).each(function() {
 
           let setting = $(this).attr('name');
           let value = fullSettings[setting];
@@ -767,12 +769,17 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           let html = `
                 <div class="row ${mobile}">
-                  <div class="input-field col s12">
+                  <div class="input-field col s11">
                     ${input}
                     ${label}
                     <a class="black-text settings-link default-button" data-setting="${key}"><b>Set to Default</b></a>
                     <br>
                     <span class="tooltipped" data-setting="${key}" data-position="bottom" data-delay="50">What's this?</span>
+                  </div>
+                  <div class="col s1">
+                    <a class="reset-input" data-setting="${key}">
+                      <i class="material-icons prefix">refresh</i>
+                    </a>
                   </div>
                 </div>
                 `;
@@ -799,6 +806,15 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
         let setting = $(this).attr('data-setting');
         localStorage.removeItem(setting);
         moodEngine.setSettings(null, `Set ${settings[setting]['label']} to Default!`);
+
+      });
+
+      // Reset inputs button
+
+      $('.reset-input').click(function() {
+
+        let setting = $(this).attr('data-setting');
+        moodEngine.setInputs(setting);
 
       });
 

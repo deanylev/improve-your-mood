@@ -26,15 +26,11 @@ label:not(.active) b {
   display: none;
 }
 
-.dropdown-content li span {
+.dropdown-content li span, .modal, .reset-input {
   color: black;
 }
 
-.modal {
-  color: black;
-}
-
-.settings-link {
+.settings-link, .reset-input {
   cursor: pointer;
 }
 
@@ -42,11 +38,7 @@ label:not(.active) b {
   text-decoration: underline;
 }
 
-.input-field label {
-  color: black !important;
-}
-
-.input-field input:focus+label {
+.input-field label, .input-field input:focus+label {
   color: black !important;
 }
 
@@ -84,6 +76,11 @@ label:not(.active) b {
 
 .chip.selected {
   background-color: black !important;
+}
+
+.reset-input {
+  position: relative;
+  top: 17px;
 }
 
 #logo {
