@@ -1,5 +1,15 @@
 <?php
 
+// Create - make a new record
+
+// View - view an existing record
+
+// Edit - update an existing record
+
+// Delete - delete an existing record
+
+// Delete All - delete all existing records in a table
+
 switch ($title) {
   case "log":
     $actions = array("view", "delete", "deleteall");
