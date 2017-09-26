@@ -1,4 +1,4 @@
-var appError, startTime, settingsOpen, lastNum, totalTime;
+var appError, startTime, settingsOpen, lastNum, totalTime, disableSwitch;
 var quotes = [];
 var colours = [];
 var usedQuotes = [];
@@ -225,6 +225,11 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
   $.getJSON(`${fullBackendAddress + otherVersion.toLowerCase()}_quote_serializer.php`).done((data) => {
 
     versionQuotes[otherVersion] = data;
+
+  }).fail((data) => {
+
+    disableSwitch = true;
+    moodEngine.log('warn', `Error fetching ${otherVersion} quotes, disabling switch feature.`)
 
   });
 
@@ -1442,22 +1447,26 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
       moodEngine.switchVersion = function() {
 
-        version = version === 'Improve' ? 'Decrease' : 'Improve';
-        otherVersion = version === 'Improve' ? 'Improve' : 'Decrease';
-        quotes = versionQuotes[otherVersion];
-        quoteHistory = [];
-        colourHistory = [];
-        usedQuotes = [];
+        if (!appError && !disableSwitch) {
 
-        $('title').text(`${version} Your Mood`);
-        $('#logo-version').text(version.toLowerCase());
-        $('#footer-version').text(version);
+          version = version === 'Improve' ? 'Decrease' : 'Improve';
+          otherVersion = version === 'Improve' ? 'Improve' : 'Decrease';
+          quotes = versionQuotes[otherVersion];
+          quoteHistory = [];
+          colourHistory = [];
+          usedQuotes = [];
 
-        moodEngine.reload('Auto');
-        moodEngine.rewind();
+          $('title').text(`${version} Your Mood`);
+          $('#logo-version').text(version.toLowerCase());
+          $('#footer-version').text(version);
 
-        moodEngine.log('log', `Switched version to ${version}.`);
-        Materialize.toast(`Switched to ${version} Your Mood!`, fullSettings['toast_interval']);
+          moodEngine.reload('Auto');
+          moodEngine.rewind();
+
+          moodEngine.log('log', `Switched version to ${version}.`);
+          Materialize.toast(`Switched to ${version} Your Mood!`, fullSettings['toast_interval']);
+
+        }
 
       };
 
