@@ -29,23 +29,49 @@ if (platform === 'web') {
 
 }
 
-moodEngine.log = function(type, log) {
+moodEngine.log = function(type, message) {
 
   moodLog.push({
     type: type,
-    message: log
+    message: message
   });
-  console[type](log);
 
-}
+  console[type](`\n${message}`);
+
+};
+
+moodEngine.sendLog = function() {
+
+  console.log('Sending log to backend...');
+
+  $.ajax({
+    type: 'POST',
+    crossDomain: true,
+    url: 'http://improveyourmood.xyz/api/create/log/index.php',
+    data: {
+      version: version,
+      platform: platform,
+      log: JSON.stringify(moodLog)
+    },
+    success: function(response) {
+
+      console.log('Log sent to backend successfully.');
+      response ? `Response: ${response}` : '';
+
+    },
+    error: function(response) {
+
+      console.log('Failed to send log to backend.');
+      response ? `Response: ${response}` : '';
+
+    }
+  });
+
+};
 
 $(window).on('error', function(error) {
 
-  let message = `${error.originalEvent.message} (LINE NUMBER: ${error.originalEvent.lineno})`;
-
-  moodLog.push(message);
-
-  moodEngine.error(null, message, '0');
+  moodEngine.error(null, `${error.originalEvent.message} (LINE NUMBER: ${error.originalEvent.lineno})`, '0');
 
   if (localStorage.length) {
 
@@ -168,36 +194,13 @@ moodEngine.error = function(display, log, code, type) {
 
     $('#quote').text('You are not connected to the internet.');
     $('#retry-button').removeClass('hide');
-    moodEngine.log('log', '\nNo internet connection.');
+    moodEngine.log('log', 'No internet connection.');
 
   }
 
   appError = true;
 
-  console.log('Sending error log to backend...');
-
-  $.ajax({
-    type: 'POST',
-    crossDomain: true,
-    url: 'http://improveyourmood.xyz/api/create/log/index.php',
-    data: {
-      version: version,
-      platform: platform,
-      log: JSON.stringify(moodLog)
-    },
-    success: function(response) {
-
-      console.log('Error log sent to backend successfully.');
-      response ? `Response: ${response}` : '';
-
-    },
-    error: function(response) {
-
-      console.log('Failed to send error log to backend.');
-      response ? `Response: ${response}` : '';
-
-    }
-  });
+  moodEngine.sendLog();
 
 };
 
@@ -210,7 +213,7 @@ console.log(`%c${version.toLowerCase()} your mood 6`, 'font-family: "Oxygen"; fo
 console.log('――――――――――――――――――――――――――――――');
 moodEngine.log('log', `Pulling from: ${fullBackendAddress}`);
 
-moodEngine.log('log', '\nPulling quotes from backend...');
+moodEngine.log('log', 'Pulling quotes from backend...');
 
 $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).done((data) => {
 
@@ -231,7 +234,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
   startTime = performance.now();
 
-  moodEngine.log('log', '\nPulling colours from backend...');
+  moodEngine.log('log', 'Pulling colours from backend...');
 
   $.getJSON(`${fullBackendAddress}colour_serializer.php`).done((data) => {
 
@@ -248,7 +251,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
     startTime = performance.now();
 
-    moodEngine.log('log', '\nPulling settings from backend...');
+    moodEngine.log('log', 'Pulling settings from backend...');
 
     $.getJSON(`${fullBackendAddress}settings_serializer.php`).done((data) => {
 
@@ -363,20 +366,23 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           $.each(fullSettings['button_order'], function(key, val) {
 
+            let html;
+            let hidden;
+
             switch (val) {
 
               case 'autoreload':
-                var html = '<li data-button="autoreload"><a class="btn-floating waves-effect transparent" id="toggle-auto-reload"><i class="material-icons theme-text" data-icon="autoreload" data-default="autorenew"></i></a></li>';
+                html = '<li data-button="autoreload"><a class="btn-floating waves-effect transparent" id="toggle-auto-reload"><i class="material-icons theme-text" data-icon="autoreload" data-default="autorenew"></i></a></li>';
                 break;
               case 'settings':
-                let hidden = hasUserSettings ? '' : 'hide';
-                var html = `<li data-button="settings" class="${hidden}"><a class="btn-floating waves-effect transparent" id="settings-button"><i class="material-icons theme-text" data-icon="settings" data-default="settings"></i></a></li>`;
+                hidden = hasUserSettings ? '' : 'hide';
+                html = `<li data-button="settings" class="${hidden}"><a class="btn-floating waves-effect transparent" id="settings-button"><i class="material-icons theme-text" data-icon="settings" data-default="settings"></i></a></li>`;
                 break;
               case 'rewind':
-                var html = '<li data-button="rewind"><a class="btn-floating waves-effect transparent disabled" id="go-back-button"><i class="material-icons theme-text" data-icon="rewind" data-default="skip_previous"></i></a></li>';
+                html = '<li data-button="rewind"><a class="btn-floating waves-effect transparent disabled" id="go-back-button"><i class="material-icons theme-text" data-icon="rewind" data-default="skip_previous"></i></a></li>';
                 break;
               default:
-                var html = '';
+                html = '';
                 moodEngine.log('warn', `Unknown value '${val}' in button order, skipping...`);
 
             }
@@ -908,7 +914,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
           if (!moodEngine.notAutoReloading() && !appError) {
 
             moodEngine.reload('Auto');
-            moodEngine.log('log', `\nAuto reloaded after ${fullSettings['reload_interval']}ms.`);
+            moodEngine.log('log', `Auto reloaded after ${fullSettings['reload_interval']}ms.`);
 
           }
 
@@ -1160,7 +1166,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
       if (!appError) {
 
-        moodEngine.log('log', '\nInitializing MoodEngine...');
+        moodEngine.log('log', 'Initializing MoodEngine...');
 
         try {
 
@@ -1171,7 +1177,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
           $('.fixed-action-btn').removeClass('hide');
           moodEngine.log('log', 'MoodEngine initialized.');
           let totalLoadTime = Math.ceil(performance.now() - totalTime);
-          moodEngine.log('log', `\nTotal load time: ${totalLoadTime}ms.`);
+          moodEngine.log('log', `Total load time: ${totalLoadTime}ms.`);
 
           // If an error, display/log it
 
@@ -1450,7 +1456,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
         moodEngine.reload('Auto');
         moodEngine.rewind();
 
-        moodEngine.log('log', `\nSwitched version to ${version}.`);
+        moodEngine.log('log', `Switched version to ${version}.`);
         Materialize.toast(`Switched to ${version} Your Mood!`, fullSettings['toast_interval']);
 
       };
