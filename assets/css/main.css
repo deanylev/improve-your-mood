@@ -13,16 +13,19 @@ body {
   display: flex;
   min-height: 100vh;
   flex-direction: column;
-  color: white;
   text-align: center;
   overflow: hidden;
+}
+
+body, #personal-link {
+  color: white;
 }
 
 main {
   flex: 1 0 auto;
 }
 
-label:not(.active) b {
+label:not(.active) b, #advanced-settings {
   display: none;
 }
 
@@ -34,7 +37,7 @@ label:not(.active) b {
   cursor: pointer;
 }
 
-.settings-link:hover {
+.underline, .settings-link:hover, #personal-link:hover {
   text-decoration: underline;
 }
 
@@ -51,10 +54,6 @@ label:not(.active) b {
   color: white !important;
 }
 
-.underline {
-  text-decoration: underline;
-}
-
 .spinner-layer {
   border-color: white;
 }
@@ -65,7 +64,6 @@ label:not(.active) b {
 
 .darken, .darken:hover {
   opacity: 0.4 !important;
-  background-color: black !important;
 }
 
 .settings-input.invalid:focus, .chips.invalid {
@@ -74,7 +72,7 @@ label:not(.active) b {
   -webkit-box-shadow: 0 1px 0 0 #F44336 !important;
 }
 
-.chip.selected {
+.darken, .darken:hover, .chip.selected {
   background-color: black !important;
 }
 
@@ -91,18 +89,6 @@ label:not(.active) b {
   font-family: 'Oxygen', Helvetica, Arial;
   font-size: 43px;
   margin-top: 200px; // For before the JS loads
-}
-
-#personal-link {
-  color: white;
-}
-
-#personal-link:hover {
-  text-decoration: underline;
-}
-
-#advanced-settings {
-  display: none;
 }
 
 @media only screen and (max-width: 599px) {
