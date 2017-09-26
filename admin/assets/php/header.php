@@ -60,18 +60,18 @@
     </div>
   </nav>
   <div class="container">
-    <?php if (isset($_SESSION["alert"])): ?>
+    <?php foreach ($_SESSION as $key => $val): ?>
 
       <br>
-      <div class="alert alert-success">
-        <?php echo $_SESSION["alert"]; ?>
+      <div class="alert alert-<?php echo $key; ?>">
+        <?php echo $val; ?>
         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
       </div>
 
     <?php
 
       session_destroy();
-      endif;
+    endforeach;
 
     ?>
   </div>
