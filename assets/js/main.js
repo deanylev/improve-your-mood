@@ -582,9 +582,9 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           if (fullSettings['settings_keys'] && typeof(fullSettings['settings_keys']) === 'object') {
 
-            Mousetrap.bind(fullSettings['settings_keys'], function(e) {
+            Mousetrap.bindGlobal(fullSettings['settings_keys'], function(e) {
 
-              if (!appError && !$('#settings-modal input:focus').length) {
+              if (!appError && !$('#settings-modal input:not([type="range"]):focus').length) {
 
                 settingsOpen ? $('#settings-modal').modal('close') : $('#settings-modal').modal('open');
 
@@ -701,6 +701,8 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         },
         complete: function() {
+
+          $('.thumb').remove();
 
           settingsOpen = false;
 
@@ -833,6 +835,9 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
       // Reset inputs button
 
       $('.reset-input').click(function() {
+
+        $('input').focusout();
+        $('.thumb').remove();
 
         let setting = $(this).attr('data-setting');
         moodEngine.setInputs(setting);
