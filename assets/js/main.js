@@ -763,6 +763,20 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
           let input;
           let label;
           let inputField = 'input-field';
+          let inputCol = 's12';
+          let resetInput = '';
+
+          if (fullSettings['reset_input_buttons']) {
+
+            inputCol = 's11'
+            resetInput = `
+                  <div class="col s1">
+                    <a class="reset-input" data-setting="${key}">
+                      <i class="material-icons prefix">refresh</i>
+                    </a>
+                  </div>`;
+
+          }
 
           if (val['input'] === 'select') {
 
@@ -812,7 +826,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           let html = `
                 <div class="row ${mobile}">
-                  <div class="${inputField} col s11">
+                  <div class="${inputField} col ${inputCol}">
                     ${container}
                     ${input}
                     ${label}
@@ -821,11 +835,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
                     <br>
                     <span class="tooltipped" data-setting="${key}" data-position="bottom" data-delay="50">What's this?</span>
                   </div>
-                  <div class="col s1">
-                    <a class="reset-input" data-setting="${key}">
-                      <i class="material-icons prefix">refresh</i>
-                    </a>
-                  </div>
+                  ${resetInput}
                 </div>
                 `;
 
