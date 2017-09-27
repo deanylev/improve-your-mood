@@ -45,7 +45,7 @@ label:not(.active) b, #advanced-settings {
   color: black !important;
 }
 
-.input-field input:focus, .chips.focus {
+.input-field input:not([type="range"]):not(.input):focus, .chips.focus {
   border-bottom: 1px solid black !important;
   box-shadow: 0 1px 0 0 black !important;
 }
@@ -72,7 +72,7 @@ label:not(.active) b, #advanced-settings {
   -webkit-box-shadow: 0 1px 0 0 #F44336 !important;
 }
 
-.darken, .darken:hover, .chip.selected {
+.darken, .darken:hover, .chip.selected, input[type=range]::-webkit-slider-thumb, input[type=range] + .thumb {
   background-color: black !important;
 }
 

@@ -460,17 +460,25 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         $('html').hammer().on(fullSettings['reverse_swipe_direction'] ? 'swiperight' : 'swipeleft', function(ev) {
 
-          let direction = fullSettings['reverse_swipe_direction'] ? 'right' : 'left';
-          moodEngine.log('log', `Swiped ${direction} to reload.`);
-          moodEngine.reload();
+          if (!appError & !settingsOpen) {
+
+            let direction = fullSettings['reverse_swipe_direction'] ? 'right' : 'left';
+            moodEngine.log('log', `Swiped ${direction} to reload.`);
+            moodEngine.reload();
+
+          }
 
         });
 
         $('html').hammer().on(fullSettings['reverse_swipe_direction'] ? 'swipeleft' : 'swiperight', function(ev) {
 
-          let direction = fullSettings['reverse_swipe_direction'] ? 'left' : 'right';
-          moodEngine.log('log', `Swiped ${direction} to rewind.`);
-          moodEngine.rewind();
+          if (!appError && !settingsOpen) {
+
+            let direction = fullSettings['reverse_swipe_direction'] ? 'left' : 'right';
+            moodEngine.log('log', `Swiped ${direction} to rewind.`);
+            moodEngine.rewind();
+
+          }
 
         });
 
@@ -734,18 +742,22 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
         if (val['user']) {
 
           var optional = !!val['optional'];
-          var indicator = optional || !fullSettings['optional_indicators'] ? '' : ' <b>*</b>'
+          let indicator = optional || !fullSettings['optional_indicators'] ? '' : ' <b>*</b>';
+          let container = '';
+          let containerClose = '';
+          let input;
+          let label;
 
           if (val['input'] === 'select') {
 
-            var input = `
+            input = `
                   <select class="settings-input" name="${key}">
                     <option value="false">No</option>
                     <option value="true">Yes</option>
                   </select>
                   `;
 
-            var label = `
+            label = `
                   <label>${val['label']}</label>
                   `;
 
@@ -753,25 +765,34 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
             if (val['input'] === 'chips') {
 
-              var input = `<div class="chips left-align settings-input" name="${key}" data-optional="${optional}"></div>`;
+              input = `<div class="chips left-align settings-input" name="${key}" data-optional="${optional}"></div>`;
+
+            } else if (val['input'] === 'range') {
+
+              input = `<input type="range" name="${key}" class="settings-input" id="${key}" min="${val['min']}" max="${val['max']}">`;
+              indicator = '';
+              container = '<p class="range-field">';
+              containerClose = '</p>';
 
             } else {
 
-              var input = `<input type="${val['input']}" name="${key}" class="settings-input mousetrap" id="${key}" data-optional="${optional}">`;
+              input = `<input type="${val['input']}" name="${key}" class="settings-input mousetrap" id="${key}" data-optional="${optional}">`;
 
             }
 
-            var label = `<label for="${key}">${val['label']}${indicator}</label>`;
+            label = `<label for="${key}">${val['label']}${indicator}</label>`;
 
           }
 
-          var mobile = val['mobile'] ? '' : 'hide-on-med-and-down';
+          let mobile = val['mobile'] ? '' : 'hide-on-med-and-down';
 
           let html = `
                 <div class="row ${mobile}">
                   <div class="input-field col s11">
+                    ${container}
                     ${input}
                     ${label}
+                    ${containerClose}
                     <a class="black-text settings-link default-button" data-setting="${key}"><b>Set to Default</b></a>
                     <br>
                     <span class="tooltipped" data-setting="${key}" data-position="bottom" data-delay="50">What's this?</span>
@@ -1325,39 +1346,43 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           // Custom Validations
 
-          // Theme Colour
+          if ($(this).val()) {
 
-          if ($(this).attr('name') === 'theme_colour' && !cssColours.includes($(this).val().toLowerCase())) {
+            // Theme Colour
 
-            invalidInputs.push(`${$(this).val()} is not a valid CSS colour.`);
+            if ($(this).attr('name') === 'theme_colour' && !cssColours.includes($(this).val().toLowerCase())) {
 
-          }
+              invalidInputs.push(`${$(this).val()} is not a valid CSS colour.`);
 
-          // Backend Address
+            }
 
-          if ($(this).attr('name') === 'backend_address' && $(this).val() != backendAddress) {
+            // Backend Address
 
-            $.ajaxSetup({
-              async: false
-            });
+            if ($(this).attr('name') === 'backend_address' && $(this).val() != backendAddress) {
 
-            $.getJSON(`http://${$(this).val()}/colour_serializer.php`).fail((data) => {
+              $.ajaxSetup({
+                async: false
+              });
 
-              invalidInputs.push(`${settings[$(this).attr('name')]['label']} '${$(this).val()}' is Invalid.`);
+              $.getJSON(`http://${$(this).val()}/colour_serializer.php`).fail((data) => {
 
-            });
+                invalidInputs.push(`${settings[$(this).attr('name')]['label']} '${$(this).val()}' is Invalid.`);
 
-            $.ajaxSetup({
-              async: true
-            });
+              });
 
-          }
+              $.ajaxSetup({
+                async: true
+              });
 
-          // Button Order
+            }
 
-          if ($(this).attr('name') === 'button_order' && settings['button_order']['value'].includes('settings') && !localSettings['button_order'].includes('settings')) {
+            // Button Order
 
-            invalidInputs.push(`${settings[$(this).attr('name')]['label']} Needs to Include Settings`);
+            if ($(this).attr('name') === 'button_order' && settings['button_order']['value'].includes('settings') && !localSettings['button_order'].includes('settings')) {
+
+              invalidInputs.push(`${settings[$(this).attr('name')]['label']} Needs to Include Settings`);
+
+            }
 
           }
 
