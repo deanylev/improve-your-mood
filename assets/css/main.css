@@ -92,7 +92,7 @@ input[type="checkbox"] + label::after {
 #quote {
   font-family: 'Oxygen', Helvetica, Arial;
   font-size: 43px;
-  margin-top: 200px; // For before the JS loads
+  margin-top: 200px; /* for before the JS loads */
 }
 
 @media only screen and (max-width: 599px) {
