@@ -17,7 +17,7 @@ body {
   overflow: hidden;
 }
 
-body, #personal-link {
+body, .footer-link {
   color: white;
 }
 
@@ -37,7 +37,7 @@ label:not(.active) b, #advanced-settings {
   cursor: pointer;
 }
 
-.underline, .settings-link:hover, #personal-link:hover {
+.underline, .settings-link:hover, .footer-link:hover {
   text-decoration: underline;
 }
 

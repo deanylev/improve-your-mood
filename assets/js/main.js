@@ -106,7 +106,7 @@ $(document).ready(function() {
   let meta_desc = version === 'Improve' ? 'Gives you randomly chosen compliments across randomly chosen beautiful colours to improve your mood!' : 'Gives you randomly chosen insults across randomly chosen beautiful colours to decrease your mood!'
   $('meta[name="description"]').attr('content', meta_desc)
 
-  $('#year').text(new Date().getFullYear());
+  $('#year').append(new Date().getFullYear());
 
   // Some buttons needs to work straight away
 
