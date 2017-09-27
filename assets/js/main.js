@@ -584,7 +584,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
             Mousetrap.bindGlobal(fullSettings['settings_keys'], function(e) {
 
-              if (!appError && !$('#settings-modal input:not([type="range"]):focus').length) {
+              if (!appError && !$('#settings-modal input:not([type="range"]):not([type="checkbox"]):focus').length) {
 
                 settingsOpen ? $('#settings-modal').modal('close') : $('#settings-modal').modal('open');
 
@@ -632,8 +632,21 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
           let setting = $(this).attr('name');
           let value = fullSettings[setting];
 
-          $(this).is('select') || typeof(value) === 'object' ? $(this).val(JSON.stringify(value)) : $(this).val(value);
-          $(this).is('input') ? $(this).parent().find('label').addClass('active') : '';
+          if ($(this).is('select') || typeof(value) === 'object') {
+
+            $(this).val(JSON.stringify(value));
+
+          } else if ($(this).is('[type="checkbox"]')) {
+
+            $(this).prop('checked', value);
+
+          } else {
+
+            $(this).val(value);
+
+          }
+
+          $(this).is('input') && !$(this).is('[type="checkbox"]') ? $(this).parent().find('label').addClass('active') : '';
           $(this).removeClass('invalid');
           $('select').material_select();
 
@@ -749,6 +762,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
           let containerClose = '';
           let input;
           let label;
+          let inputField = 'input-field';
 
           if (val['input'] === 'select') {
 
@@ -776,6 +790,14 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
               container = '<p class="range-field">';
               containerClose = '</p>';
 
+            } else if (val['input'] === 'checkbox') {
+
+              input = `<input type="checkbox" name="${key}" class="settings-input filled-in" id="${key}">`;
+              indicator = '';
+              container = '<p>';
+              containerClose = '</p>';
+              inputField = '';
+
             } else {
 
               input = `<input type="${val['input']}" name="${key}" class="settings-input mousetrap" id="${key}" data-optional="${optional}">`;
@@ -790,7 +812,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           let html = `
                 <div class="row ${mobile}">
-                  <div class="input-field col s11">
+                  <div class="${inputField} col s11">
                     ${container}
                     ${input}
                     ${label}
@@ -1328,6 +1350,10 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
             });
 
             localSettings[$(this).attr('name')] = JSON.stringify(array);
+
+          } else if ($(this).is('[type="checkbox"]')) {
+
+            localSettings[$(this).attr('name')] = $(this).is(':checked');
 
           } else {
 

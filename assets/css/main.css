@@ -29,7 +29,11 @@ label:not(.active) b, #advanced-settings {
   display: none;
 }
 
-.dropdown-content li span, .modal, .reset-input {
+input[type="checkbox"] + label::after {
+  border-color: black !important;
+}
+
+.dropdown-content li span, .modal, .reset-input, label {
   color: black;
 }
 
@@ -72,7 +76,7 @@ label:not(.active) b, #advanced-settings {
   -webkit-box-shadow: 0 1px 0 0 #F44336 !important;
 }
 
-.darken, .darken:hover, .chip.selected, input[type=range]::-webkit-slider-thumb, input[type=range] + .thumb {
+.darken, .darken:hover, .chip.selected, input[type="range"]::-webkit-slider-thumb, input[type="range"] + .thumb, input[type="checkbox"]:checked + label::after {
   background-color: black !important;
 }
 
