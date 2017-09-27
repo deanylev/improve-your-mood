@@ -1357,6 +1357,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
             if ($(this).attr('name') === 'theme_colour' && !cssColours.includes($(this).val().toLowerCase())) {
 
+              $(this).addClass('invalid');
               invalidInputs.push(`${$(this).val()} is not a valid CSS colour.`);
 
             }
@@ -1371,6 +1372,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
               $.getJSON(`http://${$(this).val()}/colour_serializer.php`).fail((data) => {
 
+                $(this).addClass('invalid');
                 invalidInputs.push(`${settings[$(this).attr('name')]['label']} '${$(this).val()}' is Invalid.`);
 
               });
@@ -1385,6 +1387,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
             if ($(this).attr('name') === 'button_order' && settings['button_order']['value'].includes('settings') && !localSettings['button_order'].includes('settings')) {
 
+              $(this).addClass('invalid');
               invalidInputs.push(`${settings[$(this).attr('name')]['label']} Needs to Include Settings`);
 
             }
