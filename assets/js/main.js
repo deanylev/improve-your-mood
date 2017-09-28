@@ -342,7 +342,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         // Build button menu
 
-        if (method === 'initial' || JSON.stringify(fullSettings.button_order) != buttonOrder && method !== 'buttonsSorted') {
+        if (method === 'initial' || JSON.stringify(fullSettings.button_order) !== buttonOrder && method !== 'buttonsSorted') {
 
           let fabOpen = $('.fixed-action-btn').hasClass('active');
 
@@ -926,7 +926,11 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         $('.chip').each(function() {
 
-          if ($(this).contents().get(0).nodeValue == false) {
+          let value = $(this).contents().get(0).nodeValue;
+
+          $(this).contents().get(0).nodeValue = $.trim($(this).contents().get(0).nodeValue);
+
+          if (!$(this).contents().get(0).nodeValue) {
 
             $(this).remove();
 
@@ -1144,7 +1148,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           $('#error-message').empty();
 
-          lastNum = localStorage.getItem('lastQuote');
+          lastNum = JSON.parse(localStorage.getItem('lastQuote'));
           quoteNum = Math.floor(quotes.length * Math.random());
 
           // If all quotes are used and no repeats is enabled, start again
@@ -1157,7 +1161,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           // If MoodEngine trys to use the same quote twice, or one that has already been used, generate a new one
 
-          while (lastNum == quoteNum || fullSettings.no_repeats && usedQuotes.includes(quoteNum)) {
+          while (lastNum === quoteNum || fullSettings.no_repeats && usedQuotes.includes(quoteNum)) {
 
             quoteNum = Math.floor(quotes.length * Math.random());
 
@@ -1197,12 +1201,12 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           }
 
-          lastNum = localStorage.getItem('lastColour');
+          lastNum = JSON.parse(localStorage.getItem('lastColour'));
           colourNum = Math.floor(colours.length * Math.random());
 
           // If MoodEngine trys to use the same colour twice, generate a new one
 
-          while (lastNum == colourNum) {
+          while (lastNum === colourNum) {
 
             colourNum = Math.floor(colours.length * Math.random());
 
@@ -1373,7 +1377,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           // Detect if input is blank
 
-          if ($(this).attr('data-optional') != 'true' && ((!$(this).hasClass('chips') && !$(this).val() || $(this).val() === 'null' || $(this).val().indexOf(' ') >= 0) || $(this).hasClass('chips') && !$(this).material_chip('data').length)) {
+          if ($(this).attr('data-optional') !== 'true' && ((!$(this).hasClass('chips') && !$(this).val() || $(this).val() === 'null' || $(this).val().indexOf(' ') >= 0) || $(this).hasClass('chips') && !$(this).material_chip('data').length)) {
 
             $(this).addClass('invalid');
 
@@ -1400,7 +1404,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
             // Backend Address
 
-            if ($(this).attr('name') === 'backend_address' && $(this).val() != backendAddress) {
+            if ($(this).attr('name') === 'backend_address' && $(this).val() !== backendAddress) {
 
               $.ajaxSetup({
                 async: false
