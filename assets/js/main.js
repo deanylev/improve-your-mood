@@ -1327,11 +1327,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           if (advancedClosed && fullSettings.keep_advanced_settings) {
 
-            if (restoreSettings[key]) {
-
-              localStorage.setItem(key, restoreSettings[key]);
-
-            }
+            localStorage.setItem(key, restoreSettings[key]);
 
           }
 
