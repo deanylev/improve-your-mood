@@ -1304,33 +1304,38 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
       moodEngine.setAllDefault = function() {
 
+        let restoreSettings = {};
+        let advancedClosed = !$('#advanced-settings-button').hasClass('underline');
         let lastQuote = localStorage.getItem('lastQuote');
         let lastColour = localStorage.getItem('lastColour');
-        let buttonOrder = localStorage.getItem('button_order');
-        let backendAddress = localStorage.getItem('backend_address');
+
+        $.each(settings, function(key, val) {
+
+          if (val.advanced) {
+
+            restoreSettings[key] = localStorage.getItem(key);
+
+          }
+
+        });
 
         localStorage.clear();
-
         localStorage.setItem('lastQuote', lastQuote);
         localStorage.setItem('lastColour', lastColour);
 
-        let advancedClosed = !$('#advanced-settings-button').hasClass('underline')
+        $.each(restoreSettings, function(key, val) {
 
-        if (advancedClosed && !fullSettings.set_default_advanced) {
+          if (advancedClosed && fullSettings.keep_advanced_settings) {
 
-          if (backendAddress) {
+            if (restoreSettings[key]) {
 
-            localStorage.setItem('backend_address', backendAddress);
+              localStorage.setItem(key, restoreSettings[key]);
 
-          }
-
-          if (buttonOrder) {
-
-            localStorage.setItem('button_order', buttonOrder);
+            }
 
           }
 
-        }
+        });
 
         moodEngine.setSettings(null, 'Set All Settings to Default!');
         moodEngine.setInputs();
