@@ -217,7 +217,7 @@ moodEngine.log('log', 'Pulling quotes from backend...');
 
 $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).done((data) => {
 
-  pullTime['quotes'] = Math.ceil(performance.now() - startTime);
+  pullTime.quotes = Math.ceil(performance.now() - startTime);
 
   quotes = data;
   versionQuotes[version] = data;
@@ -233,7 +233,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
   });
 
-  moodEngine.log('log', `Successfully pulled ${quotes.length} quotes from backend in ${pullTime['quotes']}ms.`);
+  moodEngine.log('log', `Successfully pulled ${quotes.length} quotes from backend in ${pullTime.quotes}ms.`);
 
   // Pull colours from backend
 
@@ -243,11 +243,11 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
   $.getJSON(`${fullBackendAddress}colour_serializer.php`).done((data) => {
 
-    pullTime['colours'] = Math.ceil(performance.now() - startTime);
+    pullTime.colours = Math.ceil(performance.now() - startTime);
 
     colours = data;
 
-    moodEngine.log('log', `Successfully pulled ${colours.length} colours from backend in ${pullTime['colours']}ms.`);
+    moodEngine.log('log', `Successfully pulled ${colours.length} colours from backend in ${pullTime.colours}ms.`);
 
     var quoteNum;
     var colourNum;
@@ -260,7 +260,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
     $.getJSON(`${fullBackendAddress}settings_serializer.php`).done((data) => {
 
-      pullTime['settings'] = Math.ceil(performance.now() - startTime);
+      pullTime.settings = Math.ceil(performance.now() - startTime);
 
       $.each(data, function(key, val) {
 
@@ -284,7 +284,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
       });
 
-      moodEngine.log('log', `Successfully pulled ${Object.keys(settings).length} settings from backend in ${pullTime['settings']}ms.`);
+      moodEngine.log('log', `Successfully pulled ${Object.keys(settings).length} settings from backend in ${pullTime.settings}ms.`);
 
       // Construct settings object from backend or local
 
@@ -294,7 +294,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         if (method !== 'initial') {
 
-          buttonOrder = JSON.stringify(fullSettings['button_order']);
+          buttonOrder = JSON.stringify(fullSettings.button_order);
 
         }
 
@@ -322,7 +322,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           } else {
 
-            fullSettings[key] = settings[key]['value'];
+            fullSettings[key] = settings[key].value;
 
           }
 
@@ -330,9 +330,9 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         // Reload transitions
 
-        if (fullSettings['colour_reload_transitions']) {
+        if (fullSettings.colour_reload_transitions) {
 
-          $('.coloured').css('transition', `${fullSettings['colour_reload_transition_time']}ms ease-out`);
+          $('.coloured').css('transition', `${fullSettings.colour_reload_transition_time}ms ease-out`);
 
         } else {
 
@@ -342,7 +342,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         // Build button menu
 
-        if (method === 'initial' || JSON.stringify(fullSettings['button_order']) != buttonOrder && method !== 'buttonsSorted') {
+        if (method === 'initial' || JSON.stringify(fullSettings.button_order) != buttonOrder && method !== 'buttonsSorted') {
 
           let fabOpen = $('.fixed-action-btn').hasClass('active');
 
@@ -350,10 +350,10 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           var menuHTML = '';
 
-          if (!fullSettings['button_order'] || typeof(fullSettings['button_order']) !== 'object' || !fullSettings['button_order'].includes('settings')) {
+          if (!fullSettings.button_order || typeof(fullSettings.button_order) !== 'object' || !fullSettings.button_order.includes('settings')) {
 
             moodEngine.log('warn', 'Invalid button order provided, falling back to defaults...');
-            fullSettings['button_order'] = ['autoreload', 'settings', 'rewind'];
+            fullSettings.button_order = ['autoreload', 'settings', 'rewind'];
 
           }
 
@@ -361,7 +361,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           $.each(settings, function(key, val) {
 
-            if (val['user']) {
+            if (val.user) {
 
               hasUserSettings = true;
 
@@ -369,7 +369,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           });
 
-          $.each(fullSettings['button_order'], function(key, val) {
+          $.each(fullSettings.button_order, function(key, val) {
 
             let html;
             let hidden;
@@ -400,7 +400,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           // Set correct icons
 
-          if (!fullSettings['button_icons']) {
+          if (!fullSettings.button_icons) {
 
             moodEngine.log('warn', 'Server has no icons, falling back to defaults...');
 
@@ -408,9 +408,9 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           $('.material-icons').each(function() {
 
-            if (fullSettings['button_icons']) {
+            if (fullSettings.button_icons) {
 
-              var icon = fullSettings['button_icons'][$(this).attr('data-icon')];
+              var icon = fullSettings.button_icons[$(this).attr('data-icon')];
 
             } else {
 
@@ -452,17 +452,17 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         // Theme colour
 
-        $('.theme-text').css('cssText', `color: ${fullSettings['theme_colour']} !important`);
+        $('.theme-text').css('cssText', `color: ${fullSettings.theme_colour} !important`);
 
         // Touch / click gestures
 
         $('html').hammer().off();
 
-        $('html').hammer().on(fullSettings['reverse_swipe_direction'] ? 'swiperight' : 'swipeleft', function(ev) {
+        $('html').hammer().on(fullSettings.reverse_swipe_direction ? 'swiperight' : 'swipeleft', function(ev) {
 
           if (!appError & !settingsOpen) {
 
-            let direction = fullSettings['reverse_swipe_direction'] ? 'right' : 'left';
+            let direction = fullSettings.reverse_swipe_direction ? 'right' : 'left';
             moodEngine.log('log', `Swiped ${direction} to reload.`);
             moodEngine.reload();
 
@@ -470,11 +470,11 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         });
 
-        $('html').hammer().on(fullSettings['reverse_swipe_direction'] ? 'swipeleft' : 'swiperight', function(ev) {
+        $('html').hammer().on(fullSettings.reverse_swipe_direction ? 'swipeleft' : 'swiperight', function(ev) {
 
           if (!appError && !settingsOpen) {
 
-            let direction = fullSettings['reverse_swipe_direction'] ? 'left' : 'right';
+            let direction = fullSettings.reverse_swipe_direction ? 'left' : 'right';
             moodEngine.log('log', `Swiped ${direction} to rewind.`);
             moodEngine.rewind();
 
@@ -490,9 +490,9 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           // Reload & Save Settings (because they share keys)
 
-          if (fullSettings['reload_keys'] && typeof(fullSettings['reload_keys']) === 'object') {
+          if (fullSettings.reload_keys && typeof(fullSettings.reload_keys) === 'object') {
 
-            Mousetrap.bindGlobal(fullSettings['reload_keys'], function(e, combo) {
+            Mousetrap.bindGlobal(fullSettings.reload_keys, function(e, combo) {
 
               if (!appError) {
 
@@ -500,7 +500,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
                   moodEngine.reload();
 
-                } else if (fullSettings['save_settings_keys'].includes(combo) && (!$('#settings-modal input:focus').parent().hasClass('chips') || !$('#settings-modal input:focus').val())) {
+                } else if (fullSettings.save_settings_keys.includes(combo) && (!$('#settings-modal input:focus').parent().hasClass('chips') || !$('#settings-modal input:focus').val())) {
 
                   moodEngine.saveSettings();
 
@@ -514,9 +514,9 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           // Rewind
 
-          if (fullSettings['back_keys'] && typeof(fullSettings['back_keys']) === 'object') {
+          if (typeof(fullSettings.back_keys) === 'object') {
 
-            Mousetrap.bind(fullSettings['back_keys'], function(e) {
+            Mousetrap.bind(fullSettings.back_keys, function(e) {
 
               if (!appError && !settingsOpen) {
 
@@ -530,9 +530,9 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           // Rewind
 
-          if (fullSettings['full_rewind_keys'] && typeof(fullSettings['full_rewind_keys']) === 'object') {
+          if (typeof(fullSettings.full_rewind_keys) === 'object') {
 
-            Mousetrap.bind(fullSettings['full_rewind_keys'], function(e) {
+            Mousetrap.bind(fullSettings.full_rewind_keys, function(e) {
 
               if (!appError && !settingsOpen) {
 
@@ -546,9 +546,9 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           // Toggle Auto Reload
 
-          if (fullSettings['auto_reload_keys'] && typeof(fullSettings['auto_reload_keys']) === 'object') {
+          if (typeof(fullSettings.auto_reload_keys) === 'object') {
 
-            Mousetrap.bind(fullSettings['auto_reload_keys'], function(e) {
+            Mousetrap.bind(fullSettings.auto_reload_keys, function(e) {
 
               if (!appError && !settingsOpen) {
 
@@ -562,9 +562,9 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           // Toggle Button Menu
 
-          if (fullSettings['menu_keys'] && typeof(fullSettings['menu_keys']) === 'object') {
+          if (typeof(fullSettings.menu_keys) === 'object') {
 
-            Mousetrap.bind(fullSettings['menu_keys'], function(e) {
+            Mousetrap.bind(fullSettings.menu_keys, function(e) {
 
               if (!appError && !settingsOpen) {
 
@@ -580,9 +580,9 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           // Toggle Settings Panel
 
-          if (fullSettings['settings_keys'] && typeof(fullSettings['settings_keys']) === 'object') {
+          if (typeof(fullSettings.settings_keys) === 'object') {
 
-            Mousetrap.bindGlobal(fullSettings['settings_keys'], function(e) {
+            Mousetrap.bindGlobal(fullSettings.settings_keys, function(e) {
 
               if (!appError && !$('#settings-modal input:not([type="range"]):not([type="checkbox"]):focus').length) {
 
@@ -599,9 +599,9 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
         if (method !== 'initial') {
 
           $('#settings-modal').modal('close');
-          Materialize.toast(toast, fullSettings['toast_interval']);
+          Materialize.toast(toast, fullSettings.toast_interval);
 
-          if (fullSettings['require_settings_reload'] || fullSettings['backend_address'] !== backendAddress) {
+          if (fullSettings.require_settings_reload || fullSettings.backend_address !== backendAddress) {
 
             window.location.reload();
 
@@ -615,9 +615,9 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
       // Check app version
 
-      if (platform === 'app' && fullSettings['app_update_reminder'] && fullSettings['app_version'] !== appVersion) {
+      if (platform === 'app' && fullSettings.app_update_reminder && fullSettings.app_version !== appVersion) {
 
-        Materialize.toast(settings['app_update_reminder']['description'], fullSettings['toast_interval']);
+        Materialize.toast(settings.app_update_reminder.description, fullSettings.toast_interval);
 
       }
 
@@ -702,7 +702,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           // Scroll to the top of the modal
 
-          if (fullSettings['scroll_settings'] && $('#settings-modal').scrollTop) {
+          if (fullSettings.scroll_settings && $('#settings-modal').scrollTop) {
 
             $('#settings-modal').animate({
               scrollTop: 0
@@ -729,7 +729,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
       // Initialize sortable menu
 
-      if (settings['button_order']) {
+      if (settings.button_order) {
 
         $('#button-menu').sortable({
           stop: function(event, ui) {
@@ -754,10 +754,10 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
       $.each(settings, function(key, val) {
 
-        if (val['user']) {
+        if (val.user) {
 
-          var optional = !!val['optional'];
-          let indicator = optional || !fullSettings['optional_indicators'] ? '' : ' <b>*</b>';
+          var optional = !!val.optional;
+          let indicator = optional || !fullSettings.optional_indicators ? '' : ' <b>*</b>';
           let container = '';
           let containerClose = '';
           let input;
@@ -766,7 +766,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
           let inputCol = 's12';
           let resetInput = '';
 
-          if (fullSettings['reset_input_buttons']) {
+          if (fullSettings.reset_input_buttons) {
 
             inputCol = 's11'
             resetInput = `
@@ -778,7 +778,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           }
 
-          if (val['input'] === 'select') {
+          if (val.input === 'select') {
 
             input = `
                   <select class="settings-input" name="${key}">
@@ -788,23 +788,23 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
                   `;
 
             label = `
-                  <label>${val['label']}</label>
+                  <label>${val.label}</label>
                   `;
 
           } else {
 
-            if (val['input'] === 'chips') {
+            if (val.input === 'chips') {
 
               input = `<div class="chips left-align settings-input" name="${key}" data-optional="${optional}"></div>`;
 
-            } else if (val['input'] === 'range') {
+            } else if (val.input === 'range') {
 
-              input = `<input type="range" name="${key}" class="settings-input" id="${key}" min="${val['min']}" max="${val['max']}">`;
+              input = `<input type="range" name="${key}" class="settings-input" id="${key}" min="${val.min}" max="${val.max}">`;
               indicator = '';
               container = '<p class="range-field">';
               containerClose = '</p>';
 
-            } else if (val['input'] === 'checkbox') {
+            } else if (val.input === 'checkbox') {
 
               input = `<input type="checkbox" name="${key}" class="settings-input filled-in" id="${key}">`;
               indicator = '';
@@ -814,15 +814,15 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
             } else {
 
-              input = `<input type="${val['input']}" name="${key}" class="settings-input mousetrap" id="${key}" data-optional="${optional}">`;
+              input = `<input type="${val.input}" name="${key}" class="settings-input mousetrap" id="${key}" data-optional="${optional}">`;
 
             }
 
-            label = `<label for="${key}">${val['label']}${indicator}</label>`;
+            label = `<label for="${key}">${val.label}${indicator}</label>`;
 
           }
 
-          let mobile = val['mobile'] ? '' : 'hide-on-med-and-down';
+          let mobile = val.mobile ? '' : 'hide-on-med-and-down';
 
           let html = `
                 <div class="row ${mobile}">
@@ -839,7 +839,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
                 </div>
                 `;
 
-          val['advanced'] ? fullAdvancedHTML += html : fullHTML += html;
+          val.advanced ? fullAdvancedHTML += html : fullHTML += html;
 
         }
 
@@ -860,7 +860,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         let setting = $(this).attr('data-setting');
         localStorage.removeItem(setting);
-        moodEngine.setSettings(null, `Set ${settings[setting]['label']} to Default!`);
+        moodEngine.setSettings(null, `Set ${settings[setting].label} to Default!`);
 
       });
 
@@ -891,23 +891,23 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           try {
 
-            text = settings[setting]['value'].map((s) => {
+            text = settings[setting].value.map((s) => {
               return ` ${s}`;
             });
 
           } catch (error) {
 
-            text = settings[setting]['value'];
+            text = settings[setting].value;
 
           }
 
         } else {
 
-          text = settings[setting]['value'];
+          text = settings[setting].value;
 
         }
 
-        let value = `${settings[setting]['description']}.<br>The default is ${text}.`
+        let value = `${settings[setting].description}.<br>The default is ${text}.`
         $(this).attr('data-tooltip', value);
 
         // Initialize the Materialize tooltip plugin
@@ -982,9 +982,9 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
       function autoReload() {
 
-        if (!fullSettings['reload_interval'] && fullSettings['reload_interval'] !== 0) {
+        if (!fullSettings.reload_interval && fullSettings.reload_interval !== 0) {
 
-          fullSettings['reload_interval'] = 3000;
+          fullSettings.reload_interval = 3000;
 
         }
 
@@ -993,13 +993,13 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
           if (!moodEngine.notAutoReloading() && !appError) {
 
             moodEngine.reload('Auto');
-            moodEngine.log('log', `Auto reloaded after ${fullSettings['reload_interval']}ms.`);
+            moodEngine.log('log', `Auto reloaded after ${fullSettings.reload_interval}ms.`);
 
           }
 
           autoReload();
 
-        }, fullSettings['reload_interval']);
+        }, fullSettings.reload_interval);
 
       }
 
@@ -1035,7 +1035,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           icon.text(icon_text);
           $('main').toggleClass('manual-reload');
-          Materialize.toast(`Auto Reload ${toggle}!`, fullSettings['toast_interval']);
+          Materialize.toast(`Auto Reload ${toggle}!`, fullSettings.toast_interval);
 
         }
 
@@ -1058,11 +1058,11 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
           let quote = quotes[quoteHistory[quoteNum]];
           let colour = colours[colourHistory[colourNum]];
 
-          if (fullSettings['text_reload_transitions']) {
+          if (fullSettings.text_reload_transitions) {
 
-            $('#quote').fadeOut(fullSettings['text_reload_transition_time'] / 2, function() {
+            $('#quote').fadeOut(fullSettings.text_reload_transition_time / 2, function() {
 
-              $(this).text(quote).fadeIn(fullSettings['text_reload_transition_time'] / 2);
+              $(this).text(quote).fadeIn(fullSettings.text_reload_transition_time / 2);
 
             });
 
@@ -1102,11 +1102,11 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
           quoteHistory[0] = quote;
           colourHistory[0] = colour;
 
-          if (fullSettings['text_reload_transitions']) {
+          if (fullSettings.text_reload_transitions) {
 
-            $('#quote').fadeOut(fullSettings['text_reload_transition_time'] / 2, function() {
+            $('#quote').fadeOut(fullSettings.text_reload_transition_time / 2, function() {
 
-              $(this).text(quotes[quote]).fadeIn(fullSettings['text_reload_transition_time'] / 2);
+              $(this).text(quotes[quote]).fadeIn(fullSettings.text_reload_transition_time / 2);
 
             });
 
@@ -1149,7 +1149,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           // If all quotes are used and no repeats is enabled, start again
 
-          if (usedQuotes.length === quotes.length && fullSettings['no_repeats']) {
+          if (usedQuotes.length === quotes.length && fullSettings.no_repeats) {
 
             usedQuotes = [];
 
@@ -1157,7 +1157,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           // If MoodEngine trys to use the same quote twice, or one that has already been used, generate a new one
 
-          while (lastNum == quoteNum || fullSettings['no_repeats'] && usedQuotes.includes(quoteNum)) {
+          while (lastNum == quoteNum || fullSettings.no_repeats && usedQuotes.includes(quoteNum)) {
 
             quoteNum = Math.floor(quotes.length * Math.random());
 
@@ -1173,11 +1173,11 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           // Display quote on the text element
 
-          if (fullSettings['text_reload_transitions']) {
+          if (fullSettings.text_reload_transitions) {
 
-            $('#quote').fadeOut(fullSettings['text_reload_transition_time'] / 2, function() {
+            $('#quote').fadeOut(fullSettings.text_reload_transition_time / 2, function() {
 
-              $(this).text(quote).fadeIn(fullSettings['text_reload_transition_time'] / 2);
+              $(this).text(quote).fadeIn(fullSettings.text_reload_transition_time / 2);
 
             });
 
@@ -1231,7 +1231,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           // Log quote/colour in console (for fun)
 
-          if (fullSettings['extra_logging'] && fullSettings['extra_logging'].includes('reload') && platform === 'web') {
+          if (fullSettings.extra_logging && fullSettings.extra_logging.includes('reload') && platform === 'web') {
 
             console.log(`%c${quotes[quoteNum]}`, `padding: 2px 5px; font-size: 20px; font-family: 'Oxygen'; color: white; background-color: #${colours[colourNum]}`);
 
@@ -1279,11 +1279,11 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
       moodEngine.manualReload = function(text, colour) {
 
-        if (fullSettings['text_reload_transitions']) {
+        if (fullSettings.text_reload_transitions) {
 
-          $('#quote').fadeOut(fullSettings['text_reload_transition_time'] / 2, function() {
+          $('#quote').fadeOut(fullSettings.text_reload_transition_time / 2, function() {
 
-            $(this).text(text).fadeIn(fullSettings['text_reload_transition_time'] / 2);
+            $(this).text(text).fadeIn(fullSettings.text_reload_transition_time / 2);
 
           });
 
@@ -1377,7 +1377,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
             $(this).addClass('invalid');
 
-            emptyInputs.push(` ${settings[$(this).attr('name')]['label']}`);
+            emptyInputs.push(` ${settings[$(this).attr('name')].label}`);
 
           } else {
 
@@ -1409,7 +1409,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
               $.getJSON(`http://${$(this).val()}/colour_serializer.php`).fail((data) => {
 
                 $(this).addClass('invalid');
-                invalidInputs.push(`${settings[$(this).attr('name')]['label']} '${$(this).val()}' is Invalid.`);
+                invalidInputs.push(`${settings[$(this).attr('name')].label} '${$(this).val()}' is Invalid.`);
 
               });
 
@@ -1421,10 +1421,10 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
             // Button Order
 
-            if ($(this).attr('name') === 'button_order' && settings['button_order']['value'].includes('settings') && !localSettings['button_order'].includes('settings')) {
+            if ($(this).attr('name') === 'button_order' && settings.button_order.value.includes('settings') && !localSettings.button_order.includes('settings')) {
 
               $(this).addClass('invalid');
-              invalidInputs.push(`${settings[$(this).attr('name')]['label']} Needs to Include Settings`);
+              invalidInputs.push(`${settings[$(this).attr('name')].label} Needs to Include Settings`);
 
             }
 
@@ -1435,7 +1435,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
           if ($(this).hasClass('chips')) {
 
             let input = $(this);
-            let name = settings[input.attr('name')]['label'];
+            let name = settings[input.attr('name')].label;
 
             $(this).find('.chip').each(function() {
 
@@ -1462,7 +1462,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
               // If the set value is the same as the default, just remove it from localStorage and use backend value
 
-              if (val === settings[key]['value'] || val === JSON.stringify(settings[key]['value']) || `[${val}]` === JSON.stringify(settings[key]['value'])) {
+              if (val === settings[key].value || val === JSON.stringify(settings[key].value) || `[${val}]` === JSON.stringify(settings[key].value)) {
 
                 localStorage.removeItem(key);
 
@@ -1484,7 +1484,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           } catch (error) {
 
-            Materialize.toast('Unable to Save Settings. An Error Occurred.', fullSettings['toast_interval']);
+            Materialize.toast('Unable to Save Settings. An Error Occurred.', fullSettings.toast_interval);
             moodEngine.log('error', `Couldn't save settings. Error: ${error}.`);
 
           }
@@ -1499,11 +1499,11 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
             if (emptyInputs.length === 1) {
 
-              Materialize.toast(`${emptyInputs} Contains Spaces.`, fullSettings['toast_interval']);
+              Materialize.toast(`${emptyInputs} Contains Spaces.`, fullSettings.toast_interval);
 
             } else {
 
-              Materialize.toast(`${emptyInputs.length} Fields Contain Spaces.`, fullSettings['toast_interval']);
+              Materialize.toast(`${emptyInputs.length} Fields Contain Spaces.`, fullSettings.toast_interval);
 
             }
 
@@ -1513,7 +1513,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
             $.each(invalidInputs, function(key, val) {
 
-              Materialize.toast(val, fullSettings['toast_interval']);
+              Materialize.toast(val, fullSettings.toast_interval);
 
             });
 
@@ -1569,7 +1569,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
           moodEngine.rewind();
 
           moodEngine.log('log', `Switched version to ${version}.`);
-          Materialize.toast(`Switched to ${version} Your Mood!`, fullSettings['toast_interval']);
+          Materialize.toast(`Switched to ${version} Your Mood!`, fullSettings.toast_interval);
 
         }
 
