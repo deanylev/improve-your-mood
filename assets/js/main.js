@@ -1316,15 +1316,19 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         let advancedClosed = !$('#advanced-settings-button').hasClass('underline')
 
-        if (backendAddress && advancedClosed) {
+        if (advancedClosed && !fullSettings.set_default_advanced) {
 
-          localStorage.setItem('backend_address', backendAddress);
+          if (backendAddress) {
 
-        }
+            localStorage.setItem('backend_address', backendAddress);
 
-        if (buttonOrder && advancedClosed) {
+          }
 
-          localStorage.setItem('button_order', buttonOrder);
+          if (buttonOrder) {
+
+            localStorage.setItem('button_order', buttonOrder);
+
+          }
 
         }
 
