@@ -926,8 +926,6 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         $('.chip').each(function() {
 
-          let value = $(this).contents().get(0).nodeValue;
-
           $(this).contents().get(0).nodeValue = $.trim($(this).contents().get(0).nodeValue);
 
           if (!$(this).contents().get(0).nodeValue) {
