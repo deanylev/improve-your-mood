@@ -1396,7 +1396,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
             if ($(this).attr('name') === 'theme_colour' && !cssColours.includes($(this).val().toLowerCase())) {
 
               $(this).addClass('invalid');
-              invalidInputs.push(`${$(this).val()} is not a valid CSS colour.`);
+              invalidInputs.push(`'${$(this).val()}' is not a valid CSS colour.`);
 
             }
 
