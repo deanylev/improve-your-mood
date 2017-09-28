@@ -1389,7 +1389,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           // Custom Validations
 
-          if ($(this).val()) {
+          if ($(this).val() && $(this).val().indexOf(' ') < 0) {
 
             // Theme Colour
 
