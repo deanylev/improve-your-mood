@@ -359,14 +359,14 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
             switch (val) {
 
               case 'autoreload':
-                html = '<li data-button="autoreload"><a class="btn-floating waves-effect transparent" id="toggle-auto-reload"><i class="material-icons theme-text" data-icon="autoreload" data-default="autorenew"></i></a></li>';
+                html = '<li data-button="autoreload"><a class="btn-floating waves-effect transparent" id="toggle-auto-reload"><i class="material-icons main-icon theme-text" data-icon="autoreload" data-default="autorenew"></i><i class="material-icons alt-icon theme-text hide" data-icon="switchversion" data-default="swap_calls"></i></a></li>';
                 break;
               case 'settings':
                 hidden = hasUserSettings ? '' : 'hide';
-                html = `<li data-button="settings" class="${hidden}"><a class="btn-floating waves-effect transparent" id="settings-button"><i class="material-icons theme-text" data-icon="settings" data-default="settings"></i></a></li>`;
+                html = `<li data-button="settings" class="${hidden}"><a class="btn-floating waves-effect transparent" id="settings-button"><i class="material-icons main-icon theme-text" data-icon="settings" data-default="settings"></i><i class="material-icons alt-icon theme-text hide" data-icon="setalldefault" data-default="clear_all"></i></a></li>`;
                 break;
               case 'rewind':
-                html = '<li data-button="rewind"><a class="btn-floating waves-effect transparent disabled" id="go-back-button"><i class="material-icons theme-text" data-icon="rewind" data-default="skip_previous"></i></a></li>';
+                html = '<li data-button="rewind"><a class="btn-floating waves-effect transparent disabled" id="go-back-button"><i class="material-icons main-icon theme-text" data-icon="rewind" data-default="skip_previous"></i><i class="material-icons alt-icon theme-text hide" data-icon="fullrewind" data-default="first_page"></i></a></li>';
                 break;
               default:
                 html = '';
@@ -386,7 +386,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           $('.material-icons').each(function() {
 
-            let icon = fullSettings.button_icons ? fullSettings.button_icons[$(this).attr('data-icon')] : $(this).attr('data-default');
+            let icon = fullSettings.button_icons[$(this).attr('data-icon')] || $(this).attr('data-default');
 
             $(this).text(icon);
 
@@ -453,6 +453,30 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
         if (platform === 'web') {
 
           Mousetrap.reset();
+
+          // Shift click icons
+
+          Mousetrap.bind(['shift'], function(e) {
+
+            $('.btn-floating').each(function() {
+
+              $(this).find('.main-icon').addClass('hide');
+              $(this).find('.alt-icon').removeClass('hide');
+
+            });
+
+          }, 'keydown');
+
+          Mousetrap.bind(['shift'], function(e) {
+
+            $('.btn-floating').each(function() {
+
+              $(this).find('.main-icon').removeClass('hide');
+              $(this).find('.alt-icon').addClass('hide');
+
+            });
+
+          }, 'keyup');
 
           // Reload & Save Settings (because they share keys)
 
@@ -973,7 +997,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           let toggle = moodEngine.notAutoReloading() ? 'Enabled' : 'Disabled';
           let icon_text = moodEngine.notAutoReloading() ? 'close' : 'autorenew';
-          let icon = $('#toggle-auto-reload i');
+          let icon = $('#toggle-auto-reload i.main-icon');
 
           if (moodEngine.notAutoReloading()) {
 
