@@ -434,7 +434,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
             if (!appError) {
 
-              e.shiftKey ? moodEngine.setAllDefault() : $('#settings-modal').modal('open');
+              e.shiftKey ? moodEngine.setAllDefault() : moodEngine.toggleSettings();
 
             }
 
@@ -586,7 +586,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
               if (!appError && !$('#settings-modal input:not([type="range"]):not([type="checkbox"]):focus').length) {
 
-                settingsOpen ? $('#settings-modal').modal('close') : $('#settings-modal').modal('open');
+                moodEngine.toggleSettings();
 
               }
 
@@ -598,7 +598,8 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         if (method !== 'initial') {
 
-          $('#settings-modal').modal('close');
+          moodEngine.toggleSettings('close');
+
           Materialize.toast(toast, fullSettings.toast_interval);
 
           if (fullSettings.require_settings_reload || fullSettings.backend_address !== backendAddress) {
@@ -719,13 +720,34 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           settingsOpen = false;
 
-          moodEngine.setInputs();
-
           $('#advanced-settings-button').removeClass('underline');
           $('#advanced-settings').hide();
 
         }
       });
+
+      // Functions for closing and opening settings panel
+
+      moodEngine.toggleSettings = function(action) {
+
+        moodEngine.setInputs();
+
+        if (action) {
+
+          $('#settings-modal').modal(action);
+
+        } else if (settingsOpen) {
+
+          $('#settings-modal').modal('close');
+
+        } else {
+
+          moodEngine.setInputs();
+          $('#settings-modal').modal('open');
+
+        }
+
+      }
 
       // Initialize sortable menu
 
@@ -1338,7 +1360,6 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
         });
 
         moodEngine.setSettings(null, 'Set All Settings to Default!');
-        moodEngine.setInputs();
 
       };
 
@@ -1502,7 +1523,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           // Close the modal no matter what
 
-          $('#settings-modal').modal('close');
+          moodEngine.toggleSettings('close');
 
         } else {
 
