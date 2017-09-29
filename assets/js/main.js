@@ -219,12 +219,31 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
   pullTime.quotes = Math.ceil(performance.now() - startTime);
 
-  quotes = data;
-  versionQuotes[version] = data;
+  versionQuotes[version] = quotes = [];
+
+  $.each(data, function(key, val) {
+
+    if ($.inArray(val, quotes) === -1) {
+
+      quotes.push(val);
+
+    }
+
+  });
 
   $.getJSON(`${fullBackendAddress + otherVersion.toLowerCase()}_quote_serializer.php`).done((data) => {
 
-    versionQuotes[otherVersion] = data;
+    versionQuotes[otherVersion] = [];
+
+    $.each(data, function(key, val) {
+
+      if ($.inArray(val, versionQuotes[otherVersion]) === -1) {
+
+        versionQuotes[otherVersion].push(val);
+
+      }
+
+    });
 
   }).fail((data) => {
 
@@ -245,7 +264,17 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
     pullTime.colours = Math.ceil(performance.now() - startTime);
 
-    colours = data;
+    colours = [];
+
+    $.each(data, function(key, val) {
+
+      if ($.inArray(val, colours) === -1) {
+
+        colours.push(val);
+
+      }
+
+    });
 
     moodEngine.log('log', `Successfully pulled ${colours.length} colours from backend in ${pullTime.colours}ms.`);
 
