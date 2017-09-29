@@ -13,7 +13,6 @@ var fullSettings = {};
 var pullTime = {};
 var versionQuotes = {};
 var platform = $('html').attr('data-platform');
-var appVersion = $('html').attr('data-app-version');
 var backendAddress = localStorage.getItem('backend_address') || 'improveyourmood.xyz';
 var fullBackendAddress = `http://${backendAddress}/`;
 
@@ -26,6 +25,7 @@ if (platform === 'web') {
 
   var version = $('html').attr('data-version') === 'Decrease' ? 'Decrease' : 'Improve';
   var otherVersion = $('html').attr('data-version') === 'Decrease' ? 'Improve' : 'Decrease';
+  var appVersion = JSON.parse($('html').attr('data-app-version').replace(/\./g,''));
 
 }
 
@@ -645,7 +645,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
       // Check app version
 
-      if (platform === 'app' && fullSettings.app_update_reminder && fullSettings.app_version !== appVersion) {
+      if (platform === 'app' && fullSettings.app_update_reminder && JSON.parse(fullSettings.app_version.replace(/\./g,'')) > appVersion) {
 
         Materialize.toast(settings.app_update_reminder.description, fullSettings.toast_interval);
 
