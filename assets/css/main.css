@@ -85,6 +85,10 @@ input[type="checkbox"] + label::after {
   top: 17px;
 }
 
+.inactive-icon {
+  display: none !important;
+}
+
 #logo {
   font-family: 'Raleway', Helvetica, Arial;
 }

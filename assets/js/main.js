@@ -123,6 +123,15 @@ $(document).ready(function() {
 
   });
 
+  // Set vertical or horizontal menu
+
+  if (JSON.parse(localStorage.getItem('vertical_menu'))) {
+
+    $('.fixed-action-btn').removeClass('horizontal');
+    $('#menu-button .alt-icon').toggleClass('inactive-icon');
+
+  }
+
 });
 
 // Function for displaying and logging errors
@@ -363,14 +372,14 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
               case 'autoreload':
                 mainIcon = disableSwitch ? '' : 'main-icon';
-                html = `<li data-button="autoreload"><a class="btn-floating waves-effect transparent" id="toggle-auto-reload"><i class="material-icons ${mainIcon} theme-text" data-icon="autoreload" data-default="autorenew"></i><i class="material-icons alt-icon theme-text hide" data-icon="switchversion" data-default="swap_calls"></i></a></li>`;
+                html = `<li data-button="autoreload"><a class="btn-floating menu-button waves-effect transparent" id="toggle-auto-reload"><i class="material-icons ${mainIcon} theme-text" data-icon="autoreload" data-default="autorenew"></i><i class="material-icons alt-icon theme-text hide" data-icon="switchversion" data-default="swap_calls"></i></a></li>`;
                 break;
               case 'settings':
                 hidden = hasUserSettings ? '' : 'hide';
-                html = `<li data-button="settings" class="${hidden}"><a class="btn-floating waves-effect transparent" id="settings-button"><i class="material-icons main-icon theme-text" data-icon="settings" data-default="settings"></i><i class="material-icons alt-icon theme-text hide" data-icon="setalldefault" data-default="clear_all"></i></a></li>`;
+                html = `<li data-button="settings" class="${hidden}"><a class="btn-floating menu-button waves-effect transparent" id="settings-button"><i class="material-icons main-icon theme-text" data-icon="settings" data-default="settings"></i><i class="material-icons alt-icon theme-text hide" data-icon="setalldefault" data-default="clear_all"></i></a></li>`;
                 break;
               case 'rewind':
-                html = '<li data-button="rewind"><a class="btn-floating waves-effect transparent disabled" id="go-back-button"><i class="material-icons main-icon theme-text" data-icon="rewind" data-default="skip_previous"></i><i class="material-icons alt-icon theme-text hide" data-icon="fullrewind" data-default="first_page"></i></a></li>';
+                html = '<li data-button="rewind"><a class="btn-floating menu-button waves-effect transparent disabled" id="go-back-button"><i class="material-icons main-icon theme-text" data-icon="rewind" data-default="skip_previous"></i><i class="material-icons alt-icon theme-text hide" data-icon="fullrewind" data-default="first_page"></i></a></li>';
                 break;
               default:
                 html = '';
@@ -462,7 +471,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           Mousetrap.bind(['shift'], function(e) {
 
-            $('.btn-floating').each(function() {
+            $('.menu-button').each(function() {
 
               $(this).find('.main-icon').addClass('hide');
               $(this).find('.alt-icon').removeClass('hide');
@@ -473,7 +482,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           Mousetrap.bind(['shift'], function(e) {
 
-            $('.btn-floating').each(function() {
+            $('.menu-button').each(function() {
 
               $(this).find('.main-icon').removeClass('hide');
               $(this).find('.alt-icon').addClass('hide');
@@ -907,6 +916,21 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
         $('.tooltipped').tooltip({
           html: true
         });
+
+      });
+
+      // Menu Button
+
+      $('#menu-button').click(function(e) {
+
+        if (e.shiftKey) {
+
+          $(this).parent().toggleClass('horizontal');
+          $(this).find('.alt-icon').toggleClass('inactive-icon');
+
+          localStorage.setItem('vertical_menu', !$(this).parent().hasClass('horizontal'));
+
+        }
 
       });
 
