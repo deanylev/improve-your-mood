@@ -276,6 +276,8 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
       moodEngine.log('log', `Successfully pulled ${Object.keys(settings).length} settings from backend in ${pullTime.settings}ms.`);
 
+    }).always((data) => {
+
       // Construct settings object from backend or local
 
       moodEngine.setSettings = function(method, toast) {
@@ -386,7 +388,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           $('.material-icons').each(function() {
 
-            let icon = fullSettings.button_icons[$(this).attr('data-icon')] || $(this).attr('data-default');
+            let icon = fullSettings.button_icons && fullSettings.button_icons[$(this).attr('data-icon')] ? fullSettings.button_icons[$(this).attr('data-icon')] : $(this).attr('data-default');
 
             $(this).text(icon);
 
@@ -587,6 +589,10 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
       // Check app version
 
       if (platform === 'app' && fullSettings.app_update_reminder && JSON.parse(fullSettings.app_version.replace(/\./g, '')) > appVersion) Materialize.toast(settings.app_update_reminder.description, fullSettings.toast_interval);
+
+      // Set a default toast interval
+
+      if (!fullSettings['toast_interval']) fullSettings['toast_interval'] = 2000;
 
       // Set inputs in modal
 
@@ -1533,7 +1539,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
     }).fail((data) => {
 
-      moodEngine.error('Failed to contact server. Try again later.', 'Failed to pull settings from backend.', '1c', 'backend');
+      moodEngine.log('error', 'Failed to pull settings from backend.');
 
     });
 
