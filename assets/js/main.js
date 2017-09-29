@@ -97,11 +97,7 @@ $(document).ready(function() {
   $('#logo-version').text(version.toLowerCase());
   $('#footer-version').text(version);
 
-  if (platform === 'web') {
-
-    $('link[rel="icon"], link[rel="shortcut icon"]').attr('href', `assets/${version.toLowerCase()}_favicon.ico`);
-
-  }
+  if (platform === 'web') $('link[rel="icon"], link[rel="shortcut icon"]').attr('href', `assets/${version.toLowerCase()}_favicon.ico`);
 
   let meta_desc = version === 'Improve' ? 'Gives you randomly chosen compliments across randomly chosen beautiful colours to improve your mood!' : 'Gives you randomly chosen insults across randomly chosen beautiful colours to decrease your mood!'
   $('meta[name="description"]').attr('content', meta_desc)
@@ -130,14 +126,6 @@ $(document).ready(function() {
 
   });
 
-  // Button order in localStorage seems to break a lot...
-
-  if (localStorage.getItem('button_order') === 'null') {
-
-    localStorage.removeItem('button_order');
-
-  }
-
 });
 
 // Function for displaying and logging errors
@@ -155,23 +143,11 @@ moodEngine.error = function(display, log, code, type) {
 
   if (navigator.onLine || type !== 'backend') {
 
-    if (!display) {
+    if (!display) display = 'An error occured.';
 
-      display = 'An error occured.';
+    if (!log) log = 'An error occured.';
 
-    }
-
-    if (!log) {
-
-      log = 'An error occured.';
-
-    }
-
-    if (code) {
-
-      $('#error-message').text(`${log} (${code})`);
-
-    }
+    if (code) $('#error-message').text(`${log} (${code})`);
 
     $('#quote').text(display);
 
@@ -223,11 +199,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
   $.each(data, function(key, val) {
 
-    if ($.inArray(val, quotes) === -1) {
-
-      quotes.push(val);
-
-    }
+    if ($.inArray(val, quotes) === -1) quotes.push(val);
 
   });
 
@@ -237,11 +209,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
     $.each(data, function(key, val) {
 
-      if ($.inArray(val, versionQuotes[otherVersion]) === -1) {
-
-        versionQuotes[otherVersion].push(val);
-
-      }
+      if ($.inArray(val, versionQuotes[otherVersion]) === -1) versionQuotes[otherVersion].push(val);
 
     });
 
@@ -268,11 +236,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
     $.each(data, function(key, val) {
 
-      if ($.inArray(val, colours) === -1) {
-
-        colours.push(val);
-
-      }
+      if ($.inArray(val, colours) === -1) colours.push(val);
 
     });
 
@@ -321,11 +285,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         let buttonOrder;
 
-        if (method !== 'initial') {
-
-          buttonOrder = JSON.stringify(fullSettings.button_order);
-
-        }
+        if (method !== 'initial') buttonOrder = JSON.stringify(fullSettings.button_order);
 
         $.each(settings, function(key, val) {
 
@@ -365,7 +325,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         } else {
 
-          $('.coloured').css('transition', 'none')
+          $('.coloured').css('transition', 'none');
 
         }
 
@@ -390,11 +350,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           $.each(settings, function(key, val) {
 
-            if (val.user) {
-
-              hasUserSettings = true;
-
-            }
+            if (val.user) hasUserSettings = true;
 
           });
 
@@ -429,23 +385,11 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           // Set correct icons
 
-          if (!fullSettings.button_icons) {
-
-            moodEngine.log('warn', 'Server has no icons, falling back to defaults...');
-
-          }
+          if (!fullSettings.button_icons) moodEngine.log('warn', 'Server has no icons, falling back to defaults...');
 
           $('.material-icons').each(function() {
 
-            if (fullSettings.button_icons) {
-
-              var icon = fullSettings.button_icons[$(this).attr('data-icon')];
-
-            } else {
-
-              var icon = $(this).attr('data-default');
-
-            }
+            let icon = fullSettings.button_icons ? fullSettings.button_icons[$(this).attr('data-icon')] : $(this).attr('data-default');
 
             $(this).text(icon);
 
@@ -461,11 +405,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           $('#settings-button').click(function(e) {
 
-            if (!appError) {
-
-              e.shiftKey ? moodEngine.setAllDefault() : moodEngine.toggleSettings();
-
-            }
+            if (!appError) e.shiftKey ? moodEngine.setAllDefault() : moodEngine.toggleSettings();
 
           });
 
@@ -547,11 +487,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
             Mousetrap.bind(fullSettings.back_keys, function(e) {
 
-              if (!appError && !settingsOpen) {
-
-                moodEngine.rewind();
-
-              }
+              if (!appError && !settingsOpen) moodEngine.rewind();
 
             });
 
@@ -563,11 +499,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
             Mousetrap.bind(fullSettings.full_rewind_keys, function(e) {
 
-              if (!appError && !settingsOpen) {
-
-                moodEngine.fullRewind();
-
-              }
+              if (!appError && !settingsOpen) moodEngine.fullRewind();
 
             });
 
@@ -579,11 +511,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
             Mousetrap.bind(fullSettings.auto_reload_keys, function(e) {
 
-              if (!appError && !settingsOpen) {
-
-                moodEngine.toggleAutoReload();
-
-              }
+              if (!appError && !settingsOpen) moodEngine.toggleAutoReload();
 
             });
 
@@ -613,11 +541,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
             Mousetrap.bindGlobal(fullSettings.settings_keys, function(e) {
 
-              if (!appError && !$('#settings-modal input:not([type="range"]):not([type="checkbox"]):focus').length) {
-
-                moodEngine.toggleSettings();
-
-              }
+              if (!appError && !$('#settings-modal input:not([type="range"]):not([type="checkbox"]):focus').length) moodEngine.toggleSettings();
 
             });
 
@@ -631,11 +555,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           Materialize.toast(toast, fullSettings.toast_interval);
 
-          if (fullSettings.require_settings_reload || fullSettings.backend_address !== backendAddress) {
-
-            window.location.reload();
-
-          }
+          if (fullSettings.require_settings_reload || fullSettings.backend_address !== backendAddress) window.location.reload();
 
         }
 
@@ -645,11 +565,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
       // Check app version
 
-      if (platform === 'app' && fullSettings.app_update_reminder && JSON.parse(fullSettings.app_version.replace(/\./g, '')) > appVersion) {
-
-        Materialize.toast(settings.app_update_reminder.description, fullSettings.toast_interval);
-
-      }
+      if (platform === 'app' && fullSettings.app_update_reminder && JSON.parse(fullSettings.app_version.replace(/\./g, '')) > appVersion) Materialize.toast(settings.app_update_reminder.description, fullSettings.toast_interval);
 
       // Set inputs in modal
 
@@ -711,11 +627,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
             $('.chip').each(function() {
 
-              if ($(this).contents().get(0).nodeValue === 'settings') {
-
-                $(this).find('i').remove();
-
-              }
+              if ($(this).contents().get(0).nodeValue === 'settings') $(this).find('i').remove();
 
             });
 
@@ -997,11 +909,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           $(`.chips[name="${name}"]`).material_chip('data')[key].tag = newVal;
 
-          if (!newVal) {
-
-            $(`.chips[name="${name}"]`).material_chip('data').splice(key, 1);
-
-          }
+          if (!newVal) $(`.chips[name="${name}"]`).material_chip('data').splice(key, 1);
 
         });
 
@@ -1033,13 +941,9 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
       // Auto reload
 
-      function autoReload() {
+      (function autoReload() {
 
-        if (!fullSettings.reload_interval && fullSettings.reload_interval !== 0) {
-
-          fullSettings.reload_interval = 3000;
-
-        }
+        if (!fullSettings.reload_interval && fullSettings.reload_interval !== 0) fullSettings.reload_interval = 3000;
 
         setTimeout(function() {
 
@@ -1054,9 +958,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         }, fullSettings.reload_interval);
 
-      }
-
-      autoReload();
+      })();
 
       // Allows other functions to check if currently auto reloading
 
@@ -1130,11 +1032,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         }
 
-        if (quoteHistory.length === 1 || !moodEngine.notAutoReloading()) {
-
-          $('#go-back-button').addClass('disabled');
-
-        }
+        if (quoteHistory.length === 1 || !moodEngine.notAutoReloading()) $('#go-back-button').addClass('disabled');
 
       };
 
@@ -1187,11 +1085,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           // If backend has no quotes, throw an error
 
-          if (quotes.length < 2) {
-
-            throw new Error('There are no quotes.');
-
-          }
+          if (quotes.length < 2) throw new Error('There are no quotes.');
 
           // Clear error message in case there is one
 
@@ -1202,11 +1096,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           // If all quotes are used and no repeats is enabled, start again
 
-          if (usedQuotes.length === quotes.length && fullSettings.no_repeats) {
-
-            usedQuotes = [];
-
-          }
+          if (usedQuotes.length === quotes.length && fullSettings.no_repeats) usedQuotes = [];
 
           // If MoodEngine trys to use the same quote twice, or one that has already been used, generate a new one
 
@@ -1244,11 +1134,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           // If backend has no colours, throw an error
 
-          if (colours.length < 2) {
-
-            throw new Error('There are no colours.');
-
-          }
+          if (colours.length < 2) throw new Error('There are no colours.');
 
           lastNum = JSON.parse(localStorage.getItem('lastColour'));
           colourNum = Math.floor(colours.length * Math.random());
@@ -1276,11 +1162,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           $('.fixed-action-btn').removeClass('hide');
 
-          if (method !== 'Auto') {
-
-            $('#go-back-button').removeClass('disabled');
-
-          }
+          if (method !== 'Auto') $('#go-back-button').removeClass('disabled');
 
           // Log quote/colour in console (for fun)
 
@@ -1362,11 +1244,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         $.each(settings, function(key, val) {
 
-          if (val.advanced) {
-
-            restoreSettings[key] = localStorage.getItem(key);
-
-          }
+          if (val.advanced) restoreSettings[key] = localStorage.getItem(key);
 
         });
 
@@ -1378,11 +1256,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           if (advancedClosed && fullSettings.keep_advanced_settings) {
 
-            if (val) {
-
-              localStorage.setItem(key, restoreSettings[key]);
-
-            }
+            if (val) localStorage.setItem(key, restoreSettings[key]);
 
           }
 
