@@ -42,7 +42,7 @@ moodEngine.log = function(type, message) {
 
 moodEngine.sendLog = function() {
 
-  console.log('Sending log to backend...');
+  console.log('\nSending log to backend...');
 
   $.ajax({
     type: 'POST',
@@ -55,13 +55,13 @@ moodEngine.sendLog = function() {
     },
     success: function(response) {
 
-      console.log('Log sent to backend successfully.');
+      console.log('\nLog sent to backend successfully.');
       response ? `Response: ${response}` : '';
 
     },
     error: function(response) {
 
-      console.log('Failed to send log to backend.');
+      console.log('\nFailed to send log to backend.');
       response ? `Response: ${response}` : '';
 
     }
@@ -490,7 +490,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           // Reload & Save Settings (because they share keys)
 
-          if (fullSettings.reload_keys && typeof(fullSettings.reload_keys) === 'object') {
+          if (typeof(fullSettings.reload_keys) === 'object') {
 
             Mousetrap.bindGlobal(fullSettings.reload_keys, function(e, combo) {
 
@@ -1233,9 +1233,9 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           // Log quote/colour in console (for fun)
 
-          if (fullSettings.extra_logging && fullSettings.extra_logging.includes('reload') && platform === 'web') {
+          if (typeof(fullSettings.extra_logging) === 'object' && fullSettings.extra_logging.includes('reload') && platform === 'web') {
 
-            console.log(`%c${quotes[quoteNum]}`, `padding: 2px 5px; font-size: 20px; font-family: 'Oxygen'; color: white; background-color: #${colours[colourNum]}`);
+            console.log(`\n%c${quotes[quoteNum]}`, `padding: 2px 5px; font-size: 20px; font-family: 'Oxygen'; color: white; background-color: #${colours[colourNum]}`);
 
           }
 
