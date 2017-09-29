@@ -12,7 +12,7 @@ var settings = {};
 var fullSettings = {};
 var pullTime = {};
 var versionQuotes = {};
-var platform = $('html').attr('data-platform');
+var platform = location.protocol === 'file:' ? 'app' : 'web';
 var backendAddress = localStorage.getItem('backend_address') || 'improveyourmood.xyz';
 var fullBackendAddress = `http://${backendAddress}/`;
 
