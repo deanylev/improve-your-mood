@@ -698,9 +698,9 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
       moodEngine.toggleSettings = function(action) {
 
-        moodEngine.setInputs();
-
         if (action) {
+
+          if (action === 'open') moodEngine.setInputs();
 
           $('#settings-modal').modal(action);
 
