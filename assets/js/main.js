@@ -357,11 +357,13 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
             let html;
             let hidden;
+            let mainIcon;
 
             switch (val) {
 
               case 'autoreload':
-                html = '<li data-button="autoreload"><a class="btn-floating waves-effect transparent" id="toggle-auto-reload"><i class="material-icons main-icon theme-text" data-icon="autoreload" data-default="autorenew"></i><i class="material-icons alt-icon theme-text hide" data-icon="switchversion" data-default="swap_calls"></i></a></li>';
+                mainIcon = disableSwitch ? '' : 'main-icon';
+                html = `<li data-button="autoreload"><a class="btn-floating waves-effect transparent" id="toggle-auto-reload"><i class="material-icons ${mainIcon} theme-text" data-icon="autoreload" data-default="autorenew"></i><i class="material-icons alt-icon theme-text hide" data-icon="switchversion" data-default="swap_calls"></i></a></li>`;
                 break;
               case 'settings':
                 hidden = hasUserSettings ? '' : 'hide';
@@ -398,19 +400,19 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           $('#toggle-auto-reload').click(function(e) {
 
-            e.shiftKey ? moodEngine.switchVersion() : moodEngine.toggleAutoReload();
+            e.shiftKey && platform === 'web' && !disableSwitch ? moodEngine.switchVersion() : moodEngine.toggleAutoReload();
 
           });
 
           $('#settings-button').click(function(e) {
 
-            if (!appError) e.shiftKey ? moodEngine.setAllDefault() : moodEngine.toggleSettings();
+            if (!appError) e.shiftKey && platform === 'web' ? moodEngine.setAllDefault() : moodEngine.toggleSettings();
 
           });
 
           $('#go-back-button').click(function(e) {
 
-            e.shiftKey ? moodEngine.fullRewind() : moodEngine.rewind();
+            e.shiftKey && platform === 'web' ? moodEngine.fullRewind() : moodEngine.rewind();
 
           });
 
@@ -1489,7 +1491,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         moodEngine.saveSettings();
 
-        if (e.shiftKey) window.location.reload();
+        if (e.shiftKey && platform === 'web') window.location.reload();
 
       });
 
