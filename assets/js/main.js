@@ -399,7 +399,23 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           $('.material-icons').each(function() {
 
-            let icon = fullSettings.button_icons && fullSettings.button_icons[$(this).attr('data-icon')] ? fullSettings.button_icons[$(this).attr('data-icon')] : $(this).attr('data-default');
+            let icon;
+
+            if (fullSettings.button_icons && fullSettings.button_icons[$(this).attr('data-icon')]) {
+
+              icon = fullSettings.button_icons[$(this).attr('data-icon')]
+
+            } else {
+
+              if (fullSettings.button_icons && $(this).is('[data-icon]')) {
+
+                moodEngine.log('warn', `No icon for ${$(this).attr('data-icon')}, using default...`);
+
+              }
+
+              icon = $(this).attr('data-default');
+
+            }
 
             $(this).text(icon);
 
