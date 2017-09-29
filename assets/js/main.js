@@ -47,7 +47,7 @@ moodEngine.sendLog = function() {
   $.ajax({
     type: 'POST',
     crossDomain: true,
-    url: 'http://improveyourmood.xyz/api/create/log/index.php',
+    url: `${fullBackendAddress}api/create/log/index.php`,
     data: {
       version: version,
       platform: platform,
