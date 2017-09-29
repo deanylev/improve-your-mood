@@ -25,7 +25,7 @@ if (platform === 'web') {
 
   var version = $('html').attr('data-version') === 'Decrease' ? 'Decrease' : 'Improve';
   var otherVersion = $('html').attr('data-version') === 'Decrease' ? 'Improve' : 'Decrease';
-  var appVersion = JSON.parse($('html').attr('data-app-version').replace(/\./g,''));
+  var appVersion = JSON.parse($('html').attr('data-app-version').replace(/\./g, ''));
 
 }
 
@@ -56,13 +56,13 @@ moodEngine.sendLog = function() {
     success: function(response) {
 
       console.log('\nLog sent to backend successfully.');
-      response ? `Response: ${response}` : '';
+      if (response) console.log(`Response: ${response}`);
 
     },
     error: function(response) {
 
       console.log('\nFailed to send log to backend.');
-      response ? `Response: ${response}` : '';
+      if (response) console.log(`Response: ${response}`);
 
     }
   });
@@ -645,7 +645,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
       // Check app version
 
-      if (platform === 'app' && fullSettings.app_update_reminder && JSON.parse(fullSettings.app_version.replace(/\./g,'')) > appVersion) {
+      if (platform === 'app' && fullSettings.app_update_reminder && JSON.parse(fullSettings.app_version.replace(/\./g, '')) > appVersion) {
 
         Materialize.toast(settings.app_update_reminder.description, fullSettings.toast_interval);
 
@@ -676,7 +676,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           }
 
-          $(this).is('input') && !$(this).is('[type="checkbox"]') ? $(this).parent().find('label').addClass('active') : '';
+          if ($(this).is('input') && !$(this).is('[type="checkbox"]')) $(this).parent().find('label').addClass('active');
           $(this).removeClass('invalid');
           $('select').material_select();
 
@@ -1588,7 +1588,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         moodEngine.saveSettings();
 
-        e.shiftKey ? window.location.reload() : '';
+        if (e.shiftKey) window.location.reload();
 
       });
 
