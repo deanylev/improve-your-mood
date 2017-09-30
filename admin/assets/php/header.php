@@ -1,7 +1,14 @@
 <?php
 
   session_start();
+
   include("actions.php");
+
+  $titles = array("home", "quote", "colour", "setting", "log");
+
+  if (!in_array($title, $titles)) {
+    header("location: ../home");
+  }
 
 ?>
 <!DOCTYPE html>
