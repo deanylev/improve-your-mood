@@ -18,4 +18,4 @@
 
   echo json_encode($quotes);
 
-  $conn->close();
+  $mysql->disconnect();

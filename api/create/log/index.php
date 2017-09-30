@@ -9,8 +9,6 @@
   $platform = mysqli_real_escape_string($conn, $_POST["platform"]);
   $userAgent = mysqli_real_escape_string($conn, $_POST["userAgent"]);
   $log = mysqli_real_escape_string($conn, $_POST["log"]);
-  $sql = "INSERT INTO yourmood.logs (sent_at, ip_address, version, platform, useragent, log) VALUES ('$datetime', '$ip', '$version', '$platform', '$userAgent', '$log')";
-  if ($conn->query($sql) === false) {
-      echo "Error: " . $sql . "<br>" . $conn->error;
-  }
-  $conn->close();
+  $mysql->query = "INSERT INTO yourmood.logs (sent_at, ip_address, version, platform, useragent, log) VALUES ('$datetime', '$ip', '$version', '$platform', '$userAgent', '$log')";
+  $mysql->run_query();
+  $mysql->disconnect();

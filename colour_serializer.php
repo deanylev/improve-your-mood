@@ -18,4 +18,4 @@
 
   echo json_encode($colours);
 
-  $conn->close();
+  $mysql->disconnect();

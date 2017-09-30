@@ -25,4 +25,4 @@
 
   echo json_encode($settings);
 
-  $conn->close();
+  $mysql->disconnect();
