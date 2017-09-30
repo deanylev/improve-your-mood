@@ -3,6 +3,7 @@
   session_start();
 
   include("actions.php");
+  include("../../sql.php");
 
   $titles = array("home", "quote", "colour", "setting", "log");
 

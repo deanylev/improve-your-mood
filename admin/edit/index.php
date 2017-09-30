@@ -1,12 +1,11 @@
 <?php
 
-  include("../../sql.php");
   $type = $_GET["type"];
   $id = $_GET["id"];
-  $mysql->query = "SELECT * FROM yourmood.${type} WHERE id='${id}'";
-  $row = $mysql->row();
   $title = $_GET["title"];
   include("../assets/php/header.php");
+  $mysql->query = "SELECT * FROM yourmood.${type} WHERE id='${id}'";
+  $row = $mysql->row();
 
   if (!in_array("edit", $actions)) {
     warning_handler(null, null);

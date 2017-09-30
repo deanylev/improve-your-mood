@@ -1,6 +1,5 @@
 <?php
 
-  include("../../sql.php");
   $table = "colours";
   $type = $title = "colour";
   $customHeadings = "<th>Preview</th>";

@@ -1,6 +1,5 @@
 <?php
 
-  include("../../sql.php");
   $table = "logs";
   $type = $title = "log";
   $notDefault = true;
