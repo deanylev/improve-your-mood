@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Sep 29, 2017 at 12:44 AM
+-- Generation Time: Sep 30, 2017 at 12:55 AM
 -- Server version: 5.7.19-0ubuntu0.16.04.1
 -- PHP Version: 7.0.22-0ubuntu0.16.04.1
 
@@ -206,6 +206,7 @@ CREATE TABLE `logs` (
   `ip_address` varchar(20) NOT NULL,
   `version` varchar(10) NOT NULL,
   `platform` varchar(10) NOT NULL,
+  `useragent` text NOT NULL,
   `log` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -250,10 +251,10 @@ INSERT INTO `settings` (`id`, `active`, `setting`, `value`, `user`, `optional`, 
 (24, 1, 'colour_reload_transition_time', '1200', 1, 0, 0, 1, 'range', 100, 5000, 'Colour Reload Transition Time (ms)', 'How long the colour reload transitions will take to complete, in milliseconds'),
 (25, 1, 'text_reload_transitions', 'true', 1, 0, 0, 1, 'select', 0, 0, 'Text Reload Transitions', 'Whether the text will have a fade transition when changing'),
 (26, 1, 'text_reload_transition_time', '400', 1, 0, 0, 1, 'range', 100, 5000, 'Text Reload Transition Time (ms)', 'How long the text reload transitions will take to complete, in milliseconds'),
-(29, 1, 'app_version', '6.6.0', 0, 0, 0, 0, 'number', 0, 0, '', '***NOT USER CHANGEABLE***'),
+(29, 1, 'app_version', '6.7.0', 0, 0, 0, 0, '', 0, 0, '', ''),
 (30, 1, 'app_update_reminder', 'true', 0, 0, 0, 0, '', 0, 0, '', 'Please update to the latest version of the app.'),
 (33, 1, 'reverse_swipe_direction', 'false', 1, 0, 0, 1, 'select', 0, 0, 'Reverse Swipe Direction', 'Reverse the directions that you swipe to reload/rewind'),
-(34, 1, 'button_icons', '{"menu":"menu", "autoreload":"autorenew", "settings":"settings", "rewind":"skip_previous"}', 0, 0, 0, 0, 'chips', 0, 0, '', ''),
+(34, 1, 'button_icons', '{"menu":"menu", "autoreload":"autorenew", "settings":"settings", "rewind":"skip_previous", "switchversion":"swap_calls", "setalldefault":"clear_all", "fullrewind":"first_page"}', 0, 0, 0, 0, 'chips', 0, 0, '', ''),
 (35, 1, 'require_settings_reload', 'false', 0, 0, 0, 0, 'select', 0, 0, '', ''),
 (36, 1, 'menu_keys', '["m"]', 0, 0, 0, 0, 'text', 0, 0, 'Menu Keyboard Shortcuts', 'Which keys will toggle the menu, in a JavaScript KeyDown KeyCode array.<br>Go to a KeyCode testing site to find out what KeyDown value your desired keys have'),
 (37, 1, 'scroll_settings', 'true', 0, 0, 0, 0, 'select', 0, 0, '', ''),
@@ -321,7 +322,7 @@ ALTER TABLE `improve`
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=279;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=323;
 --
 -- AUTO_INCREMENT for table `settings`
 --
