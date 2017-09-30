@@ -4,8 +4,7 @@
   $messageType = "success";
   $id = $_POST["id"];
   $table = $_POST["table"];
-  $type = $_POST["type"];
-  $title = $type;
+  $title = $type = $_POST["type"];
   $url = $_SERVER['HTTP_REFERER'];
   include("assets/php/actions.php");
 

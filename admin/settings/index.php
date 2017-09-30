@@ -4,5 +4,5 @@
   $table = "settings";
   $sql = "SELECT * FROM yourmood.{$table}";
   $result = $conn->query($sql);
-  $title = "setting";
+  $type = $title = "setting";
   include("../assets/php/page.php");

@@ -10,20 +10,22 @@
 
 // Delete All - delete all existing records in a table
 
-switch ($title) {
-  case "log":
-    $actions = array("view", "delete", "deleteall");
-    break;
+if (isset($type)) {
+  switch ($type) {
+    case "log":
+    case "logs":
+      $actions = array("view", "delete", "deleteall");
+      break;
 
-  case "quote":
-    $actions = array("create", "edit", "delete");
-    break;
+    case "improve":
+    case "decrease":
+    case "colour":
+    case "colours":
+      $actions = array("create", "edit", "delete");
+      break;
 
-  case "colour":
-    $actions = array("create", "edit", "delete");
-    break;
-
-  default:
-    $actions = array("create", "view", "edit", "delete");
-    break;
+    default:
+      $actions = array("create", "view", "edit", "delete");
+      break;
+  }
 }
