@@ -8,6 +8,7 @@ To get started, clone the repo into your desired web server, make a new file in 
 
 ```
 [MYSQL]
+host = YourHost
 username = YourUsername
 password = YourPassword
 ```
