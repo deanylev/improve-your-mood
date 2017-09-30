@@ -1352,6 +1352,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
       moodEngine.saveSettings = function() {
 
         let localSettings = {};
+        let spaceInputs = [];
         let emptyInputs = [];
         let invalidInputs = [];
 
@@ -1383,11 +1384,15 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           // Detect if input is blank
 
-          if ($(this).attr('data-optional') !== 'true' && ((!$(this).hasClass('chips') && !$(this).val() || $(this).val() === 'null' || $(this).val().indexOf(' ') >= 0) || $(this).hasClass('chips') && !$(this).material_chip('data').length)) {
+          $(this).addClass('invalid');
 
-            $(this).addClass('invalid');
+          if ($(this).attr('data-optional') !== 'true' && ((!$(this).hasClass('chips') && !$(this).val() || $(this).val() === 'null') || $(this).hasClass('chips') && !$(this).material_chip('data').length)) {
 
             emptyInputs.push(` ${settings[$(this).attr('name')].label}`);
+
+          } else if ($(this).val().indexOf(' ') >= 0) {
+
+            spaceInputs.push(` ${settings[$(this).attr('name')].label}`);
 
           } else {
 
@@ -1464,7 +1469,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         // If all inputs are not blank nor invalid
 
-        if (!emptyInputs.length && !invalidInputs.length) {
+        if (!spaceInputs.length && !emptyInputs.length && !invalidInputs.length) {
 
           try {
 
@@ -1505,15 +1510,29 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         } else {
 
+          if (spaceInputs.length) {
+
+            if (spaceInputs.length === 1) {
+
+              Materialize.toast(`${spaceInputs} Contains Spaces.`, fullSettings.toast_interval);
+
+            } else {
+
+              Materialize.toast(`${spaceInputs.length} Fields Contain Spaces.`, fullSettings.toast_interval);
+
+            }
+
+          }
+
           if (emptyInputs.length) {
 
             if (emptyInputs.length === 1) {
 
-              Materialize.toast(`${emptyInputs} Contains Spaces.`, fullSettings.toast_interval);
+              Materialize.toast(`${emptyInputs} Is Empty.`, fullSettings.toast_interval);
 
             } else {
 
-              Materialize.toast(`${emptyInputs.length} Fields Contain Spaces.`, fullSettings.toast_interval);
+              Materialize.toast(`${emptyInputs.length} Fields Are Empty.`, fullSettings.toast_interval);
 
             }
 
