@@ -7,8 +7,9 @@
   $ip = isset($_SERVER["HTTP_CF_CONNECTING_IP"]) ? $_SERVER["HTTP_CF_CONNECTING_IP"] : $_SERVER['REMOTE_ADDR'];
   $version = mysqli_real_escape_string($conn, $_POST["version"]);
   $platform = mysqli_real_escape_string($conn, $_POST["platform"]);
+  $userAgent = mysqli_real_escape_string($conn, $_POST["userAgent"]);
   $log = mysqli_real_escape_string($conn, $_POST["log"]);
-  $sql = "INSERT INTO yourmood.logs (sent_at, ip_address, version, platform, log) VALUES ('$datetime', '$ip', '$version', '$platform', '$log')";
+  $sql = "INSERT INTO yourmood.logs (sent_at, ip_address, version, platform, useragent, log) VALUES ('$datetime', '$ip', '$version', '$platform', '$userAgent', '$log')";
   if ($conn->query($sql) === false) {
       echo "Error: " . $sql . "<br>" . $conn->error;
   }

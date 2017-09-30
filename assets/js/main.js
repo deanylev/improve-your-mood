@@ -51,6 +51,7 @@ moodEngine.sendLog = function() {
     data: {
       version: version,
       platform: platform,
+      userAgent: navigator.userAgent,
       log: JSON.stringify(moodLog)
     },
     success: function(response) {
