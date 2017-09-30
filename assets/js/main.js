@@ -606,7 +606,12 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           Materialize.toast(toast, fullSettings.toast_interval);
 
-          if (fullSettings.require_settings_reload || fullSettings.backend_address !== backendAddress) window.location.reload();
+          if (fullSettings.backend_address !== backendAddress) {
+
+            localStorage.setItem('keep_advanced_settings', true);
+            window.location.reload();
+
+          }
 
         }
 
