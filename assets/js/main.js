@@ -961,6 +961,9 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           localStorage.setItem('vertical_menu', !$(this).parent().hasClass('horizontal'));
 
+          // Keep the button menu closed
+          $('.fixed-action-btn').openFAB();
+
         }
 
       });
