@@ -1325,6 +1325,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
         let advancedClosed = !$('#advanced-settings-button').hasClass('underline');
         let lastQuote = localStorage.getItem('lastQuote');
         let lastColour = localStorage.getItem('lastColour');
+        let verticalMenu = localStorage.getItem('vertical_menu');
 
         $.each(settings, function(key, val) {
 
@@ -1335,6 +1336,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
         localStorage.clear();
         localStorage.setItem('lastQuote', lastQuote);
         localStorage.setItem('lastColour', lastColour);
+        localStorage.setItem('vertical_menu', verticalMenu);
 
         $.each(restoreSettings, function(key, val) {
 
