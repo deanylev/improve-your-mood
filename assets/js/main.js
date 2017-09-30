@@ -304,6 +304,9 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         if (method !== 'initial') buttonOrder = JSON.stringify(fullSettings.button_order);
 
+        let userSettings = 0;
+        let backendSettings = 0;
+
         $.each(settings, function(key, val) {
 
           if (localStorage.getItem(key)) {
@@ -326,9 +329,13 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
             }
 
+            userSettings++;
+
           } else {
 
             fullSettings[key] = settings[key].value;
+
+            backendSettings++;
 
           }
 
@@ -631,6 +638,8 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
           }
 
         }
+
+        moodEngine.log('log', `Settings set successfully. ${userSettings} user defined, ${backendSettings} back-end defined.`)
 
       };
 
