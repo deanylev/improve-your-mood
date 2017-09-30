@@ -1,4 +1,10 @@
-<?php include("header.php"); ?>
+<?php
+
+  include("header.php");
+  $mysql->query = "SELECT * FROM yourmood.{$table}";
+  $result = $mysql->result();
+
+?>
 
 <h1 class="text-center"><?php echo ucwords($title); ?>s</h1>
 

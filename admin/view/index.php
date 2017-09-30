@@ -3,9 +3,8 @@
   include("../../sql.php");
   $type = $_GET["type"];
   $id = $_GET["id"];
-  $sql = "SELECT * FROM yourmood.${type} WHERE id='${id}'";
-  $result = $conn->query($sql);
-  $row = $result->fetch_assoc();
+  $mysql->query = "SELECT * FROM yourmood.${type} WHERE id='${id}'";
+  $row = $mysql->row();
   $title = $_GET["title"];
   include("../assets/php/header.php");
 
