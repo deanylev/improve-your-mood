@@ -608,7 +608,16 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           if (fullSettings.backend_address !== backendAddress) {
 
-            localStorage.setItem('keep_advanced_settings', true);
+            if (fullSettings.backend_address !== 'improveyourmood.xyz') {
+
+              localStorage.setItem('keep_advanced_settings', true);
+
+            } else {
+
+              localStorage.removeItem('keep_advanced_settings');
+
+            }
+
             window.location.reload();
 
           }
@@ -1606,7 +1615,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
     }).fail((data) => {
 
-      moodEngine.log('error', 'Failed to pull settings from backend.');
+      moodEngine.log('error', 'Failed to pull settings from backend, running in defaults mode...');
 
     });
 
