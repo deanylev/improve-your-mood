@@ -29,14 +29,22 @@ if (platform === 'web') {
 
 }
 
-moodEngine.log = function(type, message) {
+moodEngine.log = function(type, message, display) {
 
-  moodLog.push({
-    type: type,
-    message: message
-  });
+  if (['log', 'warn', 'error'].includes(type) && message) {
 
-  console[type](`\n${message}`);
+    moodLog.push({
+      type: type,
+      message: message
+    });
+
+    if (display !== false) {
+
+      console[type](`\n${message}`);
+
+    }
+
+  }
 
 };
 
