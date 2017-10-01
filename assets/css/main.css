@@ -54,7 +54,7 @@ input[type="checkbox"] + label::after {
   box-shadow: 0 1px 0 0 black !important;
 }
 
-.footer-copyright {
+.footer-copyright, .tab a {
   color: white !important;
 }
 
@@ -87,6 +87,23 @@ input[type="checkbox"] + label::after {
 
 .inactive-icon {
   display: none !important;
+}
+
+.default-button {
+  display: block;
+}
+
+.tabs .indicator {
+  background-color: white;
+}
+
+.modal-content {
+  padding: 0 !important;
+  padding-bottom: 24px !important;
+}
+
+.tab-column {
+  padding: 0 !important;
 }
 
 #logo {

@@ -728,6 +728,8 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
       $('#settings-modal').modal({
         ready: function(modal, trigger) {
 
+          $('ul.tabs').tabs();
+
           // Scroll to the top of the modal
 
           if (fullSettings.scroll_settings && $('#settings-modal').scrollTop) {
@@ -746,9 +748,6 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
           $('.thumb').remove();
 
           settingsOpen = false;
-
-          $('#advanced-settings-button').removeClass('underline');
-          $('#advanced-settings').hide();
 
         }
       });
@@ -798,8 +797,19 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
       // Construct settings panel
 
-      var fullHTML = '';
-      var fullAdvancedHTML = '';
+      let tabHTML = {};
+
+      $.each(settings.tabs.value, function(key, val) {
+
+        tabHTML[val] = '';
+
+        let html = `<li class="tab"><a class="coloured" href="#tab-${val}">${val}</a></li>`;
+
+        $('.tabs').append(html);
+
+        $('#settings-form').prepend(`<div id="tab-${val}" class="col s12"></div>`);
+
+      });
 
       $.each(settings, function(key, val) {
 
@@ -881,27 +891,35 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
                     ${label}
                     ${containerClose}
                     <a class="black-text settings-link default-button" data-setting="${key}"><b>Set to Default</b></a>
-                    <br>
                     <span class="tooltipped" data-setting="${key}" data-position="bottom" data-delay="50">What's this?</span>
                   </div>
                   ${resetInput}
                 </div>
                 `;
 
-          val.advanced ? fullAdvancedHTML += html : fullHTML += html;
+          if (settings.tabs.value.includes(val.tab)) {
+
+            tabHTML[val.tab] += html;
+
+          } else if (!val.tab) {
+
+            moodEngine.log('warn', `${key} is missing a tab value, it will not be included in the modal.`);
+
+          } else {
+
+            moodEngine.log('warn', `${key} has a tab value '${val.tab}' that does not exist, it will not be included in the modal.`);
+
+          }
 
         }
 
       });
 
-      $('#settings-form').prepend(fullHTML);
+      $.each(tabHTML, function(key, val) {
 
-      if (fullAdvancedHTML) {
+        $(`#tab-${key}`).html(val);
 
-        $('#advanced-settings-wrapper').removeClass('hide');
-        $('#advanced-settings').html(fullAdvancedHTML);
-
-      }
+      });
 
       // Set desired settings to default using the attr on the default button
 
@@ -1342,7 +1360,6 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
       moodEngine.setAllDefault = function() {
 
         let restoreSettings = {};
-        let advancedClosed = !$('#advanced-settings-button').hasClass('underline');
         let lastQuote = localStorage.getItem('lastQuote');
         let lastColour = localStorage.getItem('lastColour');
         let verticalMenu = localStorage.getItem('vertical_menu');
@@ -1360,7 +1377,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         $.each(restoreSettings, function(key, val) {
 
-          if (advancedClosed && fullSettings.keep_advanced_settings) {
+          if (fullSettings.keep_advanced_settings) {
 
             if (val) localStorage.setItem(key, restoreSettings[key]);
 
@@ -1596,15 +1613,6 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
       $('#settings-form').submit(function() {
 
         return false;
-
-      });
-
-      // Toggle Advanced Settings
-
-      $('#advanced-settings-button').click(function() {
-
-        $(this).toggleClass('underline');
-        $('#advanced-settings').slideToggle();
 
       });
 

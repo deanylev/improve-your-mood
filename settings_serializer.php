@@ -10,12 +10,14 @@
 
   $settings = (object)array();
 
+  $forbiddenKeys = array("id", "active", "setting");
+
   if ($result->num_rows > 0) {
       while ($row = $result->fetch_assoc()) {
           $key = $row["setting"];
           $object = (object)array();
           foreach ($row as $rowKey => $rowVal) {
-              if ($rowKey !== "id" && $rowKey !== "active") {
+              if (!in_array($rowKey, $forbiddenKeys)) {
                   $object->{$rowKey} = $rowVal;
               }
           }
