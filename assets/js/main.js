@@ -807,7 +807,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         $('.tabs').append(html);
 
-        $('#settings-form').prepend(`<div id="tab-${val}" class="col s12"></div>`);
+        $('#settings-form').append(`<div id="tab-${val}" class="col s12"></div>`);
 
       });
 
