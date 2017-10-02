@@ -145,14 +145,22 @@ $(document).ready(function() {
 
 });
 
+// Function for changing colour
+
+moodEngine.setColour = function(colour) {
+
+  $('.coloured.coloured-background').css('background-color', colour);
+  $('.coloured.coloured-text').css('color', colour);
+  $('meta[name="theme-color"]').attr('content', colour);
+
+};
+
 // Function for displaying and logging errors
 
 moodEngine.error = function(display, log, code, type) {
 
-  $('.coloured.coloured-background').css('background-color', 'black');
-  $('.coloured.coloured-text').css('color', 'black');
+  moodEngine.setColour('black');
   $('.theme-text').css('color', 'white');
-  $('meta[name="theme-color"]').attr('content', 'black');
   $('#quote').addClass('scale-in');
   $('.preloader-wrapper').addClass('hide');
   $('.fixed-action-btn').addClass('hide');
@@ -1206,9 +1214,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           }
 
-          $('.coloured.coloured-background').css('background-color', `#${colour}`);
-          $('.coloured.coloured-text').css('color', 'black');
-          $('meta[name="theme-color"]').attr('content', `#${colour}`);
+          moodEngine.setColour(`#${colour}`);
 
         }
 
@@ -1247,8 +1253,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           }
 
-          $('.coloured.coloured-background').css('background-color', `#${colours[colour]}`);
-          $('.coloured.coloured-text').css('color', `#${colours[colour]}`);
+          moodEngine.setColour(`#${colours[colour]}`);
 
           $('#go-back-button').addClass('disabled');
 
@@ -1338,9 +1343,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           // Apply colour to background
 
-          $('.coloured.coloured-background').css('background-color', `#${colour}`);
-          $('.coloured.coloured-text').css('color', `#${colour}`);
-          $('meta[name="theme-color"]').attr('content', `#${colour}`);
+          moodEngine.setColour(`#${colour}`);
 
           $('.fixed-action-btn').removeClass('hide');
 
@@ -1410,9 +1413,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         }
 
-        $('.coloured.coloured-background').css('background-color', `#${colour}`);
-        $('.coloured.coloured-text').css('color', `#${colour}`);
-        $('meta[name="theme-color"]').attr('content', `#${colour}`);
+        moodEngine.setColour(`#${colour}`);
 
       };
 
