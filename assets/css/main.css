@@ -90,7 +90,7 @@ input[type="checkbox"] + label::after {
 }
 
 .default-button {
-  display: block;
+  //display: block;
 }
 
 .tabs .indicator {
@@ -99,6 +99,10 @@ input[type="checkbox"] + label::after {
 
 .modal-content {
   padding: 24px 0 !important;
+}
+
+.tooltipped {
+  cursor: help;
 }
 
 #logo {

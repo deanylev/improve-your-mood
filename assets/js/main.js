@@ -904,11 +904,12 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
                     ${input}
                     ${label}
                     ${containerClose}
+                    <span class="tooltipped" data-setting="${key}" data-position="bottom" data-delay="50">What's This? | </span>
                     <a class="black-text settings-link default-button" data-setting="${key}"><b>Set to Default</b></a>
-                    <span class="tooltipped" data-setting="${key}" data-position="bottom" data-delay="50">What's this?</span>
                   </div>
                   ${resetInput}
                 </div>
+                <br>
                 `;
 
           if (settings.tabs.value.includes(val.tab)) {
