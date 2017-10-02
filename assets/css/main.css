@@ -98,12 +98,7 @@ input[type="checkbox"] + label::after {
 }
 
 .modal-content {
-  padding: 0 !important;
-  padding-bottom: 24px !important;
-}
-
-.tab-column {
-  padding: 0 !important;
+  padding: 24px 0 !important;
 }
 
 #logo {
