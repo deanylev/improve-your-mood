@@ -374,7 +374,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
           $('.coloured').css('transition', `${fullSettings.colour_reload_transition_time}ms ease-out`);
           $('#fade-style').text(`
 
-            input[type="range"]::-webkit-slider-thumb, input[type="range"] + .thumb, .chip.selected, input[type="checkbox"]:checked + label::after, input[type="checkbox"] + label::after, .input-field input:not([type="range"]):not(.input):focus, .chips.focus {
+            input[type="range"]::-webkit-slider-thumb {
               transition: ${fullSettings.colour_reload_transition_time}ms ease-out !important;
             }
 
