@@ -933,6 +933,10 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
       });
 
+      // Initialize Tabs
+
+      $('ul.tabs').tabs();
+
       // Set desired settings to default using the attr on the default button
 
       $('.default-button').click(function() {
