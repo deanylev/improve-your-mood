@@ -641,37 +641,46 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         }
 
-        moodEngine.log('log', `Settings set successfully. ${userSettings} user defined, ${backendSettings} back-end defined.`)
+        moodEngine.log('log', `Settings set successfully. ${userSettings} user defined, ${backendSettings} backend defined.`)
 
       };
 
       // Construct tabs in settings panel
 
       let tabHTML = {};
+      let fullHTML = '';
 
-      $.each(settings.tabs.value, function(key, val) {
+      if (settings.tabs) {
 
-        let name = val;
-        let mobile = 'hide-on-med-and-down';
-        tabHTML[name] = '';
+        $.each(settings.tabs.value, function(key, val) {
 
-        $.each(settings, function(key, val) {
+          let name = val;
+          let mobile = 'hide-on-med-and-down';
+          tabHTML[name] = '';
 
-          if (val.user && val.tab === name && val.mobile) {
+          $.each(settings, function(key, val) {
 
-            mobile = '';
+            if (val.user && val.tab === name && val.mobile) {
 
-          }
+              mobile = '';
+
+            }
+
+          });
+
+          let html = `<li class="tab ${mobile}"><a class="coloured" href="#tab-${name}">${name}</a></li>`;
+
+          $('.tabs').append(html);
+
+          $('#settings-form').append(`<div id="tab-${name}" class="col s12"></div>`);
 
         });
 
-        let html = `<li class="tab ${mobile}"><a class="coloured" href="#tab-${name}">${name}</a></li>`;
+      } else {
 
-        $('.tabs').append(html);
+        $('ul.tabs').remove();
 
-        $('#settings-form').append(`<div id="tab-${name}" class="col s12"></div>`);
-
-      });
+      }
 
       $('.tab a').click(function() {
 
@@ -766,7 +775,11 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
       $('#settings-modal').modal({
         ready: function(modal, trigger) {
 
-          $('ul.tabs').tabs();
+          if (settings.tabs) {
+
+            $('ul.tabs').tabs();
+
+          }
 
           // Scroll to the top of the modal
 
@@ -920,17 +933,25 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
                 <br>
                 `;
 
-          if (settings.tabs.value.includes(val.tab)) {
+          if (settings.tabs) {
 
-            tabHTML[val.tab] += html;
+            if (settings.tabs.value.includes(val.tab)) {
 
-          } else if (!val.tab) {
+              tabHTML[val.tab] += html;
 
-            moodEngine.log('warn', `${key} is missing a tab value, it will not be included in the modal.`);
+            } else if (!val.tab) {
+
+              moodEngine.log('warn', `${key} is missing a tab value, it will not be included in the modal.`);
+
+            } else {
+
+              moodEngine.log('warn', `${key} has a tab value '${val.tab}' that does not exist, it will not be included in the modal.`);
+
+            }
 
           } else {
 
-            moodEngine.log('warn', `${key} has a tab value '${val.tab}' that does not exist, it will not be included in the modal.`);
+            fullHTML += html;
 
           }
 
@@ -938,19 +959,27 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
       });
 
-      $.each(tabHTML, function(key, val) {
+      if (settings.tabs) {
 
-        $(`#tab-${key}`).html(val);
+        $.each(tabHTML, function(key, val) {
 
-      });
+          $(`#tab-${key}`).html(val);
 
-      // Preselect last tab
+        });
 
-      if (fullSettings.keep_tab) $(`.tab a[href="${localStorage.getItem('lastTab')}"]`).addClass('active')
+        // Preselect last tab
 
-      // Initialize Tabs
+        if (fullSettings.keep_tab) $(`.tab a[href="${localStorage.getItem('lastTab')}"]`).addClass('active')
 
-      $('ul.tabs').tabs();
+        // Initialize Tabs
+
+        $('ul.tabs').tabs();
+
+      } else {
+
+        $('#settings-form').html(fullHTML);
+
+      }
 
       // Set desired settings to default using the attr on the default button
 
