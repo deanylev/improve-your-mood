@@ -149,7 +149,8 @@ $(document).ready(function() {
 
 moodEngine.error = function(display, log, code, type) {
 
-  $('.coloured').css('background-color', 'black');
+  $('.coloured.coloured-background').css('background-color', 'black');
+  $('.coloured.coloured-text').css('color', 'black');
   $('.theme-text').css('color', 'white');
   $('meta[name="theme-color"]').attr('content', 'black');
   $('#quote').addClass('scale-in');
@@ -668,7 +669,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           });
 
-          let html = `<li class="tab ${mobile}"><a class="coloured" href="#tab-${name}">${name}</a></li>`;
+          let html = `<li class="tab ${mobile} coloured coloured-background"><a href="#tab-${name}">${name}</a></li>`;
 
           $('.tabs').append(html);
 
@@ -775,11 +776,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
       $('#settings-modal').modal({
         ready: function(modal, trigger) {
 
-          if (settings.tabs) {
-
-            $('ul.tabs').tabs();
-
-          }
+          if (settings.tabs) $('ul.tabs').tabs();
 
           // Scroll to the top of the modal
 
@@ -1209,7 +1206,8 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           }
 
-          $('.coloured').css('background-color', `#${colour}`);
+          $('.coloured.coloured-background').css('background-color', `#${colour}`);
+          $('.coloured.coloured-text').css('color', 'black');
           $('meta[name="theme-color"]').attr('content', `#${colour}`);
 
         }
@@ -1249,7 +1247,8 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           }
 
-          $('.coloured').css('background-color', `#${colours[colour]}`);
+          $('.coloured.coloured-background').css('background-color', `#${colours[colour]}`);
+          $('.coloured.coloured-text').css('color', `#${colours[colour]}`);
 
           $('#go-back-button').addClass('disabled');
 
@@ -1339,7 +1338,8 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
           // Apply colour to background
 
-          $('.coloured').css('background-color', `#${colour}`);
+          $('.coloured.coloured-background').css('background-color', `#${colour}`);
+          $('.coloured.coloured-text').css('color', `#${colour}`);
           $('meta[name="theme-color"]').attr('content', `#${colour}`);
 
           $('.fixed-action-btn').removeClass('hide');
@@ -1410,7 +1410,8 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         }
 
-        $('.coloured').css('background-color', `#${colour}`);
+        $('.coloured.coloured-background').css('background-color', `#${colour}`);
+        $('.coloured.coloured-text').css('color', `#${colour}`);
         $('meta[name="theme-color"]').attr('content', `#${colour}`);
 
       };
