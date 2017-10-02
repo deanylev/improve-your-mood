@@ -801,13 +801,25 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
       $.each(settings.tabs.value, function(key, val) {
 
-        tabHTML[val] = '';
+        let name = val;
+        let mobile = 'hide-on-med-and-down';
+        tabHTML[name] = '';
 
-        let html = `<li class="tab"><a class="coloured" href="#tab-${val}">${val}</a></li>`;
+        $.each(settings, function(key, val) {
+
+          if (val.user && val.tab === name && val.mobile) {
+
+            mobile = '';
+
+          }
+
+        });
+
+        let html = `<li class="tab ${mobile}"><a class="coloured" href="#tab-${name}">${name}</a></li>`;
 
         $('.tabs').append(html);
 
-        $('#settings-form').append(`<div id="tab-${val}" class="col s12"></div>`);
+        $('#settings-form').append(`<div id="tab-${name}" class="col s12"></div>`);
 
       });
 
