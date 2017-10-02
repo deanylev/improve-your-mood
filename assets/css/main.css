@@ -29,10 +29,6 @@ label:not(.active) b, #advanced-settings {
   display: none;
 }
 
-input[type="checkbox"] + label::after {
-  border-color: black !important;
-}
-
 .dropdown-content li span, .modal, .reset-input, label {
   color: black;
 }
@@ -47,11 +43,6 @@ input[type="checkbox"] + label::after {
 
 .input-field label, .input-field input:focus+label {
   color: black !important;
-}
-
-.input-field input:not([type="range"]):not(.input):focus, .chips.focus {
-  border-bottom: 1px solid black !important;
-  box-shadow: 0 1px 0 0 black !important;
 }
 
 .footer-copyright, .tab a {

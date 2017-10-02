@@ -152,7 +152,21 @@ moodEngine.setColour = function(colour) {
   $('.coloured.coloured-background').css('background-color', colour);
   $('.coloured.coloured-text').css('color', colour);
   $('meta[name="theme-color"]').attr('content', colour);
-  $('style').text(`input[type="range"]::-webkit-slider-thumb, input[type="range"] + .thumb, .chip.selected, input[type="checkbox"]:checked + label::after{background-color: ${colour} !important;} input[type="checkbox"] + label::after{border-color: ${colour} !important;}`);
+  $('#colour-style').text(`
+
+    input[type="range"]::-webkit-slider-thumb, input[type="range"] + .thumb, .chip.selected, input[type="checkbox"]:checked + label::after {
+      background-color: ${colour} !important;
+    }
+
+    input[type="checkbox"] + label::after, .input-field input:not([type="range"]):not(.input):focus, .chips.focus {
+      border-color: ${colour} !important;
+    }
+
+    .input-field input:not([type="range"]):not(.input):focus, .chips.focus {
+      box-shadow: 0 1px 0 0 ${colour} !important;
+    }
+
+    `);
 
 };
 
@@ -358,6 +372,13 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
         if (fullSettings.colour_reload_transitions) {
 
           $('.coloured').css('transition', `${fullSettings.colour_reload_transition_time}ms ease-out`);
+          $('#fade-style').text(`
+
+            input[type="range"]::-webkit-slider-thumb, input[type="range"] + .thumb, .chip.selected, input[type="checkbox"]:checked + label::after, input[type="checkbox"] + label::after, .input-field input:not([type="range"]):not(.input):focus, .chips.focus {
+              transition: ${fullSettings.colour_reload_transition_time}ms ease-out !important;
+            }
+
+            `);
 
         } else {
 
