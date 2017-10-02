@@ -671,6 +671,12 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
       });
 
+      $('.tab a').click(function() {
+
+        localStorage.setItem('lastTab', $(this).attr('href'));
+
+      });
+
       // Set settings
 
       moodEngine.setSettings('initial');
@@ -935,6 +941,10 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
         $(`#tab-${key}`).html(val);
 
       });
+
+      // Preselect last tab
+
+      if (fullSettings.keep_tab) $(`.tab a[href="${localStorage.getItem('lastTab')}"]`).addClass('active')
 
       // Initialize Tabs
 
@@ -1381,6 +1391,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
         let restoreSettings = {};
         let lastQuote = localStorage.getItem('lastQuote');
         let lastColour = localStorage.getItem('lastColour');
+        let lastTab = localStorage.getItem('lastTab');
         let verticalMenu = localStorage.getItem('vertical_menu');
 
         $.each(settings, function(key, val) {
@@ -1392,6 +1403,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
         localStorage.clear();
         localStorage.setItem('lastQuote', lastQuote);
         localStorage.setItem('lastColour', lastColour);
+        localStorage.setItem('lastTab', lastTab);
         localStorage.setItem('vertical_menu', verticalMenu);
 
         $.each(restoreSettings, function(key, val) {
