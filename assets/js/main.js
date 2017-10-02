@@ -383,6 +383,7 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
         } else {
 
           $('.coloured').css('transition', 'none');
+          $('#fade-style').empty();
 
         }
 
