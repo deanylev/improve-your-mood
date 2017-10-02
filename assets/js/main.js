@@ -152,6 +152,7 @@ moodEngine.setColour = function(colour) {
   $('.coloured.coloured-background').css('background-color', colour);
   $('.coloured.coloured-text').css('color', colour);
   $('meta[name="theme-color"]').attr('content', colour);
+  $('style').text(`input[type="range"]::-webkit-slider-thumb, input[type="range"] + .thumb, .chip.selected, input[type="checkbox"]:checked + label::after{background-color: ${colour} !important;} input[type="checkbox"] + label::after{border-color: ${colour} !important;}`);
 
 };
 

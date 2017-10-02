@@ -76,7 +76,7 @@ input[type="checkbox"] + label::after {
   -webkit-box-shadow: 0 1px 0 0 #F44336 !important;
 }
 
-.darken, .darken:hover, .chip.selected, input[type="range"]::-webkit-slider-thumb, input[type="range"] + .thumb, input[type="checkbox"]:checked + label::after {
+.darken, .darken:hover{
   background-color: black !important;
 }
 
