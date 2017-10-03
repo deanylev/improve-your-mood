@@ -758,6 +758,7 @@ $.getJSON(`${fullBackendAddress}settings_serializer.php`).done((data) => {
 
         }
 
+        localStorage.clear();
         window.location.reload();
 
       }
