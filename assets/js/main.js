@@ -333,6 +333,19 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
         let userSettings = 0;
         let backendSettings = 0;
 
+        let currentSettings = {};
+        let logs = [];
+
+        if (method !== 'initial') {
+
+          $.each(fullSettings, function(key, val) {
+
+            currentSettings[key] = val;
+
+          });
+
+        }
+
         $.each(settings, function(key, val) {
 
           if (localStorage.getItem(key)) {
@@ -362,6 +375,33 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
             fullSettings[key] = settings[key].value;
 
             backendSettings++;
+
+          }
+
+          if (method !== 'initial' && fullSettings[key] !== currentSettings[key]) {
+
+            let currentValue;
+            let newValue;
+
+            switch (typeof(fullSettings[key])) {
+
+              case 'boolean':
+              case 'number':
+                currentValue = currentSettings[key];
+                newValue = fullSettings[key];
+                break;
+              case 'object':
+                currentValue = `[${currentSettings[key]}]`;
+                newValue = `[${fullSettings[key]}]`;
+                break;
+              case 'string':
+                currentValue = `'${currentSettings[key]}'`;
+                newValue = `'${fullSettings[key]}'`;
+                break;
+
+            }
+
+            logs.push(`${key}: ${currentValue} => ${newValue}`);
 
           }
 
@@ -673,7 +713,19 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
 
         }
 
-        moodEngine.log('log', `Settings set successfully. ${userSettings} user defined, ${backendSettings} backend defined.`)
+        moodEngine.log('log', `Settings set successfully. ${userSettings} user defined, ${backendSettings} backend defined.`);
+
+        if (method !== 'initial' && logs.length) {
+
+          moodEngine.log('log', 'Changed Settings:');
+
+          $.each(logs, function(key, val) {
+
+            moodEngine.log('log', val);
+
+          });
+
+        }
 
       };
 
@@ -1400,6 +1452,9 @@ $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).
           moodEngine.log('log', 'MoodEngine initialized.');
           let totalLoadTime = Math.ceil(performance.now() - totalTime);
           moodEngine.log('log', `Total load time: ${totalLoadTime}ms.`);
+          if (totalLoadTime > 10000) {
+            moodEngine.log('warn', 'Loading took very long, probably due to a slow connection.');
+          }
 
           // If an error, display/log it
 
