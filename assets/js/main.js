@@ -50,7 +50,7 @@ moodEngine.log = function(type, message, display) {
 
 moodEngine.sendLog = function() {
 
-  moodEngine.log('log', `localStorage: ${JSON.stringify(localStorage)}`, false);
+  if (localStorage.length) moodEngine.log('log', `localStorage: ${JSON.stringify(localStorage)}`, false);
 
   console.log('\nSending log to backend...');
 
