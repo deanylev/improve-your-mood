@@ -765,7 +765,7 @@ $.getJSON(`${fullBackendAddress}settings_serializer.php`).done((data) => {
 
     }
 
-    moodEngine.log('log', `Settings set successfully. ${userSettings} user defined, ${backendSettings} backend defined.`);
+    if (userSettings || backendSettings) moodEngine.log('log', `Settings set successfully. ${userSettings} user defined, ${backendSettings} backend defined.`);
 
     if (method !== 'initial' && logs.length) {
 
