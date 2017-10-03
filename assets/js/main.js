@@ -230,6 +230,8 @@ moodEngine.log('log', `Pulling from: ${fullBackendAddress}`);
 
 if (localStorage.getItem('cachedQuotes') && localStorage.getItem('cachedVersionQuotes')) {
 
+  moodEngine.log('log', 'Using cached quotes...');
+
   quotes = JSON.parse(localStorage.getItem('cachedQuotes'));
   versionQuotes = JSON.parse(localStorage.getItem('cachedVersionQuotes'));
 
@@ -279,6 +281,8 @@ if (localStorage.getItem('cachedQuotes') && localStorage.getItem('cachedVersionQ
     localStorage.setItem('cachedQuotes', JSON.stringify(quotes));
     localStorage.setItem('cachedVersionQuotes', JSON.stringify(versionQuotes));
 
+    moodEngine.log('log', 'Cached quotes for next load.');
+
   }).fail((data) => {
 
     moodEngine.error('Failed to contact server. Try again later.', 'Failed to pull quotes from backend.', '1a', 'backend');
@@ -294,6 +298,8 @@ if (localStorage.getItem('cachedQuotes') && localStorage.getItem('cachedVersionQ
 // Decide whether to use cache or pull new colours
 
 if (localStorage.getItem('cachedColours')) {
+
+  moodEngine.log('log', 'Using cached colours...');
 
   colours = JSON.parse(localStorage.getItem('cachedColours'));
 
@@ -324,6 +330,8 @@ if (localStorage.getItem('cachedColours')) {
     moodEngine.log('log', `Successfully pulled ${colours.length} colours from backend in ${pullTime.colours}ms.`);
 
     localStorage.setItem('cachedColours', JSON.stringify(colours));
+
+    moodEngine.log('log', 'Cached colours for next load.');
 
   }).fail((data) => {
 
