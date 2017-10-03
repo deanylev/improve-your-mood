@@ -96,6 +96,10 @@ label:not(.active) b, #advanced-settings {
   cursor: help;
 }
 
+.set-all-default {
+  margin-right: 2%;
+}
+
 #logo {
   font-family: 'Raleway', Helvetica, Arial;
 }
