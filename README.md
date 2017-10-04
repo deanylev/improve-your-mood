@@ -4,7 +4,7 @@
 
 Includes both the back-end and front-end.
 
-To get started, clone the repo into your desired web server, make a new file in the root called `settings.ini` and in it, enter your MySQL credentials in this format:
+To get started, clone the repo into your desired web server, make a new file in assets/php called `settings.ini` and in it, enter your MySQL credentials in this format:
 
 ```
 [MYSQL]
