@@ -274,6 +274,8 @@ if (localStorage.getItem('cachedQuotes') && localStorage.getItem('cachedVersionQ
 
       });
 
+      localStorage.setItem('cachedVersionQuotes', JSON.stringify(versionQuotes));
+
     }).fail((data) => {
 
       disableSwitch = true;
@@ -284,7 +286,6 @@ if (localStorage.getItem('cachedQuotes') && localStorage.getItem('cachedVersionQ
     moodEngine.log('log', `Successfully pulled ${quotes.length} quotes from backend in ${pullTime.quotes}ms.`);
 
     localStorage.setItem('cachedQuotes', JSON.stringify(quotes));
-    localStorage.setItem('cachedVersionQuotes', JSON.stringify(versionQuotes));
 
     moodEngine.log('log', 'Cached quotes for next load.');
 
