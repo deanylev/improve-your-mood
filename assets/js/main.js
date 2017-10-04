@@ -115,8 +115,11 @@ $(document).ready(function() {
 
   $('title').text(`${version} Your Mood`);
   $('#logo-version').text(version.toLowerCase());
-  $('.fade-in-on-ready').fadeIn();
   $('#footer-version').text(version);
+
+  // Fade in elements
+
+  $('.fade-in-on-ready').fadeIn();
 
   if (platform === 'web') $('link[rel="icon"], link[rel="shortcut icon"]').attr('href', `assets/${version.toLowerCase()}_favicon.ico`);
 
