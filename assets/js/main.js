@@ -45,6 +45,10 @@ moodEngine.log = function(type, message, display) {
 
     }
 
+  } else {
+
+    console.error('INCORRECT USE OF MOODENGINE LOG');
+
   }
 
 };
@@ -767,6 +771,7 @@ $.getJSON(`${fullBackendAddress}settings_serializer.php`).done((data) => {
         }
 
         localStorage.clear();
+        localStorage.setItem('backend_address', fullSettings.backend_address);
         window.location.reload();
 
       }
