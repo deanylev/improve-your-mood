@@ -45,7 +45,7 @@ label:not(.active) b, #advanced-settings, .fade-in-on-ready, .fade-in-on-load {
   color: black !important;
 }
 
-.footer-copyright, .tab a {
+.footer-copyright, .tab a, .dropdown-content.select-dropdown li span {
   color: white !important;
 }
 

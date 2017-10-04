@@ -160,7 +160,7 @@ moodEngine.setColour = function(colour) {
   $('meta[name="theme-color"]').attr('content', colour);
   $('#colour-style').text(`
 
-    input[type="range"]::-webkit-slider-thumb, input[type="range"] + .thumb, .chip.selected, input[type="checkbox"]:checked + label::after {
+    input[type="range"]::-webkit-slider-thumb, input[type="range"] + .thumb, .chip.selected, input[type="checkbox"]:checked + label::after, .dropdown-content.select-dropdown {
       background-color: ${colour} !important;
     }
 
