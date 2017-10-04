@@ -25,7 +25,7 @@ main {
   flex: 1 0 auto;
 }
 
-label:not(.active) b, #advanced-settings {
+label:not(.active) b, #advanced-settings, .fade-in-on-load {
   display: none;
 }
 
