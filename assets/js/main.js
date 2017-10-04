@@ -757,6 +757,8 @@ $.getJSON(`${fullBackendAddress}settings_serializer.php`).done((data) => {
 
     if (method !== 'initial') {
 
+      let keepAdvanced;
+
       moodEngine.toggleSettings('close');
 
       Materialize.toast(toast, fullSettings.toast_interval);
@@ -765,16 +767,17 @@ $.getJSON(`${fullBackendAddress}settings_serializer.php`).done((data) => {
 
         if (fullSettings.backend_address !== 'improveyourmood.xyz') {
 
-          localStorage.setItem('keep_advanced_settings', true);
+          keepAdvanced = true;
 
         } else {
 
-          localStorage.removeItem('keep_advanced_settings');
+          keepAdvanced = false;
 
         }
 
         localStorage.clear();
         localStorage.setItem('backend_address', fullSettings.backend_address);
+        if (keepAdvanced) localStorage.setItem('keep_advanced_settings', true);
         window.location.reload();
 
       }
