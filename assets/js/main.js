@@ -233,7 +233,7 @@ moodEngine.log('log', `Pulling from: ${fullBackendAddress}`);
 
 // Decide whether to use cache or pull new quotes
 
-if (localStorage.getItem('cachedQuotes') && localStorage.getItem('cachedVersionQuotes')) {
+if (localStorage.getItem('cachedQuotes') && localStorage.getItem('cachedVersionQuotes') && localStorage.getItem('disable_caching') !== 'true') {
 
   moodEngine.log('log', 'Using cached quotes...');
 
@@ -252,7 +252,7 @@ if (localStorage.getItem('cachedQuotes') && localStorage.getItem('cachedVersionQ
     async: false
   });
 
-  $.getJSON(`${fullBackendAddress}api/get/quotes?version=${version.toLowerCase()}`).done((data) => {
+  $.getJSON(`${fullBackendAddress}api/get/quotes/index.php?version=${version.toLowerCase()}`).done((data) => {
 
     pullTime.quotes = Math.ceil(performance.now() - startTime);
 
@@ -264,7 +264,7 @@ if (localStorage.getItem('cachedQuotes') && localStorage.getItem('cachedVersionQ
 
     });
 
-    $.getJSON(`${fullBackendAddress}api/get/quotes?version=${otherVersion.toLowerCase()}`).done((data) => {
+    $.getJSON(`${fullBackendAddress}api/get/quotes/index.php?version=${otherVersion.toLowerCase()}`).done((data) => {
 
       versionQuotes[otherVersion] = [];
 
@@ -285,9 +285,17 @@ if (localStorage.getItem('cachedQuotes') && localStorage.getItem('cachedVersionQ
 
     moodEngine.log('log', `Successfully pulled ${quotes.length} quotes from backend in ${pullTime.quotes}ms.`);
 
-    localStorage.setItem('cachedQuotes', JSON.stringify(quotes));
+    if (localStorage.getItem('disable_caching') !== 'true') {
 
-    moodEngine.log('log', 'Cached quotes for next load.');
+      localStorage.setItem('cachedQuotes', JSON.stringify(quotes));
+
+      moodEngine.log('log', 'Cached quotes for next load.');
+
+    } else {
+
+      localStorage.removeItem('cachedQuotes');
+
+    }
 
   }).fail((data) => {
 
@@ -303,7 +311,7 @@ if (localStorage.getItem('cachedQuotes') && localStorage.getItem('cachedVersionQ
 
 // Decide whether to use cache or pull new colours
 
-if (localStorage.getItem('cachedColours')) {
+if (localStorage.getItem('cachedColours') && localStorage.getItem('disable_caching') !== 'true') {
 
   moodEngine.log('log', 'Using cached colours...');
 
@@ -321,7 +329,7 @@ if (localStorage.getItem('cachedColours')) {
     async: false
   });
 
-  $.getJSON(`${fullBackendAddress}api/get/colours`).done((data) => {
+  $.getJSON(`${fullBackendAddress}api/get/colours/index.php`).done((data) => {
 
     pullTime.colours = Math.ceil(performance.now() - startTime);
 
@@ -335,9 +343,17 @@ if (localStorage.getItem('cachedColours')) {
 
     moodEngine.log('log', `Successfully pulled ${colours.length} colours from backend in ${pullTime.colours}ms.`);
 
-    localStorage.setItem('cachedColours', JSON.stringify(colours));
+    if (localStorage.getItem('disable_caching') !== 'true') {
 
-    moodEngine.log('log', 'Cached colours for next load.');
+      localStorage.setItem('cachedColours', JSON.stringify(colours));
+
+      moodEngine.log('log', 'Cached colours for next load.');
+
+    } else {
+
+      localStorage.removeItem('cachedColours');
+
+    }
 
   }).fail((data) => {
 
@@ -357,7 +373,7 @@ startTime = performance.now();
 
 moodEngine.log('log', 'Pulling settings from backend...');
 
-$.getJSON(`${fullBackendAddress}api/get/settings`).done((data) => {
+$.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
 
   pullTime.settings = Math.ceil(performance.now() - startTime);
 
@@ -1688,7 +1704,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings`).done((data) => {
             async: false
           });
 
-          $.getJSON(`http://${$(this).val()}/api/get/colours`).fail((data) => {
+          $.getJSON(`http://${$(this).val()}/api/get/colours/index.php`).fail((data) => {
 
             $(this).addClass('invalid');
             invalidInputs.push(`${settings[$(this).attr('name')].label} '${$(this).val()}' is Invalid.`);
