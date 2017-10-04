@@ -4,7 +4,7 @@
 
 Includes both the back-end and front-end.
 
-To get started, clone the repo into your desired web server, make a new file in assets/php called `settings.ini` and in it, enter your MySQL credentials in this format:
+To get started, clone the repo into your desired web server, make a new file in /assets/php called `settings.ini` and in it, enter your MySQL credentials in this format:
 
 ```
 [MYSQL]
@@ -13,7 +13,7 @@ username = YourUsername
 password = YourPassword
 ```
 
-Then, make a new table in your DB called `yourmood` and import the provided `yourmood.sql` file.
+Then, make a new table in your DB called `yourmood` and import the provided `yourmood.sql` file (in the /assets/sql folder).
 
 Make sure your web server is configured to use the provided `.htaccess` file, as it forbids external access to this settings file (otherwise your credentials could be viewed by anyone).
 
