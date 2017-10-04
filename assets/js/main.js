@@ -107,6 +107,10 @@ $(window).on('error', function(error) {
 
 $(document).ready(function() {
 
+  // Remove has from URL
+
+  history.pushState('', document.title, window.location.pathname);
+
   // Put in correct text / favicon / year
 
   $('title').text(`${version} Your Mood`);
@@ -1867,6 +1871,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
       $('title').text(`${version} Your Mood`);
       $('#logo-version').text(version.toLowerCase());
       $('#footer-version').text(version);
+      if (platform === 'web') $('link[rel="icon"], link[rel="shortcut icon"]').attr('href', `assets/${version.toLowerCase()}_favicon.ico`);
 
       moodEngine.reload('Auto');
       moodEngine.rewind();
