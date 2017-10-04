@@ -1185,7 +1185,7 @@ $.getJSON(`${fullBackendAddress}settings_serializer.php`).done((data) => {
 
     }
 
-    let value = `${settings[setting].description}.<br>The default is ${text}.`
+    let value = `${settings[setting].description}<br>The default is ${text}.`
     $(this).attr('data-tooltip', value);
 
     // Initialize the Materialize tooltip plugin
