@@ -252,7 +252,7 @@ if (localStorage.getItem('cachedQuotes') && localStorage.getItem('cachedVersionQ
     async: false
   });
 
-  $.getJSON(`${fullBackendAddress + version.toLowerCase()}_quote_serializer.php`).done((data) => {
+  $.getJSON(`${fullBackendAddress}api/get/quotes?version=${version.toLowerCase()}`).done((data) => {
 
     pullTime.quotes = Math.ceil(performance.now() - startTime);
 
@@ -264,7 +264,7 @@ if (localStorage.getItem('cachedQuotes') && localStorage.getItem('cachedVersionQ
 
     });
 
-    $.getJSON(`${fullBackendAddress + otherVersion.toLowerCase()}_quote_serializer.php`).done((data) => {
+    $.getJSON(`${fullBackendAddress}api/get/quotes?version=${otherVersion.toLowerCase()}`).done((data) => {
 
       versionQuotes[otherVersion] = [];
 
@@ -321,7 +321,7 @@ if (localStorage.getItem('cachedColours')) {
     async: false
   });
 
-  $.getJSON(`${fullBackendAddress}colour_serializer.php`).done((data) => {
+  $.getJSON(`${fullBackendAddress}api/get/colours`).done((data) => {
 
     pullTime.colours = Math.ceil(performance.now() - startTime);
 
@@ -357,7 +357,7 @@ startTime = performance.now();
 
 moodEngine.log('log', 'Pulling settings from backend...');
 
-$.getJSON(`${fullBackendAddress}settings_serializer.php`).done((data) => {
+$.getJSON(`${fullBackendAddress}api/get/settings`).done((data) => {
 
   pullTime.settings = Math.ceil(performance.now() - startTime);
 
@@ -1688,7 +1688,7 @@ $.getJSON(`${fullBackendAddress}settings_serializer.php`).done((data) => {
             async: false
           });
 
-          $.getJSON(`http://${$(this).val()}/colour_serializer.php`).fail((data) => {
+          $.getJSON(`http://${$(this).val()}/api/get/colours`).fail((data) => {
 
             $(this).addClass('invalid');
             invalidInputs.push(`${settings[$(this).attr('name')].label} '${$(this).val()}' is Invalid.`);

@@ -7,7 +7,7 @@
   $title = $type = $_POST["type"];
   $url = $_SERVER['HTTP_REFERER'];
   include("assets/php/actions.php");
-  include("../sql.php");
+  include("../assets/php/sql.php");
 
   if (isset($_POST["new"]) && in_array("create", $actions)) {
       $mysql->query = "INSERT INTO yourmood.${table} () VALUES ()";

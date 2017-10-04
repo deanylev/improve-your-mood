@@ -2,7 +2,7 @@
 
   date_default_timezone_set('Australia/Melbourne');
   header("Access-Control-Allow-Origin: *");
-  include("../../../sql.php");
+  include("../../../assets/php/sql.php");
   $datetime = date('d/m/Y h:i:s a', time());
   $ip = isset($_SERVER["HTTP_CF_CONNECTING_IP"]) ? $_SERVER["HTTP_CF_CONNECTING_IP"] : $_SERVER['REMOTE_ADDR'];
   $version = mysqli_real_escape_string($conn, $_POST["version"]);
