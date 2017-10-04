@@ -80,10 +80,6 @@ label:not(.active) b, #advanced-settings, .fade-in-on-ready, .fade-in-on-load {
   display: none !important;
 }
 
-.default-button {
-  //display: block;
-}
-
 .tabs .indicator {
   background-color: white;
 }
