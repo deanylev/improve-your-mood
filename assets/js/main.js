@@ -111,7 +111,7 @@ $(document).ready(function() {
 
   $('title').text(`${version} Your Mood`);
   $('#logo-version').text(version.toLowerCase());
-  $('.fade-in-on-load').fadeIn();
+  $('.fade-in-on-ready').fadeIn();
   $('#footer-version').text(version);
 
   if (platform === 'web') $('link[rel="icon"], link[rel="shortcut icon"]').attr('href', `assets/${version.toLowerCase()}_favicon.ico`);
@@ -602,7 +602,7 @@ $.getJSON(`${fullBackendAddress}settings_serializer.php`).done((data) => {
     // Theme colour
 
     $('.theme-text').css('cssText', `color: ${fullSettings.theme_colour} !important`);
-    $('.fade-in-on-load').css('display', 'block');
+    $('.fade-in-on-ready').css('display', 'block');
 
     // Touch / click gestures
 
@@ -1487,7 +1487,7 @@ $.getJSON(`${fullBackendAddress}settings_serializer.php`).done((data) => {
 
       moodEngine.setColour(`#${colour}`);
 
-      $('.fixed-action-btn').removeClass('hide');
+      $('.fade-in-on-load').fadeIn();
 
       if (method !== 'Auto') $('#go-back-button').removeClass('disabled');
 
