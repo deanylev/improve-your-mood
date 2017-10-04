@@ -107,7 +107,7 @@ $(window).on('error', function(error) {
 
 $(document).ready(function() {
 
-  // Remove has from URL
+  // Remove hash from URL
 
   history.pushState('', document.title, window.location.pathname);
 
