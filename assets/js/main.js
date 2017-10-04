@@ -466,7 +466,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
 
       }
 
-      if (method !== 'initial' && fullSettings[key] !== currentSettings[key]) {
+      if (method !== 'initial' && JSON.stringify(fullSettings[key]) !== JSON.stringify(currentSettings[key])) {
 
         let currentValue;
         let newValue;
@@ -690,23 +690,53 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
 
       if (typeof(fullSettings.reload_keys) === 'object') {
 
-        Mousetrap.bindGlobal(fullSettings.reload_keys, function(e, combo) {
+        if (fullSettings.reload_keys.includes('enter')) {
 
-          if (!appError) {
+          Mousetrap.bindGlobal(fullSettings.reload_keys, function(e, combo) {
 
-            if (!settingsOpen) {
+            if (!appError) {
 
-              moodEngine.reload();
+              if (!settingsOpen) {
 
-            } else if (fullSettings.save_settings_keys.includes(combo) && (!$('#settings-modal input:focus').parent().hasClass('chips') || !$('#settings-modal input:focus').val())) {
+                moodEngine.reload();
 
-              moodEngine.saveSettings();
+              } else if (fullSettings.save_settings_keys.includes(combo) && (!$('#settings-modal input:focus').parent().hasClass('chips') || !$('#settings-modal input:focus').val())) {
+
+                moodEngine.saveSettings();
+
+              }
 
             }
 
+          });
+
+        } else {
+
+          Mousetrap.bindGlobal(fullSettings.reload_keys, function(e, combo) {
+
+            if (!appError && !settingsOpen) {
+
+              moodEngine.reload();
+
+            }
+
+          });
+
+          if (typeof(fullSettings.save_settings_keys) === 'object') {
+
+            Mousetrap.bindGlobal(fullSettings.save_settings_keys, function(e, combo) {
+
+              if (settingsOpen && (!$('#settings-modal input:focus').parent().hasClass('chips') || !$('#settings-modal input:focus').val())) {
+
+                moodEngine.saveSettings();
+
+              }
+
+            });
+
           }
 
-        });
+        }
 
       }
 
