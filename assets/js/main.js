@@ -500,19 +500,10 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
     if (fullSettings.colour_reload_transitions) {
 
       $('.coloured').css('transition', `${fullSettings.colour_reload_transition_time}ms ease-out`);
-      $('#fade-style').text(`
-
-            input[type="range"]::-webkit-slider-thumb {
-              transition: ${fullSettings.colour_reload_transition_time}ms ease-out !important;
-            }
-
-            `);
 
     } else {
 
       $('.coloured').css('transition', 'none');
-      $('#fade-style').empty();
-
     }
 
     // Build button menu
@@ -919,7 +910,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
       let setting = $(this).attr('name');
       let value = fullSettings[setting];
 
-      if ($(this).is('select') || typeof(value) === 'object') {
+      if (($(this).is('select') && typeof(value) === 'boolean') || typeof(value) === 'object') {
 
         $(this).val(JSON.stringify(value));
 
@@ -1078,11 +1069,27 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
 
       if (val.input === 'select') {
 
+        let options = '';
+
+        if (val.options) {
+
+          $.each(val.options, function(key, val) {
+
+            options += `<option value="${val}">${val}</option>`;
+
+          })
+
+        } else {
+
+          options = `
+                  <option value="false">No</option>
+                  <option value="true">Yes</option>
+                  `;
+
+        }
+
         input = `
-                  <select class="settings-input" name="${key}">
-                    <option value="false">No</option>
-                    <option value="true">Yes</option>
-                  </select>
+                  <select class="settings-input" name="${key}">${options}</select>
                   `;
 
         label = `
