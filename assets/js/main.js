@@ -242,10 +242,10 @@ moodEngine.log('log', `Pulling from: ${fullBackendAddress}`);
 
 if (localStorage.getItem('cachedQuotes') && localStorage.getItem('cachedVersionQuotes') && localStorage.getItem('disable_caching') !== 'true') {
 
-  moodEngine.log('log', 'Using cached quotes...');
-
   quotes = JSON.parse(localStorage.getItem('cachedQuotes'));
   versionQuotes = JSON.parse(localStorage.getItem('cachedVersionQuotes'));
+
+  moodEngine.log('log', `Using ${quotes.length} cached quotes...`);
 
 } else {
 
@@ -320,9 +320,9 @@ if (localStorage.getItem('cachedQuotes') && localStorage.getItem('cachedVersionQ
 
 if (localStorage.getItem('cachedColours') && localStorage.getItem('disable_caching') !== 'true') {
 
-  moodEngine.log('log', 'Using cached colours...');
-
   colours = JSON.parse(localStorage.getItem('cachedColours'));
+
+  moodEngine.log('log', `Using ${colours.length} cached colours...`);
 
 } else {
 
@@ -1040,6 +1040,8 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
     });
 
   }
+
+  // Build settings panel
 
   $.each(settings, function(key, val) {
 
