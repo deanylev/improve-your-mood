@@ -6,7 +6,6 @@ var usedColours = [];
 var quoteHistory = [];
 var colourHistory = [];
 var moodLog = [];
-var cssColours = ['aliceblue', 'antiquewhite', 'aqua', 'aquamarine', 'azure', 'beige', 'bisque', 'black', 'blanchedalmond', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chartreuse', 'chocolate', 'coral', 'cornflowerblue', 'cornsilk', 'crimson', 'cyan', 'darkblue', 'darkcyan', 'darkgoldenrod', 'darkgray', 'darkgrey', 'darkgreen', 'darkkhaki', 'darkmagenta', 'darkolivegreen', 'darkorange', 'darkorchid', 'darkred', 'darksalmon', 'darkseagreen', 'darkslateblue', 'darkslategray', 'darkslategrey', 'darkturquoise', 'darkviolet', 'deeppink', 'deepskyblue', 'dimgray', 'dimgrey', 'dodgerblue', 'firebrick', 'floralwhite', 'forestgreen', 'fuchsia', 'gainsboro', 'ghostwhite', 'gold', 'goldenrod', 'gray', 'grey', 'green', 'greenyellow', 'honeydew', 'hotpink', 'indianred', 'indigo', 'ivory', 'khaki', 'lavender', 'lavenderblush', 'lawngreen', 'lemonchiffon', 'lightblue', 'lightcoral', 'lightcyan', 'lightgoldenrodyellow', 'lightgray', 'lightgrey', 'lightgreen', 'lightpink', 'lightsalmon', 'lightseagreen', 'lightskyblue', 'lightslategray', 'lightslategrey', 'lightsteelblue', 'lightyellow', 'lime', 'limegreen', 'linen', 'magenta', 'maroon', 'mediumaquamarine', 'mediumblue', 'mediumorchid', 'mediumpurple', 'mediumseagreen', 'mediumslateblue', 'mediumspringgreen', 'mediumturquoise', 'mediumvioletred', 'midnightblue', 'mintcream', 'mistyrose', 'moccasin', 'navajowhite', 'navy', 'oldlace', 'olive', 'olivedrab', 'orange', 'orangered', 'orchid', 'palegoldenrod', 'palegreen', 'paleturquoise', 'palevioletred', 'papayawhip', 'peachpuff', 'peru', 'pink', 'plum', 'powderblue', 'purple', 'red', 'rosybrown', 'royalblue', 'saddlebrown', 'salmon', 'sandybrown', 'seagreen', 'seashell', 'sienna', 'silver', 'skyblue', 'slateblue', 'slategray', 'slategrey', 'snow', 'springgreen', 'steelblue', 'tan', 'teal', 'thistle', 'tomato', 'turquoise', 'violet', 'wheat', 'white', 'whitesmoke', 'yellow', 'yellowgreen'];
 var moodEngine = {};
 var settings = {};
 var fullSettings = {};
@@ -547,6 +546,9 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
             hidden = hasUserSettings ? '' : 'hide';
             html = `<li data-button="settings" class="${hidden}"><a class="btn-floating menu-button waves-effect transparent" id="settings-button"><i class="material-icons main-icon theme-text" data-icon="settings" data-default="settings"></i><i class="material-icons alt-icon theme-text hide" data-icon="setalldefault" data-default="clear_all"></i></a></li>`;
             break;
+          case 'speak':
+            html = '<li data-button="speak"><a class="btn-floating menu-button waves-effect transparent" id="speak-quote-button"><i class="material-icons theme-text" data-icon="speak" data-default="volume_up"></i></a></li>';
+            break;
           case 'rewind':
             html = '<li data-button="rewind"><a class="btn-floating menu-button waves-effect transparent disabled" id="go-back-button"><i class="material-icons main-icon theme-text" data-icon="rewind" data-default="skip_previous"></i><i class="material-icons alt-icon theme-text hide" data-icon="fullrewind" data-default="first_page"></i></a></li>';
             break;
@@ -601,6 +603,12 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
       $('#settings-button').click(function(e) {
 
         if (!appError) e.shiftKey && platform === 'web' ? moodEngine.setAllDefault() : moodEngine.toggleSettings();
+
+      });
+
+      $('#speak-quote-button').click(function() {
+
+        if (!appError) responsiveVoice.speak($('#quote').text(), fullSettings.speak_voice_accent);
 
       });
 
@@ -1072,13 +1080,25 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
 
         let options = '';
 
-        if (val.options) {
+        if (val.options && typeof(val.options) === 'object') {
 
-          $.each(val.options, function(key, val) {
+          if (Array.isArray(val.options)) {
 
-            options += `<option value="${val}">${val}</option>`;
+            $.each(val.options, function(key, val) {
 
-          })
+              options += `<option value="${val}">${val}</option>`;
+
+            });
+
+          } else {
+
+            $.each(val.options, function(key, val) {
+
+              options += `<option value="${val}">${key}</option>`;
+
+            });
+
+          }
 
         } else {
 
@@ -1712,34 +1732,29 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
 
       // Detect if input is blank
 
-      $(this).addClass('invalid');
+      if (!$(this).is('select')) {
 
-      if ($(this).attr('data-optional') !== 'true' && ((!$(this).hasClass('chips') && !$(this).val() || $(this).val() === 'null') || $(this).hasClass('chips') && !$(this).material_chip('data').length)) {
+        $(this).addClass('invalid');
 
-        emptyInputs.push(` ${settings[$(this).attr('name')].label}`);
+        if ($(this).attr('data-optional') !== 'true' && ((!$(this).hasClass('chips') && !$(this).val() || $(this).val() === 'null') || $(this).hasClass('chips') && !$(this).material_chip('data').length)) {
 
-      } else if ($(this).val().indexOf(' ') >= 0) {
+          emptyInputs.push(` ${settings[$(this).attr('name')].label}`);
 
-        spaceInputs.push(` ${settings[$(this).attr('name')].label}`);
+        } else if ($(this).val().indexOf(' ') >= 0 && !$(this).is('select')) {
 
-      } else {
+          spaceInputs.push(` ${settings[$(this).attr('name')].label}`);
 
-        $(this).removeClass('invalid');
+        } else {
+
+          $(this).removeClass('invalid');
+
+        }
 
       }
 
       // Custom Validations
 
       if ($(this).val() && $(this).val().indexOf(' ') < 0) {
-
-        // Theme Colour
-
-        if ($(this).attr('name') === 'theme_colour' && !cssColours.includes($(this).val().toLowerCase())) {
-
-          $(this).addClass('invalid');
-          invalidInputs.push(`'${$(this).val()}' is not a valid CSS colour.`);
-
-        }
 
         // Backend Address
 
