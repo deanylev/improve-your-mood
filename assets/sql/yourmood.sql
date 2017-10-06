@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Oct 06, 2017 at 08:46 AM
+-- Generation Time: Oct 06, 2017 at 02:31 PM
 -- Server version: 5.7.19-0ubuntu0.16.04.1
 -- PHP Version: 7.0.22-0ubuntu0.16.04.1
 
@@ -256,11 +256,11 @@ INSERT INTO `settings` (`id`, `active`, `setting`, `value`, `user`, `optional`, 
 (29, 1, 'app_version', '6.7.0', 0, 0, 0, 0, '', '', '', 0, 0, '', ''),
 (30, 1, 'app_update_reminder', 'true', 0, 0, 0, 0, '', '', '', 0, 0, '', 'Please update to the latest version of the app.'),
 (33, 1, 'reverse_swipe_direction', 'false', 1, 0, 0, 1, 'select', '', 'behaviour', 0, 0, 'Reverse Swipe Direction', 'Reverse the directions that you swipe to reload/rewind.'),
-(34, 1, 'button_icons', '{"menu":"menu", "autoreload":"autorenew", "settings":"settings", "rewind":"skip_previous", "switchversion":"swap_calls", "setalldefault":"clear_all", "fullrewind":"first_page"}', 0, 0, 0, 0, 'chips', '', 'keyboard', 0, 0, '', ''),
+(34, 1, 'button_icons', '{"menu":"menu", "autoreload":"autorenew", "settings":"settings", "rewind":"skip_previous", "switchversion":"swap_calls", "setalldefault":"clear_all", "fullrewind":"first_page", "speak":"volume_up"}', 0, 0, 0, 0, 'chips', '', 'keyboard', 0, 0, '', ''),
 (35, 1, 'require_settings_reload', 'false', 0, 0, 0, 0, 'select', '', '', 0, 0, '', ''),
 (36, 1, 'menu_keys', '["m"]', 1, 1, 0, 0, 'chips', '', 'keyboard', 0, 0, 'Menu Keyboard Shortcuts', 'Which keys will toggle the menu.'),
 (37, 1, 'scroll_settings', 'false', 0, 0, 0, 0, 'select', '', '', 0, 0, '', ''),
-(38, 1, 'button_order', '["autoreload", "settings", "rewind"]', 1, 0, 0, 1, 'chips', '', 'appearance', 0, 0, 'Button Menu Order', 'The order of the buttons in the button menu. Alternatively, these can be reordered by clicking and dragging them around. Any values that aren\'t apart of the default 3 will be ignored.'),
+(38, 1, 'button_order', '["autoreload", "settings", "speak", "rewind"]', 1, 0, 0, 1, 'chips', '', 'appearance', 0, 0, 'Button Menu Order', 'The order of the buttons in the button menu. Alternatively, these can be reordered by clicking and dragging them around. Any values that aren\'t apart of the default 3 will be ignored.'),
 (39, 1, 'theme_colour', 'white', 1, 0, 0, 1, 'select', '["aliceblue", "antiquewhite", "aqua", "aquamarine", "azure", "beige", "bisque", "black", "blanchedalmond", "blue", "blueviolet", "brown", "burlywood", "cadetblue", "chartreuse", "chocolate", "coral", "cornflowerblue", "cornsilk", "crimson", "cyan", "darkblue", "darkcyan", "darkgoldenrod", "darkgray", "darkgrey", "darkgreen", "darkkhaki", "darkmagenta", "darkolivegreen", "darkorange", "darkorchid", "darkred", "darksalmon", "darkseagreen", "darkslateblue", "darkslategray", "darkslategrey", "darkturquoise", "darkviolet", "deeppink", "deepskyblue", "dimgray", "dimgrey", "dodgerblue", "firebrick", "floralwhite", "forestgreen", "fuchsia", "gainsboro", "ghostwhite", "gold", "goldenrod", "gray", "grey", "green", "greenyellow", "honeydew", "hotpink", "indianred", "indigo", "ivory", "khaki", "lavender", "lavenderblush", "lawngreen", "lemonchiffon", "lightblue", "lightcoral", "lightcyan", "lightgoldenrodyellow", "lightgray", "lightgrey", "lightgreen", "lightpink", "lightsalmon", "lightseagreen", "lightskyblue", "lightslategray", "lightslategrey", "lightsteelblue", "lightyellow", "lime", "limegreen", "linen", "magenta", "maroon", "mediumaquamarine", "mediumblue", "mediumorchid", "mediumpurple", "mediumseagreen", "mediumslateblue", "mediumspringgreen", "mediumturquoise", "mediumvioletred", "midnightblue", "mintcream", "mistyrose", "moccasin", "navajowhite", "navy", "oldlace", "olive", "olivedrab", "orange", "orangered", "orchid", "palegoldenrod", "palegreen", "paleturquoise", "palevioletred", "papayawhip", "peachpuff", "peru", "pink", "plum", "powderblue", "purple", "red", "rosybrown", "royalblue", "saddlebrown", "salmon", "sandybrown", "seagreen", "seashell", "sienna", "silver", "skyblue", "slateblue", "slategray", "slategrey", "snow", "springgreen", "steelblue", "tan", "teal", "thistle", "tomato", "turquoise", "violet", "wheat", "white", "whitesmoke", "yellow", "yellowgreen"]', 'appearance', 0, 0, 'Theme Colour', 'What colour the accents (text, icons) will appear. Needs to be a valid CSS colour (eg. white, black, red, orange, green, etc.).'),
 (40, 1, 'full_rewind_keys', '["shift+backspace"]', 1, 1, 0, 0, 'chips', '', 'keyboard', 0, 0, 'Full Rewind Keyboard Shortcuts', 'Which keys will go back to the first quote/colour.'),
 (41, 1, 'optional_indicators', 'true', 0, 0, 0, 0, 'select', '', '', 0, 0, '', ''),
@@ -268,7 +268,8 @@ INSERT INTO `settings` (`id`, `active`, `setting`, `value`, `user`, `optional`, 
 (45, 1, 'keep_advanced_settings', 'false', 1, 0, 1, 1, 'checkbox', '', 'advanced', 0, 0, 'Keep Advanced Settings', 'If enabled, advanced settings will not be set to default when \'Set All to Default\' is clicked. This is useful when testing on a custom back-end address.'),
 (48, 1, 'tabs', '["appearance", "behaviour", "keyboard", "advanced"]', 0, 0, 0, 0, '', '', '', 0, 0, '', ''),
 (50, 1, 'keep_tab', 'true', 0, 0, 0, 0, '', '', '', 0, 0, '', ''),
-(51, 1, 'disable_caching', 'false', 1, 0, 1, 1, 'checkbox', '', 'advanced', 0, 0, 'Disable Caching', 'If enabled, quotes and colours will not be cached, and fresh copies will be pulled every time the page loads.');
+(51, 1, 'disable_caching', 'false', 1, 0, 1, 1, 'checkbox', '', 'advanced', 0, 0, 'Disable Caching', 'If enabled, quotes and colours will not be cached, and fresh copies will be pulled every time the page loads.'),
+(53, 1, 'speak_voice_accent', 'UK English Female', 1, 0, 0, 1, 'select', '["UK English Female", "UK English Male", "US English Female"]', 'behaviour', 0, 0, 'Speaking Voice Accent', 'What accent the text to speech engine will use when speaking the current quote.');
 
 --
 -- Indexes for dumped tables
@@ -327,12 +328,12 @@ ALTER TABLE `improve`
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=436;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=451;
 --
 -- AUTO_INCREMENT for table `settings`
 --
 ALTER TABLE `settings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
