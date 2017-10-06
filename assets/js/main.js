@@ -617,7 +617,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
 
           } catch (error) {
 
-            moodEngine.log('error', 'Cannot speak quote, invalid voice accent provided.');
+            moodEngine.log('error', `Cannot speak quote, invalid voice accent provided ('${fullSettings.speak_voice_accent}').`);
 
           }
 
@@ -1752,14 +1752,17 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
         if ($(this).attr('data-optional') !== 'true' && ((!$(this).hasClass('chips') && !$(this).val() || $(this).val() === 'null') || $(this).hasClass('chips') && !$(this).material_chip('data').length)) {
 
           emptyInputs.push(` ${settings[$(this).attr('name')].label}`);
+          $(this).next('label').attr('data-error', 'Can\'t be empty.');
 
         } else if ($(this).val().indexOf(' ') >= 0 && !$(this).is('select')) {
 
           spaceInputs.push(` ${settings[$(this).attr('name')].label}`);
+          $(this).next('label').attr('data-error', 'Can\'t contain spaces.');
 
         } else {
 
           $(this).removeClass('invalid');
+          $(this).next('label').attr('data-error', '');
 
         }
 
@@ -1783,6 +1786,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
 
             moodEngine.log('log', `Custom back-end address '${$(this).val()}' is invalid.`);
             $(this).addClass('invalid');
+            $(this).next('label').attr('data-error', 'Address is invalid.');
             invalidInputs.push(`${settings[$(this).attr('name')].label} '${$(this).val()}' is Invalid.`);
 
           });
