@@ -547,7 +547,8 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
             html = `<li data-button="settings" class="${hidden}"><a class="btn-floating menu-button waves-effect transparent" id="settings-button"><i class="material-icons main-icon theme-text" data-icon="settings" data-default="settings"></i><i class="material-icons alt-icon theme-text hide" data-icon="setalldefault" data-default="clear_all"></i></a></li>`;
             break;
           case 'speak':
-            html = '<li data-button="speak"><a class="btn-floating menu-button waves-effect transparent" id="speak-quote-button"><i class="material-icons theme-text" data-icon="speak" data-default="volume_up"></i></a></li>';
+            hidden = fullSettings.speak_voice_accent ? '' : 'hide';
+            html = `<li data-button="speak" class="${hidden}"><a class="btn-floating menu-button waves-effect transparent" id="speak-quote-button"><i class="material-icons theme-text" data-icon="speak" data-default="volume_up"></i></a></li>`;
             break;
           case 'rewind':
             html = '<li data-button="rewind"><a class="btn-floating menu-button waves-effect transparent disabled" id="go-back-button"><i class="material-icons main-icon theme-text" data-icon="rewind" data-default="skip_previous"></i><i class="material-icons alt-icon theme-text hide" data-icon="fullrewind" data-default="first_page"></i></a></li>';
@@ -608,7 +609,19 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
 
       $('#speak-quote-button').click(function() {
 
-        if (!appError) responsiveVoice.speak($('#quote').text(), fullSettings.speak_voice_accent);
+        if (!appError) {
+
+          try {
+
+            responsiveVoice.speak($('#quote').text(), fullSettings.speak_voice_accent);
+
+          } catch (error) {
+
+            moodEngine.log('error', 'Cannot speak quote, invalid voice accent provided.');
+
+          }
+
+        }
 
       });
 
