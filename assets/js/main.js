@@ -1034,7 +1034,6 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
 
         localStorage.setItem('button_order', JSON.stringify(array));
         moodEngine.setSettings('buttonsSorted');
-        moodEngine.setInputs();
 
       }
     });
