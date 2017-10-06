@@ -1737,12 +1737,15 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
 
         if ($(this).attr('name') === 'backend_address' && $(this).val() !== backendAddress) {
 
+          moodEngine.log('log', `Testing custom back-end address '${$(this).val()}'...`);
+
           $.ajaxSetup({
             async: false
           });
 
           $.getJSON(`http://${$(this).val()}/api/get/colours/index.php`).fail((data) => {
 
+            moodEngine.log('log', `Custom back-end address '${$(this).val()}' is invalid.`);
             $(this).addClass('invalid');
             invalidInputs.push(`${settings[$(this).attr('name')].label} '${$(this).val()}' is Invalid.`);
 
