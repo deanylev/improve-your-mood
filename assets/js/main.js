@@ -11,23 +11,11 @@ var settings = {};
 var fullSettings = {};
 var pullTime = {};
 var versionQuotes = {};
-var platform = location.protocol === 'file:' ? 'app' : 'web';
 var backendAddress = localStorage.getItem('backend_address') || 'improveyourmood.xyz';
 var fullBackendAddress = `http://${backendAddress}/`;
 var totalTime = performance.now();
-
-if (platform === 'web') {
-
-  var version = window.location.href.includes('decreaseyourmood') ? 'Decrease' : 'Improve';
-  var otherVersion = window.location.href.includes('decreaseyourmood') ? 'Improve' : 'Decrease';
-
-} else {
-
-  var version = $('html').attr('data-version') === 'Decrease' ? 'Decrease' : 'Improve';
-  var otherVersion = $('html').attr('data-version') === 'Decrease' ? 'Improve' : 'Decrease';
-  var appVersion = JSON.parse($('html').attr('data-app-version').replace(/\./g, ''));
-
-}
+var version = window.location.href.includes('decreaseyourmood') ? 'Decrease' : 'Improve';
+var otherVersion = window.location.href.includes('decreaseyourmood') ? 'Improve' : 'Decrease';
 
 moodEngine.log = function(type, message, display) {
 
@@ -64,7 +52,6 @@ moodEngine.sendLog = function() {
     url: `${fullBackendAddress}api/create/log/index.php`,
     data: {
       version: version,
-      platform: platform,
       userAgent: navigator.userAgent,
       log: JSON.stringify(moodLog)
     },
@@ -120,7 +107,7 @@ $(document).ready(function() {
 
   $('.fade-in-on-ready').fadeIn();
 
-  if (platform === 'web') $('link[rel="icon"], link[rel="shortcut icon"]').attr('href', `assets/${version.toLowerCase()}_favicon.ico`);
+  $('link[rel="icon"], link[rel="shortcut icon"]').attr('href', `assets/${version.toLowerCase()}_favicon.ico`);
 
   $('#year').append(new Date().getFullYear());
 
@@ -607,13 +594,13 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
 
       $('#toggle-auto-reload').click(function(e) {
 
-        e.shiftKey && platform === 'web' && !disableSwitch ? moodEngine.switchVersion() : moodEngine.toggleAutoReload();
+        e.shiftKey && !disableSwitch ? moodEngine.switchVersion() : moodEngine.toggleAutoReload();
 
       });
 
       $('#settings-button').click(function(e) {
 
-        if (!appError) e.shiftKey && platform === 'web' ? moodEngine.setAllDefault() : moodEngine.toggleSettings();
+        if (!appError) e.shiftKey ? moodEngine.setAllDefault() : moodEngine.toggleSettings();
 
       });
 
@@ -637,7 +624,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
 
       $('#go-back-button').click(function(e) {
 
-        e.shiftKey && platform === 'web' ? moodEngine.fullRewind() : moodEngine.rewind();
+        e.shiftKey ? moodEngine.fullRewind() : moodEngine.rewind();
 
       });
 
@@ -680,153 +667,149 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
 
     // Keyboard shortcuts
 
-    if (platform === 'web') {
+    Mousetrap.reset();
 
-      Mousetrap.reset();
+    // Shift click icons
 
-      // Shift click icons
+    Mousetrap.bind(['shift'], function(e) {
 
-      Mousetrap.bind(['shift'], function(e) {
+      $('.menu-button').each(function() {
 
-        $('.menu-button').each(function() {
+        $(this).find('.main-icon').addClass('hide');
+        $(this).find('.alt-icon').removeClass('hide');
 
-          $(this).find('.main-icon').addClass('hide');
-          $(this).find('.alt-icon').removeClass('hide');
+      });
 
-        });
+    }, 'keydown');
 
-      }, 'keydown');
+    Mousetrap.bind(['shift'], function(e) {
 
-      Mousetrap.bind(['shift'], function(e) {
+      $('.menu-button').each(function() {
 
-        $('.menu-button').each(function() {
+        $(this).find('.main-icon').removeClass('hide');
+        $(this).find('.alt-icon').addClass('hide');
 
-          $(this).find('.main-icon').removeClass('hide');
-          $(this).find('.alt-icon').addClass('hide');
+      });
 
-        });
+    }, 'keyup');
 
-      }, 'keyup');
+    // Reload & Save Settings (because they share keys)
 
-      // Reload & Save Settings (because they share keys)
+    if (typeof(fullSettings.reload_keys) === 'object') {
 
-      if (typeof(fullSettings.reload_keys) === 'object') {
+      if (fullSettings.reload_keys.includes('enter')) {
 
-        if (fullSettings.reload_keys.includes('enter')) {
+        Mousetrap.bindGlobal(fullSettings.reload_keys, function(e, combo) {
 
-          Mousetrap.bindGlobal(fullSettings.reload_keys, function(e, combo) {
+          if (!appError) {
 
-            if (!appError) {
-
-              if (!settingsOpen) {
-
-                moodEngine.reload();
-
-              } else if (fullSettings.save_settings_keys.includes(combo) && (!$('#settings-modal input:focus').parent().hasClass('chips') || !$('#settings-modal input:focus').val())) {
-
-                moodEngine.saveSettings();
-
-              }
-
-            }
-
-          });
-
-        } else {
-
-          Mousetrap.bindGlobal(fullSettings.reload_keys, function(e, combo) {
-
-            if (!appError && !settingsOpen) {
+            if (!settingsOpen) {
 
               moodEngine.reload();
 
+            } else if (fullSettings.save_settings_keys.includes(combo) && (!$('#settings-modal input:focus').parent().hasClass('chips') || !$('#settings-modal input:focus').val())) {
+
+              moodEngine.saveSettings();
+
+            }
+
+          }
+
+        });
+
+      } else {
+
+        Mousetrap.bindGlobal(fullSettings.reload_keys, function(e, combo) {
+
+          if (!appError && !settingsOpen) {
+
+            moodEngine.reload();
+
+          }
+
+        });
+
+        if (typeof(fullSettings.save_settings_keys) === 'object') {
+
+          Mousetrap.bindGlobal(fullSettings.save_settings_keys, function(e, combo) {
+
+            if (settingsOpen && (!$('#settings-modal input:focus').parent().hasClass('chips') || !$('#settings-modal input:focus').val())) {
+
+              moodEngine.saveSettings();
+
             }
 
           });
-
-          if (typeof(fullSettings.save_settings_keys) === 'object') {
-
-            Mousetrap.bindGlobal(fullSettings.save_settings_keys, function(e, combo) {
-
-              if (settingsOpen && (!$('#settings-modal input:focus').parent().hasClass('chips') || !$('#settings-modal input:focus').val())) {
-
-                moodEngine.saveSettings();
-
-              }
-
-            });
-
-          }
 
         }
 
       }
 
-      // Rewind
+    }
 
-      if (typeof(fullSettings.back_keys) === 'object') {
+    // Rewind
 
-        Mousetrap.bind(fullSettings.back_keys, function(e) {
+    if (typeof(fullSettings.back_keys) === 'object') {
 
-          if (!appError && !settingsOpen) moodEngine.rewind();
+      Mousetrap.bind(fullSettings.back_keys, function(e) {
 
-        });
+        if (!appError && !settingsOpen) moodEngine.rewind();
 
-      }
+      });
 
-      // Rewind
+    }
 
-      if (typeof(fullSettings.full_rewind_keys) === 'object') {
+    // Rewind
 
-        Mousetrap.bind(fullSettings.full_rewind_keys, function(e) {
+    if (typeof(fullSettings.full_rewind_keys) === 'object') {
 
-          if (!appError && !settingsOpen) moodEngine.fullRewind();
+      Mousetrap.bind(fullSettings.full_rewind_keys, function(e) {
 
-        });
+        if (!appError && !settingsOpen) moodEngine.fullRewind();
 
-      }
+      });
 
-      // Toggle Auto Reload
+    }
 
-      if (typeof(fullSettings.auto_reload_keys) === 'object') {
+    // Toggle Auto Reload
 
-        Mousetrap.bind(fullSettings.auto_reload_keys, function(e) {
+    if (typeof(fullSettings.auto_reload_keys) === 'object') {
 
-          if (!appError && !settingsOpen) moodEngine.toggleAutoReload();
+      Mousetrap.bind(fullSettings.auto_reload_keys, function(e) {
 
-        });
+        if (!appError && !settingsOpen) moodEngine.toggleAutoReload();
 
-      }
+      });
 
-      // Toggle Button Menu
+    }
 
-      if (typeof(fullSettings.menu_keys) === 'object') {
+    // Toggle Button Menu
 
-        Mousetrap.bind(fullSettings.menu_keys, function(e) {
+    if (typeof(fullSettings.menu_keys) === 'object') {
 
-          if (!appError && !settingsOpen) {
+      Mousetrap.bind(fullSettings.menu_keys, function(e) {
 
-            let fabOpen = $('.fixed-action-btn').hasClass('active');
+        if (!appError && !settingsOpen) {
 
-            fabOpen ? $('.fixed-action-btn').closeFAB() : $('.fixed-action-btn').openFAB();
+          let fabOpen = $('.fixed-action-btn').hasClass('active');
 
-          }
+          fabOpen ? $('.fixed-action-btn').closeFAB() : $('.fixed-action-btn').openFAB();
 
-        });
+        }
 
-      }
+      });
 
-      // Toggle Settings Panel
+    }
 
-      if (typeof(fullSettings.settings_keys) === 'object') {
+    // Toggle Settings Panel
 
-        Mousetrap.bindGlobal(fullSettings.settings_keys, function(e) {
+    if (typeof(fullSettings.settings_keys) === 'object') {
 
-          if (!appError && !$('#settings-modal input:not([type="range"]):not([type="checkbox"]):focus').length) moodEngine.toggleSettings();
+      Mousetrap.bindGlobal(fullSettings.settings_keys, function(e) {
 
-        });
+        if (!appError && !$('#settings-modal input:not([type="range"]):not([type="checkbox"]):focus').length) moodEngine.toggleSettings();
 
-      }
+      });
 
     }
 
@@ -921,10 +904,6 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
   // Set settings
 
   moodEngine.setSettings('initial');
-
-  // Check app version
-
-  if (platform === 'app' && fullSettings.app_update_reminder && JSON.parse(fullSettings.app_version.replace(/\./g, '')) > appVersion) Materialize.toast(settings.app_update_reminder.description, fullSettings.toast_interval);
 
   // Set a default toast interval
 
@@ -1933,7 +1912,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
 
     moodEngine.saveSettings();
 
-    if (e.shiftKey && platform === 'web') window.location.reload();
+    if (e.shiftKey) window.location.reload();
 
   });
 
@@ -1961,7 +1940,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
       $('title').text(`${version} Your Mood`);
       $('#logo-version').text(version.toLowerCase());
       $('#footer-version').text(version);
-      if (platform === 'web') $('link[rel="icon"], link[rel="shortcut icon"]').attr('href', `assets/${version.toLowerCase()}_favicon.ico`);
+      $('link[rel="icon"], link[rel="shortcut icon"]').attr('href', `assets/${version.toLowerCase()}_favicon.ico`);
 
       moodEngine.reload('Auto');
       moodEngine.rewind();

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Oct 07, 2017 at 11:43 AM
+-- Generation Time: Oct 07, 2017 at 11:49 AM
 -- Server version: 5.7.19-0ubuntu0.16.04.1
 -- PHP Version: 7.0.22-0ubuntu0.16.04.1
 
@@ -205,7 +205,6 @@ CREATE TABLE `logs` (
   `sent_at` varchar(30) NOT NULL,
   `ip_address` varchar(20) NOT NULL,
   `version` varchar(10) NOT NULL,
-  `platform` varchar(10) NOT NULL,
   `useragent` text NOT NULL,
   `log` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
