@@ -1102,11 +1102,11 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
 
       if (fullSettings.reset_input_buttons) {
 
-        inputCol = 's11'
+        inputCol = 'm11 s10'
         resetInput = `
-                  <div class="col s1">
-                    <a class="reset-input" data-setting="${key}">
-                      <i class="material-icons prefix">refresh</i>
+                  <div class="col m1 s2">
+                    <a class="btn-floating coloured coloured-background waves-effect reset-input" data-setting="${key}">
+                      <i class="center material-icons prefix">refresh</i>
                     </a>
                   </div>`;
 
