@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Oct 06, 2017 at 02:31 PM
+-- Generation Time: Oct 07, 2017 at 09:04 AM
 -- Server version: 5.7.19-0ubuntu0.16.04.1
 -- PHP Version: 7.0.22-0ubuntu0.16.04.1
 
@@ -240,7 +240,7 @@ CREATE TABLE `settings` (
 
 INSERT INTO `settings` (`id`, `active`, `setting`, `value`, `user`, `optional`, `advanced`, `mobile`, `input`, `options`, `tab`, `min`, `max`, `label`, `description`) VALUES
 (1, 1, 'reload_interval', '3000', 1, 0, 0, 1, 'range', '', 'behaviour', 0, 10000, 'Auto Reload Interval (ms)', 'How often the auto reload will function, in milliseconds.'),
-(4, 1, 'toast_interval', '2000', 0, 0, 0, 0, 'number', '', '', 0, 0, '', ''),
+(4, 1, 'toast_interval', '1000', 0, 0, 0, 0, 'number', '', '', 0, 0, '', ''),
 (10, 1, 'reload_keys', '["space", "enter", "right", "d"]', 1, 1, 0, 0, 'chips', '', 'keyboard', 0, 0, 'Reload Keyboard Shortcuts', 'Which keys will activate a reload.'),
 (11, 1, 'no_repeats', 'true', 0, 0, 0, 0, '', '', '', 0, 0, '', ''),
 (15, 1, 'back_keys', '["backspace", "left", "a"]', 1, 1, 0, 0, 'chips', '', 'keyboard', 0, 0, 'Rewind Keyboard Shortcuts', 'Which keys will go back to the previous quote/colour.'),
@@ -264,12 +264,12 @@ INSERT INTO `settings` (`id`, `active`, `setting`, `value`, `user`, `optional`, 
 (39, 1, 'theme_colour', 'white', 1, 0, 0, 1, 'select', '["aliceblue", "antiquewhite", "aqua", "aquamarine", "azure", "beige", "bisque", "black", "blanchedalmond", "blue", "blueviolet", "brown", "burlywood", "cadetblue", "chartreuse", "chocolate", "coral", "cornflowerblue", "cornsilk", "crimson", "cyan", "darkblue", "darkcyan", "darkgoldenrod", "darkgray", "darkgrey", "darkgreen", "darkkhaki", "darkmagenta", "darkolivegreen", "darkorange", "darkorchid", "darkred", "darksalmon", "darkseagreen", "darkslateblue", "darkslategray", "darkslategrey", "darkturquoise", "darkviolet", "deeppink", "deepskyblue", "dimgray", "dimgrey", "dodgerblue", "firebrick", "floralwhite", "forestgreen", "fuchsia", "gainsboro", "ghostwhite", "gold", "goldenrod", "gray", "grey", "green", "greenyellow", "honeydew", "hotpink", "indianred", "indigo", "ivory", "khaki", "lavender", "lavenderblush", "lawngreen", "lemonchiffon", "lightblue", "lightcoral", "lightcyan", "lightgoldenrodyellow", "lightgray", "lightgrey", "lightgreen", "lightpink", "lightsalmon", "lightseagreen", "lightskyblue", "lightslategray", "lightslategrey", "lightsteelblue", "lightyellow", "lime", "limegreen", "linen", "magenta", "maroon", "mediumaquamarine", "mediumblue", "mediumorchid", "mediumpurple", "mediumseagreen", "mediumslateblue", "mediumspringgreen", "mediumturquoise", "mediumvioletred", "midnightblue", "mintcream", "mistyrose", "moccasin", "navajowhite", "navy", "oldlace", "olive", "olivedrab", "orange", "orangered", "orchid", "palegoldenrod", "palegreen", "paleturquoise", "palevioletred", "papayawhip", "peachpuff", "peru", "pink", "plum", "powderblue", "purple", "red", "rosybrown", "royalblue", "saddlebrown", "salmon", "sandybrown", "seagreen", "seashell", "sienna", "silver", "skyblue", "slateblue", "slategray", "slategrey", "snow", "springgreen", "steelblue", "tan", "teal", "thistle", "tomato", "turquoise", "violet", "wheat", "white", "whitesmoke", "yellow", "yellowgreen"]', 'appearance', 0, 0, 'Theme Colour', 'What colour the accents (text, icons) will appear. Needs to be a valid CSS colour (eg. white, black, red, orange, green, etc.).'),
 (40, 1, 'full_rewind_keys', '["shift+backspace"]', 1, 1, 0, 0, 'chips', '', 'keyboard', 0, 0, 'Full Rewind Keyboard Shortcuts', 'Which keys will go back to the first quote/colour.'),
 (41, 1, 'optional_indicators', 'true', 0, 0, 0, 0, 'select', '', '', 0, 0, '', ''),
-(44, 1, 'reset_input_buttons', 'false', 0, 0, 0, 0, '', '', '', 0, 0, '', ''),
+(44, 1, 'reset_input_buttons', 'true', 0, 0, 0, 0, '', '', '', 0, 0, '', ''),
 (45, 1, 'keep_advanced_settings', 'false', 1, 0, 1, 1, 'checkbox', '', 'advanced', 0, 0, 'Keep Advanced Settings', 'If enabled, advanced settings will not be set to default when \'Set All to Default\' is clicked. This is useful when testing on a custom back-end address.'),
 (48, 1, 'tabs', '["appearance", "behaviour", "keyboard", "advanced"]', 0, 0, 0, 0, '', '', '', 0, 0, '', ''),
 (50, 1, 'keep_tab', 'true', 0, 0, 0, 0, '', '', '', 0, 0, '', ''),
 (51, 1, 'disable_caching', 'false', 1, 0, 1, 1, 'checkbox', '', 'advanced', 0, 0, 'Disable Caching', 'If enabled, quotes and colours will not be cached, and fresh copies will be pulled every time the page loads.'),
-(53, 1, 'speak_voice_accent', 'UK English Female', 1, 0, 0, 1, 'select', '["UK English Female", "UK English Male", "US English Female"]', 'behaviour', 0, 0, 'Speaking Voice Accent', 'What accent the text to speech engine will use when speaking the current quote.');
+(53, 1, 'speak_voice_accent', 'UK English Female', 1, 0, 0, 1, 'radio', '["UK English Female", "UK English Male", "US English Female"]', 'behaviour', 0, 0, 'Speaking Voice Accent', 'What accent the text to speech engine will use when speaking the current quote.');
 
 --
 -- Indexes for dumped tables
@@ -328,12 +328,12 @@ ALTER TABLE `improve`
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=451;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=453;
 --
 -- AUTO_INCREMENT for table `settings`
 --
 ALTER TABLE `settings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
