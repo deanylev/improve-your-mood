@@ -1577,11 +1577,11 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
 
       // If all quotes are used and no repeats is enabled, start again
 
-      if (usedQuotes.length === quotes.length && fullSettings.no_repeats) usedQuotes = [];
+      if (usedQuotes.length === quotes.length) usedQuotes = [];
 
       // If MoodEngine trys to use the same quote twice, or one that has already been used, generate a new one
 
-      while (lastNum === quoteNum || fullSettings.no_repeats && usedQuotes.includes(quoteNum)) {
+      while (lastNum === quoteNum || usedQuotes.includes(quoteNum)) {
 
         quoteNum = Math.floor(quotes.length * Math.random());
 
