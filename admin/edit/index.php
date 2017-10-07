@@ -4,8 +4,8 @@
   $id = $_GET["id"];
   $title = $_GET["title"];
   include("../assets/php/header.php");
-  $mysql->query = "SELECT * FROM yourmood.${type} WHERE id='${id}'";
-  $row = $mysql->row();
+  $result = $mysqli->query("SELECT * FROM yourmood.${type} WHERE id='${id}'");
+  $row = $result->fetch_assoc();
 
   if (!in_array("edit", $actions)) {
     warning_handler(null, null);

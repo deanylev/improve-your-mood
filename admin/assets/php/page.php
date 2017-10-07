@@ -1,8 +1,7 @@
 <?php
 
   include("header.php");
-  $mysql->query = "SELECT * FROM yourmood.{$table}";
-  $result = $mysql->result();
+  $result = $mysqli->query("SELECT * FROM yourmood.{$table}");
 
 ?>
 

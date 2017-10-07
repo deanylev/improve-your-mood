@@ -5,8 +5,7 @@
 
   include("sql.php");
 
-  $mysql->query = "SELECT * FROM yourmood.{$table} WHERE `active` = 1";
-  $result = $mysql->result();
+  $result = $mysqli->query("SELECT * FROM yourmood.{$table} WHERE `active` = 1");
 
   $array = array();
 
@@ -18,4 +17,4 @@
 
   echo json_encode($array);
 
-  $mysql->disconnect();
+  $mysqli->close();

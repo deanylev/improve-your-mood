@@ -5,8 +5,7 @@
 
   include("../../../assets/php/sql.php");
 
-  $mysql->query = "SELECT * FROM yourmood.settings WHERE `active` = 1";
-  $result = $mysql->result();
+  $result = $mysqli->query("SELECT * FROM yourmood.settings WHERE `active` = 1");
 
   $settings = (object)array();
 
@@ -27,4 +26,4 @@
 
   echo json_encode($settings);
 
-  $mysql->disconnect();
+  $mysqli->close();
