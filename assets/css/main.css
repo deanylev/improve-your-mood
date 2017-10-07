@@ -96,6 +96,10 @@ label:not(.active) b, #advanced-settings, .fade-in-on-ready, .fade-in-on-load {
   margin-right: 2%;
 }
 
+.thumb {
+  z-index: 9999;
+}
+
 #logo {
   font-family: 'Raleway', Helvetica, Arial;
 }
