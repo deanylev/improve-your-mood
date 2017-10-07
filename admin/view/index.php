@@ -5,10 +5,13 @@
   $title = $_GET["title"];
   include("../assets/php/header.php");
   $result = $mysqli->query("SELECT * FROM yourmood.${type} WHERE id='${id}'");
-  $row = $result->fetch_assoc();
+
+  if ($result->num_rows) {
+      $row = $result->fetch_assoc();
+  }
 
   if (!in_array("view", $actions)) {
-    warning_handler(null, null);
+      warning_handler(null, null);
   }
 
 ?>
