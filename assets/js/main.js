@@ -182,6 +182,26 @@ moodEngine.setColour = function(colour) {
 
 };
 
+// Function for setting text
+
+moodEngine.setText = function(text) {
+
+  if (fullSettings.text_reload_transition_time) {
+
+    $('#quote').fadeOut(fullSettings.text_reload_transition_time / 2, function() {
+
+      $(this).text(text).fadeIn(fullSettings.text_reload_transition_time / 2);
+
+    });
+
+  } else {
+
+    $('#quote').text(text);
+
+  }
+
+};
+
 // Function for displaying and logging errors
 
 moodEngine.error = function(display, log, code, type) {
@@ -491,16 +511,9 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
 
     });
 
-    // Reload transitions
+    // Colour transitions
 
-    if (fullSettings.colour_reload_transitions) {
-
-      $('.coloured').css('transition', `${fullSettings.colour_reload_transition_time}ms ease-out`);
-
-    } else {
-
-      $('.coloured').css('transition', 'none');
-    }
+    if (fullSettings.colour_reload_transition_time) $('.coloured').css('transition', `${fullSettings.colour_reload_transition_time}ms ease-out`);
 
     // Build button menu
 
@@ -1495,20 +1508,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
       let quote = quotes[quoteHistory[quoteNum]];
       let colour = colours[colourHistory[colourNum]];
 
-      if (fullSettings.text_reload_transitions) {
-
-        $('#quote').fadeOut(fullSettings.text_reload_transition_time / 2, function() {
-
-          $(this).text(quote).fadeIn(fullSettings.text_reload_transition_time / 2);
-
-        });
-
-      } else {
-
-        $('#quote').text(quote);
-
-      }
-
+      moodEngine.setText(quote);
       moodEngine.setColour(`#${colour}`);
 
     }
@@ -1534,20 +1534,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
       quoteHistory[0] = quote;
       colourHistory[0] = colour;
 
-      if (fullSettings.text_reload_transitions) {
-
-        $('#quote').fadeOut(fullSettings.text_reload_transition_time / 2, function() {
-
-          $(this).text(quotes[quote]).fadeIn(fullSettings.text_reload_transition_time / 2);
-
-        });
-
-      } else {
-
-        $('#quote').text(quotes[quote]);
-
-      }
-
+      moodEngine.setText(quotes[quote]);
       moodEngine.setColour(`#${colours[colour]}`);
 
       $('#go-back-button').addClass('disabled');
@@ -1597,19 +1584,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
 
       // Display quote on the text element
 
-      if (fullSettings.text_reload_transitions) {
-
-        $('#quote').fadeOut(fullSettings.text_reload_transition_time / 2, function() {
-
-          $(this).text(quote).fadeIn(fullSettings.text_reload_transition_time / 2);
-
-        });
-
-      } else {
-
-        $('#quote').text(quote);
-
-      }
+      moodEngine.setText(quote);
 
       // Reload the colour
 
@@ -1643,15 +1618,6 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
       $('.fade-in-on-load').fadeIn();
 
       if (method !== 'Auto') $('#go-back-button').removeClass('disabled');
-
-      // Log quote/colour in console (for fun)
-
-      if (typeof(fullSettings.extra_logging) === 'object' && fullSettings.extra_logging.includes('reload') && platform === 'web') {
-
-        console.log(`\n%c${quotes[quoteNum]}`, `padding: 2px 5px; font-size: 20px; font-family: 'Oxygen'; color: white; background-color: #${colours[colourNum]}`);
-
-      }
-
     }
 
   };
@@ -1697,20 +1663,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
 
   moodEngine.manualReload = function(text, colour) {
 
-    if (fullSettings.text_reload_transitions) {
-
-      $('#quote').fadeOut(fullSettings.text_reload_transition_time / 2, function() {
-
-        $(this).text(text).fadeIn(fullSettings.text_reload_transition_time / 2);
-
-      });
-
-    } else {
-
-      $('#quote').text(text);
-
-    }
-
+    moodEngine.setText(text);
     moodEngine.setColour(`#${colour}`);
 
   };

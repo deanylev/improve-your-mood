@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Oct 07, 2017 at 09:04 AM
+-- Generation Time: Oct 07, 2017 at 11:43 AM
 -- Server version: 5.7.19-0ubuntu0.16.04.1
 -- PHP Version: 7.0.22-0ubuntu0.16.04.1
 
@@ -242,22 +242,15 @@ INSERT INTO `settings` (`id`, `active`, `setting`, `value`, `user`, `optional`, 
 (1, 1, 'reload_interval', '3000', 1, 0, 0, 1, 'range', '', 'behaviour', 0, 10000, 'Auto Reload Interval (ms)', 'How often the auto reload will function, in milliseconds.'),
 (4, 1, 'toast_interval', '1000', 0, 0, 0, 0, 'number', '', '', 0, 0, '', ''),
 (10, 1, 'reload_keys', '["space", "enter", "right", "d"]', 1, 1, 0, 0, 'chips', '', 'keyboard', 0, 0, 'Reload Keyboard Shortcuts', 'Which keys will activate a reload.'),
-(11, 1, 'no_repeats', 'true', 0, 0, 0, 0, '', '', '', 0, 0, '', ''),
 (15, 1, 'back_keys', '["backspace", "left", "a"]', 1, 1, 0, 0, 'chips', '', 'keyboard', 0, 0, 'Rewind Keyboard Shortcuts', 'Which keys will go back to the previous quote/colour.'),
 (17, 1, 'auto_reload_keys', '["r"]', 1, 1, 0, 0, 'chips', '', 'keyboard', 0, 0, 'Auto Reload Keyboard Shortcuts', 'Which keys will toggle auto reloading.'),
 (18, 1, 'settings_keys', '["s", "up", "down"]', 1, 1, 0, 0, 'chips', '', 'keyboard', 0, 0, 'Toggle Settings Panel Keyboard Shortcuts', 'Which keys will toggle the settings panel.'),
 (19, 1, 'save_settings_keys', '["enter"]', 0, 0, 0, 0, '', '', '', 0, 0, '', ''),
 (20, 1, 'backend_address', 'improveyourmood.xyz', 1, 0, 1, 1, 'text', '', 'advanced', 0, 0, 'Custom Back-End Address', 'Define a custom back-end address, rather than using the live one. Used for development purposes.'),
-(22, 1, 'colour_reload_transitions', 'true', 1, 0, 0, 1, 'select', '', 'appearance', 0, 0, 'Colour Reload Transitions', 'Whether the background colour will have a fade transition when changing.'),
-(23, 1, 'extra_logging', '[]', 0, 0, 0, 0, '', '', '', 0, 0, '', ''),
-(24, 1, 'colour_reload_transition_time', '1200', 1, 0, 0, 1, 'range', '', 'appearance', 100, 5000, 'Colour Reload Transition Time (ms)', 'How long the colour reload transitions will take to complete, in milliseconds.'),
-(25, 1, 'text_reload_transitions', 'true', 1, 0, 0, 1, 'select', '', 'appearance', 0, 0, 'Text Reload Transitions', 'Whether the text will have a fade transition when changing.'),
-(26, 1, 'text_reload_transition_time', '400', 1, 0, 0, 1, 'range', '', 'appearance', 100, 5000, 'Text Reload Transition Time (ms)', 'How long the text reload transitions will take to complete, in milliseconds.'),
-(29, 1, 'app_version', '6.7.0', 0, 0, 0, 0, '', '', '', 0, 0, '', ''),
-(30, 1, 'app_update_reminder', 'true', 0, 0, 0, 0, '', '', '', 0, 0, '', 'Please update to the latest version of the app.'),
+(24, 1, 'colour_reload_transition_time', '1200', 1, 0, 0, 1, 'range', '', 'appearance', 0, 5000, 'Colour Reload Transition Time (ms)', 'How long the colour reload transitions will take to complete, in milliseconds.'),
+(26, 1, 'text_reload_transition_time', '400', 1, 0, 0, 1, 'range', '', 'appearance', 0, 5000, 'Text Reload Transition Time (ms)', 'How long the text reload transitions will take to complete, in milliseconds.'),
 (33, 1, 'reverse_swipe_direction', 'false', 1, 0, 0, 1, 'select', '', 'behaviour', 0, 0, 'Reverse Swipe Direction', 'Reverse the directions that you swipe to reload/rewind.'),
 (34, 1, 'button_icons', '{"menu":"menu", "autoreload":"autorenew", "settings":"settings", "rewind":"skip_previous", "switchversion":"swap_calls", "setalldefault":"clear_all", "fullrewind":"first_page", "speak":"volume_up"}', 0, 0, 0, 0, 'chips', '', 'keyboard', 0, 0, '', ''),
-(35, 1, 'require_settings_reload', 'false', 0, 0, 0, 0, 'select', '', '', 0, 0, '', ''),
 (36, 1, 'menu_keys', '["m"]', 1, 1, 0, 0, 'chips', '', 'keyboard', 0, 0, 'Menu Keyboard Shortcuts', 'Which keys will toggle the menu.'),
 (37, 1, 'scroll_settings', 'false', 0, 0, 0, 0, 'select', '', '', 0, 0, '', ''),
 (38, 1, 'button_order', '["autoreload", "settings", "speak", "rewind"]', 1, 0, 0, 1, 'chips', '', 'appearance', 0, 0, 'Button Menu Order', 'The order of the buttons in the button menu. Alternatively, these can be reordered by clicking and dragging them around. Any values that aren\'t apart of the default 3 will be ignored.'),
@@ -313,7 +306,7 @@ ALTER TABLE `settings`
 -- AUTO_INCREMENT for table `colours`
 --
 ALTER TABLE `colours`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=97;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98;
 --
 -- AUTO_INCREMENT for table `decrease`
 --
@@ -328,7 +321,7 @@ ALTER TABLE `improve`
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=453;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=454;
 --
 -- AUTO_INCREMENT for table `settings`
 --
