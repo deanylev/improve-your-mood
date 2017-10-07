@@ -166,11 +166,11 @@ moodEngine.setColour = function(colour) {
   $('meta[name="theme-color"]').attr('content', colour);
   $('#colour-style').text(`
 
-    input[type="range"]::-webkit-slider-thumb, input[type="range"] + .thumb, .chip.selected, input[type="checkbox"]:checked + label::after, .dropdown-content.select-dropdown {
+    input[type="range"]::-webkit-slider-thumb, input[type="range"] + .thumb, .chip.selected, input[type="checkbox"]:checked + label::after, .dropdown-content.select-dropdown, input[type="radio"]:checked+label:after {
       background-color: ${colour} !important;
     }
 
-    input[type="checkbox"] + label::after, .input-field input:not([type="range"]):not(.input):focus, .chips.focus {
+    input[type="checkbox"] + label::after, .input-field input:not([type="range"]):not(.input):focus, .chips.focus, input[type="radio"]:checked+label:after {
       border-color: ${colour} !important;
     }
 
