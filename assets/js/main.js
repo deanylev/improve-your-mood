@@ -936,6 +936,28 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
 
         $(this).prop('checked', value);
 
+      } else if ($(this).is('[type="radio"]')) {
+
+        let index;
+
+        if (settings[setting].options) {
+
+          $.each(settings[setting].options, function(key, val) {
+
+            if (val === value) index = key;
+
+          });
+
+          $(`#${setting}_${index}`).prop('checked', true);
+
+        } else {
+
+          value = JSON.stringify(value);
+
+          $(`#${setting}_${value}`).prop('checked', true);
+
+        }
+
       } else {
 
         $(this).val(value);
@@ -1133,32 +1155,64 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
 
       } else {
 
-        if (val.input === 'chips') {
+        label = `<label for="${key}">${val.label}${indicator}</label>`;
 
-          input = `<div class="chips left-align settings-input" name="${key}" data-optional="${optional}"></div>`;
+        switch (val.input) {
 
-        } else if (val.input === 'range') {
+          case 'chips':
+            input = `<div class="chips left-align settings-input" name="${key}" data-optional="${optional}"></div>`;
+            break;
+          case 'range':
+            input = `<input type="range" name="${key}" class="settings-input" id="${key}" min="${val.min}" max="${val.max}">`;
+            indicator = '';
+            container = '<p class="range-field">';
+            containerClose = '</p>';
+            break;
+          case 'checkbox':
+            input = `<input type="checkbox" name="${key}" class="settings-input filled-in" id="${key}">`;
+            indicator = '';
+            container = '<p>';
+            containerClose = '</p>';
+            inputField = '';
+            break;
+          case 'radio':
+            input = `<label class="left">${val.label}</label><br>`;
+            label = '';
+            inputField = '';
+            settingKey = key;
+            if (val.options) {
 
-          input = `<input type="range" name="${key}" class="settings-input" id="${key}" min="${val.min}" max="${val.max}">`;
-          indicator = '';
-          container = '<p class="range-field">';
-          containerClose = '</p>';
+              $.each(val.options, function(key, val) {
 
-        } else if (val.input === 'checkbox') {
+                input += `
+                        <p>
+                          <input type="radio" name="${settingKey}" class="settings-input" value="${val}" id="${settingKey}_${key}">
+                          <label for="${settingKey}_${key}">${val}</label>
+                        </p>
+                        `;
 
-          input = `<input type="checkbox" name="${key}" class="settings-input filled-in" id="${key}">`;
-          indicator = '';
-          container = '<p>';
-          containerClose = '</p>';
-          inputField = '';
+              });
 
-        } else {
+            } else {
 
-          input = `<input type="${val.input}" name="${key}" class="settings-input mousetrap" id="${key}" data-optional="${optional}">`;
+              input += `
+                      <p>
+                        <input type="radio" name="${settingKey}" class="settings-input" value="false" id="${settingKey}_false">
+                        <label for="${settingKey}_false">No</label>
+                      </p>
+                      <p>
+                        <input type="radio" name="${settingKey}" class="settings-input" value="true" id="${settingKey}_true">
+                        <label for="${settingKey}_true">Yes</label>
+                      </p>
+                      `;
+
+            }
+            break;
+          default:
+            input = `<input type="${val.input}" name="${key}" class="settings-input mousetrap" id="${key}" data-optional="${optional}">`;
+            break;
 
         }
-
-        label = `<label for="${key}">${val.label}${indicator}</label>`;
 
       }
 
@@ -1738,6 +1792,12 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
 
         localSettings[$(this).attr('name')] = $(this).is(':checked');
 
+      } else if ($(this).is('[type="radio"]')) {
+
+        let name = $(this).attr('name');
+
+        localSettings[name] = $(`.settings-input[name="${name}"]:checked`).val();
+
       } else {
 
         localSettings[$(this).attr('name')] = $(this).val();
@@ -1746,7 +1806,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
 
       // Detect if input is blank
 
-      if (!$(this).is('select')) {
+      if (!$(this).is('select') && !$(this).is('[type="radio"]')) {
 
         $(this).addClass('invalid');
 
