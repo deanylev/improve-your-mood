@@ -478,12 +478,9 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
             newValue = fullSettings[key];
             break;
           case 'object':
-            currentValue = `[${currentSettings[key]}]`;
-            newValue = `[${fullSettings[key]}]`;
-            break;
           case 'string':
-            currentValue = `'${currentSettings[key]}'`;
-            newValue = `'${fullSettings[key]}'`;
+            currentValue = JSON.stringify(currentSettings[key]);
+            newValue = JSON.stringify(fullSettings[key]);
             break;
 
         }
@@ -1040,7 +1037,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
 
     }
 
-  }
+  };
 
   // Initialize sortable menu
 
