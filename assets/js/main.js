@@ -510,7 +510,15 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
 
       $('.fixed-action-btn').closeFAB();
 
-      var menuHTML = '';
+      let hasUserSettings = false;
+
+      $.each(settings, function(key, val) {
+
+        if (val.user) hasUserSettings = true;
+
+      });
+
+      let menuHTML = '';
 
       if (!fullSettings.button_order || typeof(fullSettings.button_order) !== 'object' || !fullSettings.button_order.includes('settings')) {
 
@@ -518,14 +526,6 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
         fullSettings.button_order = ['autoreload', 'settings', 'rewind'];
 
       }
-
-      var hasUserSettings = false;
-
-      $.each(settings, function(key, val) {
-
-        if (val.user) hasUserSettings = true;
-
-      });
 
       $.each(fullSettings.button_order, function(key, val) {
 
@@ -1068,7 +1068,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
     $('#button-menu').sortable({
       stop: function(event, ui) {
 
-        var array = $('#button-menu').sortable('toArray', {
+        let array = $('#button-menu').sortable('toArray', {
           attribute: 'data-button'
         });
 
@@ -1090,7 +1090,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
 
     if (val.user) {
 
-      var optional = !!val.optional;
+      let optional = val.optional;
       let indicator = optional || !fullSettings.optional_indicators ? '' : ' <b>*</b>';
       let container = '';
       let containerClose = '';
