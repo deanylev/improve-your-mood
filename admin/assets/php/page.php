@@ -5,7 +5,7 @@
 
 ?>
 
-<h1 class="text-center"><?php echo ucwords($title); ?>s</h1>
+<h1 class="text-center"><?php echo ucwords($title); ?>s (<?php echo $result->num_rows; ?>)</h1>
 
 <form class="container" action="../modify.php" method="POST">
   <input type="hidden" name="table" value="<?php echo $table; ?>">
