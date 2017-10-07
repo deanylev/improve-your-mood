@@ -1050,8 +1050,12 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
           attribute: 'data-button'
         });
 
-        localStorage.setItem('button_order', JSON.stringify(array));
-        moodEngine.setSettings('buttonsSorted');
+        if (JSON.stringify(array) !== JSON.stringify(fullSettings.button_order)) {
+
+          localStorage.setItem('button_order', JSON.stringify(array));
+          moodEngine.setSettings('buttonsSorted');
+
+        }
 
       }
     });
