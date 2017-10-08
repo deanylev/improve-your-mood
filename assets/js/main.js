@@ -467,6 +467,12 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).fail((data) => {
     defaultMode = true;
     fullSettings = data;
 
+  }).fail((data) => {
+
+    let reason = data.status === 404 ? 'missing' : 'damaged';
+
+    moodEngine.log('error', `Failed to pull default settings, local JSON file is ${reason}.`);
+
   });
 
   $.ajaxSetup({
