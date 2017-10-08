@@ -165,6 +165,22 @@ function modifyColour(hex, lum) {
   }
 
   return rgb;
+
+}
+
+// Function for converting hex to rgba
+
+function hexToRgbA(hex, opacity) {
+  var c;
+  if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
+    c = hex.substring(1).split('');
+    if (c.length == 3) {
+      c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+    }
+    c = '0x' + c.join('');
+    return 'rgba(' + [(c >> 16) & 255, (c >> 8) & 255, c & 255].join(',') + ',' + opacity + ')';
+  }
+  throw new Error('Bad Hex');
 }
 
 // Function for changing colour
@@ -181,7 +197,11 @@ moodEngine.setColour = function(colour) {
     }
 
     .switch label input[type=checkbox]:checked+.lever:after {
-      background-color: ${modifyColour(colour, -0.15)}
+      background-color: ${modifyColour(colour, -0.15)} !important;
+    }
+
+    .switch label .lever:before {
+      background-color: ${hexToRgbA(colour, 0.15)} !important;
     }
 
     input[type="checkbox"] + label::after, .input-field input:not([type="range"]):not(.input):focus, .chips.focus, input[type="radio"]:checked+label:after {
