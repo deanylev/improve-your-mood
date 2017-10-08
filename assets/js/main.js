@@ -876,27 +876,20 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
 
     if (method !== 'initial') {
 
-      let keepAdvanced;
-
       moodEngine.toggleSettings('close');
 
       Materialize.toast(toast, fullSettings.toast_interval);
 
       if (fullSettings.backend_address !== backendAddress) {
 
-        if (fullSettings.backend_address !== 'improveyourmood.xyz') {
-
-          keepAdvanced = true;
-
-        } else {
-
-          keepAdvanced = false;
-
-        }
+        let usedBackendAddresses = JSON.parse(localStorage.getItem('usedBackendAddresses')) || [];
+        usedBackendAddresses.push(fullSettings.backend_address);
+        usedBackendAddresses = JSON.stringify(usedBackendAddresses);
 
         localStorage.clear();
         localStorage.setItem('backend_address', fullSettings.backend_address);
-        if (keepAdvanced) localStorage.setItem('keep_advanced_settings', true);
+        localStorage.setItem('usedBackendAddresses', usedBackendAddresses);
+        if (fullSettings.backend_address !== 'improveyourmood.xyz') localStorage.setItem('keep_advanced_settings', true);
         window.location.reload();
 
       }
@@ -1352,6 +1345,24 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
 
   }
 
+  // Autocomplete on specific inputs
+
+  if (localStorage.getItem('usedBackendAddresses') && fullSettings.keep_backend_addresses) {
+
+    let options = {};
+
+    $.each(JSON.parse(localStorage.getItem('usedBackendAddresses')), function(key, val) {
+
+      if (val !== backendAddress) options[val] = null;
+
+    });
+
+    $('.settings-input[name="backend_address"]').autocomplete({
+      data: options
+    });
+
+  }
+
   // Set desired settings to default using the attr on the default button
 
   $('.default-button').click(function() {
@@ -1738,6 +1749,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
     let lastColour = localStorage.getItem('lastColour');
     let lastTab = localStorage.getItem('lastTab');
     let verticalMenu = localStorage.getItem('vertical_menu');
+    let usedBackendAddresses = localStorage.getItem('usedBackendAddresses');
 
     $.each(settings, function(key, val) {
 
@@ -1753,6 +1765,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
     localStorage.setItem('lastColour', lastColour);
     localStorage.setItem('lastTab', lastTab);
     localStorage.setItem('vertical_menu', verticalMenu);
+    localStorage.setItem('usedBackendAddresses', usedBackendAddresses);
 
     $.each(restoreSettings, function(key, val) {
 
