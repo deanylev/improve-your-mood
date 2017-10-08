@@ -72,7 +72,6 @@ label:not(.active) b, #advanced-settings, .fade-in-on-ready, .fade-in-on-load {
 }
 
 .reset-input {
-  position: relative;
   top: 17px;
 }
 
@@ -98,6 +97,10 @@ label:not(.active) b, #advanced-settings, .fade-in-on-ready, .fade-in-on-load {
 
 .thumb {
   z-index: 9999;
+}
+
+.autocomplete-content, .reset-input {
+  position: relative;
 }
 
 #logo {
