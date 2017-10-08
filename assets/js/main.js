@@ -1138,8 +1138,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
 
     if (val.user) {
 
-      let optional = val.optional;
-      let indicator = optional || !fullSettings.optional_indicators ? '' : ' <b>*</b>';
+      let indicator = val.optional || !fullSettings.optional_indicators ? '' : ' <b>*</b>';
       let container = '';
       let containerClose = '';
       let input;
@@ -1208,7 +1207,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
         switch (val.input) {
 
           case 'chips':
-            input = `<div class="chips left-align settings-input" name="${key}" data-optional="${optional}"></div>`;
+            input = `<div class="chips left-align settings-input" name="${key}" data-optional="${val.optional}"></div>`;
             break;
           case 'range':
             input = `<input type="range" name="${key}" class="settings-input" id="${key}" min="${val.min}" max="${val.max}">`;
@@ -1273,7 +1272,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
             }
             break;
           default:
-            input = `<input type="${val.input}" name="${key}" class="settings-input mousetrap" id="${key}" data-optional="${optional}">`;
+            input = `<input type="${val.input}" name="${key}" class="settings-input mousetrap" id="${key}" data-optional="${val.optional}">`;
             break;
 
         }
