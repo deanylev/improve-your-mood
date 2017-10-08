@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Oct 07, 2017 at 11:49 AM
+-- Generation Time: Oct 08, 2017 at 08:01 AM
 -- Server version: 5.7.19-0ubuntu0.16.04.1
 -- PHP Version: 7.0.22-0ubuntu0.16.04.1
 
@@ -248,7 +248,7 @@ INSERT INTO `settings` (`id`, `active`, `setting`, `value`, `user`, `optional`, 
 (20, 1, 'backend_address', 'improveyourmood.xyz', 1, 0, 1, 1, 'text', '', 'advanced', 0, 0, 'Custom Back-End Address', 'Define a custom back-end address, rather than using the live one. Used for development purposes.'),
 (24, 1, 'colour_reload_transition_time', '1200', 1, 0, 0, 1, 'range', '', 'appearance', 0, 5000, 'Colour Reload Transition Time (ms)', 'How long the colour reload transitions will take to complete, in milliseconds.'),
 (26, 1, 'text_reload_transition_time', '400', 1, 0, 0, 1, 'range', '', 'appearance', 0, 5000, 'Text Reload Transition Time (ms)', 'How long the text reload transitions will take to complete, in milliseconds.'),
-(33, 1, 'reverse_swipe_direction', 'false', 1, 0, 0, 1, 'select', '', 'behaviour', 0, 0, 'Reverse Swipe Direction', 'Reverse the directions that you swipe to reload/rewind.'),
+(33, 1, 'reverse_swipe_direction', 'false', 1, 0, 0, 1, 'checkbox', '', 'behaviour', 0, 0, 'Reverse Swipe Direction', 'Reverse the directions that you swipe to reload/rewind.'),
 (34, 1, 'button_icons', '{"menu":"menu", "autoreload":"autorenew", "settings":"settings", "rewind":"skip_previous", "switchversion":"swap_calls", "setalldefault":"clear_all", "fullrewind":"first_page", "speak":"volume_up"}', 0, 0, 0, 0, 'chips', '', 'keyboard', 0, 0, '', ''),
 (36, 1, 'menu_keys', '["m"]', 1, 1, 0, 0, 'chips', '', 'keyboard', 0, 0, 'Menu Keyboard Shortcuts', 'Which keys will toggle the menu.'),
 (37, 1, 'scroll_settings', 'false', 0, 0, 0, 0, 'select', '', '', 0, 0, '', ''),
@@ -261,7 +261,8 @@ INSERT INTO `settings` (`id`, `active`, `setting`, `value`, `user`, `optional`, 
 (48, 1, 'tabs', '["appearance", "behaviour", "keyboard", "advanced"]', 0, 0, 0, 0, '', '', '', 0, 0, '', ''),
 (50, 1, 'keep_tab', 'true', 0, 0, 0, 0, '', '', '', 0, 0, '', ''),
 (51, 1, 'disable_caching', 'false', 1, 0, 1, 1, 'checkbox', '', 'advanced', 0, 0, 'Disable Caching', 'If enabled, quotes and colours will not be cached, and fresh copies will be pulled every time the page loads.'),
-(53, 1, 'speak_voice_accent', 'UK English Female', 1, 0, 0, 1, 'radio', '["UK English Female", "UK English Male", "US English Female"]', 'behaviour', 0, 0, 'Speaking Voice Accent', 'What accent the text to speech engine will use when speaking the current quote.');
+(53, 1, 'speak_voice_accent', 'UK English Female', 1, 0, 0, 1, 'radio', '["UK English Female", "UK English Male", "US English Female"]', 'behaviour', 0, 0, 'Speaking Voice Accent', 'What accent the text to speech engine will use when speaking the current quote.'),
+(55, 1, 'keep_backend_addresses', 'true', 0, 0, 0, 0, '', '', '', 0, 0, '', '');
 
 --
 -- Indexes for dumped tables
@@ -305,7 +306,7 @@ ALTER TABLE `settings`
 -- AUTO_INCREMENT for table `colours`
 --
 ALTER TABLE `colours`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
 --
 -- AUTO_INCREMENT for table `decrease`
 --
@@ -320,12 +321,12 @@ ALTER TABLE `improve`
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=454;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=458;
 --
 -- AUTO_INCREMENT for table `settings`
 --
 ALTER TABLE `settings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
