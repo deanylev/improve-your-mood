@@ -1,0 +1,8 @@
+{
+  "toast_interval": 1000,
+  "reload_interval": 3000,
+  "button_order": ["autoreload", "settings", "rewind"],
+  "reload_keys": ["space"],
+  "back_keys": ["backspace"],
+  "menu_keys": ["m"]
+}

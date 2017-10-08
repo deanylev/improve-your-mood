@@ -1,4 +1,4 @@
-var appError, startTime, settingsOpen, lastNum, disableSwitch, quoteNum, colourNum;
+var appError, defaultMode, startTime, settingsOpen, lastNum, disableSwitch, quoteNum, colourNum;
 var quotes = [];
 var colours = [];
 var usedQuotes = [];
@@ -16,6 +16,13 @@ var fullBackendAddress = `http://${backendAddress}/`;
 var totalTime = performance.now();
 var version = window.location.href.includes('decreaseyourmood') ? 'Decrease' : 'Improve';
 var otherVersion = window.location.href.includes('decreaseyourmood') ? 'Improve' : 'Decrease';
+
+
+// Disable JSON caching
+
+$.ajaxSetup({
+  cache: false
+});
 
 moodEngine.log = function(type, message, display) {
 
@@ -447,7 +454,26 @@ startTime = performance.now();
 
 moodEngine.log('log', 'Pulling settings from backend...');
 
-$.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
+$.getJSON(`${fullBackendAddress}api/get/settings/index.php`).fail((data) => {
+
+  moodEngine.log('error', 'Failed to pull settings from backend, running in default settings mode...');
+
+  $.ajaxSetup({
+    async: false
+  });
+
+  $.getJSON('assets/json/default_settings.json').done((data) => {
+
+    defaultMode = true;
+    fullSettings = data;
+
+  });
+
+  $.ajaxSetup({
+    async: true
+  });
+
+}).done((data) => {
 
   pullTime.settings = Math.ceil(performance.now() - startTime);
 
@@ -581,7 +607,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
 
       let menuHTML = '';
 
-      if (!fullSettings.button_order || typeof(fullSettings.button_order) !== 'object' || !fullSettings.button_order.includes('settings')) {
+      if (!defaultMode && (!fullSettings.button_order || typeof(fullSettings.button_order) !== 'object' || !fullSettings.button_order.includes('settings'))) {
 
         moodEngine.log('warn', 'Invalid button order provided, falling back to defaults...');
         fullSettings.button_order = ['autoreload', 'settings', 'rewind'];
@@ -625,7 +651,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
 
       // Set correct icons
 
-      if (!fullSettings.button_icons) moodEngine.log('warn', 'Server has no icons, falling back to defaults...');
+      if (!defaultMode && !fullSettings.button_icons) moodEngine.log('warn', 'Server has no icons, falling back to defaults...');
 
       $('.material-icons').each(function() {
 
@@ -958,10 +984,6 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
   // Set settings
 
   moodEngine.setSettings('initial');
-
-  // Set a default toast interval
-
-  if (!fullSettings['toast_interval']) fullSettings['toast_interval'] = 2000;
 
   // Set inputs in modal
 
@@ -1506,8 +1528,6 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
 
   (function autoReload() {
 
-    if (!fullSettings.reload_interval && fullSettings.reload_interval !== 0) fullSettings.reload_interval = 3000;
-
     setTimeout(function() {
 
       if (!moodEngine.notAutoReloading() && !appError) {
@@ -2042,9 +2062,5 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
     }
 
   };
-
-}).fail((data) => {
-
-  moodEngine.log('error', 'Failed to pull settings from backend, running in defaults mode...');
 
 });
