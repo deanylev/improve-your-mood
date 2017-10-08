@@ -989,6 +989,8 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
 
         });
 
+        // Remove delete button from settings chip
+
         $('.chip').each(function() {
 
           if ($(this).contents().get(0).nodeValue === 'settings') $(this).find('i').remove();
@@ -1097,7 +1099,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
         inputCol = 'm11 s10'
         resetInput = `
                   <div class="col m1 s2">
-                    <a class="btn-floating coloured coloured-background waves-effect reset-input" data-setting="${key}">
+                    <a class="btn-floating btn-flat coloured coloured-background waves-effect reset-input" data-setting="${key}">
                       <i class="center material-icons prefix">refresh</i>
                     </a>
                   </div>`;
