@@ -144,6 +144,29 @@ $(document).ready(function() {
 
 });
 
+// Function for modifiying hex
+
+function modifyColour(hex, lum) {
+
+  // validate hex string
+  hex = String(hex).replace(/[^0-9a-f]/gi, '');
+  if (hex.length < 6) {
+    hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+  }
+  lum = lum || 0;
+
+  // convert to decimal and change luminosity
+  var rgb = '#',
+    c, i;
+  for (i = 0; i < 3; i++) {
+    c = parseInt(hex.substr(i * 2, 2), 16);
+    c = Math.round(Math.min(Math.max(0, c + (c * lum)), 255)).toString(16);
+    rgb += ('00' + c).substr(c.length);
+  }
+
+  return rgb;
+}
+
 // Function for changing colour
 
 moodEngine.setColour = function(colour) {
@@ -153,8 +176,12 @@ moodEngine.setColour = function(colour) {
   $('meta[name="theme-color"]').attr('content', colour);
   $('#colour-style').text(`
 
-    input[type="range"]::-webkit-slider-thumb, input[type="range"] + .thumb, .chip.selected, input[type="checkbox"]:checked + label::after, .dropdown-content.select-dropdown, input[type="radio"]:checked+label:after {
+    input[type="range"]::-webkit-slider-thumb, input[type="range"] + .thumb, .chip.selected, input[type="checkbox"]:checked + label::after, .dropdown-content.select-dropdown, input[type="radio"]:checked+label:after, .switch label input[type=checkbox]:checked+.lever {
       background-color: ${colour} !important;
+    }
+
+    .switch label input[type=checkbox]:checked+.lever:after {
+      background-color: ${modifyColour(colour, -0.15)}
     }
 
     input[type="checkbox"] + label::after, .input-field input:not([type="range"]):not(.input):focus, .chips.focus, input[type="radio"]:checked+label:after {
@@ -1168,6 +1195,22 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).done((data) => {
             container = '<p>';
             containerClose = '</p>';
             inputField = '';
+            break;
+          case 'switch':
+            inputField = '';
+            label = '';
+            input = `
+                      <label class="left">${val.label}</label><br>
+                      <div class="switch left">
+                        <label>
+                          Off
+                          <input type="checkbox" name="${key}" class="settings-input">
+                          <span class="lever"></span>
+                          On
+                        </label>
+                      </div>
+                      <br><br>
+                      `;
             break;
           case 'radio':
             input = `<label class="left">${val.label}</label><br>`;
