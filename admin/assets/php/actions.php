@@ -1,35 +1,50 @@
 <?php
 
-// Create - make a new record
+  if (isset($_SESSION["user"])) {
 
-// View - view an existing record
 
-// Edit - update an existing record
+      include("user.php");
 
-// Delete - delete an existing record
+      // Create - make a new record
 
-// Delete All - delete all existing records in a table
+      // View - view an existing record
 
-if (isset($type)) {
-  switch ($type) {
-    case "log":
-    case "logs":
-      $actions = array("view", "delete", "deleteall");
-      break;
+      // Edit - update an existing record
 
-    case "improve":
-    case "decrease":
-    case "quote":
-    case "quotes":
-    case "colour":
-    case "colours":
-    case "user":
-    case "users":
-      $actions = array("create", "edit", "delete");
-      break;
+      // Delete - delete an existing record
 
-    default:
-      $actions = array("create", "view", "edit", "delete");
-      break;
+      // Delete All - delete all existing records in a table
+
+      if (!$currentUser["read_only"]) {
+
+        if (isset($type)) {
+          switch ($type) {
+            case "log":
+            case "logs":
+              $actions = array("view", "delete", "deleteall");
+              break;
+
+            case "improve":
+            case "decrease":
+            case "quote":
+            case "quotes":
+            case "colour":
+            case "colours":
+            case "user":
+            case "users":
+              $actions = array("create", "edit", "delete");
+              break;
+
+            default:
+              $actions = array("create", "view", "edit", "delete");
+              break;
+          }
+        }
+
+      } else {
+
+          $actions = array("view");
+
+      }
+
   }
-}

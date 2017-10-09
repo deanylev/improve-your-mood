@@ -18,6 +18,8 @@
       if (!$(this).val()) $('#password_confirmation').val('');
 
     });
+
+    if (!$('.action-button').length) $('.actions').remove();
   </script>
 </body>
 

@@ -2,9 +2,9 @@
 
   @session_start();
 
-  include("force_auth.php");
-  include("actions.php");
   include("../../assets/php/sql.php");
+  include("actions.php");
+  include("force_auth.php");
 
   $titles = array("user", "home", "quote", "colour", "setting", "log");
 
@@ -14,18 +14,6 @@
       $_SESSION["message"]["danger"] = "An error occured";
       header("location: ../home");
       die();
-  }
-
-  $sessionUser = $_SESSION["user"];
-
-  $userQuery = $mysqli->query("SELECT * FROM yourmood.users WHERE id='{$sessionUser}'");
-
-  if ($userQuery->num_rows) {
-    $userRow = $userQuery->fetch_assoc();
-    $currentUser["name"] = $userRow["user"];
-  } else {
-    header("location ../logout");
-    die();
   }
 
 ?>
@@ -93,7 +81,7 @@
       </ul>
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-          <a class="nav-link <?php echo isset($userPage) ? "active" : "" ?>" href="../edit/?type=users&amp;title=user&amp;id=<?php echo $_SESSION["user"]; ?>"><?php echo $currentUser["name"]; ?></a>
+          <a class="nav-link <?php echo isset($userPage) ? "active" : "" ?>" href="../<?php echo $currentUser["read_only"] ? "view" : "edit"; ?>/?type=users&amp;title=user&amp;id=<?php echo $_SESSION["user"]; ?>"><?php echo $currentUser["name"]; ?></a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="../logout">Log Out</a>

@@ -28,7 +28,7 @@
         <?php endif; ?>
         <?php echo isset($customHeadings) ? $customHeadings : ""; ?>
         <?php if (in_array("edit", $actions) || in_array("delete", $actions)): ?>
-          <th>Actions</th>
+          <th class="actions">Actions</th>
         <?php endif; ?>
       </tr>
     </thead>
@@ -46,19 +46,19 @@
           <td><p><?php echo $row[$title]; ?></p></td>
         <?php endif; ?>
         <?php isset($customFields) ? include($customFields) : ""; ?>
-        <td>
+        <td class="actions">
           <form action="../modify.php" method="POST">
             <?php if (in_array("view", $actions)): ?>
-              <a class="btn btn-success" href="../view?type=<?php echo $table; ?>&amp;title=<?php echo $title; ?>&amp;id=<?php echo $row["id"]; ?>">View</a>
+              <a class="btn btn-success action-button" href="../view?type=<?php echo $table; ?>&amp;title=<?php echo $title; ?>&amp;id=<?php echo $row["id"]; ?>">View</a>
             <?php endif; ?>
             <?php if (in_array("edit", $actions)): ?>
-              <a class="btn btn-warning" href="../edit?type=<?php echo $table; ?>&amp;title=<?php echo $title; ?>&amp;id=<?php echo $row["id"]; ?>">Edit</a>
+              <a class="btn btn-warning action-button" href="../edit?type=<?php echo $table; ?>&amp;title=<?php echo $title; ?>&amp;id=<?php echo $row["id"]; ?>">Edit</a>
             <?php endif; ?>
             <input type="hidden" name="id" value="<?php echo $row["id"]; ?>">
             <input type="hidden" name="table" value="<?php echo $table; ?>">
             <input type="hidden" name="type" value="<?php echo $title; ?>">
             <?php if (in_array("delete", $actions)): ?>
-              <input class="btn btn-danger" type="submit" name="delete" value="Delete">
+              <input class="btn btn-danger action-button" type="submit" name="delete" value="Delete">
             <?php endif; ?>
           </form>
         </td>
