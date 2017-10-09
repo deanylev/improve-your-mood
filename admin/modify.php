@@ -65,8 +65,8 @@
   if (isset($goToID)) {
     if ($table === "users") {
       $randomUsername = "user_" . uniqid();
-      $blankPassword = md5(uniqid());
-      $mysqli->query("UPDATE yourmood.${table} SET user = '${randomUsername}', password = '{$blankPassword}' WHERE id = '{$newId}'");
+      $randomPassword = md5(uniqid());
+      $mysqli->query("UPDATE yourmood.${table} SET user = '${randomUsername}', password = '{$randomPassword}' WHERE id = '{$newId}'");
     }
     $url = "edit/?type=${table}&title=${type}&id=${newId}";
   }
