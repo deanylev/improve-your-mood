@@ -10,6 +10,14 @@
       return confirm('Are you sure?');
 
     });
+
+    $('#password').on('keypress keydown keyup change', function() {
+
+      $('#password_confirmation').attr('disabled', !$(this).val());
+
+      if (!$(this).val()) $('#password_confirmation').val('');
+
+    });
   </script>
 </body>
 
