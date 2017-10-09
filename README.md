@@ -21,4 +21,4 @@ If you would like to point the app to your custom back-end, you simply open the 
 
 **NOTE:**
 
-The admin panel has no built in authentication (mainly because I'm lazy), so you'll need to secure it yourself. I simply use Apache Basic Authentication.
+Right now the admin panel uses MD5 password hashing, which I'll fix at some point. The default credentials are `admin` and `password`.
