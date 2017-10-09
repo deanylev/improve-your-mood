@@ -62,7 +62,7 @@
   {
       global $title;
       global $type;
-      $_SESSION["message"] = "An error occured";
+      $_SESSION["message"]["danger"] = "An error occured";
       header("location: ../{$title}s?type={$type}");
   }
 
