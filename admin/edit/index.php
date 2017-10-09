@@ -1,8 +1,13 @@
 <?php
 
+  session_start();
+
   $type = $_GET["type"];
   $id = $_GET["id"];
   $title = $_GET["title"];
+  if ($id === $_SESSION["user_id"]) {
+    $userPage = true;
+  }
   include("../assets/php/header.php");
   $result = $mysqli->query("SELECT * FROM yourmood.${type} WHERE id='${id}'");
 
@@ -45,7 +50,7 @@
 ?>
 
     <label for="password">password</label>
-    <textarea id="password" class="form-control" name="values[password]"></textarea><br>
+    <input type="password" id="password" class="form-control" name="values[password]"></input><br>
 
 <?php
 
