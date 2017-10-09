@@ -21,6 +21,8 @@ if (isset($type)) {
     case "decrease":
     case "colour":
     case "colours":
+    case "user":
+    case "users":
       $actions = array("create", "edit", "delete");
       break;
 

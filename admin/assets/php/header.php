@@ -78,7 +78,7 @@
       </ul>
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-          <a class="nav-link <?php echo isset($userPage) ? "active" : "" ?>" href="../view/?type=users&amp;title=user&amp;id=<?php echo $_SESSION["user_id"]; ?>"><?php echo $_SESSION["user"]; ?></a>
+          <a class="nav-link <?php echo isset($userPage) ? "active" : "" ?>" href="../edit/?type=users&amp;title=user&amp;id=<?php echo $_SESSION["user_id"]; ?>"><?php echo $_SESSION["user"]; ?></a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="../logout">Log Out</a>
