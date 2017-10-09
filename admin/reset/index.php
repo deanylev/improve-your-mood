@@ -6,6 +6,11 @@
       header("location: ../home");
   }
 
+  $file = fopen("reset_code.txt", "w");
+  $code = md5(uniqid());
+  $_SESSION["reset_code"] = $code;
+  fwrite($file, $code);
+
 ?>
 
 <!DOCTYPE html>
@@ -40,20 +45,18 @@
     }
 
   ?>
-  <h1 class="text-center">Login</h1>
-  <form action="authenticate.php" method="POST">
+  <h1 class="text-center">Reset Default User</h1>
+  <br>
+  <p class="text-center">A reset code has been generated and written to a file in this folder called <b>reset_code.txt</b>. Open it and paste in the generated code.<br><br>The default user with credentials <b>admin</b> and <b>password</b> will be created.</p>
+  <br>
+  <form action="verify.php" method="POST">
     <div class="form-group">
-      <label for="username">Username</label>
-      <input type="text" name="user" class="form-control" id="username">
-    </div>
-    <div class="form-group">
-      <label for="password">Password</label>
-      <input type="password" name="password" class="form-control" id="password">
+      <label for="reset_code">Reset Code</label>
+      <input type="password" name="reset_code" class="form-control" id="reset_code" placeholder="Enter the generated reset code">
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
-    <br><br>
-    <a href="../reset">I Can't Login</a>
   </form>
+  <a class="btn btn-link" href="../login">Cancel</a>
 </body>
 
 </html>
