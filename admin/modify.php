@@ -12,11 +12,11 @@
 
   if (isset($_POST["new"]) && in_array("create", $actions)) {
       $query = "INSERT INTO yourmood.${table} () VALUES ()";
-      $message = "Successfully created ${type}";
+      $message = "Successfully created ${type}.";
       $goToID = true;
   } elseif (isset($_POST["delete"]) && in_array("delete", $actions)) {
       $query = "DELETE FROM yourmood.{$table} WHERE id='{$id}'";
-      $message = "Successfully deleted ${type}";
+      $message = "Successfully deleted ${type}.";
       $url = "{$type}s?type=${table}";
       if ($table === "users" && $id === $_SESSION["user_id"]) {
         $url = "logout";
@@ -29,7 +29,7 @@
       }
       $statement = substr($statement, 0, -1);
       $query = "UPDATE yourmood.${table} SET {$statement} WHERE id = '{$id}'";
-      $message = "Successfully updated ${type}";
+      $message = "Successfully updated ${type}.";
       $url = in_array("view", $actions) ? "view/?type=${table}&title=${type}&id=${id}" : "{$type}s?type=${table}";
       if ($table === "users") {
         $user = $_POST["values"]["user"];
@@ -43,14 +43,14 @@
       }
   } elseif (isset($_POST["deleteall"]) && in_array("deleteall", $actions)) {
       $query = "DELETE FROM yourmood.{$table}";
-      $message = "Successfully deleted all ${type}s";
+      $message = "Successfully deleted all ${type}s.";
       $url = "{$type}s?type=${table}";
       if ($table === "users") {
         $url = "logout";
       }
   } else {
       $messageType = "danger";
-      $message = "An error occured";
+      $message = "An error occured.";
   }
 
   $mysqli->query($query);
