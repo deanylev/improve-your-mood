@@ -6,17 +6,22 @@
   $id = $_GET["id"];
   $title = $_GET["title"];
   if ($id === $_SESSION["user_id"]) {
-    $userPage = true;
+      $userPage = true;
   }
   include("../assets/php/header.php");
   $result = $mysqli->query("SELECT * FROM yourmood.${type} WHERE id='${id}'");
 
   if ($result->num_rows) {
       $row = $result->fetch_assoc();
+      $fieldInfo = mysqli_fetch_field($result);
   }
 
   if (!in_array("edit", $actions)) {
       warning_handler(null, null);
+  }
+
+  while ($column = $result->fetch_field()) {
+      $columnTypes[$column->name] = $column->type;
   }
 
 ?>
@@ -33,26 +38,80 @@
 
   set_error_handler("warning_handler", E_WARNING);
   foreach ($row as $key => $val) {
-      if ($key !== "id" && $key !== "password"):
+      if ($key !== "id" && $key !== "password") {
+          $columnType = $columnTypes[$key];
+          switch ($columnType):
+          case 252:
+?>
+
+            <label for="<?php echo $key; ?>"><?php echo $key; ?></label>
+            <textarea id="<?php echo $key; ?>" class="form-control" name="values[<?php echo $key; ?>]"><?php echo $val; ?></textarea>
+            <br>
+
+<?php
+          break;
+
+          case 1:
 
 ?>
 
-    <label for="<?php echo $key; ?>"><?php echo $key; ?></label>
-    <textarea id="<?php echo $key; ?>" class="form-control" name="values[<?php echo $key; ?>]"><?php echo $val; ?></textarea><br>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input type="hidden" name="values[<?php echo $key; ?>]" value="0">
+                <input type="checkbox" class="form-check-input" <?php echo $val ? "checked" : ""; ?> name="values[<?php echo $key; ?>]" value="1">
+                <?php echo $key; ?>
+              </label>
+            </div>
+            <br>
+
+<?php
+          break;
+
+          case 253:
+
+?>
+
+            <div class="form-group">
+              <label for="<?php echo $key; ?>"><?php echo $key; ?></label>
+              <input type="text" class="form-control" id="<?php echo $key; ?>" value="<?php echo $val; ?>" name="values[<?php echo $key; ?>]">
+            </div>
+            <br>
+
+<?php
+        break;
+
+        case 3:
+
+?>
+
+            <div class="form-group">
+              <label for="<?php echo $key; ?>"><?php echo $key; ?></label>
+              <input type="number" class="form-control" id="<?php echo $key; ?>" value="<?php echo $val; ?>" name="values[<?php echo $key; ?>]">
+            </div>
+            <br>
 
 <?php
 
-    endif;
+        break;
+
+        endswitch;
+      }
   }
 
   if ($type === "users"):
 
 ?>
 
-    <label for="password">password</label>
-    <input type="password" id="password" class="form-control" name="values[password]" placeholder="Unchanged"></input><br>
-    <label for="password_confirmation">password confirmation</label>
-    <input type="password" id="password_confirmation" class="form-control" name="password_confirmation" disabled></input><br>
+    <div class="form-group">
+      <label for="password">password</label>
+      <input type="password" id="password" class="form-control" name="values[password]" placeholder="Unchanged"></input>
+    </div>
+    <br>
+    <div class="form-group">
+      <label for="password_confirmation">password confirmation</label>
+      <input type="password" id="password_confirmation" class="form-control" name="password_confirmation" disabled></input>
+    </div>
+    <br>
 
 <?php
 

@@ -19,6 +19,8 @@ if (isset($type)) {
 
     case "improve":
     case "decrease":
+    case "quote":
+    case "quotes":
     case "colour":
     case "colours":
     case "user":
