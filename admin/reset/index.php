@@ -6,10 +6,15 @@
       header("location: ../home");
   }
 
-  $file = fopen("reset_code.txt", "w");
-  $code = md5(uniqid());
-  $_SESSION["reset_code"] = $code;
-  fwrite($file, $code);
+  $file = @fopen("reset_code.txt", "w");
+
+  if (!$file) {
+    $_SESSION["message"]["danger"] = "Failed to create reset_code.txt file. Please enable write permissions (777) on this directory.";
+  } else {
+    $code = md5(uniqid());
+    $_SESSION["reset_code"] = $code;
+    fwrite($file, $code);
+  }
 
 ?>
 
