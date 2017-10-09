@@ -23,6 +23,9 @@
       }
   } elseif (isset($_POST["edit"]) && in_array("edit", $actions)) {
       $statement = "";
+      if (isset($_POST["values"]["password"]) && !$_POST["values"]["password"]) {
+        unset($_POST["values"]["password"]);
+      }
       foreach ($_POST["values"] as $key => $val) {
           $val = $key === "password" ? md5($val) : $val;
           $statement .= $key . " = '" . addslashes($val) . "',";
@@ -37,9 +40,9 @@
         if ($result->num_rows) {
           $row = $result->fetch_assoc();
         }
-        if (isset($row) && $row["id"] !== $id) {
+        if ((isset($row) && $row["id"] !== $id) || isset($_POST["values"]["password"]) && $_POST["values"]["password"] !== $_POST["password_confirmation"]) {
             $messageType = "danger";
-            $message = "Username already exists.";
+            $message = $_POST["values"]["password"] !== $_POST["password_confirmation"] ? "Passwords don't match." : "Username already exists.";
             $url = $_SERVER['HTTP_REFERER'];
             $query = "";
         }
@@ -60,6 +63,10 @@
   $newId = $mysqli->insert_id;
 
   if (isset($goToID)) {
+    if ($table === "users") {
+      $randomUsername = "user_" . uniqid();
+      $mysqli->query("UPDATE yourmood.${table} SET user = '${randomUsername}' WHERE id = '{$newId}'");
+    }
     $url = "edit/?type=${table}&title=${type}&id=${newId}";
   }
 

@@ -50,7 +50,9 @@
 ?>
 
     <label for="password">password</label>
-    <input type="password" id="password" class="form-control" name="values[password]"></input><br>
+    <input type="password" id="password" class="form-control" name="values[password]" placeholder="Unchanged"></input><br>
+    <label for="password_confirmation">password confirmation</label>
+    <input type="password" id="password_confirmation" class="form-control" name="password_confirmation" placeholder="Unchanged"></input><br>
 
 <?php
 
