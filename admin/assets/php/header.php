@@ -2,11 +2,7 @@
 
   @session_start();
 
-  if (!isset($_SESSION["user"])) {
-      header("location: ../login");
-      die();
-  }
-
+  include("force_auth.php");
   include("actions.php");
   include("../../assets/php/sql.php");
 

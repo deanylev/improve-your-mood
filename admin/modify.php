@@ -1,6 +1,7 @@
 <?php
 
   session_start();
+  include("assets/php/force_auth.php");
   $messageType = "success";
   $id = $_POST["id"];
   $table = $_POST["table"];
@@ -17,6 +18,9 @@
       $query = "DELETE FROM yourmood.{$table} WHERE id='{$id}'";
       $message = "Successfully deleted ${type}";
       $url = "{$type}s?type=${table}";
+      if ($table === "users" && $id === $_SESSION["user_id"]) {
+        $url = "logout";
+      }
   } elseif (isset($_POST["edit"]) && in_array("edit", $actions)) {
       $statement = "";
       foreach ($_POST["values"] as $key => $val) {
@@ -27,10 +31,23 @@
       $query = "UPDATE yourmood.${table} SET {$statement} WHERE id = '{$id}'";
       $message = "Successfully updated ${type}";
       $url = in_array("view", $actions) ? "view/?type=${table}&title=${type}&id=${id}" : "{$type}s?type=${table}";
+      if ($table === "users") {
+        $user = $_POST["values"]["user"];
+        $result = $mysqli->query("SELECT * FROM yourmood.${table} WHERE user='${user}'");
+        if ($result->num_rows) {
+            $messageType = "danger";
+            $message = "Username already exists.";
+            $url = $_SERVER['HTTP_REFERER'];
+            $query = "";
+        }
+      }
   } elseif (isset($_POST["deleteall"]) && in_array("deleteall", $actions)) {
       $query = "DELETE FROM yourmood.{$table}";
       $message = "Successfully deleted all ${type}s";
       $url = "{$type}s?type=${table}";
+      if ($table === "users") {
+        $url = "logout";
+      }
   } else {
       $messageType = "danger";
       $message = "An error occured";
