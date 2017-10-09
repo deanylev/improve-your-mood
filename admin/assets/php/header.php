@@ -2,17 +2,22 @@
 
   session_start();
 
+  if (!isset($_SESSION["user"])) {
+      header("location: ../login");
+      die();
+  }
+
   include("actions.php");
   include("../../assets/php/sql.php");
 
-  $titles = array("home", "quote", "colour", "setting", "log");
+  $titles = array("user", "home", "quote", "colour", "setting", "log");
 
-  $titlePairs = array("improve"=>"quote", "decrease"=>"quote", "colours"=>"colour", "settings"=>"setting", "logs"=>"log");
+  $titlePairs = array("users" => "user", "improve"=>"quote", "decrease"=>"quote", "colours"=>"colour", "settings"=>"setting", "logs"=>"log");
 
   if (!in_array($title, $titles) || (isset($type) && array_key_exists($type, $titlePairs) && $titlePairs[$type] !== $title)) {
-    $_SESSION["danger"] = "An error occured";
-    header("location: ../home");
-    die();
+      $_SESSION["message"]["danger"] = "An error occured";
+      header("location: ../home");
+      die();
   }
 
 ?>
@@ -62,17 +67,25 @@
       </div>
       <div class="collapse navbar-collapse" id="nav">
         <ul class="nav navbar-nav">
+          <li class="<?php echo $title === "user" ? "active" : "" ?>"><a href="../users">Users</a></li>
           <li class="<?php echo isset($type) && $type === "improve" ? "active" : "" ?>"><a href="../quotes?type=improve">Improve Quotes</a></li>
           <li class="<?php echo isset($type) && $type === "decrease" ? "active" : "" ?>"><a href="../quotes?type=decrease">Decrease Quotes</a></li>
           <li class="<?php echo $title === "colour" ? "active" : "" ?>"><a href="../colours">Colours</a></li>
           <li class="<?php echo $title === "setting" ? "active" : "" ?>"><a href="../settings">Settings</a></li>
           <li class="<?php echo $title === "log" ? "active" : "" ?>"><a href="../logs">Logs</a></li>
         </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="../view/?type=users&amp;title=user&amp;id=<?php echo $_SESSION["user_id"]; ?>"><?php echo $_SESSION["user"]; ?></a></li>
+          <li><a href="../logout">Log Out</a></li>
+        </ul>
       </div>
     </div>
   </nav>
   <div class="container">
-    <?php foreach ($_SESSION as $key => $val): ?>
+    <?php
+
+      if (isset($_SESSION["message"])) {
+          foreach ($_SESSION["message"] as $key => $val): ?>
 
       <br>
       <div class="alert alert-<?php echo $key; ?>">
@@ -82,8 +95,9 @@
 
     <?php
 
-      session_destroy();
+      unset($_SESSION["message"]);
     endforeach;
+      }
 
     ?>
   </div>

@@ -20,6 +20,7 @@
   } elseif (isset($_POST["edit"]) && in_array("edit", $actions)) {
       $statement = "";
       foreach ($_POST["values"] as $key => $val) {
+          $val = $key === "password" ? md5($val) : $val;
           $statement .= $key . " = '" . addslashes($val) . "',";
       }
       $statement = substr($statement, 0, -1);
@@ -44,5 +45,5 @@
 
   $mysqli->close();
 
-  $_SESSION[$messageType] = $message;
+  $_SESSION["message"][$messageType] = $message;
   header("location: {$url}");

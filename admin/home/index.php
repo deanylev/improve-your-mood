@@ -7,6 +7,10 @@
 ?>
 
 <div class="list-group container">
+  <a href="../users" class="list-group-item">
+    <h4 class="list-group-item-heading">Users</h4>
+    <p class="list-group-item-text">Users that can login to the admin panel.</p>
+  </a>
   <a href="../quotes?type=improve" class="list-group-item">
     <h4 class="list-group-item-heading">Improve Quotes</h4>
     <p class="list-group-item-text">Quotes that will be displayed on Improve Your Mood.</p>

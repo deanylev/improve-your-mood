@@ -28,7 +28,7 @@
 
   set_error_handler("warning_handler", E_WARNING);
   foreach ($row as $key => $val) {
-      if ($key !== "id"):
+      if ($key !== "id" && $key !== "password"):
 
 ?>
 
@@ -45,7 +45,7 @@
   {
       global $title;
       global $type;
-      $_SESSION["danger"] = "An error occured";
+      $_SESSION["message"] = "An error occured";
       header("location: ../{$title}s?type={$type}");
   }
 

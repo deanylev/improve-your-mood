@@ -28,7 +28,7 @@
 
   set_error_handler("warning_handler", E_WARNING);
   foreach ($row as $key => $val) {
-      if ($key !== "id"):
+      if ($key !== "id" && $key !== "password"):
 
 ?>
 
@@ -39,13 +39,25 @@
 
     endif;
   }
+
+  if ($type === "users"):
+
+?>
+
+    <label for="password">password</label>
+    <textarea id="password" class="form-control" name="values[password]"></textarea><br>
+
+<?php
+
+    endif;
+
   restore_error_handler();
 
   function warning_handler($errno, $errstr)
   {
       global $title;
       global $type;
-      $_SESSION["danger"] = "An error occured";
+      $_SESSION["message"] = "An error occured";
       header("location: ../{$title}s?type={$type}");
   }
 
@@ -55,7 +67,7 @@
   <?php if (in_array("view", $actions)): ?>
     <a class="btn btn-lg btn-primary" href="../view?type=<?php echo $type; ?>&amp;title=<?php echo $title; ?>&amp;id=<?php echo $row["id"]; ?>">Cancel</a>
   <?php else: ?>
-    <a class="btn btn-lg btn-primary" href="../<?php echo $title; ?>s?type=<?php echo $type; ?>">Cancel</a>    
+    <a class="btn btn-lg btn-primary" href="../<?php echo $title; ?>s?type=<?php echo $type; ?>">Cancel</a>
   <?php endif; ?>
   <?php if (in_array("delete", $actions)): ?>
     <input class="btn btn-lg btn-danger" type="submit" name="delete" value="Delete">
