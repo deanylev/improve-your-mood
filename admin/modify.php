@@ -23,9 +23,11 @@
       }
   } elseif (isset($_POST["edit"]) && in_array("edit", $actions)) {
       $statement = "";
+      // Ignore blank password
       if (isset($_POST["values"]["password"]) && !$_POST["values"]["password"]) {
         unset($_POST["values"]["password"]);
       }
+      // Don't allow user to set themself as read_only
       if (isset($_POST["values"]["read_only"]) && $id === $_SESSION["user"]) {
         unset($_POST["values"]["read_only"]);
       }
@@ -43,6 +45,7 @@
         if ($result->num_rows) {
           $row = $result->fetch_assoc();
         }
+        // If the username is taken, or the password doesn't match the confirmation
         if ((isset($row) && $row["id"] !== $id) || isset($_POST["values"]["password"]) && $_POST["values"]["password"] !== $_POST["password_confirmation"]) {
             $messageType = "danger";
             $message = $_POST["values"]["password"] !== $_POST["password_confirmation"] ? "Passwords don't match." : "Username already exists.";
@@ -66,11 +69,13 @@
   $newId = $mysqli->insert_id;
 
   if (isset($goToID)) {
+    // Generate a random username/password for a new user
     if ($table === "users") {
       $randomUsername = "user_" . uniqid();
       $randomPassword = md5(uniqid());
       $mysqli->query("UPDATE yourmood.${table} SET user = '${randomUsername}', password = '{$randomPassword}' WHERE id = '{$newId}'");
     }
+    // Go to the newly created item
     $url = "edit/?type=${table}&title=${type}&id=${newId}";
   }
 
