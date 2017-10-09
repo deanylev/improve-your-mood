@@ -35,6 +35,9 @@
         $user = $_POST["values"]["user"];
         $result = $mysqli->query("SELECT * FROM yourmood.${table} WHERE user='${user}'");
         if ($result->num_rows) {
+          $row = $result->fetch_assoc();
+        }
+        if (isset($row) && $row["id"] !== $id) {
             $messageType = "danger";
             $message = "Username already exists.";
             $url = $_SERVER['HTTP_REFERER'];
