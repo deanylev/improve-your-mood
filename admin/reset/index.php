@@ -55,8 +55,8 @@
       <input type="password" name="reset_code" class="form-control" id="reset_code" placeholder="Enter the generated reset code">
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
+    <a class="btn btn-link" href="../login">Cancel</a>
   </form>
-  <a class="btn btn-link" href="../login">Cancel</a>
 </body>
 
 </html>
