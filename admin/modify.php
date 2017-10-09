@@ -26,6 +26,9 @@
       if (isset($_POST["values"]["password"]) && !$_POST["values"]["password"]) {
         unset($_POST["values"]["password"]);
       }
+      if (isset($_POST["values"]["read_only"]) && $id === $_SESSION["user"]) {
+        unset($_POST["values"]["read_only"]);
+      }
       foreach ($_POST["values"] as $key => $val) {
           $val = $key === "password" ? md5($val) : $val;
           $statement .= $key . " = '" . addslashes($val) . "',";
