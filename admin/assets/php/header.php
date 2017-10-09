@@ -47,6 +47,9 @@
       width: 20px;
       height: 20px;
     }
+    .btn {
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
