@@ -1,8 +1,13 @@
 <?php
 
+  session_start();
+
   $type = $_GET["type"];
   $id = $_GET["id"];
   $title = $_GET["title"];
+  if ($id === $_SESSION["user_id"]) {
+    $userPage = true;
+  }
   include("../assets/php/header.php");
   $result = $mysqli->query("SELECT * FROM yourmood.${type} WHERE id='${id}'");
 

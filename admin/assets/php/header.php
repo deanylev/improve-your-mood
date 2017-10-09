@@ -1,6 +1,6 @@
 <?php
 
-  session_start();
+  @session_start();
 
   if (!isset($_SESSION["user"])) {
       header("location: ../login");
@@ -29,9 +29,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Admin Panel - <?php echo ucwords($title); echo isset($singular) ? "" : "s"; ?></title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
   <style>
     html {
       position: relative;
@@ -54,31 +54,40 @@
   </style>
 </head>
 <body>
-  <nav class="navbar navbar-inverse">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav" aria-expanded="false">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a href="../home" class="navbar-brand">MoodBackend</a>
-      </div>
-      <div class="collapse navbar-collapse" id="nav">
-        <ul class="nav navbar-nav">
-          <li class="<?php echo $title === "user" ? "active" : "" ?>"><a href="../users">Users</a></li>
-          <li class="<?php echo isset($type) && $type === "improve" ? "active" : "" ?>"><a href="../quotes?type=improve">Improve Quotes</a></li>
-          <li class="<?php echo isset($type) && $type === "decrease" ? "active" : "" ?>"><a href="../quotes?type=decrease">Decrease Quotes</a></li>
-          <li class="<?php echo $title === "colour" ? "active" : "" ?>"><a href="../colours">Colours</a></li>
-          <li class="<?php echo $title === "setting" ? "active" : "" ?>"><a href="../settings">Settings</a></li>
-          <li class="<?php echo $title === "log" ? "active" : "" ?>"><a href="../logs">Logs</a></li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-          <li><a href="../view/?type=users&amp;title=user&amp;id=<?php echo $_SESSION["user_id"]; ?>"><?php echo $_SESSION["user"]; ?></a></li>
-          <li><a href="../logout">Log Out</a></li>
-        </ul>
-      </div>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a href="../home" class="navbar-brand">MoodBackend</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-nav" aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="main-nav">
+      <ul class="nav navbar-nav">
+        <li class="nav-item <?php echo $title === "user" ? "active" : "" ?>">
+          <a class="nav-link" href="../users">Users</a>
+        </li>
+        <li class="nav-item <?php echo isset($type) && $type === "improve" ? "active" : "" ?>">
+          <a class="nav-link" href="../quotes?type=improve">Improve Quotes</a>
+        </li>
+        <li class="nav-item <?php echo isset($type) && $type === "decrease" ? "active" : "" ?>">
+          <a class="nav-link" href="../quotes?type=decrease">Decrease Quotes</a>
+        </li>
+        <li class="nav-item <?php echo $title === "colour" ? "active" : "" ?>">
+          <a class="nav-link" href="../colours">Colours</a>
+        </li>
+        <li class="nav-item <?php echo $title === "setting" ? "active" : "" ?>">
+          <a class="nav-link" href="../settings">Settings</a>
+        </li>
+        <li class="nav-item <?php echo $title === "log" ? "active" : "" ?>">
+          <a class="nav-link" href="../logs">Logs</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link <?php echo isset($userPage) ? "active" : "" ?>" href="../view/?type=users&amp;title=user&amp;id=<?php echo $_SESSION["user_id"]; ?>"><?php echo $_SESSION["user"]; ?></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="../logout">Log Out</a>
+        </li>
+      </ul>
     </div>
   </nav>
   <div class="container">
@@ -96,8 +105,9 @@
     <?php
 
       unset($_SESSION["message"]);
-    endforeach;
+          endforeach;
       }
 
     ?>
   </div>
+  <br>
