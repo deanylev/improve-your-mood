@@ -18,11 +18,11 @@
 
   $sessionUser = $_SESSION["user"];
 
-  $result = $mysqli->query("SELECT * FROM yourmood.users WHERE id='{$sessionUser}'");
+  $userQuery = $mysqli->query("SELECT * FROM yourmood.users WHERE id='{$sessionUser}'");
 
-  if ($result->num_rows) {
-    $row = $result->fetch_assoc();
-    $currentUser["name"] = $row["user"];
+  if ($userQuery->num_rows) {
+    $userRow = $userQuery->fetch_assoc();
+    $currentUser["name"] = $userRow["user"];
   } else {
     header("location ../logout");
     die();
