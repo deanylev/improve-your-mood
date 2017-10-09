@@ -5,7 +5,7 @@
   $type = $_GET["type"];
   $id = $_GET["id"];
   $title = $_GET["title"];
-  if ($id === $_SESSION["user_id"]) {
+  if ($id === $_SESSION["user"]) {
     $userPage = true;
   }
   include("../assets/php/header.php");

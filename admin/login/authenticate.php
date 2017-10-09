@@ -14,8 +14,7 @@
   }
 
   if (isset($row) && md5($authPass) === $row["password"]) {
-      $_SESSION["user"] = $row["user"];
-      $_SESSION["user_id"] = $row["id"];
+      $_SESSION["user"] = $row["id"];
       $_SESSION["message"]["success"] = "Logged in successfully.";
       header("location: ../home");
   } else {

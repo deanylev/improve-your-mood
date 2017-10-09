@@ -16,6 +16,18 @@
       die();
   }
 
+  $sessionUser = $_SESSION["user"];
+
+  $result = $mysqli->query("SELECT * FROM yourmood.users WHERE id='{$sessionUser}'");
+
+  if ($result->num_rows) {
+    $row = $result->fetch_assoc();
+    $currentUser["name"] = $row["user"];
+  } else {
+    header("location ../logout");
+    die();
+  }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -81,7 +93,7 @@
       </ul>
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-          <a class="nav-link <?php echo isset($userPage) ? "active" : "" ?>" href="../edit/?type=users&amp;title=user&amp;id=<?php echo $_SESSION["user_id"]; ?>"><?php echo $_SESSION["user"]; ?></a>
+          <a class="nav-link <?php echo isset($userPage) ? "active" : "" ?>" href="../edit/?type=users&amp;title=user&amp;id=<?php echo $_SESSION["user"]; ?>"><?php echo $currentUser["name"]; ?></a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="../logout">Log Out</a>

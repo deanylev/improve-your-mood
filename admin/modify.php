@@ -18,7 +18,7 @@
       $query = "DELETE FROM yourmood.{$table} WHERE id='{$id}'";
       $message = "Successfully deleted ${type}.";
       $url = "{$type}s?type=${table}";
-      if ($table === "users" && $id === $_SESSION["user_id"]) {
+      if ($table === "users" && $id === $_SESSION["user"]) {
         $url = "logout";
       }
   } elseif (isset($_POST["edit"]) && in_array("edit", $actions)) {
