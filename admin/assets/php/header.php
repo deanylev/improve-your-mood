@@ -27,6 +27,7 @@
   <title>Admin Panel - <?php echo ucwords($title); echo isset($singular) ? "" : "s"; ?></title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.5/umd/popper.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
   <style>
     html {
@@ -81,10 +82,15 @@
       </ul>
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-          <a class="nav-link <?php echo isset($userPage) ? "active" : "" ?>" href="../<?php echo $currentUser["read_only"] ? "view" : "edit"; ?>/?type=users&amp;title=user&amp;id=<?php echo $_SESSION["user"]; ?>"><?php echo $currentUser["name"]; ?></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="../logout">Log Out</a>
+          <div class="btn-group">
+            <a class="btn btn-primary <?php echo isset($userPage) ? "active" : "" ?>" href="../<?php echo $currentUser["read_only"] ? "view" : "edit"; ?>/?type=users&amp;title=user&amp;id=<?php echo $_SESSION["user"]; ?>"><?php echo $currentUser["name"]; ?></a>
+            <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <a class="dropdown-item" href="../logout">Log Out</a>
+            </div>
+          </div>
         </li>
       </ul>
     </div>
