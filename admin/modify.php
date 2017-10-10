@@ -75,6 +75,9 @@
         $randomUsername = "user_" . uniqid();
         $randomPassword = md5(uniqid());
         $mysqli->query("UPDATE yourmood.${table} SET user = '${randomUsername}', password = '{$randomPassword}' WHERE id = '{$newId}'");
+        // Make active by default
+      } else {
+        $mysqli->query("UPDATE yourmood.${table} SET active = 1 WHERE id = '{$newId}'");
       }
       // Go to the newly created item
       $url = "edit/?type=${table}&title=${type}&id=${newId}";
