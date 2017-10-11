@@ -12,7 +12,7 @@
       <span class="fa fa-user"></span>
       <span class="icon-text">Users</span>
     </h4>
-    <p class="list-group-item-text">Users that can login to the admin panel.</p>
+    <p class="list-group-item-text">Users that can log in to the admin panel.</p>
   </a>
   <a href="../quotes?type=improve" class="list-group-item list-group-item-action">
     <h4 class="list-group-item-heading">

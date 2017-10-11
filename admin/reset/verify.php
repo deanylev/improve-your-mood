@@ -15,7 +15,7 @@
     $mysqli->close();
     unset($_SESSION["reset_code"]);
     unlink("reset_code.txt");
-    $_SESSION["message"]["success"] = "Default user has been created with credentials <b>admin</b> and <b>password</b>. Please login and change this password immediately.";
+    $_SESSION["message"]["success"] = "Default user has been created with credentials <b>admin</b> and <b>password</b>. Please log in and change this password immediately.";
     header("location: ../login");
   } else {
     $_SESSION["message"]["danger"] = "Reset code incorrect. New one generated.";
