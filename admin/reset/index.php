@@ -53,7 +53,7 @@
     <div class="card-body">
       <h1 class="text-center">Reset Default User</h1>
       <br>
-      <p class="text-center">A reset code has been generated and written to a file in this folder called <b>reset_code.txt</b>. Open it and paste in the generated code.<br><br>The default user with credentials <b>admin</b> and <b>password</b> will be created.</p>
+      <p class="text-center">A reset code has been generated and written to a file in this folder called <b>reset_code.txt</b>. Open it and paste in the generated code.<br><br>The default user with credentials <b>admin</b> and <b>password</b> will be created. You should change this password <b>immediately</b> after logging in.</p>
       <br>
       <form action="verify.php" method="POST">
         <div class="form-group">
