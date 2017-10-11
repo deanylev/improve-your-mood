@@ -46,6 +46,13 @@
           if ($result->num_rows) {
             $row = $result->fetch_assoc();
           }
+          // Minimum password length is 8
+          if (isset($_POST["values"]["password"]) && strlen($_POST["values"]["password"]) < 8) {
+            $messageType = "danger";
+            $message = "Password must be at least 8 characters.";
+            $url = $_SERVER['HTTP_REFERER'];
+            $query = "";
+          }
           // If the username is taken, or the password doesn't match the confirmation
           if ((isset($row) && $row["id"] !== $id) || isset($_POST["values"]["password"]) && $_POST["values"]["password"] !== $_POST["password_confirmation"]) {
               $messageType = "danger";
