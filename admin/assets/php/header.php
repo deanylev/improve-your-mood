@@ -55,6 +55,9 @@
     .icon-text {
       margin-left: 2.5px;
     }
+    .list-group-item .icon-text {
+      margin-left: 7.5px;
+    }
   </style>
 </head>
 <body>
