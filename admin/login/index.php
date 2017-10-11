@@ -53,7 +53,7 @@
           <input type="password" name="password" class="form-control" id="password">
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
-        <a class="btn btn-link" href="../reset">I Can't Login</a>
+        <a class="btn btn-link" href="../reset">I Can't Log In</a>
       </form>
     </div>
   </div>
