@@ -30,7 +30,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
 </head>
-<body class="container">
+<body class="container bg-primary">
   <br>
   <?php
 
@@ -50,18 +50,22 @@
     }
 
   ?>
-  <h1 class="text-center">Reset Default User</h1>
-  <br>
-  <p class="text-center">A reset code has been generated and written to a file in this folder called <b>reset_code.txt</b>. Open it and paste in the generated code.<br><br>The default user with credentials <b>admin</b> and <b>password</b> will be created.</p>
-  <br>
-  <form action="verify.php" method="POST">
-    <div class="form-group">
-      <label for="reset_code">Reset Code</label>
-      <input type="password" name="reset_code" class="form-control" id="reset_code" placeholder="Enter the generated reset code">
+  <div class="card">
+    <div class="card-body">
+      <h1 class="text-center">Reset Default User</h1>
+      <br>
+      <p class="text-center">A reset code has been generated and written to a file in this folder called <b>reset_code.txt</b>. Open it and paste in the generated code.<br><br>The default user with credentials <b>admin</b> and <b>password</b> will be created.</p>
+      <br>
+      <form action="verify.php" method="POST">
+        <div class="form-group">
+          <label for="reset_code">Reset Code</label>
+          <input type="password" name="reset_code" class="form-control" id="reset_code" placeholder="Enter the generated reset code">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <a class="btn btn-link" href="../login">Cancel</a>
+      </form>
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-    <a class="btn btn-link" href="../login">Cancel</a>
-  </form>
+  </div>
 </body>
 
 </html>
