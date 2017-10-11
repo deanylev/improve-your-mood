@@ -26,6 +26,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Admin Panel - <?php echo ucwords($title); echo isset($singular) ? "" : "s"; ?></title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.5/umd/popper.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
@@ -51,6 +52,9 @@
     .btn {
       cursor: pointer;
     }
+    .icon-text {
+      margin-left: 2.5px;
+    }
   </style>
 </head>
 <body>
@@ -62,33 +66,70 @@
     <div class="collapse navbar-collapse" id="main-nav">
       <ul class="nav navbar-nav">
         <li class="nav-item <?php echo $title === "user" ? "active" : "" ?>">
-          <a class="nav-link" href="../users">Users</a>
+          <a class="nav-link" href="../users">
+            <span class="fa fa-user"></span>
+            <span class="icon-text">Users</span>
+          </a>
         </li>
         <li class="nav-item <?php echo isset($type) && $type === "improve" ? "active" : "" ?>">
-          <a class="nav-link" href="../quotes?type=improve">Improve Quotes</a>
+          <a class="nav-link" href="../quotes?type=improve">
+            <span class="fa fa-quote-left"></span>
+            <span class="icon-text">Improve Quotes</span>
+          </a>
         </li>
         <li class="nav-item <?php echo isset($type) && $type === "decrease" ? "active" : "" ?>">
-          <a class="nav-link" href="../quotes?type=decrease">Decrease Quotes</a>
+          <a class="nav-link" href="../quotes?type=decrease">
+            <span class="fa fa-quote-right"></span>
+            <span class="icon-text">Decrease Quotes</span>
+          </a>
         </li>
         <li class="nav-item <?php echo $title === "colour" ? "active" : "" ?>">
-          <a class="nav-link" href="../colours">Colours</a>
+          <a class="nav-link" href="../colours">
+            <span class="fa fa-eyedropper"></span>
+            <span class="icon-text">Colours</span>
+          </a>
         </li>
         <li class="nav-item <?php echo $title === "setting" ? "active" : "" ?>">
-          <a class="nav-link" href="../settings">Settings</a>
+          <a class="nav-link" href="../settings">
+            <span class="fa fa-cog"></span>
+            <span class="icon-text">Settings</span>
+          </a>
         </li>
         <li class="nav-item <?php echo $title === "log" ? "active" : "" ?>">
-          <a class="nav-link" href="../logs">Logs</a>
+          <a class="nav-link" href="../logs">
+            <span class="fa fa-file-text"></span>
+            <span class="icon-text">Logs</span>
+          </a>
+        </li>
+        <div class="dropdown-divider"></div>
+        <li class="nav-item d-lg-none <?php echo isset($userPage) ? "active" : "" ?>">
+          <a class="nav-link"  href="../<?php echo $currentUser["read_only"] ? "view" : "edit"; ?>/?type=users&amp;title=user&amp;id=<?php echo $_SESSION["user"]; ?>">
+            <span class="fa fa-user"></span>
+            <span class="icon-text"><?php echo $currentUser["name"]; ?></span>
+          </a>
+        </li>
+        <li class="nav-item d-lg-none <?php echo $title === "log" ? "active" : "" ?>">
+          <a class="nav-link" href="../logout">
+            <span class="fa fa-sign-out"></span>
+            <span class="icon-text">Log Out</span>
+          </a>
         </li>
       </ul>
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-          <div class="btn-group">
-            <a class="btn btn-primary <?php echo isset($userPage) ? "active" : "" ?>" href="../<?php echo $currentUser["read_only"] ? "view" : "edit"; ?>/?type=users&amp;title=user&amp;id=<?php echo $_SESSION["user"]; ?>"><?php echo $currentUser["name"]; ?></a>
+          <div class="btn-group d-none d-lg-block d-xl-block">
+            <a class="btn btn-primary <?php echo isset($userPage) ? "active" : "" ?>" href="../<?php echo $currentUser["read_only"] ? "view" : "edit"; ?>/?type=users&amp;title=user&amp;id=<?php echo $_SESSION["user"]; ?>">
+              <span class="fa fa-user"></span>
+              <span class="icon-text"><?php echo $currentUser["name"]; ?></span>
+            </a>
             <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <span class="sr-only">Toggle Dropdown</span>
             </button>
             <div class="dropdown-menu dropdown-menu-right">
-              <a class="dropdown-item" href="../logout">Log Out</a>
+              <a class="dropdown-item" href="../logout">
+                <span class="fa fa-sign-out"></span>
+                <span class="icon-text">Log Out</span>
+              </a>
             </div>
           </div>
         </li>
