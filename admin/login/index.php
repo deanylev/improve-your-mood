@@ -27,7 +27,6 @@
     if (isset($_SESSION["message"])) {
         foreach ($_SESSION["message"] as $key => $val): ?>
 
-    <br>
     <div class="alert alert-<?php echo $key; ?>">
       <?php echo $val; ?>
       <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>

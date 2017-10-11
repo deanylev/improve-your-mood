@@ -58,6 +58,9 @@
     .list-group-item .icon-text {
       margin-left: 7.5px;
     }
+    .alert {
+      margin-top: 25px;
+    }
   </style>
 </head>
 <body>
@@ -145,7 +148,6 @@
       if (isset($_SESSION["message"])) {
           foreach ($_SESSION["message"] as $key => $val): ?>
 
-      <br>
       <div class="alert alert-<?php echo $key; ?>">
         <?php echo $val; ?>
         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
