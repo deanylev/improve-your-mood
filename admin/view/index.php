@@ -5,6 +5,9 @@
   $type = $_GET["type"];
   $id = $_GET["id"];
   $title = $_GET["title"];
+  $word = ucwords($title);
+  $singular = true;
+  $otherTitle = "View ${word}";
   if ($id === $_SESSION["user"]) {
     $userPage = true;
   }
