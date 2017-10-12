@@ -313,6 +313,12 @@ console.log(`%c${version.toLowerCase()} your mood 6`, 'font-family: "Oxygen"; fo
 console.log('――――――――――――――――――――――――――――――');
 moodEngine.log('log', `Pulling from: ${fullBackendAddress}`);
 
+$.get(`${fullBackendAddress}api/verify/index.php`, function(data) {
+
+  isProd = data === 'improveyourmood.xyz';
+
+});
+
 // Decide whether to use cache or pull new quotes
 
 if (localStorage.getItem('cachedQuotes') && localStorage.getItem('cachedVersionQuotes') && localStorage.getItem('disable_caching') !== 'true') {
@@ -332,12 +338,6 @@ if (localStorage.getItem('cachedQuotes') && localStorage.getItem('cachedVersionQ
 
   $.ajaxSetup({
     async: false
-  });
-
-  $.get(`${fullBackendAddress}api/verify/index.php`, function(data) {
-
-    isProd = data === 'improveyourmood.xyz';
-
   });
 
   $.getJSON(`${fullBackendAddress}api/get/quotes/index.php?version=${version.toLowerCase()}`).done((data) => {
@@ -1937,9 +1937,17 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).fail((data) => {
 
         // Disable SSL
 
-        if ($(this).attr('name') === 'disable_ssl' && $(this).prop('checked') && (needSSL || isProd)) {
+        if ($(this).attr('name') === 'disable_ssl') {
 
-          invalidInputs.push(`Cannot Disable SSL, Your Back-End Address Requires It.`);
+          if ($(this).prop('checked') && (needSSL || isProd)) {
+
+            invalidInputs.push(`Cannot Disable SSL, Your Back-End Address Requires It.`);
+
+          } else if (!$(this).prop('checked') && !needSSL && !isProd) {
+
+            invalidInputs.push(`Please Disable SSL, Your Back-End Address Does Not Support It.`);
+
+          }
 
         }
 
