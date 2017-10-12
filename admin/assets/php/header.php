@@ -27,41 +27,10 @@
   <title>Admin Panel - <?php echo isset($otherTitle) ? $otherTitle :  ucwords($title); echo isset($singular) ? "" : "s"; ?></title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="../assets/css/main.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.5/umd/popper.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
-  <style>
-    html {
-      position: relative;
-      min-height: 100%;
-    }
-    body {
-      margin-bottom: 60px;
-    }
-    footer {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      height: 60px;
-      text-align: center;
-    }
-    .colour-preview {
-      width: 20px;
-      height: 20px;
-    }
-    .btn {
-      cursor: pointer;
-    }
-    .icon-text {
-      margin-left: 2.5px;
-    }
-    .list-group-item .icon-text {
-      margin-left: 7.5px;
-    }
-    .alert {
-      margin-top: 25px;
-    }
-  </style>
 </head>
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -148,7 +117,7 @@
       if (isset($_SESSION["message"])) {
           foreach ($_SESSION["message"] as $key => $val): ?>
 
-      <div class="alert alert-<?php echo $key; ?>">
+      <div class="alert margin alert-<?php echo $key; ?>">
         <?php echo $val; ?>
         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
       </div>
