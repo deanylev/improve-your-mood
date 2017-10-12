@@ -1,4 +1,4 @@
-var appError, defaultMode, startTime, settingsOpen, lastNum, disableSwitch, quoteNum, colourNum;
+var appError, defaultMode, startTime, settingsOpen, lastNum, disableSwitch, quoteNum, colourNum, needSSL;
 var quotes = [];
 var colours = [];
 var usedQuotes = [];
@@ -12,7 +12,7 @@ var fullSettings = {};
 var pullTime = {};
 var versionQuotes = {};
 var backendAddress = localStorage.getItem('backend_address') || 'improveyourmood.xyz';
-var ssl = !localStorage.getItem('disable_ssl');
+var ssl = !JSON.parse(localStorage.getItem('disable_ssl'));
 var fullBackendAddress = ssl ? `https://${backendAddress}/` : `http://${backendAddress}/`;
 var totalTime = performance.now();
 var version = window.location.href.includes('decreaseyourmood') ? 'Decrease' : 'Improve';
@@ -1896,15 +1896,20 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).fail((data) => {
 
           // Test both http and https
 
+          needSSL = false;
+
           $.getJSON(`http://${$(this).val()}/api/get/colours/index.php`).done((data) => {
 
             localStorage.setItem('disable_ssl', true);
 
           }).fail((data) => {
 
+            moodEngine.log('warn', 'Failed http test, trying https...');
+
             $.getJSON(`https://${$(this).val()}/api/get/colours/index.php`).done((data) => {
 
               localStorage.setItem('disable_ssl', false);
+              needSSL = true;
 
             }).fail((data) => {
 
@@ -1921,6 +1926,14 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).fail((data) => {
           $.ajaxSetup({
             async: true
           });
+
+        }
+
+        // Disable SSL
+
+        if ($(this).attr('name') === 'disable_ssl' && $(this).prop('checked') && needSSL) {
+
+          invalidInputs.push(`Cannot Disable SSL, Your Back-End Address Requires It.`);
 
         }
 
