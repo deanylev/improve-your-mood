@@ -1908,7 +1908,8 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).fail((data) => {
 
             }).fail((data) => {
 
-              moodEngine.log('log', `Custom back-end address '${$(this).val()}' is invalid.`);
+              let sslMessage = ssl ? 'Make sure it is SSL enabled.' : '';
+              moodEngine.log('log', `Custom back-end address '${$(this).val()}' is invalid.${sslMessage}`);
               $(this).addClass('invalid');
               $(this).next('label').attr('data-error', 'Address is invalid.');
               invalidInputs.push(`${settings[$(this).attr('name')].label} '${$(this).val()}' is Invalid.`);
