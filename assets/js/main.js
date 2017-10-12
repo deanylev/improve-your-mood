@@ -12,7 +12,8 @@ var fullSettings = {};
 var pullTime = {};
 var versionQuotes = {};
 var backendAddress = localStorage.getItem('backend_address') || 'improveyourmood.xyz';
-var fullBackendAddress = `https://${backendAddress}/`;
+var ssl = !localStorage.getItem('disable_ssl');
+var fullBackendAddress = ssl ? `https://${backendAddress}/` : `http://${backendAddress}/`;
 var totalTime = performance.now();
 var version = window.location.href.includes('decreaseyourmood') ? 'Decrease' : 'Improve';
 var otherVersion = window.location.href.includes('decreaseyourmood') ? 'Improve' : 'Decrease';
@@ -920,6 +921,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).fail((data) => {
 
         localStorage.clear();
         localStorage.setItem('backend_address', fullSettings.backend_address);
+        localStorage.setItem('disable_ssl', fullSettings.disable_ssl);
         localStorage.setItem('usedBackendAddresses', usedBackendAddresses);
         if (fullSettings.backend_address !== 'improveyourmood.xyz') localStorage.setItem('keep_advanced_settings', true);
         window.location.reload();
@@ -1892,12 +1894,26 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).fail((data) => {
             async: false
           });
 
-          $.getJSON(`http://${$(this).val()}/api/get/colours/index.php`).fail((data) => {
+          // Test both http and https
 
-            moodEngine.log('log', `Custom back-end address '${$(this).val()}' is invalid.`);
-            $(this).addClass('invalid');
-            $(this).next('label').attr('data-error', 'Address is invalid.');
-            invalidInputs.push(`${settings[$(this).attr('name')].label} '${$(this).val()}' is Invalid.`);
+          $.getJSON(`http://${$(this).val()}/api/get/colours/index.php`).done((data) => {
+
+            localStorage.setItem('disable_ssl', true);
+
+          }).fail((data) => {
+
+            $.getJSON(`https://${$(this).val()}/api/get/colours/index.php`).done((data) => {
+
+              localStorage.setItem('disable_ssl', false);
+
+            }).fail((data) => {
+
+              moodEngine.log('log', `Custom back-end address '${$(this).val()}' is invalid.`);
+              $(this).addClass('invalid');
+              $(this).next('label').attr('data-error', 'Address is invalid.');
+              invalidInputs.push(`${settings[$(this).attr('name')].label} '${$(this).val()}' is Invalid.`);
+
+            });
 
           });
 
