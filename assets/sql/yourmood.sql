@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Oct 09, 2017 at 03:34 AM
+-- Generation Time: Oct 12, 2017 at 11:21 AM
 -- Server version: 5.7.19-0ubuntu0.16.04.1
 -- PHP Version: 7.0.22-0ubuntu0.16.04.1
 
@@ -262,7 +262,8 @@ INSERT INTO `settings` (`id`, `active`, `setting`, `value`, `user`, `optional`, 
 (50, 1, 'keep_tab', 'true', 0, 0, 0, 0, '', '', '', 0, 0, '', ''),
 (51, 1, 'disable_caching', 'false', 1, 0, 1, 1, 'checkbox', '', 'advanced', 0, 0, 'Disable Caching', 'If enabled, quotes and colours will not be cached, and fresh copies will be pulled every time the page loads.'),
 (53, 1, 'speak_voice_accent', 'UK English Female', 1, 0, 0, 1, 'radio', '["UK English Female", "UK English Male", "US English Female"]', 'behaviour', 0, 0, 'Speaking Voice Accent', 'What accent the text to speech engine will use when speaking the current quote.'),
-(55, 1, 'keep_backend_addresses', 'true', 0, 0, 0, 0, '', '', '', 0, 0, '', '');
+(55, 1, 'keep_backend_addresses', 'false', 0, 0, 0, 0, '', '', '', 0, 0, '', ''),
+(56, 1, 'disable_ssl', 'false', 1, 0, 1, 1, 'checkbox', '', 'advanced', 0, 0, 'Disable SSL', 'Only enable if your desired back-end address does not have an SSL certificate (and therefore serves over HTTP).');
 
 -- --------------------------------------------------------
 
@@ -282,7 +283,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `read_only`, `user`, `password`) VALUES
-(1, 0, 'admin', '5f4dcc3b5aa765d61d8327deb882cf99');
+(1, 0, 'admin', '5f4dcc3b5aa765d61d8327deb882cf99'),
 
 --
 -- Indexes for dumped tables
@@ -332,27 +333,27 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `colours`
 --
 ALTER TABLE `colours`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
 --
 -- AUTO_INCREMENT for table `decrease`
 --
 ALTER TABLE `decrease`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 --
 -- AUTO_INCREMENT for table `improve`
 --
 ALTER TABLE `improve`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
 --
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=460;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=461;
 --
 -- AUTO_INCREMENT for table `settings`
 --
 ALTER TABLE `settings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 --
 -- AUTO_INCREMENT for table `users`
 --
