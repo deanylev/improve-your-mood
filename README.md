@@ -1,6 +1,6 @@
 # Improve Your Mood
 
-**Live Version Here:** http://improveyourmood.xyz
+**Live Version Here:** https://improveyourmood.xyz
 
 Includes both the back-end and front-end.
 
