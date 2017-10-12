@@ -1,4 +1,4 @@
-var appError, defaultMode, startTime, settingsOpen, lastNum, disableSwitch, quoteNum, colourNum, needSSL;
+var appError, defaultMode, startTime, settingsOpen, lastNum, disableSwitch, quoteNum, colourNum, needSSL, isProd;
 var quotes = [];
 var colours = [];
 var usedQuotes = [];
@@ -332,6 +332,12 @@ if (localStorage.getItem('cachedQuotes') && localStorage.getItem('cachedVersionQ
 
   $.ajaxSetup({
     async: false
+  });
+
+  $.get(`${fullBackendAddress}api/verify/index.php`, function(data) {
+
+    isProd = data === 'improveyourmood.xyz';
+
   });
 
   $.getJSON(`${fullBackendAddress}api/get/quotes/index.php?version=${version.toLowerCase()}`).done((data) => {
@@ -1931,7 +1937,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).fail((data) => {
 
         // Disable SSL
 
-        if ($(this).attr('name') === 'disable_ssl' && $(this).prop('checked') && needSSL) {
+        if ($(this).attr('name') === 'disable_ssl' && $(this).prop('checked') && (needSSL || isProd)) {
 
           invalidInputs.push(`Cannot Disable SSL, Your Back-End Address Requires It.`);
 
