@@ -13,6 +13,7 @@ var pullTime = {};
 var versionQuotes = {};
 var backendAddress = localStorage.getItem('backend_address') || 'improveyourmood.xyz';
 var ssl = !JSON.parse(localStorage.getItem('disable_ssl'));
+var pageSSL = window.location.protocol === 'https:';
 var fullBackendAddress = ssl ? `https://${backendAddress}/` : `http://${backendAddress}/`;
 var totalTime = performance.now();
 var version = window.location.href.includes('decreaseyourmood') ? 'Decrease' : 'Improve';
@@ -1919,7 +1920,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).fail((data) => {
 
             }).fail((data) => {
 
-              let sslMessage = ssl ? ' Make sure it is SSL enabled.' : '';
+              let sslMessage = pageSSL ? ' Make sure it is SSL enabled.' : '';
               moodEngine.log('log', `Custom back-end address '${$(this).val()}' is invalid.`);
               $(this).addClass('invalid');
               $(this).next('label').attr('data-error', 'Address is invalid.');
