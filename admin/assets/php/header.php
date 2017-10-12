@@ -10,9 +10,9 @@
 
   $titlePairs = array("users" => "user", "improve"=>"quote", "decrease"=>"quote", "colours"=>"colour", "settings"=>"setting", "logs"=>"log");
 
-  if (!in_array($title, $titles) || (isset($type) && array_key_exists($type, $titlePairs) && $titlePairs[$type] !== $title)) {
+  if (!in_array($title, $titles) || (isset($type) && array_key_exists($type, $titlePairs) && $titlePairs[$type] !== $title) || (isset($action) && !in_array($action, $actions))) {
       $_SESSION["message"]["danger"] = "An error occured";
-      header("location: ../home");
+      in_array($title, $titles) ? header("location: ../{$title}s?type={$type}") : header("location: ../home");
       die();
   }
 

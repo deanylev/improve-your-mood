@@ -1,8 +1,6 @@
 <?php
 
   if (isset($_SESSION["user"])) {
-
-
       include("user.php");
 
       // Create - make a new record
@@ -16,7 +14,6 @@
       // Delete All - delete all existing records in a table
 
       if (!$currentUser["read_only"]) {
-
         if (isset($type)) {
           switch ($type) {
             case "log":
@@ -40,11 +37,7 @@
               break;
           }
         }
-
       } else {
-
           $actions = array("view");
-
       }
-
   }

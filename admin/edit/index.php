@@ -5,9 +5,9 @@
   $type = $_GET["type"];
   $id = $_GET["id"];
   $title = $_GET["title"];
-  $word = ucwords($title);
   $singular = true;
-  $otherTitle = "Edit ${word}";
+  $action = "edit";
+  $otherTitle = ucwords($action) . " " . ucwords($title);
   if ($id === $_SESSION["user"]) {
       $userPage = true;
   }
@@ -17,10 +17,6 @@
   if ($result->num_rows) {
       $row = $result->fetch_assoc();
       $fieldInfo = mysqli_fetch_field($result);
-  }
-
-  if (!in_array("edit", $actions)) {
-      warning_handler(null, null);
   }
 
   while ($column = $result->fetch_field()) {

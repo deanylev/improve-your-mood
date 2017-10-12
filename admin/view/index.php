@@ -5,9 +5,9 @@
   $type = $_GET["type"];
   $id = $_GET["id"];
   $title = $_GET["title"];
-  $word = ucwords($title);
   $singular = true;
-  $otherTitle = "View ${word}";
+  $action = "view";
+  $otherTitle = ucwords($action) . " " . ucwords($title);
   if ($id === $_SESSION["user"]) {
     $userPage = true;
   }
@@ -16,10 +16,6 @@
 
   if ($result->num_rows) {
       $row = $result->fetch_assoc();
-  }
-
-  if (!in_array("view", $actions)) {
-      warning_handler(null, null);
   }
 
 ?>
