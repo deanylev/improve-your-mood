@@ -66,7 +66,7 @@ moodEngine.sendLogs = function(method) {
   $.ajax({
     type: 'POST',
     crossDomain: true,
-    url: `${backendAddress}api/create/log/index.php`,
+    url: `${backendAddress}/api/create/log/index.php`,
     data: {
       version: version,
       userAgent: navigator.userAgent,
@@ -82,7 +82,7 @@ moodEngine.sendLogs = function(method) {
     error: function(response) {
 
       console.log('\nFailed to send logs to backend.');
-      if (method === 'button') Materialize.toast('Fail To Send Logs to Back-End.', fullSettings.toast_interval);
+      if (method === 'button') Materialize.toast('Failed To Send Logs to Back-End.', fullSettings.toast_interval);
       if (response) console.log(`Response: ${response}`);
 
     }
@@ -332,7 +332,7 @@ console.log(`%c${version.toLowerCase()} your mood 6`, 'font-family: "Oxygen"; fo
 console.log('――――――――――――――――――――――――――――――');
 moodEngine.log('log', `Pulling from: ${backendAddress}`);
 
-$.get(`${backendAddress}api/verify/index.php`, function(data) {
+$.get(`${backendAddress}/api/verify/index.php`, function(data) {
 
   isProd = data === 'improveyourmood.xyz';
 
