@@ -829,7 +829,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).fail((data) => {
 
               moodEngine.reload();
 
-            } else if (fullSettings.save_settings_keys.includes(combo) && (!$('#settings-modal input:focus').parent().hasClass('chips') || !$('#settings-modal input:focus').val())) {
+            } else if ($('#settings-modal').hasClass('open') && fullSettings.save_settings_keys.includes(combo) && (!$('#settings-modal input:focus').parent().hasClass('chips') || !$('#settings-modal input:focus').val())) {
 
               moodEngine.saveSettings();
 
@@ -2124,9 +2124,9 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).fail((data) => {
 
   });
 
-  // The form is just for show, don't allow submitting
+  // Forms are just for show, don't allow submitting
 
-  $('#settings-form').submit(function() {
+  $('form').submit(function() {
 
     return false;
 
