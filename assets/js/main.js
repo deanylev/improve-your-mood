@@ -57,11 +57,13 @@ moodEngine.log = function(type, message, display) {
 
 };
 
-moodEngine.sendLogs = function() {
+moodEngine.sendLogs = function(method) {
 
   //if (localStorage.length) moodEngine.log('log', `localStorage: ${JSON.stringify(localStorage)}`, false);
 
-  console.log('\nSending log to backend...');
+  console.log('\nSending logs to backend...');
+
+  if (method === 'button') Materialize.toast('Sending Logs To Back-End...', fullSettings.toast_interval);
 
   $.ajax({
     type: 'POST',
@@ -74,13 +76,15 @@ moodEngine.sendLogs = function() {
     },
     success: function(response) {
 
-      console.log('\nLog sent to backend successfully.');
+      console.log('\nLogs sent to backend successfully.');
+      if (method === 'button') Materialize.toast('Logs Sent To Back-End Successfully.', fullSettings.toast_interval);
       if (response) console.log(`Response: ${response}`);
 
     },
     error: function(response) {
 
-      console.log('\nFailed to send log to backend.');
+      console.log('\nFailed to send logs to backend.');
+      if (method === 'button') Materialize.toast('Fail To Send Logs to Back-End.', fullSettings.toast_interval);
       if (response) console.log(`Response: ${response}`);
 
     }
@@ -163,7 +167,7 @@ $(document).ready(function() {
 
   $('#send-logs-button').click(function() {
 
-    moodEngine.sendLogs();
+    moodEngine.sendLogs('button');
 
   });
 
