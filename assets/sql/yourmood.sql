@@ -239,13 +239,13 @@ CREATE TABLE `settings` (
 
 INSERT INTO `settings` (`id`, `active`, `setting`, `value`, `user`, `optional`, `advanced`, `mobile`, `input`, `options`, `tab`, `min`, `max`, `label`, `description`) VALUES
 (1, 1, 'reload_interval', '3000', 1, 0, 0, 1, 'range', '', 'behaviour', 0, 10000, 'Auto Reload Interval (ms)', 'How often the auto reload will function, in milliseconds.'),
-(4, 1, 'toast_interval', '1000', 0, 0, 0, 0, 'number', '', '', 0, 0, '', ''),
+(4, 1, 'toast_interval', '1500', 0, 0, 0, 0, 'number', '', '', 0, 0, '', ''),
 (10, 1, 'reload_keys', '["space", "enter", "right", "d"]', 1, 1, 0, 0, 'chips', '', 'keyboard', 0, 0, 'Reload Keyboard Shortcuts', 'Which keys will activate a reload.'),
 (15, 1, 'back_keys', '["backspace", "left", "a"]', 1, 1, 0, 0, 'chips', '', 'keyboard', 0, 0, 'Rewind Keyboard Shortcuts', 'Which keys will go back to the previous quote/colour.'),
 (17, 1, 'auto_reload_keys', '["r"]', 1, 1, 0, 0, 'chips', '', 'keyboard', 0, 0, 'Auto Reload Keyboard Shortcuts', 'Which keys will toggle auto reloading.'),
 (18, 1, 'settings_keys', '["s", "up", "down"]', 1, 1, 0, 0, 'chips', '', 'keyboard', 0, 0, 'Toggle Settings Panel Keyboard Shortcuts', 'Which keys will toggle the settings panel.'),
 (19, 1, 'save_settings_keys', '["enter"]', 0, 0, 0, 0, '', '', '', 0, 0, '', ''),
-(20, 1, 'backend_address', 'improveyourmood.xyz', 1, 0, 1, 1, 'text', '', 'advanced', 0, 0, 'Custom Back-End Address', 'Define a custom back-end address, rather than using the live one. Used for development purposes.'),
+(20, 1, 'backend_address', 'https://improveyourmood.xyz', 1, 0, 1, 1, 'text', '', 'advanced', 0, 0, 'Custom Back-End Address', 'Define a custom back-end address, rather than using the live one. Used for development purposes.'),
 (24, 1, 'colour_reload_transition_time', '1200', 1, 0, 0, 1, 'range', '', 'appearance', 0, 5000, 'Colour Reload Transition Time (ms)', 'How long the colour reload transitions will take to complete, in milliseconds.'),
 (26, 1, 'text_reload_transition_time', '400', 1, 0, 0, 1, 'range', '', 'appearance', 0, 5000, 'Text Reload Transition Time (ms)', 'How long the text reload transitions will take to complete, in milliseconds.'),
 (33, 1, 'reverse_swipe_direction', 'false', 1, 0, 0, 1, 'checkbox', '', 'behaviour', 0, 0, 'Reverse Swipe Direction', 'Reverse the directions that you swipe to reload/rewind.'),
@@ -262,8 +262,7 @@ INSERT INTO `settings` (`id`, `active`, `setting`, `value`, `user`, `optional`, 
 (50, 1, 'keep_tab', 'true', 0, 0, 0, 0, '', '', '', 0, 0, '', ''),
 (51, 1, 'disable_caching', 'false', 1, 0, 1, 1, 'checkbox', '', 'advanced', 0, 0, 'Disable Caching', 'If enabled, quotes and colours will not be cached, and fresh copies will be pulled every time the page loads.'),
 (53, 1, 'speak_voice_accent', 'UK English Female', 1, 0, 0, 1, 'radio', '["UK English Female", "UK English Male", "US English Female"]', 'behaviour', 0, 0, 'Speaking Voice Accent', 'What accent the text to speech engine will use when speaking the current quote.'),
-(55, 1, 'keep_backend_addresses', 'false', 0, 0, 0, 0, '', '', '', 0, 0, '', ''),
-(56, 1, 'disable_ssl', 'false', 1, 0, 1, 1, 'checkbox', '', 'advanced', 0, 0, 'Disable SSL', 'Only enable if your desired back-end address does not have an SSL certificate (and therefore serves over HTTP).');
+(57, 1, 'view_logs_keys', '["l o g"]', 0, 0, 0, 0, '', '', '', 0, 0, '', '');
 
 -- --------------------------------------------------------
 
@@ -353,7 +352,7 @@ ALTER TABLE `logs`
 -- AUTO_INCREMENT for table `settings`
 --
 ALTER TABLE `settings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
 --
 -- AUTO_INCREMENT for table `users`
 --

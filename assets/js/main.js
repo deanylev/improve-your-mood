@@ -1,4 +1,4 @@
-let appError, defaultMode, startTime, modalOpen, lastNum, disableSwitch, quoteNum, colourNum, needSSL, isProd;
+let appError, defaultMode, startTime, modalOpen, lastNum, disableSwitch, quoteNum, colourNum, isProd;
 let quotes = [];
 let colours = [];
 let usedQuotes = [];
@@ -11,10 +11,8 @@ let settings = {};
 let fullSettings = {};
 let pullTime = {};
 let versionQuotes = {};
-let backendAddress = localStorage.getItem('backend_address') || 'improveyourmood.xyz';
-let ssl = !JSON.parse(localStorage.getItem('disable_ssl'));
+let backendAddress = localStorage.getItem('backend_address') || 'https://improveyourmood.xyz';
 let pageSSL = window.location.protocol === 'https:';
-let fullBackendAddress = ssl ? `https://${backendAddress}/` : `http://${backendAddress}/`;
 let totalTime = performance.now();
 let version = window.location.href.includes('decreaseyourmood') ? 'Decrease' : 'Improve';
 let otherVersion = window.location.href.includes('decreaseyourmood') ? 'Improve' : 'Decrease';
@@ -68,7 +66,7 @@ moodEngine.sendLogs = function(method) {
   $.ajax({
     type: 'POST',
     crossDomain: true,
-    url: `${fullBackendAddress}api/create/log/index.php`,
+    url: `${backendAddress}api/create/log/index.php`,
     data: {
       version: version,
       userAgent: navigator.userAgent,
@@ -332,9 +330,9 @@ moodEngine.error = function(display, log, code, type) {
 
 console.log(`%c${version.toLowerCase()} your mood 6`, 'font-family: "Oxygen"; font-size: 20px;');
 console.log('――――――――――――――――――――――――――――――');
-moodEngine.log('log', `Pulling from: ${fullBackendAddress}`);
+moodEngine.log('log', `Pulling from: ${backendAddress}`);
 
-$.get(`${fullBackendAddress}api/verify/index.php`, function(data) {
+$.get(`${backendAddress}api/verify/index.php`, function(data) {
 
   isProd = data === 'improveyourmood.xyz';
 
@@ -361,7 +359,7 @@ if (localStorage.getItem('cachedQuotes') && localStorage.getItem('cachedVersionQ
     async: false
   });
 
-  $.getJSON(`${fullBackendAddress}api/get/quotes/index.php?version=${version.toLowerCase()}`).done((data) => {
+  $.getJSON(`${backendAddress}/api/get/quotes/index.php?version=${version.toLowerCase()}`).done((data) => {
 
     pullTime.quotes = Math.ceil(performance.now() - startTime);
 
@@ -373,7 +371,7 @@ if (localStorage.getItem('cachedQuotes') && localStorage.getItem('cachedVersionQ
 
     });
 
-    $.getJSON(`${fullBackendAddress}api/get/quotes/index.php?version=${otherVersion.toLowerCase()}`).done((data) => {
+    $.getJSON(`${backendAddress}/api/get/quotes/index.php?version=${otherVersion.toLowerCase()}`).done((data) => {
 
       versionQuotes[otherVersion] = [];
 
@@ -438,7 +436,7 @@ if (localStorage.getItem('cachedColours') && localStorage.getItem('disable_cachi
     async: false
   });
 
-  $.getJSON(`${fullBackendAddress}api/get/colours/index.php`).done((data) => {
+  $.getJSON(`${backendAddress}/api/get/colours/index.php`).done((data) => {
 
     pullTime.colours = Math.ceil(performance.now() - startTime);
 
@@ -482,7 +480,7 @@ startTime = performance.now();
 
 moodEngine.log('log', 'Pulling settings from backend...');
 
-$.getJSON(`${fullBackendAddress}api/get/settings/index.php`).fail((data) => {
+$.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   moodEngine.log('warn', 'Failed to pull settings from backend, running in default settings mode...');
 
@@ -955,15 +953,9 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).fail((data) => {
 
       if (fullSettings.backend_address !== backendAddress) {
 
-        let usedBackendAddresses = JSON.parse(localStorage.getItem('usedBackendAddresses')) || [];
-        usedBackendAddresses.push(fullSettings.backend_address);
-        usedBackendAddresses = JSON.stringify(usedBackendAddresses);
-
         localStorage.clear();
         localStorage.setItem('backend_address', fullSettings.backend_address);
-        localStorage.setItem('disable_ssl', fullSettings.disable_ssl);
-        localStorage.setItem('usedBackendAddresses', usedBackendAddresses);
-        if (fullSettings.backend_address !== 'improveyourmood.xyz') localStorage.setItem('keep_advanced_settings', true);
+        if (fullSettings.backend_address !== 'https://improveyourmood.xyz') localStorage.setItem('keep_advanced_settings', true);
         window.location.reload();
 
       }
@@ -1427,24 +1419,6 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).fail((data) => {
 
   }
 
-  // Autocomplete on specific inputs
-
-  if (localStorage.getItem('usedBackendAddresses') && fullSettings.keep_backend_addresses) {
-
-    let options = {};
-
-    $.each(JSON.parse(localStorage.getItem('usedBackendAddresses')), function(key, val) {
-
-      if (val !== backendAddress) options[val] = null;
-
-    });
-
-    $('.settings-input[name="backend_address"]').autocomplete({
-      data: options
-    });
-
-  }
-
   // Set desired settings to default using the attr on the default button
 
   $('.default-button').click(function() {
@@ -1829,7 +1803,6 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).fail((data) => {
     let lastColour = localStorage.getItem('lastColour');
     let lastTab = localStorage.getItem('lastTab');
     let verticalMenu = localStorage.getItem('vertical_menu');
-    let usedBackendAddresses = localStorage.getItem('usedBackendAddresses');
 
     $.each(settings, function(key, val) {
 
@@ -1845,7 +1818,6 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).fail((data) => {
     localStorage.setItem('lastColour', lastColour);
     localStorage.setItem('lastTab', lastTab);
     localStorage.setItem('vertical_menu', verticalMenu);
-    localStorage.setItem('usedBackendAddresses', usedBackendAddresses);
 
     $.each(restoreSettings, function(key, val) {
 
@@ -1947,54 +1919,19 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).fail((data) => {
             async: false
           });
 
-          // Test both http and https
+          $.getJSON(`${$(this).val()}/api/get/colours/index.php`).fail((data) => {
 
-          needSSL = false;
-
-          $.getJSON(`http://${$(this).val()}/api/get/colours/index.php`).done((data) => {
-
-            localStorage.setItem('disable_ssl', true);
-
-          }).fail((data) => {
-
-            moodEngine.log('warn', 'Failed http test, trying https...');
-
-            $.getJSON(`https://${$(this).val()}/api/get/colours/index.php`).done((data) => {
-
-              localStorage.setItem('disable_ssl', false);
-              needSSL = true;
-
-            }).fail((data) => {
-
-              let sslMessage = pageSSL ? ' Make sure it is SSL enabled.' : '';
-              moodEngine.log('log', `Custom back-end address '${$(this).val()}' is invalid.`);
-              $(this).addClass('invalid');
-              $(this).next('label').attr('data-error', 'Address is invalid.');
-              invalidInputs.push(`${settings[$(this).attr('name')].label} '${$(this).val()}' is Invalid.${sslMessage}`);
-
-            });
+            let sslMessage = pageSSL ? ' Make sure it is SSL enabled.' : '';
+            moodEngine.log('log', `Custom back-end address '${$(this).val()}' is invalid.`);
+            $(this).addClass('invalid');
+            $(this).next('label').attr('data-error', 'Address is invalid.');
+            invalidInputs.push(`${settings[$(this).attr('name')].label} '${$(this).val()}' is Invalid.${sslMessage}`);
 
           });
 
           $.ajaxSetup({
             async: true
           });
-
-        }
-
-        // Disable SSL
-
-        if ($(this).attr('name') === 'disable_ssl') {
-
-          if ($(this).prop('checked') && (needSSL || isProd)) {
-
-            invalidInputs.push(`Cannot Disable SSL, Your Back-End Address Requires It.`);
-
-          } else if (!$(this).prop('checked') && !needSSL && !isProd) {
-
-            invalidInputs.push(`Please Disable SSL, Your Back-End Address Does Not Support It.`);
-
-          }
 
         }
 
