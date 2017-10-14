@@ -40,16 +40,25 @@
   <div id="logs-modal" class="modal modal-fixed-footer bottom-sheet">
     <div class="modal-content">
       <h4 class="coloured coloured-text">Logs</h4>
+      <form>
+        <div class="row">
+          <div class="input-field col s6 offset-s3">
+            <i class="material-icons prefix coloured coloured-text">search</i>
+            <input type="text" id="logs-search" placeholder="Search Logs">
+          </div>
+        </div>
+      </form>
       <div id="visible-logs"></div>
+      <div id="logs-search-results" class="hide"></div>
     </div>
     <div class="modal-footer">
       <button id="send-logs-button" class="btn-flat coloured coloured-background white-text waves-effect">Send Logs</button>
     </div>
   </div>
-  <div class="container">
+  <div class="container clickable">
     <h2 id="logo" class="theme-text fade-in-on-ready"><span id="logo-version"></span> your mood</h2>
   </div>
-  <main class="container manual-reload">
+  <main class="container clickable manual-reload">
     <div class="preloader-wrapper big active js-margin">
       <div class="spinner-layer">
         <div class="circle-clipper left">
@@ -77,7 +86,7 @@
   </div>
   <footer class="page-footer transparent hide-on-med-and-down fade-in-on-ready">
     <div class="footer-copyright transparent theme-text">
-      <div class="container">
+      <div class="container clickable">
         <span id="footer-version"></span>
         <span>Your Mood 6 |</span>
         <a class="theme-text footer-link" href="https://github.com/deanylev/improveyourmood_web" target="_blank">GitHub Repo</a>

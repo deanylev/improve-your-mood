@@ -1,4 +1,4 @@
-let appError, defaultMode, startTime, settingsOpen, lastNum, disableSwitch, quoteNum, colourNum, needSSL, isProd;
+let appError, defaultMode, startTime, modalOpen, lastNum, disableSwitch, quoteNum, colourNum, needSSL, isProd;
 let quotes = [];
 let colours = [];
 let usedQuotes = [];
@@ -45,7 +45,7 @@ moodEngine.log = function(type, message, display) {
 
     $.each(moodLog, function(key, val) {
 
-      $('#visible-logs').append(`<b><span class="log-${val.type}">${val.type}:</span></b> ${val.message}<br>`);
+      $('#visible-logs').append(`<div class="log"><b><span class="log-${val.type}">${val.type}:</span></b> <div class="content">${val.message}</div></div><br>`);
 
     });
 
@@ -765,7 +765,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).fail((data) => {
 
     $('html').hammer().on(fullSettings.reverse_swipe_direction ? 'swiperight' : 'swipeleft', function(ev) {
 
-      if (!appError & !settingsOpen) {
+      if (!appError & !modalOpen) {
 
         let direction = fullSettings.reverse_swipe_direction ? 'right' : 'left';
         moodEngine.log('log', `Swiped ${direction} to reload.`);
@@ -777,7 +777,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).fail((data) => {
 
     $('html').hammer().on(fullSettings.reverse_swipe_direction ? 'swipeleft' : 'swiperight', function(ev) {
 
-      if (!appError && !settingsOpen) {
+      if (!appError && !modalOpen) {
 
         let direction = fullSettings.reverse_swipe_direction ? 'left' : 'right';
         moodEngine.log('log', `Swiped ${direction} to rewind.`);
@@ -825,7 +825,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).fail((data) => {
 
           if (!appError) {
 
-            if (!settingsOpen) {
+            if (!modalOpen) {
 
               moodEngine.reload();
 
@@ -843,7 +843,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).fail((data) => {
 
         Mousetrap.bindGlobal(fullSettings.reload_keys, function(e, combo) {
 
-          if (!appError && !settingsOpen) {
+          if (!appError && !modalOpen) {
 
             moodEngine.reload();
 
@@ -855,7 +855,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).fail((data) => {
 
           Mousetrap.bindGlobal(fullSettings.save_settings_keys, function(e, combo) {
 
-            if (settingsOpen && (!$('#settings-modal input:focus').parent().hasClass('chips') || !$('#settings-modal input:focus').val())) {
+            if (modalOpen && (!$('#settings-modal input:focus').parent().hasClass('chips') || !$('#settings-modal input:focus').val())) {
 
               moodEngine.saveSettings();
 
@@ -875,7 +875,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).fail((data) => {
 
       Mousetrap.bind(fullSettings.back_keys, function(e) {
 
-        if (!appError && !settingsOpen) moodEngine.rewind();
+        if (!appError && !modalOpen) moodEngine.rewind();
 
       });
 
@@ -887,7 +887,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).fail((data) => {
 
       Mousetrap.bind(fullSettings.full_rewind_keys, function(e) {
 
-        if (!appError && !settingsOpen) moodEngine.fullRewind();
+        if (!appError && !modalOpen) moodEngine.fullRewind();
 
       });
 
@@ -899,7 +899,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).fail((data) => {
 
       Mousetrap.bind(fullSettings.auto_reload_keys, function(e) {
 
-        if (!appError && !settingsOpen) moodEngine.toggleAutoReload();
+        if (!appError && !modalOpen) moodEngine.toggleAutoReload();
 
       });
 
@@ -911,7 +911,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).fail((data) => {
 
       Mousetrap.bind(fullSettings.menu_keys, function(e) {
 
-        if (!appError && !settingsOpen) {
+        if (!appError && !modalOpen) {
 
           let fabOpen = $('.fixed-action-btn').hasClass('active');
 
@@ -941,7 +941,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).fail((data) => {
 
       Mousetrap.bindGlobal(fullSettings.view_logs_keys, function(e) {
 
-        if (!appError && !settingsOpen) $('#logs-modal').modal('open');
+        if (!appError && !modalOpen) $('#logs-modal').modal('open');
 
       });
 
@@ -1144,19 +1144,30 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).fail((data) => {
 
       }
 
-      settingsOpen = true;
+      modalOpen = true;
 
     },
     complete: function() {
 
       $('.thumb').remove();
 
-      settingsOpen = false;
+      modalOpen = false;
 
     }
   });
 
-  $('#logs-modal').modal();
+  $('#logs-modal').modal({
+    ready: function(modal, trigger) {
+
+      modalOpen = true;
+
+    },
+    complete: function() {
+
+      modalOpen = false;
+
+    }
+  });
 
   // Functions for closing and opening settings panel
 
@@ -1168,7 +1179,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).fail((data) => {
 
       $('#settings-modal').modal(action);
 
-    } else if (settingsOpen) {
+    } else if (modalOpen) {
 
       $('#settings-modal').modal('close');
 
@@ -1791,7 +1802,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).fail((data) => {
 
   }
 
-  $('.container').click(function(e) {
+  $('.clickable').click(function(e) {
 
     moodEngine.reload();
 
@@ -2148,5 +2159,48 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).fail((data) => {
     }
 
   };
+
+  // Log Searching
+
+  $('#logs-search').on('keypress keydown keyup change', function() {
+
+    $('#logs-search-results').empty();
+
+    let value = $(this).val().toLowerCase();
+
+    if (value) {
+
+      $('#visible-logs').addClass('hide');
+      $('#logs-search-results').removeClass('hide');
+
+      let string = '';
+
+      $('.log .content').each(function() {
+
+        if ($(this).text().toLowerCase().includes(value)) {
+
+          string += `${$(this).parent().html()}<br>`;
+
+        }
+
+      });
+
+      if (string) {
+
+        $('#logs-search-results').html(string);
+
+      } else {
+
+        $('#logs-search-results').html('<h5>No Results</h5>');
+
+      }
+
+    } else {
+
+      $('#visible-logs').removeClass('hide');
+
+    }
+
+  });
 
 });
