@@ -1,5 +1,5 @@
 {
-  "toast_interval": 1000,
+  "toast_interval": 1500,
   "reload_interval": 3000,
   "button_order": ["autoreload", "settings", "speak", "rewind"],
   "reload_keys": ["space"],
