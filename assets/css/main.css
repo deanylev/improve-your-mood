@@ -73,7 +73,7 @@ label:not(.active) b, #advanced-settings, .fade-in-on-ready, .fade-in-on-load {
 
 .reset-input {
   top: 17px;
-  z-index: auto;
+  z-index: 0;
 }
 
 .inactive-icon {
