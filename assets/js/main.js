@@ -1,23 +1,23 @@
-var appError, defaultMode, startTime, settingsOpen, lastNum, disableSwitch, quoteNum, colourNum, needSSL, isProd;
-var quotes = [];
-var colours = [];
-var usedQuotes = [];
-var usedColours = [];
-var quoteHistory = [];
-var colourHistory = [];
-var moodLog = [];
-var moodEngine = {};
-var settings = {};
-var fullSettings = {};
-var pullTime = {};
-var versionQuotes = {};
-var backendAddress = localStorage.getItem('backend_address') || 'improveyourmood.xyz';
-var ssl = !JSON.parse(localStorage.getItem('disable_ssl'));
-var pageSSL = window.location.protocol === 'https:';
-var fullBackendAddress = ssl ? `https://${backendAddress}/` : `http://${backendAddress}/`;
-var totalTime = performance.now();
-var version = window.location.href.includes('decreaseyourmood') ? 'Decrease' : 'Improve';
-var otherVersion = window.location.href.includes('decreaseyourmood') ? 'Improve' : 'Decrease';
+let appError, defaultMode, startTime, settingsOpen, lastNum, disableSwitch, quoteNum, colourNum, needSSL, isProd;
+let quotes = [];
+let colours = [];
+let usedQuotes = [];
+let usedColours = [];
+let quoteHistory = [];
+let colourHistory = [];
+let moodLog = [];
+let moodEngine = {};
+let settings = {};
+let fullSettings = {};
+let pullTime = {};
+let versionQuotes = {};
+let backendAddress = localStorage.getItem('backend_address') || 'improveyourmood.xyz';
+let ssl = !JSON.parse(localStorage.getItem('disable_ssl'));
+let pageSSL = window.location.protocol === 'https:';
+let fullBackendAddress = ssl ? `https://${backendAddress}/` : `http://${backendAddress}/`;
+let totalTime = performance.now();
+let version = window.location.href.includes('decreaseyourmood') ? 'Decrease' : 'Improve';
+let otherVersion = window.location.href.includes('decreaseyourmood') ? 'Improve' : 'Decrease';
 
 
 // Disable JSON caching
@@ -41,6 +41,14 @@ moodEngine.log = function(type, message, display) {
 
     }
 
+    $('#visible-logs').empty();
+
+    $.each(moodLog, function(key, val) {
+
+      $('#visible-logs').append(`<b><span class="log-${val.type}">${val.type}:</span></b> ${val.message}<br>`);
+
+    });
+
   } else {
 
     console.error('INCORRECT USE OF MOODENGINE LOG');
@@ -49,7 +57,7 @@ moodEngine.log = function(type, message, display) {
 
 };
 
-moodEngine.sendLog = function() {
+moodEngine.sendLogs = function() {
 
   //if (localStorage.length) moodEngine.log('log', `localStorage: ${JSON.stringify(localStorage)}`, false);
 
@@ -150,6 +158,14 @@ $(document).ready(function() {
     $('#menu-button .alt-icon').toggleClass('inactive-icon');
 
   }
+
+  // Send Logs
+
+  $('#send-logs-button').click(function() {
+
+    moodEngine.sendLogs();
+
+  });
 
 });
 
@@ -306,7 +322,7 @@ moodEngine.error = function(display, log, code, type) {
 
   appError = true;
 
-  moodEngine.sendLog();
+  moodEngine.sendLogs();
 
 };
 
@@ -464,7 +480,7 @@ moodEngine.log('log', 'Pulling settings from backend...');
 
 $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).fail((data) => {
 
-  moodEngine.log('error', 'Failed to pull settings from backend, running in default settings mode...');
+  moodEngine.log('warn', 'Failed to pull settings from backend, running in default settings mode...');
 
   $.ajaxSetup({
     async: false
@@ -479,7 +495,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).fail((data) => {
 
     let reason = data.status === 404 ? 'missing' : 'damaged';
 
-    moodEngine.log('error', `Failed to pull default settings, local JSON file is ${reason}.`);
+    moodEngine.log('warn', `Failed to pull default settings, local JSON file is ${reason}.`);
 
   });
 
@@ -716,6 +732,7 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).fail((data) => {
           } catch (error) {
 
             moodEngine.log('error', `Cannot speak quote, invalid voice accent provided ('${fullSettings.speak_voice_accent}').`);
+            Materialize.toast('Invalid Voice Accent Provided.', fullSettings.toast_interval)
 
           }
 
@@ -909,6 +926,18 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).fail((data) => {
       Mousetrap.bindGlobal(fullSettings.settings_keys, function(e) {
 
         if (!appError && !$('#settings-modal input:not([type="range"]):not([type="checkbox"]):focus').length) moodEngine.toggleSettings();
+
+      });
+
+    }
+
+    // View Logs
+
+    if (typeof(fullSettings.view_logs_keys) === 'object') {
+
+      Mousetrap.bindGlobal(fullSettings.view_logs_keys, function(e) {
+
+        if (!appError && !settingsOpen) $('#logs-modal').modal('open');
 
       });
 
@@ -1122,6 +1151,8 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).fail((data) => {
 
     }
   });
+
+  $('#logs-modal').modal();
 
   // Functions for closing and opening settings panel
 

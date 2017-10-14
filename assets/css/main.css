@@ -73,6 +73,7 @@ label:not(.active) b, #advanced-settings, .fade-in-on-ready, .fade-in-on-load {
 
 .reset-input {
   top: 17px;
+  z-index: auto;
 }
 
 .inactive-icon {
@@ -101,6 +102,14 @@ label:not(.active) b, #advanced-settings, .fade-in-on-ready, .fade-in-on-load {
 
 .autocomplete-content, .reset-input {
   position: relative;
+}
+
+.log-error {
+  color: red;
+}
+
+.log-warn {
+  color: orange;
 }
 
 #logo {

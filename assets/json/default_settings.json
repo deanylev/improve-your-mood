@@ -3,6 +3,7 @@
   "reload_interval": 3000,
   "button_order": ["autoreload", "settings", "speak", "rewind"],
   "reload_keys": ["space"],
+  "view_logs_keys": ["l o g"],
   "back_keys": ["backspace"],
   "menu_keys": ["m"],
   "speak_voice_accent": ["UK English Female"]
