@@ -2171,21 +2171,22 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).fail((data) => {
     if (value) {
 
       $('#visible-logs').addClass('hide');
-      $('#logs-search-results').removeClass('hide');
 
       let string = '';
+      let results = 0;
 
       $('.log .content').each(function() {
 
         if ($(this).text().toLowerCase().includes(value)) {
 
           string += `${$(this).parent().html()}<br>`;
+          results++;
 
         }
 
       });
 
-      if (string) {
+      if (results) {
 
         $('#logs-search-results').html(string);
 
@@ -2195,9 +2196,12 @@ $.getJSON(`${fullBackendAddress}api/get/settings/index.php`).fail((data) => {
 
       }
 
+      $('#results-number').text(` (${results})`);
+
     } else {
 
       $('#visible-logs').removeClass('hide');
+      $('#results-number').empty();
 
     }
 
