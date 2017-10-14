@@ -1921,9 +1921,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
           $.getJSON(`${$(this).val()}/api/get/colours/index.php`).fail((data) => {
 
-            console.log(data);
-
-            let sslMessage = pageSSL ? ' Make sure it is SSL enabled.' : '';
+            let sslMessage = pageSSL && !$(this).val().startsWith('https://') ? ' Make sure it is SSL enabled.' : '';
             moodEngine.log('log', `Custom back-end address '${$(this).val()}' is invalid.`);
             $(this).addClass('invalid');
             $(this).next('label').attr('data-error', 'Address is invalid.');
