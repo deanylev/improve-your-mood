@@ -1028,9 +1028,27 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   moodEngine.setInputs = function(input) {
 
-    let target = input ? `.settings-input[name="${input}"]` : '.settings-input:not(.select-wrapper)';
+    let target;
+
+    if (input) {
+
+      target = `.settings-input[name="${input}"]`;
+
+    } else if (modalOpen) {
+
+      target = '.settings-input.dirty:not(.select-wrapper)';
+
+    } else {
+
+      target = '.settings-input:not(.select-wrapper)'
+
+    }
+
+    moodEngine.log('log', `Inputs set successfully, target was '${target}'`);
 
     $(target).each(function() {
+
+      $(this).removeClass('dirty');
 
       let setting = $(this).attr('name');
       let value = fullSettings[setting];
@@ -1418,6 +1436,22 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   }
 
+  // Record dirty inputs
+
+  $('.settings-input, .input').change(function() {
+
+    if ($(this).is('[type="radio"]')) {
+
+      $(this).closest('.row').find('[type="radio"]').addClass('dirty');
+
+    } else {
+
+      $(this).addClass('dirty');
+
+    }
+
+  });
+
   // Set desired settings to default using the attr on the default button
 
   $('.default-button').click(function() {
@@ -1504,6 +1538,8 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   $('.chips').on('chip.add', function(e, chip) {
 
+    $(this).addClass('dirty');
+
     let name = $(this).attr('name');
 
     $('.chip').each(function() {
@@ -1537,6 +1573,8 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
   // Don't allow deleting the settings chip
 
   $('.chips').on('chip.delete', function(e, chip) {
+
+    $(this).addClass('dirty');
 
     if (chip.tag === 'settings') {
 
