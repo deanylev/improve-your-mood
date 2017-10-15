@@ -592,6 +592,8 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       if (method !== 'initial' && JSON.stringify(fullSettings[key]) !== JSON.stringify(currentSettings[key])) {
 
+        $(`.settings-input[name="${key}"]`).addClass('dirty');
+
         let currentValue;
         let newValue;
 
@@ -1026,7 +1028,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   // Set inputs in modal
 
-  moodEngine.setInputs = function(input) {
+  moodEngine.setInputs = function(input, method) {
 
     let target;
 
@@ -1034,13 +1036,13 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       target = `.settings-input[name="${input}"]`;
 
-    } else if (modalOpen) {
+    } else if (method === 'initial') {
 
-      target = '.settings-input.dirty:not(.select-wrapper)';
+      target = '.settings-input:not(.select-wrapper)';
 
     } else {
 
-      target = '.settings-input:not(.select-wrapper)'
+      target = '.settings-input.dirty:not(.select-wrapper)';
 
     }
 
@@ -1476,7 +1478,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   // Set the correct values in the settings inputs on load
 
-  moodEngine.setInputs();
+  moodEngine.setInputs(null, 'initial');
 
   // Add defaults to tooltips
 
