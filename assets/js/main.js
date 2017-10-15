@@ -17,7 +17,6 @@ let totalTime = performance.now();
 let version = window.location.href.includes('decreaseyourmood') ? 'Decrease' : 'Improve';
 let otherVersion = window.location.href.includes('decreaseyourmood') ? 'Improve' : 'Decrease';
 
-
 // Disable JSON caching
 
 $.ajaxSetup({
