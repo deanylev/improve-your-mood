@@ -71,7 +71,7 @@ label:not(.active) b, #advanced-settings, .fade-in-on-ready, .fade-in-on-load {
   background-color: black !important;
 }
 
-.reset-input {
+.reset-input:not(.reset-all) {
   top: 17px;
   z-index: 0;
 }
