@@ -2112,11 +2112,11 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       let string = '';
       let results = 0;
 
-      $('.log .content').each(function() {
+      $('.log').each(function() {
 
-        if ($(this).text().toLowerCase().includes(value)) {
+        if ($(this).find('.content').text().toLowerCase().includes(value)) {
 
-          string += `${$(this).parent().html()}<br>`;
+          string += `${$(this).html()}<br>`;
           results++;
 
         }
