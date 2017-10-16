@@ -1031,6 +1031,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
   moodEngine.setInputs = function(input, method) {
 
     let target;
+    let success = true;
 
     if (input) {
 
@@ -1040,13 +1041,18 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       target = '.settings-input:not(.select-wrapper)';
 
-    } else {
+    } else if ($('.dirty').length) {
 
       target = '.settings-input.dirty:not(.select-wrapper)';
 
+    } else {
+
+      success = false;
+
     }
 
-    moodEngine.log('log', `Inputs set successfully, target was '${target}'`);
+    let log = success ? `Inputs set successfully, target was '${target}'` : 'No inputs to set.';
+    moodEngine.log('log', log);
 
     $(target).each(function() {
 
