@@ -1091,6 +1091,22 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         }
 
+      } else if ($(this).is('[type="range"]') && method !== 'initial') {
+
+        let input = $(this);
+        let currentValue = parseInt($(this).val());
+        currentValue = Math.ceil((currentValue + 1) / 10) * 10;
+
+        let interval = setInterval(function() {
+
+          currentValue > value ? currentValue -= 10 : currentValue += 10;
+
+          input.val(currentValue);
+
+          if (currentValue === value) clearInterval(interval);
+
+        }, 1);
+
       } else {
 
         $(this).val(value);
