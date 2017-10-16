@@ -1091,7 +1091,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         }
 
-      } else if ($(this).is('[type="range"]') && method !== 'initial') {
+      } else if ($(this).is('[type="range"]') && method !== 'initial' && modalOpen) {
 
         let input = $(this);
         let currentValue = parseInt($(this).val());
