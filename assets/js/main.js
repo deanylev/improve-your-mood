@@ -1094,12 +1094,13 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       } else if ($(this).is('[type="range"]') && method !== 'initial' && modalOpen) {
 
         let input = $(this);
-        let currentValue = parseInt($(this).val());
-        currentValue = Math.ceil((currentValue + 1) / 10) * 10;
+        let max = parseInt(input.attr('max'));
+        let amount = max % 250 === 0 ? max / 250 : 10;
+        let currentValue = Math.ceil((parseInt(input.val()) + 1) / amount) * amount;
 
         let interval = setInterval(function() {
 
-          currentValue > value ? currentValue -= 10 : currentValue += 10;
+          currentValue > value ? currentValue -= amount : currentValue += amount;
 
           input.val(currentValue);
 
