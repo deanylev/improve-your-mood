@@ -1631,8 +1631,6 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   };
 
-  let timeout;
-  let autoReload;
 
   // Toggle auto reload when the button is clicked
 
@@ -1640,6 +1638,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
     if (!appError) {
 
+      let timeout, autoReload;
       let toggle = moodEngine.notAutoReloading() ? 'Enabled' : 'Disabled';
       let icon_text = moodEngine.notAutoReloading() ? 'close' : 'autorenew';
       let icon = $('#toggle-auto-reload i.main-icon');
