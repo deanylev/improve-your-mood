@@ -1833,7 +1833,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   }
 
-  $('.clickable').click(function(e) {
+  $('.clickable').click(function() {
 
     moodEngine.reload();
 
@@ -2002,26 +2002,6 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
         }
 
       }
-
-      // Chips
-
-      // if ($(this).hasClass('chips')) {
-      //
-      //   let input = $(this);
-      //   let name = settings[input.attr('name')].label;
-      //
-      //   $(this).find('.chip').each(function() {
-      //
-      //     if ($(this).contents().get(0).nodeValue.indexOf(' ') >= 0) {
-      //
-      //       input.addClass('invalid');
-      //       invalidInputs.push(`Keyboard Shortcuts in ${name} Cannot Contain Spaces`);
-      //
-      //     }
-      //
-      //   });
-      //
-      // }
 
     });
 
