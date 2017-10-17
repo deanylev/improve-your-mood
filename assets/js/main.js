@@ -963,6 +963,8 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
     }
 
+    if (method!== 'initial' && !moodEngine.notAutoReloading()) moodEngine.toggleAutoReload();
+
     if (userSettings || backendSettings) moodEngine.log('log', `Settings set successfully. ${userSettings} user defined, ${backendSettings} backend defined.`);
 
     if (method !== 'initial' && logs.length) {
@@ -1621,11 +1623,20 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   });
 
-  // Auto reload
+  // Allows other functions to check if currently auto reloading
 
-  (function autoReload() {
+  moodEngine.notAutoReloading = function() {
 
-    setTimeout(function() {
+    return $('main').hasClass('manual-reload');
+
+  };
+
+  let timeout;
+  let autoReload;
+
+  (autoReload = function() {
+
+    timeout = setTimeout(function() {
 
       if (!moodEngine.notAutoReloading() && !appError) {
 
@@ -1640,14 +1651,6 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   })();
 
-  // Allows other functions to check if currently auto reloading
-
-  moodEngine.notAutoReloading = function() {
-
-    return $('main').hasClass('manual-reload');
-
-  };
-
   // Toggle auto reload when the button is clicked
 
   moodEngine.toggleAutoReload = function() {
@@ -1658,13 +1661,41 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       let icon_text = moodEngine.notAutoReloading() ? 'close' : 'autorenew';
       let icon = $('#toggle-auto-reload i.main-icon');
 
+      // Enabling
+
       if (moodEngine.notAutoReloading()) {
 
         $('#go-back-button').addClass('disabled');
 
-      } else if (quoteHistory.length > 1) {
+        if (!timeout) {
 
-        $('#go-back-button').removeClass('disabled');
+          moodEngine.log('log', 'Setting timeout for auto reload.');
+
+          timeout = setTimeout(function() {
+
+            if (!moodEngine.notAutoReloading() && !appError) {
+
+              moodEngine.reload('Auto');
+              moodEngine.log('log', `Auto reloaded after ${fullSettings.reload_interval}ms.`);
+
+            }
+
+            autoReload();
+
+          }, fullSettings.reload_interval);
+
+        }
+
+        // Disabling
+
+      } else {
+
+        moodEngine.log('log', 'Cleared auto reload timeout.');
+
+        clearTimeout(timeout);
+        timeout = null;
+
+        if (quoteHistory.length > 1) $('#go-back-button').removeClass('disabled');
 
       }
 
