@@ -129,16 +129,6 @@ $(document).ready(function() {
 
   $('#year').append(new Date().getFullYear());
 
-  // Some buttons needs to work straight away
-
-  // Retry loading
-
-  $('#retry-button').click(function() {
-
-    window.location.reload();
-
-  });
-
   // Calculate proper top margin for certain elements
 
   $('.js-margin').css('margin-top', $(document).height() / 4.5);
@@ -316,7 +306,6 @@ moodEngine.error = function(display, log, code, type) {
   } else {
 
     $('#quote').text('You are not connected to the internet.');
-    $('#retry-button').removeClass('hide');
     moodEngine.log('log', 'No internet connection.');
 
   }
@@ -1631,8 +1620,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   };
 
-  let timeout;
-  let autoReload;
+  let timeout, autoReload;
 
   // Toggle auto reload when the button is clicked
 
@@ -1826,7 +1814,6 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       moodEngine.reload('Auto');
       $('#quote').addClass('scale-in');
       $('.preloader-wrapper').addClass('hide');
-      $('#retry-button').hide();
       $('.fixed-action-btn').removeClass('hide');
       moodEngine.log('log', 'MoodEngine initialized.');
       let totalLoadTime = Math.ceil(performance.now() - totalTime);
