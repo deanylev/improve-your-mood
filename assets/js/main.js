@@ -952,7 +952,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
     }
 
-    if (method !== 'initial' && !moodEngine.notAutoReloading()) moodEngine.toggleAutoReload();
+    if (method !== 'initial' && currentSettings.reload_interval !== fullSettings.reload_interval && !moodEngine.notAutoReloading()) moodEngine.toggleAutoReload();
 
     if (userSettings || backendSettings) moodEngine.log('log', `Settings set successfully. ${userSettings} user defined, ${backendSettings} backend defined.`);
 
