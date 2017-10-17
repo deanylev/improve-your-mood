@@ -963,7 +963,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
     }
 
-    if (method!== 'initial' && !moodEngine.notAutoReloading()) moodEngine.toggleAutoReload();
+    if (method !== 'initial' && !moodEngine.notAutoReloading()) moodEngine.toggleAutoReload();
 
     if (userSettings || backendSettings) moodEngine.log('log', `Settings set successfully. ${userSettings} user defined, ${backendSettings} backend defined.`);
 
@@ -1634,23 +1634,6 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
   let timeout;
   let autoReload;
 
-  (autoReload = function() {
-
-    timeout = setTimeout(function() {
-
-      if (!moodEngine.notAutoReloading() && !appError) {
-
-        moodEngine.reload('Auto');
-        moodEngine.log('log', `Auto reloaded after ${fullSettings.reload_interval}ms.`);
-
-      }
-
-      autoReload();
-
-    }, fullSettings.reload_interval);
-
-  })();
-
   // Toggle auto reload when the button is clicked
 
   moodEngine.toggleAutoReload = function() {
@@ -1667,24 +1650,19 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         $('#go-back-button').addClass('disabled');
 
-        if (!timeout) {
+        moodEngine.log('log', `Set timeout for auto reload to ${fullSettings.reload_interval}ms.`);
 
-          moodEngine.log('log', 'Setting timeout for auto reload.');
+        (autoReload = function() {
 
           timeout = setTimeout(function() {
 
-            if (!moodEngine.notAutoReloading() && !appError) {
-
-              moodEngine.reload('Auto');
-              moodEngine.log('log', `Auto reloaded after ${fullSettings.reload_interval}ms.`);
-
-            }
+            if (!moodEngine.notAutoReloading() && !appError) moodEngine.reload('Auto');
 
             autoReload();
 
           }, fullSettings.reload_interval);
 
-        }
+        })();
 
         // Disabling
 
@@ -1693,7 +1671,6 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
         moodEngine.log('log', 'Cleared auto reload timeout.');
 
         clearTimeout(timeout);
-        timeout = null;
 
         if (quoteHistory.length > 1) $('#go-back-button').removeClass('disabled');
 
