@@ -20,6 +20,57 @@
     });
 
     if (!$('.action-button').length) $('.actions').remove();
+
+    let originalResults = parseInt($('#results-number').text());
+
+    $('#search-bar').on('keypress keydown keyup change', function() {
+
+      $('.filler').remove();
+
+      let field = $('select[name="field"]').val();
+      let search = $(this).val().toLowerCase();
+      let results = 0;
+
+      if (search) {
+
+        $('.item').addClass('d-none');
+
+        if (search === 'null') {
+
+          search = null;
+          $('#search-bar').addClass('text-danger');
+
+        } else {
+
+          $('#search-bar').removeClass('text-danger');
+
+        }
+
+        $('.item').each(function() {
+
+          if ((search && $(this).attr(`data-${field}`).toLowerCase().includes(search)) || (search === null && $(this).attr(`data-${field}`) === '')) {
+
+            $(this).removeClass('d-none');
+            results++;
+
+          } else {
+
+            $(this).after('<tr class="filler d-none"></tr>');
+
+          }
+
+        });
+
+        $('#results-number').text(results);
+
+      } else {
+
+        $('.item').removeClass('d-none');
+        $('#results-number').text(originalResults);
+
+      }
+
+    });
   </script>
 </body>
 

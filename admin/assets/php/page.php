@@ -5,7 +5,22 @@
 
 ?>
 
-<h1 class="text-center"><?php echo ucwords($title); ?>s (<?php echo $result->num_rows; ?>)</h1>
+<h1 class="text-center"><?php echo ucwords($title); ?>s (<span id="results-number"><?php echo $result->num_rows; ?></span>)</h1>
+
+<br>
+
+<?php if ($result->num_rows): ?>
+  <div class="text-center">
+    <input id="search-bar" type="text" name="search" placeholder="Search">
+    <select name="field">
+      <?php foreach ($result->fetch_assoc() as $key => $val) { ?>
+        <?php if ($key !== "id"): ?>
+          <option value="<?php echo $key; ?>"><?php echo $key ?></option>
+        <?php endif; ?>
+      <?php } ?>
+    </select>
+  </div>
+<?php endif; ?>
 
 <form class="container" action="../modify.php" method="POST">
   <input type="hidden" name="table" value="<?php echo $table; ?>">
@@ -39,9 +54,15 @@
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()):
 
+          $fields = "";
+
+          foreach ($row as $key => $val) {
+            $fields .= " data-${key}='{$val}'";
+          }
+
   ?>
 
-      <tr>
+      <tr class="item"<?php echo $fields; ?>>
         <?php if (!isset($notDefault)): ?>
           <td><p><?php echo $row[$title]; ?></p></td>
         <?php endif; ?>

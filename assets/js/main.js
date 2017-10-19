@@ -1823,9 +1823,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       moodEngine.log('log', 'MoodEngine initialized.');
       let totalLoadTime = Math.ceil(performance.now() - totalTime);
       moodEngine.log('log', `Total load time: ${totalLoadTime}ms.`);
-      if (totalLoadTime > 10000) {
-        moodEngine.log('warn', 'Loading took very long, probably due to a slow connection.');
-      }
+      if (totalLoadTime > 10000) moodEngine.log('warn', 'Loading took very long, probably due to a slow connection.');
 
       // If an error, display/log it
 
