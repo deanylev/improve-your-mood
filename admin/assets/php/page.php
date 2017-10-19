@@ -15,7 +15,7 @@
     <select name="field">
       <?php foreach ($result->fetch_assoc() as $key => $val) { ?>
         <?php if ($key !== "id" && $key !== "log"): ?>
-          <option value="<?php echo $key; ?>"><?php echo $key ?></option>
+          <option value="<?php echo $key; ?>" <?php echo $key === $title ? "selected" : ""; ?>><?php echo $key ?></option>
         <?php endif; ?>
       <?php } ?>
     </select>
@@ -58,7 +58,7 @@
 
           foreach ($row as $key => $val) {
             if ($key !== "id" && $key !== "log") {
-              $fields .= " data-${key}='{$val}'";  
+              $fields .= " data-${key}='{$val}'";
             }
           }
 
