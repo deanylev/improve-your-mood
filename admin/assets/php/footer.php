@@ -23,12 +23,12 @@
 
     let originalResults = parseInt($('#results-number').text());
 
-    $('#search-bar').on('keypress keydown keyup change', function() {
+    $('#search-bar, select[name="field"]').on('keypress keydown keyup change', function() {
 
       $('.filler').remove();
 
       let field = $('select[name="field"]').val();
-      let search = $(this).val().toLowerCase();
+      let search = $('#search-bar').val().toLowerCase();
       let results = 0;
 
       if (search) {
