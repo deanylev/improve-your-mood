@@ -1023,6 +1023,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
     let target;
     let success = true;
+    let logInputs = false;
 
     if (input) {
 
@@ -1035,6 +1036,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
     } else if ($('.dirty').length) {
 
       target = '.settings-input.dirty:not(.select-wrapper)';
+      logInputs = true;
 
     } else {
 
@@ -1045,12 +1047,16 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
     let log = success ? `Inputs set successfully, target was '${target}'` : 'No inputs to set.';
     moodEngine.log('log', log);
 
+    let setInputs = [];
+
     $(target).each(function() {
 
       $(this).removeClass('dirty');
 
       let setting = $(this).attr('name');
       let value = fullSettings[setting];
+
+      setInputs.push(setting);
 
       if (($(this).is('select') && typeof(value) === 'boolean') || typeof(value) === 'object') {
 
@@ -1156,6 +1162,8 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       }
 
     });
+
+    if (logInputs) moodEngine.log('log', `Affected inputs were: ${setInputs.join(', ')}`);
 
   }
 
@@ -1508,19 +1516,9 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
     let setting = $(this).attr('data-setting');
     let text;
 
-    if (typeof(fullSettings[setting]) === 'object') {
+    if (Array.isArray(settings[setting].value)) {
 
-      try {
-
-        text = settings[setting].value.map((s) => {
-          return ` ${s}`;
-        });
-
-      } catch (error) {
-
-        text = settings[setting].value;
-
-      }
+      text = settings[setting].value.join(', ');
 
     } else {
 
