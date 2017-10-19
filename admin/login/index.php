@@ -52,11 +52,28 @@
           <label for="password">Password</label>
           <input type="password" name="password" class="form-control" id="password">
         </div>
+        <p class="text-danger"></p>
         <button type="submit" class="btn btn-primary">Submit</button>
         <a class="btn btn-link" href="../reset">I Can't Log In</a>
       </form>
     </div>
   </div>
+  <script>
+    $('form').submit(function() {
+
+      $.ajax({
+        data: $('form').serialize(),
+        method: 'POST',
+        url: 'authenticate.php',
+        success: function(response) {
+          response === 'success' ? window.location.href = '../home' : $('.text-danger').text('Invalid credentials.');
+        }
+      });
+
+      return false;
+
+    });
+  </script>
 </body>
 
 </html>

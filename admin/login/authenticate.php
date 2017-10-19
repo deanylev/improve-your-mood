@@ -14,10 +14,9 @@
   }
 
   if (isset($row) && md5($authPass) === $row["password"]) {
+      echo "success";
       $_SESSION["user"] = $row["id"];
       $_SESSION["message"]["success"] = "Logged in successfully.";
-      header("location: ../home");
   } else {
-      $_SESSION["message"]["danger"] = "Invalid credentials.";
-      header("location: .");
+      echo "fail";
   }

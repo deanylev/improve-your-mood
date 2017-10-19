@@ -1,5 +1,6 @@
 <?php
 
   session_start();
-  session_destroy();
+  unset($_SESSION["user"]);
+  $_SESSION["message"]["success"] = "Logged out successfully.";
   header("location: ../login");
