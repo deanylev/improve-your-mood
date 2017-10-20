@@ -47,6 +47,7 @@
         <?php if (!isset($notDefault)): ?>
           <th><?php echo ucwords($title); ?></th>
         <?php endif; ?>
+        <th class="preview d-none">Preview</th>
         <?php echo isset($customHeadings) ? $customHeadings : ""; ?>
         <?php if (in_array("edit", $actions) || in_array("delete", $actions)): ?>
           <th class="actions">Actions</th>
@@ -64,7 +65,7 @@
 
           foreach ($row as $key => $val) {
             if ($key !== "id" && $key !== "active" && $key !== "log") {
-              $quote = $key === "quote" ? "\"" : "'";
+              $quote = strpos($val, "'") ? "\"" : "'";
               $fields .= " data-${key}={$quote}{$val}{$quote}";
             }
           }
@@ -76,6 +77,7 @@
           <td><p><?php echo $row[$title]; ?></p></td>
         <?php endif; ?>
         <?php isset($customFields) ? include($customFields) : ""; ?>
+        <th class="preview d-none"></th>
         <td class="actions">
           <form action="../modify.php" method="POST">
             <?php if (in_array("view", $actions)): ?>
