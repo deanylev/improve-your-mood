@@ -16,9 +16,7 @@ if (!$('.action-button').length) $('.actions').remove();
 
 let originalResults = parseInt($('#results-number').text());
 
-$('#search-bar').val('');
-
-$('#search-bar, select').on('keypress keydown keyup change', function() {
+function search() {
 
   $('.filler').remove();
   $('.preview').addClass('d-none');
@@ -107,4 +105,8 @@ $('#search-bar, select').on('keypress keydown keyup change', function() {
 
   }
 
-});
+}
+
+if ($('#search-bar').val()) search();
+
+$('#search-bar, select').on('keypress keydown keyup change', search);
