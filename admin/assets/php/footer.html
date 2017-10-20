@@ -23,11 +23,18 @@
 
     let originalResults = parseInt($('#results-number').text());
 
-    $('#search-bar, select[name="field"]').on('keypress keydown keyup change', function() {
+    $(document).ready(function() {
+
+      $('#search-bar').val('');
+
+    });
+
+    $('#search-bar, select').on('keypress keydown keyup change', function() {
 
       $('.filler').remove();
 
       let field = $('select[name="field"]').val();
+      let query = $('select[name="query"]').val();
       let search = $('#search-bar').val().toLowerCase();
       let results = 0;
 
@@ -35,7 +42,7 @@
 
         $('.item').addClass('d-none');
 
-        if (search === 'null') {
+        if (search === 'null' && query === 'equals') {
 
           search = null;
           $('#search-bar').addClass('text-danger');
@@ -48,7 +55,14 @@
 
         $('.item').each(function() {
 
-          if ((search && $(this).attr(`data-${field}`).toLowerCase().includes(search)) || (search === null && $(this).attr(`data-${field}`) === '')) {
+          let itemField = $(this).attr(`data-${field}`).toLowerCase();
+
+          if (
+            (query === 'contains' && itemField.includes(search)) ||
+            (query === 'equals' && (itemField === search || (search === null && itemField === ''))) ||
+            (query === 'startswith' && itemField.startsWith(search)) ||
+            (query === 'endswith' && itemField.endsWith(search))
+          ) {
 
             $(this).removeClass('d-none');
             results++;

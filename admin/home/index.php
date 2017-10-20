@@ -51,4 +51,4 @@
   </a>
 </div>
 
-<?php include("../assets/php/footer.php"); ?>
+<?php include("../assets/php/footer.html"); ?>

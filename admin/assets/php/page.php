@@ -5,13 +5,12 @@
 
 ?>
 
-<h1 class="text-center"><?php echo ucwords($title); ?>s (<span id="results-number"><?php echo $result->num_rows - 1; ?></span>)</h1>
+<h1 class="text-center"><?php echo ucwords($title); ?>s (<span id="results-number"><?php echo $result->num_rows - ($result->num_rows === 0 ? 0 : 1); ?></span>)</h1>
 
 <br>
 
 <?php if ($result->num_rows): ?>
   <div class="text-center">
-    <input id="search-bar" type="text" name="search" placeholder="Search">
     <select name="field">
       <?php foreach ($result->fetch_assoc() as $key => $val) { ?>
         <?php if ($key !== "id" && $key !== "active" && $key !== "log"): ?>
@@ -19,6 +18,13 @@
         <?php endif; ?>
       <?php } ?>
     </select>
+    <select name="query">
+      <option value="contains">contains</option>
+      <option value="equals">equals</option>
+      <option value="startswith">starts with</option>
+      <option value="endswith">ends with</option>
+    </select>
+    <input id="search-bar" type="text" name="search" placeholder="search">
   </div>
 <?php endif; ?>
 
@@ -98,4 +104,4 @@
   </table>
 </div>
 
-<?php include("footer.php"); ?>
+<?php include("footer.html"); ?>
