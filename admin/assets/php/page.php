@@ -14,7 +14,7 @@
     <input id="search-bar" type="text" name="search" placeholder="Search">
     <select name="field">
       <?php foreach ($result->fetch_assoc() as $key => $val) { ?>
-        <?php if ($key !== "id" && $key !== "log"): ?>
+        <?php if ($key !== "id" && $key !== "active" && $key !== "log"): ?>
           <option value="<?php echo $key; ?>" <?php echo $key === $title ? "selected" : ""; ?>><?php echo $key ?></option>
         <?php endif; ?>
       <?php } ?>
@@ -57,7 +57,7 @@
           $fields = "";
 
           foreach ($row as $key => $val) {
-            if ($key !== "id" && $key !== "log") {
+            if ($key !== "id" && $key !== "active" && $key !== "log") {
               $quote = $key === "quote" ? "\"" : "'";
               $fields .= " data-${key}={$quote}{$val}{$quote}";
             }
