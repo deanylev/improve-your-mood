@@ -47,8 +47,8 @@
         <?php if (!isset($notDefault)): ?>
           <th><?php echo ucwords($title); ?></th>
         <?php endif; ?>
-        <th class="preview d-none">Preview</th>
         <?php echo isset($customHeadings) ? $customHeadings : ""; ?>
+        <th class="preview d-none">Preview</th>
         <?php if (in_array("edit", $actions) || in_array("delete", $actions)): ?>
           <th class="actions">Actions</th>
         <?php endif; ?>
