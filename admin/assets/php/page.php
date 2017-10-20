@@ -5,7 +5,7 @@
 
 ?>
 
-<h1 class="text-center"><?php echo ucwords($title); ?>s (<span id="results-number"><?php echo $result->num_rows; ?></span>)</h1>
+<h1 class="text-center"><?php echo ucwords($title); ?>s (<span id="results-number"><?php echo $result->num_rows - 1; ?></span>)</h1>
 
 <br>
 
