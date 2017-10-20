@@ -58,7 +58,8 @@
 
           foreach ($row as $key => $val) {
             if ($key !== "id" && $key !== "log") {
-              $fields .= " data-${key}='{$val}'";
+              $quote = $key === "quote" ? "\"" : "'";
+              $fields .= " data-${key}={$quote}{$val}{$quote}";
             }
           }
 
