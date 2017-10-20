@@ -2,6 +2,7 @@
 
   include("header.php");
   $result = $mysqli->query("SELECT * FROM yourmood.{$table}");
+  $forbiddenKeys = array("id", "active", "log", "password");
 
 ?>
 
@@ -13,7 +14,7 @@
   <div class="text-center">
     <select name="field">
       <?php foreach ($result->fetch_assoc() as $key => $val) { ?>
-        <?php if ($key !== "id" && $key !== "active" && $key !== "log"): ?>
+        <?php if (!in_array($key, $forbiddenKeys)): ?>
           <option value="<?php echo $key; ?>" <?php echo $key === $title ? "selected" : ""; ?>><?php echo $key ?></option>
         <?php endif; ?>
       <?php } ?>
@@ -64,7 +65,7 @@
           $fields = "";
 
           foreach ($row as $key => $val) {
-            if ($key !== "id" && $key !== "active" && $key !== "log") {
+            if (!in_array($key, $forbiddenKeys)) {
               $quote = strpos($val, "'") ? "\"" : "'";
               $fields .= " data-${key}={$quote}{$val}{$quote}";
             }
