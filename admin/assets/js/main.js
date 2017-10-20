@@ -66,7 +66,9 @@ $('#search-bar, select').on('keypress keydown keyup change', function() {
 
           if (query === 'contains') {
 
-            preview.mark(search);
+            preview.mark(search, {
+              separateWordSearch: false
+            });
 
           } else if (query === 'startswith') {
 
