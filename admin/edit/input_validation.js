@@ -1,32 +1,22 @@
-let errors = {};
-
 function valError(input, error) {
 
   let text = $(`.validation-error[data-input="${input}"]`);
 
   text.text(error);
 
-  if (!Array.isArray(errors[input])) errors[input] = [];
-
-  errors[input].push(error);
-
   if (error) {
 
     $('form').addClass('errors');
     $('#save-button').attr('disabled', true);
 
-  } else {
+  } else if (!$('.validation-error:not(:empty)').length) {
 
-    delete errors[input];
-
-    if (!Object.keys(errors).length) {
-
-      $('form').removeClass('errors');
-      $('#save-button').removeAttr('disabled');
-
-    }
+    $('form').removeClass('errors');
+    $('#save-button').removeAttr('disabled');
 
   }
+
+
 
 }
 
