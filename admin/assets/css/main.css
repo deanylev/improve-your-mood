@@ -20,7 +20,7 @@ footer {
   height: 20px;
 }
 
-.btn {
+.btn:not(:disabled) {
   cursor: pointer;
 }
 

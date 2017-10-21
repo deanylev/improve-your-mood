@@ -78,6 +78,7 @@
               <label for="<?php echo $key; ?>"><?php echo $key; ?></label>
               <input type="text" class="form-control" id="<?php echo $key; ?>" value="<?php echo $val; ?>" name="values[<?php echo $key; ?>]">
             </div>
+            <p class="validation-error text-danger" data-input="<?php echo $key; ?>"></p>
             <br>
 
 <?php
@@ -109,11 +110,13 @@
       <label for="password">password</label>
       <input type="password" id="password" class="form-control" name="values[password]" placeholder="Unchanged" autocomplete="false"></input>
     </div>
+    <p class="validation-error text-danger" data-input="password"></p>
     <br>
     <div class="form-group">
       <label for="password_confirmation">password confirmation</label>
       <input type="password" id="password_confirmation" class="form-control" name="password_confirmation" autocomplete="false" disabled></input>
     </div>
+    <p class="validation-error text-danger" data-input="password_confirmation"></p>
     <br>
 
 <?php
@@ -132,7 +135,7 @@
 
 ?>
 
-  <input class="btn btn-lg btn-success" type="submit" name="edit" value="Save">
+  <input id="save-button" class="btn btn-lg btn-success" type="submit" name="edit" value="Save">
   <?php if (in_array("view", $actions)): ?>
     <a class="btn btn-lg btn-primary" href="../view?type=<?php echo $type; ?>&amp;title=<?php echo $title; ?>&amp;id=<?php echo $row["id"]; ?>">Cancel</a>
   <?php else: ?>
@@ -142,5 +145,7 @@
     <input class="btn btn-lg btn-danger" type="submit" name="delete" value="Delete">
   <?php endif; ?>
 </form>
+
+<script src="input_validation.js"></script>
 
 <?php include("../assets/php/footer.html"); ?>

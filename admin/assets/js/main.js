@@ -1,6 +1,14 @@
 $('form').submit(function() {
 
-  return confirm('Are you sure?');
+  if (!$(this).hasClass('errors')) {
+
+    return confirm('Are you sure?');
+
+  } else {
+
+    return false;
+
+  }
 
 });
 
