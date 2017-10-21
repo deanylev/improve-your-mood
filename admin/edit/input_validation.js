@@ -24,7 +24,8 @@ $('#user').change(function() {
 
   $.ajax({
     data: {
-      user: input.val()
+      user: input.val(),
+      id: itemId
     },
     method: 'POST',
     url: 'check_username.php',

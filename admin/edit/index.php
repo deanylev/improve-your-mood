@@ -146,6 +146,7 @@
   <?php endif; ?>
 </form>
 
+<script>let itemId = <?php echo $id; ?></script>
 <script src="input_validation.js"></script>
 
 <?php include("../assets/php/footer.html"); ?>
