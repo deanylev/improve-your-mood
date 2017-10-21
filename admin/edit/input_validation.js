@@ -17,7 +17,7 @@ function valError(input, error) {
 
   } else {
 
-    errors[input] = null;
+    delete errors[input];
 
     if (!Object.keys(errors).length) {
 
