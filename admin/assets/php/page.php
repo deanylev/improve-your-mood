@@ -2,20 +2,22 @@
 
   include("header.php");
   $result = $mysqli->query("SELECT * FROM yourmood.{$table}");
+  $dbColumns = $mysqli->query("DESCRIBE yourmood.{$table}");
   $forbiddenKeys = array("id", "active", "log", "password");
 
 ?>
 
-<h1 class="text-center"><?php echo ucwords($title); ?>s (<span id="results-number"><?php echo $result->num_rows - ($result->num_rows === 0 ? 0 : 1); ?></span>)</h1>
+<h1 class="text-center"><?php echo ucwords($title); ?>s (<span id="results-number"><?php echo $result->num_rows; ?></span>)</h1>
 
 <br>
 
 <?php if ($result->num_rows): ?>
   <div class="text-center">
     <select name="field">
-      <?php foreach ($result->fetch_assoc() as $key => $val) { ?>
-        <?php if (!in_array($key, $forbiddenKeys)): ?>
-          <option value="<?php echo $key; ?>" <?php echo $key === $title ? "selected" : ""; ?>><?php echo $key ?></option>
+      <?php while ($row = $dbColumns->fetch_assoc()) { ?>
+        <?php $field = $row["Field"]; ?>
+        <?php if (!in_array($field, $forbiddenKeys)): ?>
+          <option value="<?php echo $field; ?>" <?php echo $field === $title ? "selected" : ""; ?>><?php echo $field; ?></option>
         <?php endif; ?>
       <?php } ?>
     </select>
