@@ -22,25 +22,33 @@ $('#user').change(function() {
 
   let input = $(this);
 
-  $.ajax({
-    data: {
-      user: input.val(),
-      id: itemId
-    },
-    method: 'POST',
-    url: 'check_username.php',
-    success: function(response) {
-      if (response === 'exists') {
+  if (input.val()) {
 
-        valError('user', 'Username already exists.');
+    $.ajax({
+      data: {
+        user: input.val(),
+        id: itemId
+      },
+      method: 'POST',
+      url: 'check_username.php',
+      success: function(response) {
+        if (response === 'exists') {
 
-      } else {
+          valError('user', 'Username already exists.');
 
-        valError('user', '');
+        } else {
 
+          valError('user', '');
+
+        }
       }
-    }
-  })
+    })
+
+  } else {
+
+    valError('user', 'Username can\'t be blank.');
+
+  }
 
 });
 
