@@ -16,8 +16,6 @@ function valError(input, error) {
 
   }
 
-
-
 }
 
 $('#user').change(function() {
