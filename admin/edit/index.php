@@ -108,13 +108,13 @@
 
     <div class="form-group">
       <label for="password">password</label>
-      <input type="password" id="password" class="form-control" name="values[password]" placeholder="Unchanged" autocomplete="false"></input>
+      <input type="password" id="password" class="form-control" name="values[password]" placeholder="Unchanged" autocomplete="new-password"></input>
     </div>
     <p class="validation-error text-danger" data-input="password"></p>
     <br>
     <div class="form-group">
       <label for="password_confirmation">password confirmation</label>
-      <input type="password" id="password_confirmation" class="form-control" name="password_confirmation" autocomplete="false" disabled></input>
+      <input type="password" id="password_confirmation" class="form-control" name="password_confirmation" disabled></input>
     </div>
     <p class="validation-error text-danger" data-input="password_confirmation"></p>
     <br>
