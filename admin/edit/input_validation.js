@@ -1,8 +1,14 @@
+let errors = {};
+
 function valError(input, error) {
 
   let text = $(`.validation-error[data-input="${input}"]`);
 
   text.text(error);
+
+  if (!Array.isArray(errors[input])) errors[input] = [];
+
+  errors[input].push(error);
 
   if (error) {
 
@@ -11,8 +17,14 @@ function valError(input, error) {
 
   } else {
 
-    $('form').removeClass('errors');
-    $('#save-button').removeAttr('disabled');
+    errors[input] = null;
+
+    if (!Object.keys(errors).length) {
+
+      $('form').removeClass('errors');
+      $('#save-button').removeAttr('disabled');
+
+    }
 
   }
 
