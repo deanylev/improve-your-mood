@@ -9,7 +9,7 @@
 
   $settings = (object)array();
 
-  $forbiddenKeys = array("id", "active", "setting");
+  $forbiddenKeys = array("id", "active", "setting", "notes");
 
   if ($result->num_rows > 0) {
       while ($row = $result->fetch_assoc()) {
