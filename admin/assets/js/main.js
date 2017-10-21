@@ -20,6 +20,7 @@ function search() {
 
   $('.filler').remove();
   $('.preview').addClass('d-none');
+  $('.no-results').remove();
 
   let field = $('select[name="field"]').val();
   let query = $('select[name="query"]').val();
@@ -97,6 +98,7 @@ function search() {
     });
 
     $('#results-number').text(results);
+    if (!results) $('table').after('<div class="text-center no-results"><br><h3>No Results</h3></div>');
 
   } else {
 
