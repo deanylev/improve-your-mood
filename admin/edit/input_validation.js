@@ -2,7 +2,7 @@ function valError(input, id, error) {
 
   let div = $(`.validation-errors[data-input="${input}"]`);
 
-  div.append(`<p id="${input}_${id}">${error}</p>`);
+  if (!$(`#${input}_${id}`).length) div.append(`<p id="${input}_${id}">${error}</p>`);
 
   $('form').addClass('errors');
   $('#save-button').attr('disabled', true);
@@ -24,48 +24,47 @@ function clearError(input, id) {
 
 $('#user').on('keypress keydown keyup change', function(e) {
 
-  $('.validation-errors[data-input="user"] p').remove();
-
   let input = $(this);
 
   if (input.val()) {
 
+    clearError('user', 'blank');
+
     if (input.val().indexOf(' ') > -1) {
 
+      clearError('user', 'exists');
       valError('user', 'spaces', 'Username can\'t contain spaces.');
 
     } else {
 
       clearError('user', 'spaces');
 
-      if (e.type === 'change') {
+      $.ajax({
+        data: {
+          user: input.val(),
+          id: itemId
+        },
+        method: 'POST',
+        url: 'check_username.php',
+        success: function(response) {
+          if (response === 'exists') {
 
-        $.ajax({
-          data: {
-            user: input.val(),
-            id: itemId
-          },
-          method: 'POST',
-          url: 'check_username.php',
-          success: function(response) {
-            if (response === 'exists') {
+            valError('user', 'exists', 'Username already exists.');
 
-              valError('user', 'exists', 'Username already exists.');
+          } else {
 
-            } else {
+            clearError('user', 'exists');
 
-              clearError('user', 'exists');
-
-            }
           }
-        });
-
-      }
+        }
+      });
 
     }
 
   } else {
 
+    clearError('user', 'spaces');
+    clearError('user', 'exists');
     valError('user', 'blank', 'Username can\'t be blank.');
 
   }
@@ -73,8 +72,6 @@ $('#user').on('keypress keydown keyup change', function(e) {
 });
 
 $('#password').on('keypress keydown keyup change', function() {
-
-  $('.validation-errors[data-input="password"] p').remove();
 
   if ($(this).val() && $(this).val().length < 8) {
 
@@ -89,8 +86,6 @@ $('#password').on('keypress keydown keyup change', function() {
 });
 
 $('#password, #password_confirmation').on('keypress keydown keyup change', function() {
-
-  $('.validation-errors[data-input="password_confirmation"] p').remove();
 
   if ($('#password').val() !== $('#password_confirmation').val()) {
 
