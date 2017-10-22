@@ -32,8 +32,8 @@ $('#user').on('keyup change', function(e) {
 
     if (input.val().indexOf(' ') > -1) {
 
-      valError('user', 'spaces', 'Username can\'t contain spaces.');
       clearError('user', 'exists');
+      valError('user', 'spaces', 'Username can\'t contain spaces.');
 
     } else {
 
@@ -47,7 +47,7 @@ $('#user').on('keyup change', function(e) {
         method: 'POST',
         url: 'check_username.php',
         success: function(response) {
-          if (response === 'exists') {
+          if (response === 'exists' && !$('#user_spaces').length) {
 
             valError('user', 'exists', 'Username already exists.');
 
