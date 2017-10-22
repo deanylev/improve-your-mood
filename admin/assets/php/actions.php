@@ -21,12 +21,6 @@
               $actions = array("view", "delete", "deleteall");
               break;
 
-            case "improve":
-            case "decrease":
-            case "quote":
-            case "quotes":
-            case "colour":
-            case "colours":
             case "user":
             case "users":
               $actions = array("create", "edit", "delete");
