@@ -59,13 +59,30 @@
       <form action="verify.php" method="POST">
         <div class="form-group">
           <label for="reset_code">Reset Code</label>
-          <input type="password" name="reset_code" class="form-control" id="reset_code" placeholder="Enter the generated reset code">
+          <input type="password" name="reset_code" class="form-control" id="reset_code" placeholder="Enter the generated reset code" <?php echo $file ? "" : "disabled" ?>>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <p class="text-danger"></p>
+        <button type="submit" class="btn btn-primary" <?php echo $file ? "" : "disabled" ?>>Submit</button>
         <a class="btn btn-link" href="../login">Cancel</a>
       </form>
     </div>
   </div>
+  <script>
+    $('form').submit(function() {
+
+      $.ajax({
+        data: $('form').serialize(),
+        method: 'POST',
+        url: 'verify.php',
+        success: function(response) {
+          response === 'success' ? window.location.href = '../login' : $('.text-danger').text('Reset code incorrect. New one generated.');
+        }
+      });
+
+      return false;
+
+    });
+  </script>
 </body>
 
 </html>
