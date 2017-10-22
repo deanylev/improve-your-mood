@@ -18,7 +18,7 @@ function valError(input, error) {
 
 }
 
-$('#user').change(function() {
+$('#user').on('keypress keydown keyup change', function() {
 
   let input = $(this);
 
