@@ -73,11 +73,68 @@ $('#user').on('keyup change', function(e) {
 
 $('#password').on('keypress keydown keyup change', function() {
 
-  if ($(this).val() && $(this).val().length < 8) {
+  let input = $(this).val();
+  let strengthText = $('#password_strength');
 
-    valError('password', 'length', 'Password must be at least 8 characters.');
+  strengthText.empty();
+  strengthText.removeClass();
+
+  $('#password_confirmation').attr('disabled', !input);
+
+  if (input) {
+
+    if (input.length >= 8) {
+
+      clearError('password', 'length');
+
+      let passwordStrength = 0;
+
+      // Lowercase letters
+      if (/[a-z]/.test(input)) passwordStrength++;
+      // Uppercase letters
+      if (/[A-Z]/.test(input)) passwordStrength++;
+      // Numbers
+      if (/\d/.test(input)) passwordStrength++;
+      // Symbols
+      if (/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/g.test(input)) passwordStrength++;
+
+      let text;
+      let textClass;
+
+      switch (passwordStrength) {
+
+        case 2:
+          text = 'medium';
+          textClass = 'warning';
+          break;
+        case 3:
+          text = 'strong';
+          textClass = 'success';
+          break;
+        case 4:
+          text = 'very strong';
+          textClass = 'primary';
+          break;
+        default:
+          text = 'weak';
+          textClass = 'danger';
+          break;
+
+      }
+
+      strengthText.text(`(${text})`);
+      strengthText.addClass(`text-${textClass}`);
+
+    } else {
+
+      valError('password', 'length', 'Password must be at least 8 characters.');
+
+    }
+
 
   } else {
+
+    $('#password_confirmation').val('');
 
     clearError('password', 'length');
 

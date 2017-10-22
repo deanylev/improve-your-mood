@@ -107,7 +107,7 @@
 ?>
 
     <div class="form-group">
-      <label for="password">password</label>
+      <label for="password">password <span id="password_strength"></span></label>
       <input type="password" id="password" class="form-control" name="values[password]" placeholder="Unchanged" autocomplete="new-password"></input>
     </div>
     <div class="validation-errors text-danger" data-input="password"></div>

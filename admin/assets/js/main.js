@@ -12,14 +12,6 @@ $('form').submit(function() {
 
 });
 
-$('#password').on('keypress keydown keyup change', function() {
-
-  $('#password_confirmation').attr('disabled', !$(this).val());
-
-  if (!$(this).val()) $('#password_confirmation').val('');
-
-});
-
 if (!$('.action-button').length) $('.actions').remove();
 
 let originalResults = parseInt($('#results-number').text());
