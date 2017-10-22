@@ -52,7 +52,7 @@ $('#user').change(function() {
 
 });
 
-$('#password').change(function() {
+$('#password').on('keypress keydown keyup change', function() {
 
   if ($(this).val() && $(this).val().length < 8) {
 
@@ -66,7 +66,7 @@ $('#password').change(function() {
 
 });
 
-$('#password, #password_confirmation').change(function() {
+$('#password, #password_confirmation').on('keypress keydown keyup change', function() {
 
   if ($('#password').val() !== $('#password_confirmation').val()) {
 
