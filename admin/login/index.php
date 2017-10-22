@@ -43,7 +43,7 @@
   <div class="card">
     <div class="card-body">
       <h1 class="text-center">Log In</h1>
-      <form>
+      <form action="authenticate.php" method="POST">
         <div class="form-group">
           <label for="username">Username</label>
           <input type="text" name="user" class="form-control" id="username">
