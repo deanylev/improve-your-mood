@@ -22,7 +22,7 @@ function clearError(input, id) {
 
 }
 
-$('#user').on('keypress keydown keyup change', function(e) {
+$('#user').on('keyup change', function(e) {
 
   let input = $(this);
 
