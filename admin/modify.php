@@ -60,6 +60,13 @@
             $url = $_SERVER['HTTP_REFERER'];
             $query = "";
           }
+          // Username can't contain spaces
+          if (isset($_POST["values"]["user"]) && strpos($_POST["values"]["user"], " ")) {
+            $messageType = "danger";
+            $message = "Username can't contain spaces.";
+            $url = $_SERVER['HTTP_REFERER'];
+            $query = "";
+          }
           // If the username is taken, or the password doesn't match the confirmation
           if ((isset($row) && $row["id"] !== $id) || isset($_POST["values"]["password"]) && $_POST["values"]["password"] !== $_POST["password_confirmation"]) {
               $messageType = "danger";

@@ -24,25 +24,33 @@ $('#user').change(function() {
 
   if (input.val()) {
 
-    $.ajax({
-      data: {
-        user: input.val(),
-        id: itemId
-      },
-      method: 'POST',
-      url: 'check_username.php',
-      success: function(response) {
-        if (response === 'exists') {
+    if (input.val().indexOf(' ') > -1) {
 
-          valError('user', 'Username already exists.');
+      valError('user', 'Username can\'t contain spaces.');
 
-        } else {
+    } else {
 
-          valError('user', '');
+      $.ajax({
+        data: {
+          user: input.val(),
+          id: itemId
+        },
+        method: 'POST',
+        url: 'check_username.php',
+        success: function(response) {
+          if (response === 'exists') {
 
+            valError('user', 'Username already exists.');
+
+          } else {
+
+            valError('user', '');
+
+          }
         }
-      }
-    })
+      });
+
+    }
 
   } else {
 
