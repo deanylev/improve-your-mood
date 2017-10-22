@@ -32,8 +32,8 @@ $('#user').on('keyup change', function(e) {
 
     if (input.val().indexOf(' ') > -1) {
 
-      clearError('user', 'exists');
       valError('user', 'spaces', 'Username can\'t contain spaces.');
+      clearError('user', 'exists');
 
     } else {
 
