@@ -17,6 +17,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Admin Panel - Log In</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="../assets/css/main.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
@@ -53,13 +54,15 @@
           <input type="password" name="password" class="form-control" id="password">
         </div>
         <p class="text-danger"></p>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary">Submit<i class="d-none fa fa-spinner fa-pulse fa-fw"></i></button>
         <a class="btn btn-link" href="../reset">I Can't Log In</a>
       </form>
     </div>
   </div>
   <script>
     $('form').submit(function() {
+
+      $('.fa-spinner').removeClass('d-none');
 
       $.ajax({
         data: $('form').serialize(),
@@ -69,6 +72,8 @@
           response === 'success' ? window.location.href = '../home' : $('.text-danger').text('Invalid credentials.');
         }
       });
+
+      $('.fa-spinner').addClass('d-none');
 
       return false;
 

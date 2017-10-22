@@ -62,13 +62,15 @@
           <input type="password" name="reset_code" class="form-control" id="reset_code" placeholder="Enter the generated reset code" <?php echo $file ? "" : "disabled" ?>>
         </div>
         <p class="text-danger"></p>
-        <button type="submit" class="btn btn-primary" <?php echo $file ? "" : "disabled" ?>>Submit</button>
+        <button type="submit" class="btn btn-primary" <?php echo $file ? "" : "disabled" ?>>Submit<i class="d-none fa fa-spinner fa-pulse fa-fw"></i></button>
         <a class="btn btn-link" href="../login">Cancel</a>
       </form>
     </div>
   </div>
   <script>
     $('form').submit(function() {
+
+      $('.fa-spinner').removeClass('d-none');
 
       $.ajax({
         data: $('form').serialize(),
@@ -78,6 +80,8 @@
           response === 'success' ? window.location.href = '../login' : $('.text-danger').text('Reset code incorrect. New one generated.');
         }
       });
+
+      $('.fa-spinner').addClass('d-none');
 
       return false;
 
