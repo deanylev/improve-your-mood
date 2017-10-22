@@ -78,7 +78,7 @@
               <label for="<?php echo $key; ?>"><?php echo $key; ?></label>
               <input type="text" class="form-control" id="<?php echo $key; ?>" value="<?php echo $val; ?>" name="values[<?php echo $key; ?>]">
             </div>
-            <p class="validation-error text-danger" data-input="<?php echo $key; ?>"></p>
+            <div class="validation-errors text-danger" data-input="<?php echo $key; ?>"></div>
             <br>
 
 <?php
@@ -110,13 +110,13 @@
       <label for="password">password</label>
       <input type="password" id="password" class="form-control" name="values[password]" placeholder="Unchanged" autocomplete="new-password"></input>
     </div>
-    <p class="validation-error text-danger" data-input="password"></p>
+    <div class="validation-errors text-danger" data-input="password"></div>
     <br>
     <div class="form-group">
       <label for="password_confirmation">password confirmation</label>
       <input type="password" id="password_confirmation" class="form-control" name="password_confirmation" disabled></input>
     </div>
-    <p class="validation-error text-danger" data-input="password_confirmation"></p>
+    <div class="validation-errors text-danger" data-input="password_confirmation"></div>
     <br>
 
 <?php

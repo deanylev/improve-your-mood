@@ -1,15 +1,19 @@
-function valError(input, error) {
+function valError(input, id, error) {
 
-  let text = $(`.validation-error[data-input="${input}"]`);
+  let div = $(`.validation-errors[data-input="${input}"]`);
 
-  text.text(error);
+  div.append(`<p id="${input}_${id}">${error}</p>`);
 
-  if (error) {
+  $('form').addClass('errors');
+  $('#save-button').attr('disabled', true);
 
-    $('form').addClass('errors');
-    $('#save-button').attr('disabled', true);
+}
 
-  } else if (!$('.validation-error:not(:empty)').length) {
+function clearError(input, id) {
+
+  $(`#${input}_${id}`).remove();
+
+  if (!$('.validation-errors p').length) {
 
     $('form').removeClass('errors');
     $('#save-button').removeAttr('disabled');
@@ -18,7 +22,9 @@ function valError(input, error) {
 
 }
 
-$('#user').on('keypress keydown keyup change', function() {
+$('#user').on('keypress keydown keyup change', function(e) {
+
+  $('.validation-errors[data-input="user"] p').remove();
 
   let input = $(this);
 
@@ -26,35 +32,41 @@ $('#user').on('keypress keydown keyup change', function() {
 
     if (input.val().indexOf(' ') > -1) {
 
-      valError('user', 'Username can\'t contain spaces.');
+      valError('user', 'spaces', 'Username can\'t contain spaces.');
 
     } else {
 
-      $.ajax({
-        data: {
-          user: input.val(),
-          id: itemId
-        },
-        method: 'POST',
-        url: 'check_username.php',
-        success: function(response) {
-          if (response === 'exists') {
+      clearError('user', 'spaces');
 
-            valError('user', 'Username already exists.');
+      if (e.type === 'change') {
 
-          } else {
+        $.ajax({
+          data: {
+            user: input.val(),
+            id: itemId
+          },
+          method: 'POST',
+          url: 'check_username.php',
+          success: function(response) {
+            if (response === 'exists') {
 
-            valError('user', '');
+              valError('user', 'exists', 'Username already exists.');
 
+            } else {
+
+              clearError('user', 'exists');
+
+            }
           }
-        }
-      });
+        });
+
+      }
 
     }
 
   } else {
 
-    valError('user', 'Username can\'t be blank.');
+    valError('user', 'blank', 'Username can\'t be blank.');
 
   }
 
@@ -62,13 +74,15 @@ $('#user').on('keypress keydown keyup change', function() {
 
 $('#password').on('keypress keydown keyup change', function() {
 
+  $('.validation-errors[data-input="password"] p').remove();
+
   if ($(this).val() && $(this).val().length < 8) {
 
-    valError('password', 'Password must be at least 8 characters.');
+    valError('password', 'length', 'Password must be at least 8 characters.');
 
   } else {
 
-    valError('password', '');
+    clearError('password', 'length');
 
   }
 
@@ -76,13 +90,15 @@ $('#password').on('keypress keydown keyup change', function() {
 
 $('#password, #password_confirmation').on('keypress keydown keyup change', function() {
 
+  $('.validation-errors[data-input="password_confirmation"] p').remove();
+
   if ($('#password').val() !== $('#password_confirmation').val()) {
 
-    valError('password_confirmation', 'Passwords don\'t match.');
+    valError('password_confirmation', 'match', 'Passwords don\'t match.');
 
   } else {
 
-    valError('password_confirmation', '');
+    clearError('password_confirmation', 'match');
 
   }
 
