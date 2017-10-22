@@ -96,7 +96,7 @@ $('#password').on('keypress keydown keyup change', function() {
       // Numbers
       if (/\d/.test(input)) passwordStrength++;
       // Symbols
-      if (/[~`!#$%\^&*()+=\-\[\]\\';,/{}|\\":<>\?]/g.test(input)) passwordStrength++;
+      if (/[~`!#$%\^&*()+=\-_\[\]\\';,/{}|\\":<>\?]/g.test(input)) passwordStrength++;
 
       let text;
       let textClass;
