@@ -153,11 +153,14 @@ $('#search-bar, select').on('keypress keydown keyup change', search);
 $('.submit').click(function() {
 
   let action = $(this).attr('data-action');
+  let bsClass = $(this).attr('data-class');
   let form = action === 'deleteselected' ? $('#select-multiple-form') : $(this).closest('form');
 
   form.prepend(`<input class="hidden-submit-input" type="hidden" name="${action}" value="true">`);
 
   $('#modal-submit').off();
+  $('#modal-submit').removeClass();
+  $('#modal-submit').addClass(`btn btn-${bsClass}`);
 
   $('#modal-submit').click(function() {
 
