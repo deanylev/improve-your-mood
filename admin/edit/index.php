@@ -53,19 +53,20 @@
           case 1:
 
             if ($type === "users" && $id === $_SESSION["user"] && $key === "read_only") {
-              $disabled = true;
+              $hidden = true;
             }
 
 ?>
-
-            <div class="form-check">
-              <label class="form-check-label">
-                <input type="hidden" name="values[<?php echo $key; ?>]" value="0">
-                <input type="checkbox" class="form-check-input" <?php echo $val ? "checked" : ""; ?> name="values[<?php echo $key; ?>]" value="1" <?php echo isset($disabled) ? "disabled" : ""; ?>>
-                <?php echo $key; ?>
-              </label>
+            <div class="<?php echo isset($hidden) ? "d-none" : ""; ?>">
+              <div class="form-check">
+                <label class="form-check-label">
+                  <input type="hidden" name="values[<?php echo $key; ?>]" value="0">
+                  <input type="checkbox" class="form-check-input" <?php echo $val ? "checked" : ""; ?> name="values[<?php echo $key; ?>]" value="1">
+                  <?php echo $key; ?>
+                </label>
+              </div>
+              <br>
             </div>
-            <br>
 
 <?php
           break;
