@@ -20,7 +20,32 @@ $('#delete-selected-button').click(function() {
 
 });
 
-$('.select-checkbox').change(function() {
+var lastChecked = null;
+var checkBoxes = $('.select-checkbox');
+
+checkBoxes.click(function(e) {
+
+  if (!lastChecked) {
+
+    lastChecked = this;
+    return;
+
+  }
+
+  if (e.shiftKey) {
+
+    var start = checkBoxes.index(this);
+    var end = checkBoxes.index(lastChecked);
+
+    checkBoxes.slice(Math.min(start, end), Math.max(start, end) + 1).prop('checked', lastChecked.checked);
+
+  }
+
+  lastChecked = this;
+
+});
+
+checkBoxes.change(function() {
 
   $('#select-multiple-input').remove();
   $('#delete-selected-button').addClass('d-none');
