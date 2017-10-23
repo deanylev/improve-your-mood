@@ -12,7 +12,7 @@
     $userPage = true;
   }
   include("../assets/php/header.php");
-  $result = $mysqli->query("SELECT * FROM yourmood.${type} WHERE id='${id}'");
+  $result = $mysqli->query("SELECT * FROM yourmood.{$type} WHERE id='{$id}'");
 
   if ($result->num_rows) {
       $row = $result->fetch_assoc();

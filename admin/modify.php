@@ -12,16 +12,25 @@
     include("../assets/php/sql.php");
 
     if (isset($_POST["new"]) && in_array("create", $actions)) {
-        $query = "INSERT INTO yourmood.${table} () VALUES ()";
-        $message = "Successfully created ${type}.";
+        $query = "INSERT INTO yourmood.{$table} () VALUES ()";
+        $message = "Successfully created {$type}.";
         $goToID = true;
     } elseif (isset($_POST["delete"]) && in_array("delete", $actions)) {
         $query = "DELETE FROM yourmood.{$table} WHERE id='{$id}'";
-        $message = "Successfully deleted ${type}.";
-        $url = "{$type}s?type=${table}";
+        $message = "Successfully deleted {$type}.";
+        $url = "{$type}s?type={$table}";
         if ($table === "users" && $id === $_SESSION["user"]) {
           $url = "logout";
         }
+    } elseif (isset($_POST["deletemultiple"]) && in_array("delete", $actions)) {
+        $statement = "";
+        foreach($_POST["items"] as $item) {
+          $statement .= "id = '{$item}' OR ";
+        }
+        $statement = substr($statement, 0, -3);
+        $query = "DELETE FROM yourmood.{$table} WHERE {$statement}";
+        $message = "Successfully deleted multiple {$type}s";
+        $url = "{$type}s?type={$table}";
     } elseif (isset($_POST["edit"]) && in_array("edit", $actions)) {
         $statement = "";
         // Ignore blank password
@@ -38,12 +47,12 @@
             $statement .= $key . " = '" . addslashes($val) . "',";
         }
         $statement = substr($statement, 0, -1);
-        $query = "UPDATE yourmood.${table} SET {$statement} WHERE id = '{$id}'";
-        $message = "Successfully updated ${type}.";
-        $url = in_array("view", $actions) ? "view/?type=${table}&title=${type}&id=${id}" : "{$type}s?type=${table}";
+        $query = "UPDATE yourmood.{$table} SET {$statement} WHERE id = '{$id}'";
+        $message = "Successfully updated {$type}.";
+        $url = in_array("view", $actions) ? "view/?type={$table}&title={$type}&id={$id}" : "{$type}s?type={$table}";
         if ($table === "users") {
           $user = $_POST["values"]["user"];
-          $result = $mysqli->query("SELECT * FROM yourmood.${table} WHERE user='${user}'");
+          $result = $mysqli->query("SELECT * FROM yourmood.{$table} WHERE user='{$user}'");
           if ($result->num_rows) {
             $row = $result->fetch_assoc();
           }
@@ -78,8 +87,8 @@
         }
     } elseif (isset($_POST["deleteall"]) && in_array("deleteall", $actions)) {
         $query = "DELETE FROM yourmood.{$table}";
-        $message = "Successfully deleted all ${type}s.";
-        $url = "{$type}s?type=${table}";
+        $message = "Successfully deleted all {$type}s.";
+        $url = "{$type}s?type={$table}";
         if ($table === "users") {
           $url = "logout";
         }
@@ -96,13 +105,13 @@
       if ($table === "users") {
         $randomUsername = "user_" . uniqid();
         $randomPassword = md5(uniqid());
-        $mysqli->query("UPDATE yourmood.${table} SET user = '${randomUsername}', password = '{$randomPassword}' WHERE id = '{$newId}'");
+        $mysqli->query("UPDATE yourmood.{$table} SET user = '{$randomUsername}', password = '{$randomPassword}' WHERE id = '{$newId}'");
         // Make active by default
       } else {
-        $mysqli->query("UPDATE yourmood.${table} SET active = 1 WHERE id = '{$newId}'");
+        $mysqli->query("UPDATE yourmood.{$table} SET active = 1 WHERE id = '{$newId}'");
       }
       // Go to the newly created item
-      $url = "edit/?type=${table}&title=${type}&id=${newId}";
+      $url = "edit/?type={$table}&title={$type}&id={$newId}";
     }
 
     $mysqli->close();

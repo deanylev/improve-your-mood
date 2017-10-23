@@ -31,82 +31,88 @@
   </div>
 <?php endif; ?>
 
+<br>
+
 <form class="container" action="../modify.php" method="POST">
   <input type="hidden" name="table" value="<?php echo $table; ?>">
   <input type="hidden" name="type" value="<?php echo $title; ?>">
   <?php if (in_array("create", $actions)): ?>
     <input class="btn btn-lg btn-primary" type="submit" name="new" value="New <?php echo ucwords($title); ?>">
   <?php endif; ?>
+  <button id="delete-selected-button" type="button" class="btn btn-lg btn-danger d-none">Delete Selected <?php echo ucwords($title); ?>s</button>
   <?php if (in_array("deleteall", $actions)): ?>
     <input class="btn btn-lg btn-danger" type="submit" name="deleteall" value="Delete All <?php echo ucwords($title); ?>s">
   <?php endif; ?>
   <br><br>
 </form>
+<form id="select-multiple-form" action="../modify.php" method="POST">
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th></th>
+          <?php if (!isset($notDefault)): ?>
+            <th><?php echo ucwords($title); ?></th>
+          <?php endif; ?>
+          <?php echo isset($customHeadings) ? $customHeadings : ""; ?>
+          <th class="preview d-none">Preview</th>
+          <?php if (in_array("edit", $actions) || in_array("delete", $actions)): ?>
+            <th class="actions">Actions</th>
+          <?php endif; ?>
+        </tr>
+      </thead>
+      <tbody>
 
-<div class="table-responsive">
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <?php if (!isset($notDefault)): ?>
-          <th><?php echo ucwords($title); ?></th>
-        <?php endif; ?>
-        <?php echo isset($customHeadings) ? $customHeadings : ""; ?>
-        <th class="preview d-none">Preview</th>
-        <?php if (in_array("edit", $actions) || in_array("delete", $actions)): ?>
-          <th class="actions">Actions</th>
-        <?php endif; ?>
-      </tr>
-    </thead>
-    <tbody>
+    <?php
 
-  <?php
+      if ($result->num_rows > 0) {
+          while ($row = $result->fetch_assoc()):
 
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()):
+            $fields = "";
 
-          $fields = "";
-
-          foreach ($row as $key => $val) {
-            if (!in_array($key, $forbiddenKeys)) {
-              $quote = strpos($val, "'") ? "\"" : "'";
-              $fields .= " data-${key}={$quote}{$val}{$quote}";
+            foreach ($row as $key => $val) {
+              if (!in_array($key, $forbiddenKeys)) {
+                $quote = strpos($val, "\"") ? "'" : "\"";
+                $fields .= " data-{$key}={$quote}{$val}{$quote}";
+              }
             }
-          }
 
-  ?>
+    ?>
 
-      <tr class="item"<?php echo $fields; ?>>
-        <?php if (!isset($notDefault)): ?>
-          <td><p><?php echo $row[$title]; ?></p></td>
-        <?php endif; ?>
-        <?php isset($customFields) ? include($customFields) : ""; ?>
-        <th class="preview d-none"></th>
-        <td class="actions">
-          <form action="../modify.php" method="POST">
-            <?php if (in_array("view", $actions)): ?>
-              <a class="btn btn-success action-button" href="../view?type=<?php echo $table; ?>&amp;title=<?php echo $title; ?>&amp;id=<?php echo $row["id"]; ?>">View</a>
-            <?php endif; ?>
-            <?php if (in_array("edit", $actions)): ?>
-              <a class="btn btn-warning action-button" href="../edit?type=<?php echo $table; ?>&amp;title=<?php echo $title; ?>&amp;id=<?php echo $row["id"]; ?>">Edit</a>
-            <?php endif; ?>
-            <input type="hidden" name="id" value="<?php echo $row["id"]; ?>">
-            <input type="hidden" name="table" value="<?php echo $table; ?>">
-            <input type="hidden" name="type" value="<?php echo $title; ?>">
-            <?php if (in_array("delete", $actions)): ?>
-              <input class="btn btn-danger action-button" type="submit" name="delete" value="Delete">
-            <?php endif; ?>
-          </form>
-        </td>
-      </tr>
+        <tr class="item"<?php echo $fields; ?>>
+          <td><input class="select-checkbox" type="checkbox" name="items[]" value="<?php echo $row["id"]; ?>"></td>
+          <?php if (!isset($notDefault)): ?>
+            <td><p><?php echo $row[$title]; ?></p></td>
+          <?php endif; ?>
+          <?php isset($customFields) ? include($customFields) : ""; ?>
+          <td class="preview d-none"></td>
+          <td class="actions">
+            <form action="../modify.php" method="POST">
+              <?php if (in_array("view", $actions)): ?>
+                <a class="btn btn-success action-button" href="../view?type=<?php echo $table; ?>&amp;title=<?php echo $title; ?>&amp;id=<?php echo $row["id"]; ?>">View</a>
+              <?php endif; ?>
+              <?php if (in_array("edit", $actions)): ?>
+                <a class="btn btn-warning action-button" href="../edit?type=<?php echo $table; ?>&amp;title=<?php echo $title; ?>&amp;id=<?php echo $row["id"]; ?>">Edit</a>
+              <?php endif; ?>
+              <input type="hidden" name="id" value="<?php echo $row["id"]; ?>">
+              <input type="hidden" name="table" value="<?php echo $table; ?>">
+              <input type="hidden" name="type" value="<?php echo $title; ?>">
+              <?php if (in_array("delete", $actions)): ?>
+                <input class="btn btn-danger action-button" type="submit" name="delete" value="Delete">
+              <?php endif; ?>
+            </form>
+          </td>
+        </tr>
 
-  <?php
+    <?php
 
-      endwhile;
-    }
+        endwhile;
+      }
 
-  ?>
-    </tbody>
-  </table>
-</div>
+    ?>
 
+      </tbody>
+    </table>
+  </div>
+</form>
 <?php include("footer.html"); ?>

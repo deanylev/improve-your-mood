@@ -7,7 +7,7 @@
   $authUser = $_POST["user"];
   $authPass = $_POST["password"];
 
-  $result = $mysqli->query("SELECT * FROM yourmood.users WHERE user='${authUser}'");
+  $result = $mysqli->query("SELECT * FROM yourmood.users WHERE user='{$authUser}'");
 
   if ($result->num_rows) {
       $row = $result->fetch_assoc();

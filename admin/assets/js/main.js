@@ -14,6 +14,26 @@ $('form').submit(function() {
 
 if (!$('.action-button').length) $('.actions').remove();
 
+$('#delete-selected-button').click(function() {
+
+  $('#select-multiple-form').submit();
+
+});
+
+$('.select-checkbox').change(function() {
+
+  $('#select-multiple-input').remove();
+  $('#delete-selected-button').addClass('d-none');
+
+  if ($('.select-checkbox:checked').length) {
+
+    $('#delete-selected-button').removeClass('d-none');
+    $('#select-multiple-form').append('<input id="select-multiple-input" type="hidden" name="deletemultiple" value="true">');
+
+  }
+
+});
+
 let originalResults = parseInt($('#results-number').text());
 
 function search() {
