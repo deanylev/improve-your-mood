@@ -37,7 +37,7 @@
   <?php
 
     unset($_SESSION["message"]);
-  endforeach;
+        endforeach;
     }
 
   ?>
@@ -70,10 +70,9 @@
         url: 'authenticate.php',
         success: function(response) {
           response === 'success' ? window.location.href = '../home' : $('.text-danger').text('Invalid credentials.');
+          $('.fa-spinner').addClass('d-none');
         }
       });
-
-      $('.fa-spinner').addClass('d-none');
 
       return false;
 

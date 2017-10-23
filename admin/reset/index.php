@@ -79,10 +79,9 @@
         url: 'verify.php',
         success: function(response) {
           response === 'success' ? window.location.href = '../login' : $('.text-danger').text('Reset code incorrect. New one generated.');
+          $('.fa-spinner').addClass('d-none');
         }
       });
-
-      $('.fa-spinner').addClass('d-none');
 
       return false;
 
