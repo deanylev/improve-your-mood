@@ -21,7 +21,7 @@ $('#delete-selected-button').click(function() {
 });
 
 var lastChecked = null;
-var checkBoxes = $('.select-checkbox');
+var checkBoxes = $('.item:not(.d-none) .select-checkbox');
 
 checkBoxes.click(function(e) {
 
@@ -151,6 +151,8 @@ function search() {
     $('#results-number').text(originalResults);
 
   }
+
+  checkBoxes = $('.item:not(.d-none) .select-checkbox');
 
 }
 
