@@ -37,11 +37,11 @@
   <input type="hidden" name="table" value="<?php echo $table; ?>">
   <input type="hidden" name="type" value="<?php echo $title; ?>">
   <?php if (in_array("create", $actions)): ?>
-    <input class="btn btn-lg btn-primary" type="submit" name="new" value="New <?php echo ucwords($title); ?>">
+    <button class="btn btn-lg btn-primary submit" type="button" data-action="new" data-toggle="modal" data-target="#modal">New <?php echo ucwords($title); ?></button>
   <?php endif; ?>
-  <button id="delete-selected-button" type="button" class="btn btn-lg btn-danger d-none">Delete Selected <?php echo ucwords($title); ?>s</button>
-  <?php if (in_array("deleteall", $actions)): ?>
-    <input class="btn btn-lg btn-danger" type="submit" name="deleteall" value="Delete All <?php echo ucwords($title); ?>s">
+  <button id="delete-selected-button" class="btn btn-lg btn-danger submit d-none" type="button" data-action="deleteselected" data-toggle="modal" data-target="#modal">Delete Selected <?php echo ucwords($title); ?>s</button>
+  <?php if (in_array("deleteall", $actions) && $result->num_rows): ?>
+    <button class="btn btn-lg btn-danger submit" type="button" data-action="deleteall" data-toggle="modal" data-target="#modal">Delete All <?php echo ucwords($title); ?>s</button>
   <?php endif; ?>
   <br><br>
 </form>
@@ -98,7 +98,7 @@
               <input type="hidden" name="table" value="<?php echo $table; ?>">
               <input type="hidden" name="type" value="<?php echo $title; ?>">
               <?php if (in_array("delete", $actions)): ?>
-                <input class="btn btn-danger action-button" type="submit" name="delete" value="Delete">
+                <button class="btn btn-danger submit" type="button" data-action="delete" data-toggle="modal" data-target="#modal">Delete</button>
               <?php endif; ?>
             </form>
           </td>

@@ -1,10 +1,6 @@
 $('form').submit(function() {
 
-  if (!$(this).hasClass('errors')) {
-
-    return confirm('Are you sure?');
-
-  } else {
+  if ($(this).hasClass('errors')) {
 
     return false;
 
@@ -13,12 +9,6 @@ $('form').submit(function() {
 });
 
 if (!$('.action-button').length) $('.actions').remove();
-
-$('#delete-selected-button').click(function() {
-
-  $('#select-multiple-form').submit();
-
-});
 
 var lastChecked = null;
 var checkBoxes = $('.item:not(.d-none) .select-checkbox');
@@ -159,3 +149,32 @@ function search() {
 if ($('#search-bar').val()) search();
 
 $('#search-bar, select').on('keypress keydown keyup change', search);
+
+$('.submit').click(function() {
+
+  let action = $(this).attr('data-action');
+  let form = action === 'deleteselected' ? $('#select-multiple-form') : $(this).closest('form');
+
+  form.prepend(`<input class="hidden-submit-input" type="hidden" name="${action}" value="true">`);
+
+  $('#modal-submit').off();
+
+  $('#modal-submit').click(function() {
+
+    form.submit();
+
+  });
+
+});
+
+$('#modal').on('shown.bs.modal', function() {
+
+  $('#modal-submit').focus();
+
+});
+
+$('#modal').on('hide.bs.modal', function() {
+
+  $('.hidden-submit-input').remove();
+
+});

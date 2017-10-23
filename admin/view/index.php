@@ -67,7 +67,7 @@
 
 ?>
 
-  <input class="btn btn-lg btn-danger" type="submit" name="delete" value="Delete">
+  <button class="btn btn-lg btn-danger submit" type="button" data-action="delete" data-toggle="modal" data-target="#modal">Delete</button>
 
 <?php endif; ?>
 </form>
