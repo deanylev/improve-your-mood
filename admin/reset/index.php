@@ -63,7 +63,7 @@
           <input type="password" name="reset_code" class="form-control" id="reset_code" placeholder="Enter the generated reset code" <?php echo $file ? "" : "disabled" ?>>
         </div>
         <p class="text-danger"></p>
-        <button type="submit" class="btn btn-primary" <?php echo $file ? "" : "disabled" ?>>Submit<i class="d-none fa fa-spinner fa-pulse fa-fw"></i></button>
+        <button type="submit" class="btn btn-primary" <?php echo $file ? "" : "disabled" ?>>Reset<i class="d-none fa fa-spinner fa-pulse fa-fw"></i></button>
         <a class="btn btn-link" href="../login">Cancel</a>
       </form>
     </div>

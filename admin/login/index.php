@@ -54,7 +54,7 @@
           <input type="password" name="password" class="form-control" id="password">
         </div>
         <p class="text-danger"></p>
-        <button type="submit" class="btn btn-primary">Submit<i class="d-none fa fa-spinner fa-pulse fa-fw"></i></button>
+        <button type="submit" class="btn btn-primary">Log In<i class="d-none fa fa-spinner fa-pulse fa-fw"></i></button>
         <a class="btn btn-link" href="../reset">I Can't Log In</a>
       </form>
     </div>
