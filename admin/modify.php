@@ -29,7 +29,7 @@
         }
         $statement = substr($statement, 0, -3);
         $query = "DELETE FROM yourmood.{$table} WHERE {$statement}";
-        $message = "Successfully deleted multiple {$type}s";
+        $message = "Successfully deleted multiple {$type}s.";
         $url = "{$type}s?type={$table}";
     } elseif (isset($_POST["edit"]) && in_array("edit", $actions)) {
         $statement = "";
