@@ -69,23 +69,31 @@
     </div>
   </div>
   <script>
-    $('form').submit(function() {
+  $('form').submit(function() {
 
-      $('.fa-spinner').removeClass('d-none');
+    $('.fa-spinner').removeClass('d-none');
 
-      $.ajax({
-        data: $('form').serialize(),
-        method: 'POST',
-        url: 'verify.php',
-        success: function(response) {
-          response === 'success' ? window.location.href = '../login' : $('.text-danger').text('Reset code incorrect. New one generated.');
+    $.ajax({
+      data: $('form').serialize(),
+      method: 'POST',
+      url: 'verify.php',
+      success: function(response) {
+        if (response === 'success') {
+
+          window.location.href = '../login'
+
+        } else {
+
+          $('.text-danger').text('Reset code incorrect. New one generated.');
           $('.fa-spinner').addClass('d-none');
+
         }
-      });
-
-      return false;
-
+      }
     });
+
+    return false;
+
+  });
   </script>
 </body>
 

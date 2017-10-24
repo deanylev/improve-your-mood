@@ -60,23 +60,31 @@
     </div>
   </div>
   <script>
-    $('form').submit(function() {
+  $('form').submit(function() {
 
-      $('.fa-spinner').removeClass('d-none');
+    $('.fa-spinner').removeClass('d-none');
 
-      $.ajax({
-        data: $('form').serialize(),
-        method: 'POST',
-        url: 'authenticate.php',
-        success: function(response) {
-          response === 'success' ? window.location.href = '../home' : $('.text-danger').text('Invalid credentials.');
+    $.ajax({
+      data: $('form').serialize(),
+      method: 'POST',
+      url: 'authenticate.php',
+      success: function(response) {
+        if (response === 'success') {
+
+          window.location.href = '../home'
+
+        } else {
+
+          $('.text-danger').text('Invalid credentials.');
           $('.fa-spinner').addClass('d-none');
+
         }
-      });
-
-      return false;
-
+      }
     });
+
+    return false;
+
+  });
   </script>
 </body>
 
