@@ -37,13 +37,16 @@ checkBoxes.click(function(e) {
 
 checkBoxes.change(function() {
 
+  let checked = $('.select-checkbox:checked').length;
+
   $('#select-multiple-input').remove();
   $('#delete-selected-button').addClass('d-none');
 
-  if ($('.select-checkbox:checked').length) {
+  if (checked) {
 
     $('#delete-selected-button').removeClass('d-none');
     $('#select-multiple-form').append('<input id="select-multiple-input" type="hidden" name="deletemultiple" value="true">');
+    $('#selected-number').text(checked);
 
   }
 
