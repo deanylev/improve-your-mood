@@ -157,6 +157,8 @@ $('.submit').click(function() {
 
   let action = $(this).attr('data-action');
   let bsClass = $(this).attr('data-class');
+  let undo = $(this).attr('data-undo') === 'true' ? 'You will be able to undo this action.' : 'You will not be able to undo this action.';
+  let confirm = `You are ${$(this).attr('data-confirm')}. ${undo}`;
   let form = action === 'deleteselected' ? $('#select-multiple-form') : $(this).closest('form');
 
   form.prepend(`<input class="hidden-submit-input" type="hidden" name="${action}" value="true">`);
@@ -164,6 +166,7 @@ $('.submit').click(function() {
   $('#modal-submit').off();
   $('#modal-submit').removeClass();
   $('#modal-submit').addClass(`btn btn-${bsClass}`);
+  $('#modal-confirm').text(confirm);
 
   $('#modal-submit').click(function() {
 

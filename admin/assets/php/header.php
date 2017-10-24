@@ -121,9 +121,7 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body">
-          You may not be able to undo this action.
-        </div>
+        <div class="modal-body"><span id="modal-confirm"></span></div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
           <button id="modal-submit" type="button" class="btn">OK</button>
