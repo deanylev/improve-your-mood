@@ -10,8 +10,8 @@ $('form').submit(function() {
 
 if (!$('.action-button').length) $('.actions').remove();
 
-var lastChecked = null;
-var checkBoxes = $('.item:not(.d-none) .select-checkbox');
+let lastChecked = null;
+let checkBoxes = $('.item:not(.d-none) .select-checkbox');
 
 checkBoxes.click(function(e) {
 
@@ -24,8 +24,8 @@ checkBoxes.click(function(e) {
 
   if (e.shiftKey) {
 
-    var start = checkBoxes.index(this);
-    var end = checkBoxes.index(lastChecked);
+    let start = checkBoxes.index(this);
+    let end = checkBoxes.index(lastChecked);
 
     checkBoxes.slice(Math.min(start, end), Math.max(start, end) + 1).prop('checked', lastChecked.checked);
 

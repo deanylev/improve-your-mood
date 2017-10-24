@@ -35,3 +35,7 @@ footer {
 .alert.margin {
   margin-top: 25px;
 }
+
+.fa-spinner {
+  margin-left: 5px;
+}
