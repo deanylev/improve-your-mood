@@ -98,7 +98,7 @@
     }
 
     $mysqli->query($query);
-    $newId = $mysqli->insert_id();
+    $newId = $mysqli->insert_id;
 
     if (isset($goToID)) {
       // Generate a random username/password for a new user
