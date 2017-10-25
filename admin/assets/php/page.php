@@ -28,6 +28,9 @@
       <option value="endswith">ends with</option>
     </select>
     <input id="search-bar" type="text" name="search" placeholder="search">
+    <br><br>
+    <input id="case-sensitive" type="checkbox">
+    <label>Case Sensitive?</label>
   </div>
 <?php endif; ?>
 

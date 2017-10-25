@@ -62,8 +62,11 @@ function search() {
 
   let field = $('select[name="field"]').val();
   let query = $('select[name="query"]').val();
-  let search = $('#search-bar').val().toLowerCase();
+  let search = $('#search-bar').val();
+  let caseSensitive = $('#case-sensitive').is(':checked');
   let results = 0;
+
+  if (!caseSensitive) search = search.toLowerCase();
 
   if (search) {
 
@@ -83,7 +86,7 @@ function search() {
     $('.item').each(function() {
 
       let itemFieldFull = $(this).attr(`data-${field}`)
-      let itemField = itemFieldFull.toLowerCase();
+      let itemField = caseSensitive ? itemFieldFull : itemFieldFull.toLowerCase();
 
       if (
         (query === 'contains' && itemField.includes(search)) ||
@@ -151,7 +154,7 @@ function search() {
 
 if ($('#search-bar').val()) search();
 
-$('#search-bar, select').on('keypress keydown keyup change', search);
+$('#search-bar, select, #case-sensitive').on('keypress keydown keyup change', search);
 
 $('.submit').click(function() {
 
