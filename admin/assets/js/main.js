@@ -1,10 +1,6 @@
 $('form').submit(function() {
 
-  if ($(this).hasClass('errors')) {
-
-    return false;
-
-  }
+  if ($(this).hasClass('errors')) return false;
 
 });
 
@@ -72,7 +68,7 @@ function search() {
 
     $('.item').addClass('d-none');
 
-    if (search === 'null' && query === 'equals') {
+    if (search.toLowerCase() === 'null' && query === 'equals') {
 
       search = null;
       $('#search-bar').addClass('text-danger');
