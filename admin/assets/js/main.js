@@ -34,17 +34,22 @@ checkBoxes.click(function(e) {
 checkBoxes.change(function() {
 
   let checked = $('.select-checkbox:checked').length;
+  let button = $('#delete-selected-button');
+  let plural = checked === 1 ? '' : 's';
 
   $('#select-multiple-input').remove();
-  $('#delete-selected-button').addClass('d-none');
+
+  button.addClass('d-none');
 
   if (checked) {
 
-    $('#delete-selected-button').removeClass('d-none');
+    button.removeClass('d-none');
     $('#select-multiple-form').append('<input id="select-multiple-input" type="hidden" name="deletemultiple" value="true">');
     $('#selected-number').text(checked);
 
   }
+
+  button.attr('data-confirm', `deleting ${checked} ${button.attr('data-title')}${plural}`);
 
 });
 
