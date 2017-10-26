@@ -280,9 +280,9 @@ moodEngine.error = function(display, log, code, type) {
 
   if (navigator.onLine || type !== 'backend') {
 
-    if (!display) display = 'An error occured.';
+    display = display || 'An error occured.';
 
-    if (!log) log = 'An error occured.';
+    log = log || 'An error occured.';
 
     if (code) $('#error-message').text(`${log} (${code})`);
 

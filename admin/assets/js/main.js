@@ -36,6 +36,7 @@ checkBoxes.change(function() {
   let checked = $('.select-checkbox:checked').length;
   let button = $('#delete-selected-button');
   let plural = checked === 1 ? '' : 's';
+  let number = checked === 1 ? 'a' : checked;
 
   $('#select-multiple-input').remove();
 
@@ -49,7 +50,7 @@ checkBoxes.change(function() {
 
   }
 
-  button.attr('data-confirm', `deleting ${checked} ${button.attr('data-title')}${plural}`);
+  button.attr('data-confirm', `deleting ${number} ${button.attr('data-title')}${plural}`);
 
 });
 
