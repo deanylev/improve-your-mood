@@ -109,7 +109,8 @@ function search() {
           if (query === 'contains') {
 
             preview.mark(search, {
-              separateWordSearch: false
+              separateWordSearch: false,
+              caseSensitive: caseSensitive
             });
 
           } else if (query === 'startswith') {
