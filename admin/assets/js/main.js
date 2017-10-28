@@ -163,8 +163,8 @@ function search() {
 }
 
 if ($('#search-bar').val()) search();
-
-$('#search-bar, select, #case-sensitive').on('keyup', search);
+$('#search-bar').on('keyup', search);
+$('select, #case-sensitive').on('change', search);
 
 $('.submit').click(function() {
 
