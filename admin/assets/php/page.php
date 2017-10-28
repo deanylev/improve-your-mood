@@ -10,6 +10,9 @@
   if (!in_array($currentUser["items_per_page"], $itemAmounts)) {
     $itemAmounts[] = $currentUser["items_per_page"];
   }
+  if (isset($_GET["items"]) && !in_array(intval($_GET["items"]), $itemAmounts)) {
+    $itemAmounts[] = intval($_GET["items"]);
+  }
   sort($itemAmounts);
   if (isset($_GET["page"])) {
     $page = isset($_GET["page"]) ? intval($_GET["page"]) : "";
