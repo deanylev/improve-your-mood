@@ -54,38 +54,44 @@ moodEngine.log = function(type, message, display) {
 
 };
 
-moodEngine.sendLogs = function(method) {
+moodEngine.sendLogs = function(method, amount) {
 
   //if (localStorage.length) moodEngine.log('log', `localStorage: ${JSON.stringify(localStorage)}`, false);
+
+  amount = amount || 1;
 
   console.log('\nSending logs to backend...');
 
   if (method === 'button') Materialize.toast('Sending Logs To Back-End...', fullSettings.toast_interval);
 
-  $.ajax({
-    type: 'POST',
-    crossDomain: true,
-    url: `${backendAddress}/api/create/log/index.php`,
-    data: {
-      version: version,
-      userAgent: navigator.userAgent,
-      log: JSON.stringify(moodLog)
-    },
-    success: function(response) {
+  for (i = 0; i < amount; i++) {
 
-      console.log('\nLogs sent to backend successfully.');
-      if (method === 'button') Materialize.toast('Logs Sent To Back-End Successfully.', fullSettings.toast_interval);
-      if (response) console.log(`Response: ${response}`);
+    $.ajax({
+      type: 'POST',
+      crossDomain: true,
+      url: `${backendAddress}/api/create/log/index.php`,
+      data: {
+        version: version,
+        userAgent: navigator.userAgent,
+        log: JSON.stringify(moodLog)
+      },
+      success: function(response) {
 
-    },
-    error: function(response) {
+        console.log('\nLogs sent to backend successfully.');
+        if (method === 'button') Materialize.toast('Logs Sent To Back-End Successfully.', fullSettings.toast_interval);
+        if (response) console.log(`Response: ${response}`);
 
-      console.log('\nFailed to send logs to backend.');
-      if (method === 'button') Materialize.toast('Failed To Send Logs to Back-End.', fullSettings.toast_interval);
-      if (response) console.log(`Response: ${response}`);
+      },
+      error: function(response) {
 
-    }
-  });
+        console.log('\nFailed to send logs to backend.');
+        if (method === 'button') Materialize.toast('Failed To Send Logs to Back-End.', fullSettings.toast_interval);
+        if (response) console.log(`Response: ${response}`);
+
+      }
+    });
+
+  }
 
 };
 
@@ -122,8 +128,6 @@ $(document).ready(function() {
   $('#footer-version').text(version);
 
   // Fade in elements
-
-  $('.fade-in-on-ready').fadeIn();
 
   $('link[rel="icon"], link[rel="shortcut icon"]').attr('href', `assets/${version.toLowerCase()}_favicon.ico`);
 
@@ -746,7 +750,6 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
     // Theme colour
 
     $('.theme-text').css('cssText', `color: ${fullSettings.theme_colour} !important`);
-    $('.fade-in-on-ready').css('display', 'block');
 
     // Touch / click gestures
 
