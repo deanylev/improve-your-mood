@@ -287,7 +287,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `read_only`, `items_per_page`, `user`, `password`) VALUES
-(1, 0, 100, 'admin', '5f4dcc3b5aa765d61d8327deb882cf99'),
+(1, 0, 100, 'admin', '5f4dcc3b5aa765d61d8327deb882cf99');
 
 --
 -- Indexes for dumped tables
