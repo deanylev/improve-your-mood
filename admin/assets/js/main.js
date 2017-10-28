@@ -168,8 +168,10 @@ $('.submit').click(function() {
   let undo = $(this).attr('data-undo') === 'true' ? 'You will be able to undo this action.' : 'You will not be able to undo this action.';
   let confirm = `You are ${$(this).attr('data-confirm')}. ${undo}`;
   let form = action === 'deletemultiple' ? $('#main-form') : $(this).closest('form');
+  let id = $(this).attr('data-id');
 
   form.prepend(`<input class="hidden-submit-input" type="hidden" name="${action}" value="true">`);
+  if (id) form.prepend(`<input class="hidden-submit-input" type="hidden" name="id" value="${id}">`);
 
   $('#modal-submit').off();
   $('#modal-submit').removeClass();

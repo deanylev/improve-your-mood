@@ -8,7 +8,7 @@
   }
   $itemAmounts = array(100, 200, 300, 400, 500, 600, 700, 800, 900, 1000);
   if (!in_array($currentUser["items_per_page"], $itemAmounts)) {
-    $itemAmounts[] = $currentUser["items_per_page"];  
+    $itemAmounts[] = $currentUser["items_per_page"];
   }
   sort($itemAmounts);
   if (isset($_GET["page"])) {
@@ -92,6 +92,8 @@
     Loading...
 </section>
 <form id="main-form" action="../modify.php" method="POST">
+  <input type="hidden" name="table" value="<?php echo $table; ?>">
+  <input type="hidden" name="type" value="<?php echo $title; ?>">
   <div class="table-responsive">
     <table class="table table-striped show-on-load d-none">
       <thead>
@@ -139,11 +141,8 @@
             <?php if (in_array("edit", $actions)): ?>
               <a class="btn btn-warning action-button" href="../edit?type=<?php echo $table; ?>&amp;title=<?php echo $title; ?>&amp;id=<?php echo $row["id"]; ?>">Edit</a>
             <?php endif; ?>
-            <input type="hidden" name="id" value="<?php echo $row["id"]; ?>">
-            <input type="hidden" name="table" value="<?php echo $table; ?>">
-            <input type="hidden" name="type" value="<?php echo $title; ?>">
             <?php if (in_array("delete", $actions)): ?>
-              <button class="btn btn-danger submit" type="button" data-action="delete" data-confirm="deleting a <?php echo $title; ?>" data-class="danger" data-toggle="modal" data-target="#modal">Delete</button>
+              <button class="btn btn-danger submit" type="button" data-id="<?php echo $row["id"]; ?>" data-action="delete" data-confirm="deleting a <?php echo $title; ?>" data-class="danger" data-toggle="modal" data-target="#modal">Delete</button>
             <?php endif; ?>
           </td>
         </tr>
