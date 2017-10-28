@@ -75,8 +75,6 @@ function search() {
 
   if (search) {
 
-    if ($('.item').length <= 1000 || confirm('Querying over 1000 items will be very slow, and could freeze your browser. Are you sure you want to continue?')) {
-
     $('.item').addClass('d-none');
 
     if (search.toLowerCase() === 'null' && query === 'equals') {
@@ -149,8 +147,6 @@ function search() {
     $('#results-number').text(results);
     if (!results) $('table').after('<div class="text-center no-results"><br><h3>No Results</h3></div>');
 
-  }
-
   } else {
 
     $('.item').removeClass('d-none');
@@ -163,8 +159,7 @@ function search() {
 }
 
 if ($('#search-bar').val()) search();
-$('#search-bar').on('keyup', search);
-$('select, #case-sensitive').on('change', search);
+$('#search-bar, select, #case-sensitive').on('keypress keydown keyup change', search);
 
 $('.submit').click(function() {
 
@@ -172,7 +167,7 @@ $('.submit').click(function() {
   let bsClass = $(this).attr('data-class');
   let undo = $(this).attr('data-undo') === 'true' ? 'You will be able to undo this action.' : 'You will not be able to undo this action.';
   let confirm = `You are ${$(this).attr('data-confirm')}. ${undo}`;
-  let form = action === 'deleteselected' ? $('#select-multiple-form') : $(this).closest('form');
+  let form = action === 'deletemultiple' ? $('#main-form') : $(this).closest('form');
 
   form.prepend(`<input class="hidden-submit-input" type="hidden" name="${action}" value="true">`);
 
