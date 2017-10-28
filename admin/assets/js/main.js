@@ -1,3 +1,6 @@
+$('.pre-loader').addClass('d-none');
+$('.show-on-load').removeClass('d-none');
+
 $('form').submit(function() {
 
   if ($(this).hasClass('errors')) return false;
@@ -72,6 +75,8 @@ function search() {
 
   if (search) {
 
+    if ($('.item').length <= 1000 || confirm('Querying over 1000 items will be very slow, and could freeze your browser. Are you sure you want to continue?')) {
+
     $('.item').addClass('d-none');
 
     if (search.toLowerCase() === 'null' && query === 'equals') {
@@ -144,6 +149,8 @@ function search() {
     $('#results-number').text(results);
     if (!results) $('table').after('<div class="text-center no-results"><br><h3>No Results</h3></div>');
 
+  }
+
   } else {
 
     $('.item').removeClass('d-none');
@@ -157,7 +164,7 @@ function search() {
 
 if ($('#search-bar').val()) search();
 
-$('#search-bar, select, #case-sensitive').on('keypress keydown keyup change', search);
+$('#search-bar, select, #case-sensitive').on('keyup', search);
 
 $('.submit').click(function() {
 

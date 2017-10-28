@@ -12,7 +12,7 @@
 <br>
 
 <?php if ($result->num_rows): ?>
-  <div class="text-center">
+  <div class="text-center show-on-load d-none">
     <select name="field">
       <?php while ($row = $dbColumns->fetch_assoc()) { ?>
         <?php $field = $row["Field"]; ?>
@@ -36,7 +36,7 @@
 
 <br>
 
-<form class="container" action="../modify.php" method="POST">
+<form class="container show-on-load d-none" action="../modify.php" method="POST">
   <input type="hidden" name="table" value="<?php echo $table; ?>">
   <input type="hidden" name="type" value="<?php echo $title; ?>">
   <?php if (in_array("create", $actions)): ?>
@@ -48,9 +48,13 @@
   <?php endif; ?>
   <br><br>
 </form>
+<section class="section pre-loader">
+    <span class="loader loader1"></span>
+    Loading...
+</section>
 <form id="select-multiple-form" action="../modify.php" method="POST">
   <div class="table-responsive">
-    <table class="table table-striped">
+    <table class="table table-striped show-on-load d-none">
       <thead>
         <tr>
           <th></th>

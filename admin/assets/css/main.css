@@ -39,3 +39,114 @@ footer {
 .fa-spinner {
   margin-left: 5px;
 }
+
+.section {
+  height: 100%;
+  line-height: 100px;
+  text-align: center;
+  color: black;
+}
+
+.loader, .loader:before, .loader:after {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  vertical-align: middle;
+  border-radius: 30px;
+  border: 5px solid transparent;
+  margin-right: 10px;
+}
+
+.loader1 {
+  position: relative;
+  border: 5px solid rgba(255, 255, 255, 0.4);
+}
+
+.loader1:after {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  border: 5px solid transparent;
+  border-top-color: black;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg)
+  }
+  100% {
+    transform: rotate(360deg)
+  }
+}
+
+@keyframes spin-r {
+  from {
+    transform: rotate(0deg)
+  }
+  to {
+    transform: rotate(-360deg)
+  }
+}
+
+@keyframes grow {
+  0% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scaleY(0.5);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+@keyframes fade {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.2;
+  }
+}
+
+@keyframes orbit {
+  0% {
+    transform: rotate(225deg);
+    opacity: 1;
+    animation-timing-function: ease-out;
+  }
+  7% {
+    transform: rotate(345deg);
+    animation-timing-function: linear;
+  }
+  30% {
+    transform: rotate(455deg);
+    animation-timing-function: ease-in-out;
+  }
+  39% {
+    transform: rotate(690deg);
+    animation-timing-function: linear;
+  }
+  70% {
+    transform: rotate(815deg);
+    opacity: 1;
+    animation-timing-function: ease-out;
+  }
+  75% {
+    transform: rotate(945deg);
+    animation-timing-function: ease-out;
+  }
+  76% {
+    transform: rotate(945deg);
+    opacity: 0;
+  }
+  100% {
+    transform: rotate(945deg);
+    opacity: 0;
+  }
+}
