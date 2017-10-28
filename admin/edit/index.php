@@ -45,6 +45,7 @@
 
             <label for="<?php echo $key; ?>"><?php echo $key; ?></label>
             <textarea id="<?php echo $key; ?>" class="form-control" name="values[<?php echo $key; ?>]"><?php echo $val; ?></textarea>
+            <div class="validation-errors text-danger" data-input="<?php echo $key; ?>"></div>
             <br>
 
 <?php
@@ -93,6 +94,7 @@
               <label for="<?php echo $key; ?>"><?php echo $key; ?></label>
               <input type="number" class="form-control" id="<?php echo $key; ?>" value="<?php echo $val; ?>" name="values[<?php echo $key; ?>]">
             </div>
+            <div class="validation-errors text-danger" data-input="<?php echo $key; ?>"></div>
             <br>
 
 <?php

@@ -155,3 +155,20 @@ $('#password, #password_confirmation').on('keypress keydown keyup change', funct
   }
 
 });
+
+$('#items_per_page').attr('min', '1');
+$('#items_per_page').attr('max', '50000');
+
+$('#items_per_page').on('keypress keydown keyup change', function() {
+
+  if ($(this).val() < 1 || $(this).val() > 50000) {
+
+    valError('items_per_page', 'between', 'Items per page must be between 1 and 50,000.');
+
+  } else {
+
+    clearError('items_per_page', 'between');
+
+  }
+
+});

@@ -56,6 +56,13 @@
           if ($result->num_rows) {
             $row = $result->fetch_assoc();
           }
+          // Items per page must be between 1 and 50000
+          if (isset($_POST["values"]["items_per_page"]) && intval($_POST["values"]["items_per_page"]) < 1 || intval($_POST["values"]["items_per_page"]) > 50000) {
+            $messageType = "danger";
+            $message = "Items per page must be between 1 and 50,000.";
+            $url = $_SERVER['HTTP_REFERER'];
+            $query = "";
+          }
           // Minimum password length is 8
           if (isset($_POST["values"]["password"]) && strlen($_POST["values"]["password"]) < 8) {
             $messageType = "danger";
