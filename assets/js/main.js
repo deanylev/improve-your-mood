@@ -389,6 +389,7 @@ if (localStorage.getItem('cachedQuotes') && localStorage.getItem('cachedVersionQ
     } else {
 
       localStorage.removeItem('cachedQuotes');
+      localStorage.removeItem('cachedVersionQuotes');
 
     }
 
