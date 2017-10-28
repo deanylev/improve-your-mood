@@ -21,7 +21,7 @@
 
 <div class="text-center">
   <h1><?php echo ucwords($title); ?>s (<span id="results-number"><?php echo $currentRows; ?></span>/<?php echo $numRows; ?>)</h1>
-  <?php if (isset($page)): ?>
+  <?php if (isset($page) && $totalPages > 1): ?>
     <br>
     <?php if ($page > 1): ?>
       <a href="?page=1&amp;items=<?php echo $items; ?>" class="btn btn-info"><span class="fa fa-step-backward"></span></a>
