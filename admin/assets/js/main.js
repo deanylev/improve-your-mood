@@ -159,7 +159,7 @@ function search() {
 }
 
 if ($('#search-bar').val()) search();
-$('#search-bar, select, #case-sensitive').on('keypress keydown keyup change', search);
+$('#search-bar, select[name], #case-sensitive').on('keypress keydown keyup change', search);
 
 $('.submit').click(function() {
 
@@ -181,6 +181,26 @@ $('.submit').click(function() {
     form.submit();
 
   });
+
+});
+
+$('#items-per-page').change(function() {
+
+  let string = `?items=${$(this).val()}`;
+
+  // hacky method of keeping quote type
+
+  if (location.href.includes('type=improve')) {
+
+    string += '&type=improve';
+
+  } else if (location.href.includes('type=decrease')) {
+
+    string += '&type=decrease';
+
+  }
+
+  location.href = string;
 
 });
 

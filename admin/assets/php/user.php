@@ -12,6 +12,7 @@
     $userRow = $userQuery->fetch_assoc();
     $currentUser["name"] = $userRow["user"];
     $currentUser["read_only"] = $userRow["read_only"];
+    $currentUser["items_per_page"] = intval($userRow["items_per_page"]);
   } else {
     header("location ../logout");
     die();

@@ -3,8 +3,8 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Oct 21, 2017 at 01:25 PM
--- Server version: 5.7.19-0ubuntu0.16.04.1
+-- Generation Time: Oct 28, 2017 at 02:10 PM
+-- Server version: 5.7.20-0ubuntu0.16.04.1
 -- PHP Version: 7.0.22-0ubuntu0.16.04.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -277,6 +277,7 @@ INSERT INTO `settings` (`id`, `active`, `setting`, `value`, `user`, `optional`, 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `read_only` tinyint(1) NOT NULL,
+  `items_per_page` int(11) NOT NULL DEFAULT '100',
   `user` varchar(50) NOT NULL,
   `password` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -285,8 +286,8 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `read_only`, `user`, `password`) VALUES
-(1, 0, 'admin', '5f4dcc3b5aa765d61d8327deb882cf99');
+INSERT INTO `users` (`id`, `read_only`, `items_per_page`, `user`, `password`) VALUES
+(1, 0, 100, 'admin', '5f4dcc3b5aa765d61d8327deb882cf99'),
 
 --
 -- Indexes for dumped tables
@@ -336,22 +337,22 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `colours`
 --
 ALTER TABLE `colours`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
 --
 -- AUTO_INCREMENT for table `decrease`
 --
 ALTER TABLE `decrease`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 --
 -- AUTO_INCREMENT for table `improve`
 --
 ALTER TABLE `improve`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
 --
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=823;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 --
 -- AUTO_INCREMENT for table `settings`
 --
