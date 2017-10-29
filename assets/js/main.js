@@ -939,6 +939,18 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
     }
 
+    // View Admin Login
+
+    if (typeof(fullSettings.admin_keys) === 'object') {
+
+      Mousetrap.bindGlobal(fullSettings.admin_keys, function(e) {
+
+        if (!appError && !modalOpen) $('#admin-modal').modal('open');
+
+      });
+
+    }
+
     if (method !== 'initial') {
 
       moodEngine.toggleSettings('close');
@@ -1201,6 +1213,19 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
   });
 
   $('#logs-modal').modal({
+    ready: function(modal, trigger) {
+
+      modalOpen = true;
+
+    },
+    complete: function() {
+
+      modalOpen = false;
+
+    }
+  });
+
+  $('#admin-modal').modal({
     ready: function(modal, trigger) {
 
       modalOpen = true;
@@ -2185,6 +2210,29 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       $('#results-number').empty();
 
     }
+
+  });
+
+  // Admin Login
+
+  $('#admin-login-button').click(function() {
+
+    $.ajax({
+      data: $('#admin-modal form').serialize(),
+      method: 'POST',
+      url: 'admin/login/authenticate.php',
+      success: function(response) {
+        if (response === 'success') {
+
+          window.location.href = 'admin/home'
+
+        } else {
+
+          $('.red-text').text('Invalid credentials.');
+
+        }
+      }
+    });
 
   });
 
