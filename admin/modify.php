@@ -37,10 +37,9 @@
         if (isset($_POST["values"]["password"]) && !$_POST["values"]["password"]) {
           unset($_POST["values"]["password"]);
         }
-        // Don't allow user to set themself as read_only
-        if (isset($_POST["values"]["read_only"]) && $_POST["values"]["read_only"] === "1" && $id === $_SESSION["user"]) {
+        // Don't allow user to change their own read_only value
+        if (isset($_POST["values"]["read_only"]) && $id === $_SESSION["user"]) {
           unset($_POST["values"]["read_only"]);
-          $_SESSION["message"]["warning"] = "Can't set self as read_only.";
         }
         foreach ($_POST["values"] as $key => $val) {
             $val = $key === "password" ? md5($val) : $val;

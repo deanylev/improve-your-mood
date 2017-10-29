@@ -101,7 +101,9 @@
     <table class="table table-striped show-on-load d-none">
       <thead>
         <tr>
-          <th></th>
+          <?php if (!$currentUser["read_only"]): ?>
+            <th></th>
+          <?php endif; ?>
           <?php if (!isset($notDefault)): ?>
             <th><?php echo ucwords($title); ?></th>
           <?php endif; ?>
@@ -131,17 +133,19 @@
     ?>
 
         <tr class="item"<?php echo $fields; ?>>
-          <td><input class="select-checkbox" type="checkbox" name="items[]" value="<?php echo $row["id"]; ?>"></td>
+          <?php if (!$currentUser["read_only"]): ?>
+            <td><input class="select-checkbox" type="checkbox" name="items[]" value="<?php echo $row["id"]; ?>"></td>
+          <?php endif; ?>
           <?php if (!isset($notDefault)): ?>
             <td><p><?php echo $row[$title]; ?></p></td>
           <?php endif; ?>
           <?php isset($customFields) ? include($customFields) : ""; ?>
           <td class="preview d-none"></td>
           <td class="actions">
-            <?php if (in_array("view", $actions)): ?>
+            <?php if (in_array("view", $actions) && !($table === "users" && $row["id"] == $_SESSION["user"])): ?>
               <a class="btn btn-success action-button" href="../view?type=<?php echo $table; ?>&amp;title=<?php echo $title; ?>&amp;id=<?php echo $row["id"]; ?>">View</a>
             <?php endif; ?>
-            <?php if (in_array("edit", $actions)): ?>
+            <?php if (in_array("edit", $actions) || ($table === "users" && $row["id"] == $_SESSION["user"])): ?>
               <a class="btn btn-warning action-button" href="../edit?type=<?php echo $table; ?>&amp;title=<?php echo $title; ?>&amp;id=<?php echo $row["id"]; ?>">Edit</a>
             <?php endif; ?>
             <?php if (in_array("delete", $actions)): ?>

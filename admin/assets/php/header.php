@@ -79,7 +79,7 @@
         </li>
         <div class="dropdown-divider"></div>
         <li class="nav-item d-lg-none <?php echo isset($userPage) ? "active" : "" ?>">
-          <a class="nav-link"  href="../<?php echo $currentUser["read_only"] ? "view" : "edit"; ?>/?type=users&amp;title=user&amp;id=<?php echo $_SESSION["user"]; ?>">
+          <a class="nav-link"  href="../edit/?type=users&amp;title=user&amp;id=<?php echo $_SESSION["user"]; ?>">
             <span class="fa fa-user"></span>
             <span class="icon-text"><?php echo $currentUser["name"]; ?></span>
           </a>
@@ -94,7 +94,7 @@
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
           <div class="btn-group d-none d-lg-block d-xl-block">
-            <a class="btn btn-primary <?php echo isset($userPage) ? "active" : "" ?>" href="../<?php echo $currentUser["read_only"] ? "view" : "edit"; ?>/?type=users&amp;title=user&amp;id=<?php echo $_SESSION["user"]; ?>">
+            <a class="btn btn-primary <?php echo isset($userPage) ? "active" : "" ?>" href="../edit/?type=users&amp;title=user&amp;id=<?php echo $_SESSION["user"]; ?>">
               <span class="fa fa-user"></span>
               <span class="icon-text"><?php echo $currentUser["name"]; ?></span>
             </a>
