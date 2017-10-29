@@ -62,6 +62,7 @@
   <script>
   $('form').submit(function() {
 
+    $('#password').removeClass('wrong');
     $('.fa-spinner').removeClass('d-none');
 
     $.ajax({
@@ -77,6 +78,7 @@
 
           $('.text-danger').text('Invalid credentials.');
           $('.fa-spinner').addClass('d-none');
+          $('#password').addClass('wrong');
 
         }
       }

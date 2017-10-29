@@ -71,6 +71,7 @@
   <script>
   $('form').submit(function() {
 
+    $('#reset_code').removeClass('wrong');
     $('.fa-spinner').removeClass('d-none');
 
     $.ajax({
@@ -86,6 +87,7 @@
 
           $('.text-danger').text('Reset code incorrect. New one generated.');
           $('.fa-spinner').addClass('d-none');
+          $('#reset_code').addClass('wrong');
 
         }
       }
