@@ -25,7 +25,7 @@
 
 ?>
 
-<h1 class="text-center">Edit <?php echo ucwords($title); ?></h1>
+<h1 class="text-center">Edit <?php echo $title === "user" && $id == $_SESSION["user"] ? "Your Profile" : ucwords($title); ?></h1>
 <br>
 
 <form class="form-group text-center container" action="../modify.php" method="POST">

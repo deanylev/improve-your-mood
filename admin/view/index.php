@@ -20,7 +20,7 @@
 
 ?>
 
-<h1 class="text-center">View <?php echo ucwords($title); ?></h1>
+<h1 class="text-center">View <?php echo $title === "user" && $id == $_SESSION["user"] ? "Your Profile" : ucwords($title); ?></h1>
 <br>
 
 <form class="form-group text-center container" action="../modify.php" method="POST">

@@ -137,7 +137,7 @@
             <td><input class="select-checkbox" type="checkbox" name="items[]" value="<?php echo $row["id"]; ?>"></td>
           <?php endif; ?>
           <?php if (!isset($notDefault)): ?>
-            <td><p><?php echo $row[$title]; ?></p></td>
+            <td><p><?php echo $row[$title]; ?><?php echo $title === "user" && $row["id"] === $_SESSION["user"] ? " <b>(you)</b>" : ""; ?></p></td>
           <?php endif; ?>
           <?php isset($customFields) ? include($customFields) : ""; ?>
           <td class="preview d-none"></td>
