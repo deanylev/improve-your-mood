@@ -20,6 +20,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="../assets/css/main.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lscache/1.1.0/lscache.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
 </head>
 <body class="container bg-primary">
@@ -59,36 +60,7 @@
       </form>
     </div>
   </div>
-  <script>
-  $('form').submit(function() {
-
-    $('#password').removeClass('wrong');
-    $('.fa-spinner').removeClass('d-none');
-
-    $.ajax({
-      data: $('form').serialize(),
-      method: 'POST',
-      url: 'authenticate.php',
-      success: function(response) {
-        if (response === 'success') {
-
-          window.location.href = '../home'
-
-        } else {
-
-          $('.text-danger').text('Invalid credentials.');
-          $('.fa-spinner').addClass('d-none');
-          $('#password').addClass('wrong');
-          $('#password').focus();
-
-        }
-      }
-    });
-
-    return false;
-
-  });
-  </script>
+  <script src="login.js"></script>
 </body>
 
 </html>
