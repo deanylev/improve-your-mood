@@ -79,6 +79,7 @@
           $('.text-danger').text('Invalid credentials.');
           $('.fa-spinner').addClass('d-none');
           $('#password').addClass('wrong');
+          $('#password').focus();
 
         }
       }

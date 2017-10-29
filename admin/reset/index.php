@@ -88,6 +88,7 @@
           $('.text-danger').text('Reset code incorrect. New one generated.');
           $('.fa-spinner').addClass('d-none');
           $('#reset_code').addClass('wrong');
+          $('#reset_code').focus();
 
         }
       }
