@@ -38,13 +38,15 @@
   set_error_handler("warning_handler", E_WARNING);
   foreach ($row as $key => $val) {
       if ($key !== "id" && $key !== "password") {
-          $columnType = $columnTypes[$key];
+      $columnType = $columnTypes[$key]; ?>
+        <div class="default-field" data-key="<?php echo $key; ?>" data-value="<?php echo $val; ?>" <?php echo $columnType === 1 ? "data-bool=\"true\"" : "" ?>></div>
+<?php
           switch ($columnType):
           case 252:
 ?>
 
             <label for="<?php echo $key; ?>"><?php echo $key; ?></label>
-            <textarea id="<?php echo $key; ?>" class="form-control" name="values[<?php echo $key; ?>]"><?php echo $val; ?></textarea>
+            <textarea id="<?php echo $key; ?>" class="form-control" data-field-key="<?php echo $key; ?>" name="values[<?php echo $key; ?>]"><?php echo $val; ?></textarea>
             <div class="validation-errors text-danger" data-input="<?php echo $key; ?>"></div>
             <br>
 
