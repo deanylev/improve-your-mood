@@ -76,6 +76,18 @@ footer {
   -webkit-animation: shake .5s linear;
 }
 
+.actions {
+  float: right;
+}
+
+th.actions {
+  margin-right: 75px;
+}
+
+th {
+  border: none !important;
+}
+
 @-webkit-keyframes shake {
   8%, 41% {
     -webkit-transform: translateX(-10px);
