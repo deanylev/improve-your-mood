@@ -2,9 +2,9 @@
 
   @session_start();
 
+  include("force_auth.php");
   include("../../assets/php/sql.php");
   include("actions.php");
-  include("force_auth.php");
 
   $titles = array("user", "home", "quote", "colour", "setting", "log");
 

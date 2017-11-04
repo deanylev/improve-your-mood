@@ -17,6 +17,9 @@
       echo "success";
       $_SESSION["user"] = $row["id"];
       $_SESSION["message"]["success"] = "Logged in successfully.";
+      if (isset($_POST["remember"])) {
+        setcookie("user", $row["id"],  time() + (86400 * 30), "/");
+      }
   } else {
       echo "fail";
   }
