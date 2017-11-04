@@ -2255,7 +2255,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
     $.ajax({
       data: $('#admin-modal form').serialize(),
       method: 'POST',
-      url: 'admin/login/authenticate.php',
+      url: `${backendAddress}/admin/login/authenticate.php`,
       success: function(response) {
         if (response === 'success') {
 
@@ -2279,7 +2279,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
     $.ajax({
       //data: $('#admin-modal form').serialize(),
       method: 'POST',
-      url: 'admin/logout/index.php',
+      url: `${backendAddress}/admin/logout/index.php`,
       success: function() {
         checkUser();
       },
