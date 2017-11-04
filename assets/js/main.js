@@ -1,4 +1,4 @@
-let appError, defaultMode, startTime, modalOpen, lastNum, disableSwitch, quoteNum, colourNum, isProd;
+let appError, defaultMode, startTime, modalOpen, lastNum, disableSwitch, quoteNum, colourNum, isProd, currentUser;
 let quotes = [];
 let colours = [];
 let usedQuotes = [];
@@ -324,11 +324,44 @@ console.log(`%c${version.toLowerCase()} your mood 6`, 'font-family: "Oxygen"; fo
 console.log('――――――――――――――――――――――――――――――');
 moodEngine.log('log', `Pulling from: ${backendAddress}`);
 
-$.get(`${backendAddress}/api/verify/index.php`, function(data) {
+$.get(`${backendAddress}/api/verify/url/index.php`, (data) => {
 
   isProd = data === 'improveyourmood.xyz';
 
 });
+
+function checkUser() {
+
+  $.get(`${backendAddress}/api/verify/current_user/index.php`, (data) => {
+
+    if (data !== 'no user') {
+
+      $('.not-logged-in').addClass('hide');
+      $('.logged-in').removeClass('hide');
+
+      if (data !== currentUser) {
+
+        currentUser = data;
+        moodEngine.log('log', `Current user is: ${currentUser}`);
+        $('#current-user').text(currentUser);
+
+      }
+
+    } else {
+
+      $('.logged-in').addClass('hide');
+      $('.not-logged-in').removeClass('hide');
+      currentUser = undefined;
+
+    }
+
+  });
+
+}
+
+checkUser();
+
+setInterval(checkUser, 5000);
 
 // Decide whether to use cache or pull new quotes
 
@@ -2217,6 +2250,8 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   $('#admin-login-button').click(function() {
 
+    $('.red-text').empty();
+
     $.ajax({
       data: $('#admin-modal form').serialize(),
       method: 'POST',
@@ -2224,13 +2259,32 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       success: function(response) {
         if (response === 'success') {
 
-          window.location.href = 'admin/home'
+          checkUser();
 
         } else {
 
           $('.red-text').text('Invalid credentials.');
 
         }
+      }
+    });
+
+  });
+
+
+  $('#admin-logout-button').click(function() {
+
+    $('.red-text').empty();
+
+    $.ajax({
+      //data: $('#admin-modal form').serialize(),
+      method: 'POST',
+      url: 'admin/logout/index.php',
+      success: function() {
+        checkUser();
+      },
+      error: function() {
+        $('.red-text').text('Failed to log out.');
       }
     });
 

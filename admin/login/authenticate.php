@@ -4,6 +4,8 @@
 
   session_start();
 
+  setcookie("user", "", time() - 3600, "/");
+
   $authUser = $_POST["user"];
   $authPass = $_POST["password"];
 
