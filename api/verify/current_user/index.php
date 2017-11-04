@@ -1,6 +1,7 @@
 <?php
 
-  require("../../../assets/php/sql.php");
+  header("Access-Control-Allow-Origin: *");
+  include("../../../assets/php/sql.php");
 
   @session_start();
 

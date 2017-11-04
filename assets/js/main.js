@@ -2277,7 +2277,6 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
     $('.red-text').empty();
 
     $.ajax({
-      //data: $('#admin-modal form').serialize(),
       method: 'POST',
       url: `${backendAddress}/admin/logout/index.php`,
       success: function() {
