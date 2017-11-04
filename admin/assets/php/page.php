@@ -40,13 +40,13 @@
   <?php if (isset($page) && $totalPages > 1): ?>
     <br>
     <?php if ($page > 1): ?>
-      <a href="?page=1&amp;items=<?php echo $items; ?>" class="btn btn-info"><span class="fa fa-step-backward"></span></a>
-      <a href="?page=<?php echo $page - 1; ?>&amp;items=<?php echo $items; ?>" class="btn btn-info"><span class="fa fa-backward"></span></a>
+      <a href="?page=1&amp;items=<?php echo $items; ?>" class="btn btn-default"><span class="arrow fa fa-angle-double-left"></span></a>
+      <a href="?page=<?php echo $page - 1; ?>&amp;items=<?php echo $items; ?>" class="btn btn-default"><span class="arrow fa fa-angle-left"></span></a>
     <?php endif; ?>
     <span>&nbsp;Page: <?php echo $page; ?>/<?php echo $totalPages; ?>&nbsp;</span>
     <?php if ($page < $totalPages): ?>
-      <a href="?page=<?php echo $page + 1; ?>&amp;items=<?php echo $items; ?>" class="btn btn-info"><span class="fa fa-forward"></span></a>
-      <a href="?page=<?php echo $totalPages; ?>&amp;items=<?php echo $items; ?>" class="btn btn-info"><span class="fa fa-step-forward"></span></a>
+      <a href="?page=<?php echo $page + 1; ?>&amp;items=<?php echo $items; ?>" class="btn btn-default"><span class="arrow fa fa-angle-right"></span></a>
+      <a href="?page=<?php echo $totalPages; ?>&amp;items=<?php echo $items; ?>" class="btn btn-default"><span class="arrow fa fa-angle-double-right"></span></a>
     <?php endif; ?>
   <?php endif; ?>
 </div>

@@ -80,6 +80,10 @@ footer {
   float: right;
 }
 
+.arrow {
+  font-size: 25px;
+}
+
 th.actions {
   margin-right: 75px;
 }
