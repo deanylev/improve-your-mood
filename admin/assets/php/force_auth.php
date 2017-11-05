@@ -1,6 +1,6 @@
 <?php
 
-  include("../../assets/php/cookies.php");
+  include(dirname(__FILE__) . "../../../../assets/php/cookies.php");
 
   if (isset($_COOKIE["user"])) {
     $_SESSION["user"] = decryptCookie($_COOKIE["user"]);
