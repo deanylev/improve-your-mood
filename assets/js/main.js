@@ -2285,21 +2285,33 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
     $('.red-text').empty();
 
-    $.ajax({
-      data: {
-        no_message: true
-      },
-      method: 'POST',
-      url: `admin/logout/index.php`,
-      success: function() {
-        checkUser();
-        moodEngine.log('log', 'Logged out.')
-      },
-      error: function() {
-        $('.red-text').text('Failed to log out.');
-        moodEngine.log('error', 'Failed to log out.')
+    let logoutSequence = setInterval(() => {
+
+      if (!Object.keys(currentUser).length) {
+
+        clearInterval(logoutSequence);
+
+      } else {
+
+        $.ajax({
+          data: {
+            no_message: true
+          },
+          method: 'POST',
+          url: `admin/logout/index.php`,
+          success: function() {
+            checkUser();
+            moodEngine.log('log', 'Logged out.');
+          },
+          error: function() {
+            $('.red-text').text('Failed to log out.');
+            moodEngine.log('error', 'Failed to log out.')
+          }
+        });
+
       }
-    });
+
+    }, 100);
 
   });
 
