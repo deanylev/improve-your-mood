@@ -332,7 +332,7 @@ $.get(`${backendAddress}/api/verify/url/index.php`, (data) => {
 
 function checkUser() {
 
-  $.get(`${backendAddress}/api/verify/current_user/index.php`, (data) => {
+  $.get(`api/verify/current_user/index.php`, (data) => {
 
     if (data !== 'no user') {
 
@@ -361,7 +361,7 @@ function checkUser() {
 
 checkUser();
 
-setInterval(checkUser, 5000);
+setInterval(checkUser, 3000);
 
 // Decide whether to use cache or pull new quotes
 
@@ -2255,7 +2255,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
     $.ajax({
       data: $('#admin-modal form').serialize(),
       method: 'POST',
-      url: `${backendAddress}/admin/login/authenticate.php`,
+      url: `admin/login/authenticate.php`,
       success: function(response) {
         if (response === 'success') {
 
@@ -2278,7 +2278,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
     $.ajax({
       method: 'POST',
-      url: `${backendAddress}/admin/logout/index.php`,
+      url: `admin/logout/index.php`,
       success: function() {
         checkUser();
       },
