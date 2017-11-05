@@ -2290,6 +2290,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       if (!Object.keys(currentUser).length) {
 
         clearInterval(logoutSequence);
+        moodEngine.log('log', 'Logged out.');
 
       } else {
 
@@ -2301,7 +2302,6 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
           url: `admin/logout/index.php`,
           success: function() {
             checkUser();
-            moodEngine.log('log', 'Logged out.');
           },
           error: function() {
             $('.red-text').text('Failed to log out.');
@@ -2311,7 +2311,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       }
 
-    }, 100);
+    }, 400);
 
   });
 
