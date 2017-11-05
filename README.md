@@ -15,7 +15,7 @@ password = YourPassword
 cookie = LongRandomValue (eg. ejr890e9ah8453h89rnudfn)
 ```
 
-(if writing permissions are enabled on the directory, this file will be created with these default values)
+(if writing permissions are enabled on the directory, this file will be created automatically with these placeholder values when you first visit /admin/ in your web browser.)
 
 Then, make a new table in your DB called `yourmood` and import the provided `yourmood.sql` file (in the /assets/sql/ folder).
 
