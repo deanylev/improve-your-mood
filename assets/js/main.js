@@ -350,7 +350,7 @@ function checkUser() {
       if (data.name !== currentUser.name) {
 
         currentUser = data;
-        moodEngine.log('log', `Current user is: ${currentUser.name}`);
+        moodEngine.log('log', `Logged in as '${currentUser.name}'.`);
         $('#current-user').html(`<a href="admin/edit/?type=users&amp;title=user&amp;id=${currentUser.id}" target="_blank">${currentUser.name}</a>`);
 
       }
@@ -1095,7 +1095,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
     }
 
-    let log = success ? `Inputs set successfully, target was '${target}'` : 'No inputs to set.';
+    let log = success ? `Inputs set successfully, target was '${target}'.` : 'No inputs to set.';
     moodEngine.log('log', log);
 
     let setInputs = [];
@@ -2293,9 +2293,11 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       url: `admin/logout/index.php`,
       success: function() {
         checkUser();
+        moodEngine.log('log', 'Logged out.')
       },
       error: function() {
         $('.red-text').text('Failed to log out.');
+        moodEngine.log('error', 'Failed to log out.')
       }
     });
 
