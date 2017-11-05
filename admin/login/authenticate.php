@@ -19,7 +19,9 @@
   if (isset($row) && md5($authPass) === $row["password"]) {
       echo "success";
       $_SESSION["user"] = $row["id"];
-      $_SESSION["message"]["success"] = "Logged in successfully.";
+      if (!isset($_POST["no_message"])) {
+        $_SESSION["message"]["success"] = "Logged in successfully.";
+      }
       if (isset($_POST["remember"])) {
         setcookie("user", $row["id"],  time() + (86400 * 30), "/");
       }

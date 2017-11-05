@@ -1,6 +1,7 @@
 <?php
 
   header("Access-Control-Allow-Origin: *");
+
   include("../../../assets/php/sql.php");
 
   @session_start();
@@ -13,8 +14,10 @@
     $sessionUser = $_SESSION["user"];
     $userQuery = $mysqli->query("SELECT * FROM yourmood.users WHERE id='{$sessionUser}'");
     $userRow = $userQuery->fetch_assoc();
-    $username = $userRow["user"];
-    echo $userRow["user"];
+    $user["id"] = $userRow["id"];
+    $user["name"] = $userRow["user"];
+    header("Content-Type: application/json");
+    echo json_encode($user);
   } else {
     echo "no user";
   }

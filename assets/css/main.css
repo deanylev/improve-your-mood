@@ -29,7 +29,7 @@ label:not(.active) b, #advanced-settings, .fade-in-on-load {
   display: none;
 }
 
-.dropdown-content li span, .modal, .reset-input, label {
+.dropdown-content li span, .modal, .reset-input, label, #current-user a {
   color: black;
 }
 
@@ -37,7 +37,7 @@ label:not(.active) b, #advanced-settings, .fade-in-on-load {
   cursor: pointer;
 }
 
-.underline, .settings-link:hover, .footer-link:hover {
+.underline, .settings-link:hover, .footer-link:hover, #current-user a:hover {
   text-decoration: underline;
 }
 

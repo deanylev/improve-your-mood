@@ -1,4 +1,4 @@
-let appError, defaultMode, startTime, modalOpen, lastNum, disableSwitch, quoteNum, colourNum, isProd, currentUser;
+let appError, defaultMode, startTime, modalOpen, lastNum, disableSwitch, quoteNum, colourNum, isProd;
 let quotes = [];
 let colours = [];
 let usedQuotes = [];
@@ -11,6 +11,7 @@ let settings = {};
 let fullSettings = {};
 let pullTime = {};
 let versionQuotes = {};
+let currentUser = {};
 let backendAddress = localStorage.getItem('backend_address') || 'https://improveyourmood.xyz';
 let pageSSL = window.location.protocol === 'https:';
 let totalTime = performance.now();
@@ -334,24 +335,25 @@ function checkUser() {
 
   $.get(`api/verify/current_user/index.php`, (data) => {
 
-    if (data !== 'no user') {
+    if (data === 'no user') {
+
+      $('.logged-in').addClass('hide');
+      $('.not-logged-in').removeClass('hide');
+      $('#current-user').empty();
+      currentUser = {};
+
+    } else {
 
       $('.not-logged-in').addClass('hide');
       $('.logged-in').removeClass('hide');
 
-      if (data !== currentUser) {
+      if (data.name !== currentUser.name) {
 
         currentUser = data;
-        moodEngine.log('log', `Current user is: ${currentUser}`);
-        $('#current-user').text(currentUser);
+        moodEngine.log('log', `Current user is: ${currentUser.name}`);
+        $('#current-user').html(`<a href="admin/edit/?type=users&amp;title=user&amp;id=${currentUser.id}" target="_blank">${currentUser.name}</a>`);
 
       }
-
-    } else {
-
-      $('.logged-in').addClass('hide');
-      $('.not-logged-in').removeClass('hide');
-      currentUser = undefined;
 
     }
 
@@ -2284,6 +2286,9 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
     $('.red-text').empty();
 
     $.ajax({
+      data: {
+        no_message: true
+      },
       method: 'POST',
       url: `admin/logout/index.php`,
       success: function() {
