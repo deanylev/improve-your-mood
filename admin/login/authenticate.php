@@ -7,6 +7,11 @@
 
   setcookie("user", "", time() - 3600, "/");
 
+  if (!isset($_COOKIE["login_attempts"])) {
+    setcookie("login_attempts", 0, time() + 600, "/");
+    $_COOKIE["login_attempts"] = 0;
+  }
+
   $authUser = $_POST["user"];
   $authPass = $_POST["password"];
 
@@ -16,7 +21,10 @@
       $row = $result->fetch_assoc();
   }
 
-  if (isset($row) && md5($authPass) === $row["password"]) {
+  if ($_COOKIE["login_attempts"] >= 10) {
+    echo "Too many login attempts. Try again in 10 minutes.";
+  } elseif (isset($row) && md5($authPass) === $row["password"]) {
+      setcookie("login_attempts", "", time() - 3600, "/");
       echo "success";
       $_SESSION["user"] = $row["id"];
       if (!isset($_POST["no_message"])) {
@@ -26,5 +34,6 @@
         setcookie("user", $row["id"],  time() + (86400 * 30), "/");
       }
   } else {
-      echo "fail";
+      setcookie("login_attempts", $_COOKIE["login_attempts"] + 1, time() + 600, "/");
+      echo "Invalid credentials.";
   }

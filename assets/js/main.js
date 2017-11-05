@@ -2265,7 +2265,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         } else {
 
-          $('.red-text').text('Invalid credentials.');
+          $('.red-text').text(response);
 
         }
       }
