@@ -2248,7 +2248,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   // Admin Login
 
-  $('#admin-login-button').click(function() {
+  function login() {
 
     $('.red-text').empty();
 
@@ -2269,8 +2269,15 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       }
     });
 
-  });
+  }
 
+  $('#admin-login-button').click(login);
+
+  $('form.not-logged-in input').keydown(function(e) {
+
+    if (e.keyCode === 13) login();
+
+  });
 
   $('#admin-logout-button').click(function() {
 
