@@ -2,6 +2,7 @@
 
   header("Access-Control-Allow-Origin: *");
   include("../../assets/php/sql.php");
+  include("../assets/php/cookies.php");
 
   session_start();
 
@@ -31,7 +32,7 @@
         $_SESSION["message"]["success"] = "Logged in successfully.";
       }
       if (isset($_POST["remember"])) {
-        setcookie("user", $row["id"],  time() + (86400 * 30), "/");
+        setcookie("user", encryptCookie($row["id"]), time() + (86400 * 30), "/");
       }
   } else {
       setcookie("login_attempts", $_COOKIE["login_attempts"] + 1, time() + 600, "/");

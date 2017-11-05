@@ -1,7 +1,9 @@
 <?php
 
+  include("cookies.php");
+
   if (isset($_COOKIE["user"])) {
-    $_SESSION["user"] = $_COOKIE["user"];
+    $_SESSION["user"] = decryptCookie($_COOKIE["user"]);
   }
 
   if (!isset($_SESSION["user"])) {
