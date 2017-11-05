@@ -2,7 +2,7 @@
 
   header("Access-Control-Allow-Origin: *");
   include("../../assets/php/sql.php");
-  include("../assets/php/cookies.php");
+  include("../../assets/php/cookies.php");
 
   session_start();
 

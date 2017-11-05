@@ -3,11 +3,12 @@
   header("Access-Control-Allow-Origin: *");
 
   include("../../../assets/php/sql.php");
+  include("../../../assets/php/cookies.php");
 
   @session_start();
 
   if (isset($_COOKIE["user"])) {
-    $_SESSION["user"] = $_COOKIE["user"];
+    $_SESSION["user"] = decryptCookie($_COOKIE["user"]);
   }
 
   if (isset($_SESSION["user"])) {
