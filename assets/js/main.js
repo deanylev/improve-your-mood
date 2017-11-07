@@ -596,13 +596,43 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
             profileSettings[key] = val;
 
-            $('#saved-settings p').append(`<b>${key}:</b> ${val}<br>`);
+            $('#saved-settings p').append(`<b>${key}:</b> ${val}<a class="delete-saved-setting" data-setting="${key}"><i class="material-icons red-text">close</i></a><br>`);
 
           });
 
         } catch (error) {}
 
       }
+
+      $('.delete-saved-setting').off();
+      $('.delete-saved-setting').click(function() {
+
+        let setting = $(this).attr('data-setting');
+
+        delete profileSettings[setting];
+
+        $.ajax({
+          data: {
+            id: currentUser.id,
+            settings: JSON.stringify(profileSettings)
+          },
+          method: 'POST',
+          url: `api/update/user_settings/index.php`,
+          success: function(response) {
+            if (response === 'success') {
+              moodEngine.log('log', `Cleared setting '${setting}' from profile.`);
+              moodEngine.checkUser();
+            } else {
+              $('.red-text').text(response);
+            }
+          },
+          error: function(response) {
+            $('.red-text').text(`Failed to clear setting '${setting}' from profile.`);
+            moodEngine.log('error', 'Failed to clear setting.');
+          }
+        });
+
+      });
 
       if (method !== 'initial') moodEngine.setSettings('userCheck');
 

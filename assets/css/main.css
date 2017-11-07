@@ -112,6 +112,17 @@ label:not(.active) b, #advanced-settings, .fade-in-on-load {
   color: orange;
 }
 
+.delete-saved-setting {
+  cursor: pointer;
+  position: relative;
+  top: 5px;
+  margin-left: 15px;
+}
+
+.delete-saved-setting i {
+  font-weight: bold;
+}
+
 #logo {
   font-family: 'Raleway', Helvetica, Arial;
 }
