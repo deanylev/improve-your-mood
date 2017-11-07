@@ -564,7 +564,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         // Log in
 
-        $('.red-text').empty();
+        $('#admin-error').empty();
         $('.not-logged-in').addClass('hide');
         $('.logged-in').removeClass('hide');
 
@@ -596,7 +596,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
             profileSettings[key] = val;
 
-            $('#saved-settings p').append(`<b>${key}:</b> ${val}<a class="delete-saved-setting" data-setting="${key}"><i class="material-icons red-text">close</i></a><br>`);
+            $('#saved-settings p').append(`<div><b>${key}:</b> ${val}<a class="delete-saved-setting" data-setting="${key}"><i class="material-icons red-text">close</i></a><br></div>`);
 
           });
 
@@ -623,11 +623,11 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
               moodEngine.log('log', `Cleared setting '${setting}' from profile.`);
               moodEngine.checkUser();
             } else {
-              $('.red-text').text(response);
+              $('#admin-error').text(response);
             }
           },
           error: function(response) {
-            $('.red-text').text(`Failed to clear setting '${setting}' from profile.`);
+            $('#admin-error').text(`Failed to clear setting '${setting}' from profile.`);
             moodEngine.log('error', 'Failed to clear setting.');
           }
         });
@@ -2356,7 +2356,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   function login() {
 
-    $('.red-text').empty();
+    $('#admin-error').empty();
 
     $.ajax({
       data: $('#admin-modal form').serialize(),
@@ -2369,7 +2369,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         } else {
 
-          $('.red-text').text(response);
+          $('#admin-error').text(response);
 
         }
       }
@@ -2387,7 +2387,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   $('#admin-logout-button').click(function() {
 
-    $('.red-text').empty();
+    $('#admin-error').empty();
 
     let logoutSequence = setInterval(() => {
 
@@ -2408,7 +2408,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
             moodEngine.checkUser();
           },
           error: function() {
-            $('.red-text').text('Failed to log out.');
+            $('#admin-error').text('Failed to log out.');
             moodEngine.log('error', 'Failed to log out.')
           }
         });
@@ -2459,11 +2459,11 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
           moodEngine.notify(successToast);
           moodEngine.checkUser();
         } else {
-          $('.red-text').text(response);
+          $('#admin-error').text(response);
         }
       },
       error: function(response) {
-        $('.red-text').text(failLog);
+        $('#admin-error').text(failLog);
         moodEngine.log('error', failLog);
       }
     });
