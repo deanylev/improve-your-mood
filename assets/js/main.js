@@ -2419,12 +2419,16 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       },
       method: 'POST',
       url: `api/update/user_settings/index.php`,
-      success: function() {
-        moodEngine.log('log', successLog);
-        moodEngine.notify(successToast);
-        moodEngine.checkUser();
+      success: function(response) {
+        if (response === 'success') {
+          moodEngine.log('log', successLog);
+          moodEngine.notify(successToast);
+          moodEngine.checkUser();
+        } else {
+          $('.red-text').text(response);
+        }
       },
-      error: function() {
+      error: function(response) {
         $('.red-text').text(failLog);
         moodEngine.log('error', failLog);
       }
