@@ -3,6 +3,7 @@
   if (isset($_SERVER["HTTP_REFERER"])) {
     session_start();
     include("assets/php/force_auth.php");
+    include("assets/php/user.php");
     $messageType = "success";
     $id = $_POST["id"];
     $table = $_POST["table"];
@@ -41,6 +42,11 @@
         if (isset($_POST["values"]["read_only"]) && $id === $_SESSION["user"]) {
           unset($_POST["values"]["read_only"]);
         }
+        // Don't allow user to change their own is_admin value
+        if (isset($_POST["values"]["is_admin"]) && $id === $_SESSION["user"]) {
+          unset($_POST["values"]["is_admin"]);
+        }
+        // Construct SQL statement
         foreach ($_POST["values"] as $key => $val) {
             $val = $key === "password" ? md5($val) : $val;
             $statement .= $key . " = '" . addslashes($val) . "',";

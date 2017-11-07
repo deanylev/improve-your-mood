@@ -276,6 +276,7 @@ INSERT INTO `settings` (`id`, `active`, `setting`, `value`, `user`, `optional`, 
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
+  `is_admin` tinyint(1) NOT NULL,
   `read_only` tinyint(1) NOT NULL,
   `items_per_page` int(11) NOT NULL DEFAULT '100',
   `user` varchar(50) NOT NULL,
@@ -287,8 +288,8 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `read_only`, `items_per_page`, `user`, `password`, `app_settings`) VALUES
-(1, 0, 100, 'admin', '5f4dcc3b5aa765d61d8327deb882cf99', '{}');
+INSERT INTO `users` (`id`, `is_admin`, `read_only`, `items_per_page`, `user`, `password`, `app_settings`) VALUES
+(1, 1, 0, 100, 'admin', '5f4dcc3b5aa765d61d8327deb882cf99', '{}');
 
 --
 -- Indexes for dumped tables

@@ -55,7 +55,7 @@
 
           case 1:
 
-            if ($type === "users" && $id === $_SESSION["user"] && $key === "read_only") {
+            if ($type === "users" && $id === $_SESSION["user"] && ($key === "read_only" || $key === "is_admin")) {
               $hidden = true;
             }
 
