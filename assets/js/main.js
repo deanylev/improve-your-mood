@@ -2047,7 +2047,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
           } else if (pageSSL && $(this).val().startsWith('http://')) {
 
-            invalidInputs.push(`${settings[$(this).attr('name')].label} Must Be SSL enabled.`);
+            invalidInputs.push(`${settings[$(this).attr('name')].label} Must Be SSL Enabled.`);
 
           } else {
 
@@ -2059,11 +2059,11 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
             $.getJSON(`${$(this).val()}/api/get/colours/index.php`).fail((data) => {
 
-              let sslMessage = pageSSL && !$(this).val().startsWith('https://') ? ' Make sure it is SSL enabled.' : '';
+              let sslMessage = pageSSL && !$(this).val().startsWith('https://') ? ' Make Sure It Is SSL Enabled.' : '';
               moodEngine.log('warn', `Custom back-end address '${$(this).val()}' is invalid.`);
               $(this).addClass('invalid');
               $(this).next('label').attr('data-error', 'Address is invalid.');
-              invalidInputs.push(`${settings[$(this).attr('name')].label} '${$(this).val()}' is Invalid.${sslMessage}`);
+              invalidInputs.push(`${settings[$(this).attr('name')].label} '${$(this).val()}' Is Invalid.${sslMessage}`);
 
             });
 
