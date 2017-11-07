@@ -9,6 +9,7 @@ let moodLog = [];
 let moodEngine = {};
 let settings = {};
 let fullSettings = {};
+let profileSettings = {};
 let pullTime = {};
 let versionQuotes = {};
 let currentUser = {};
@@ -63,7 +64,7 @@ moodEngine.sendLogs = function(method, amount) {
 
   console.log('\nSending logs to backend...');
 
-  if (method === 'button') Materialize.toast('Sending Logs To Back-End...', fullSettings.toast_interval);
+  if (method === 'button') moodEngine.notify('Sending Logs To Back-End...');
 
   for (i = 0; i < amount; i++) {
 
@@ -79,20 +80,27 @@ moodEngine.sendLogs = function(method, amount) {
       success: function(response) {
 
         console.log('\nLogs sent to backend successfully.');
-        if (method === 'button') Materialize.toast('Logs Sent To Back-End Successfully.', fullSettings.toast_interval);
+        if (method === 'button') moodEngine.notify('Logs Sent To Back-End Successfully.');
         if (response) console.log(`Response: ${response}`);
 
       },
       error: function(response) {
 
         console.log('\nFailed to send logs to backend.');
-        if (method === 'button') Materialize.toast('Failed To Send Logs to Back-End.', fullSettings.toast_interval);
+        if (method === 'button') moodEngine.notify('Failed To Send Logs to Back-End.');
         if (response) console.log(`Response: ${response}`);
 
       }
     });
 
   }
+
+};
+
+moodEngine.notify = (message, interval) => {
+
+  interval = interval || fullSettings.toast_interval;
+  Materialize.toast(message, interval);
 
 };
 
@@ -331,40 +339,6 @@ $.get(`${backendAddress}/api/verify/url/index.php`, (data) => {
 
 });
 
-function checkUser() {
-
-  $.get(`api/verify/current_user/index.php`, (data) => {
-
-    if (data === 'no user') {
-
-      $('.logged-in').addClass('hide');
-      $('.not-logged-in').removeClass('hide');
-      $('#current-user').empty();
-      currentUser = {};
-
-    } else {
-
-      $('.not-logged-in').addClass('hide');
-      $('.logged-in').removeClass('hide');
-
-      if (data.name !== currentUser.name) {
-
-        currentUser = data;
-        moodEngine.log('log', `Logged in as '${currentUser.name}'.`);
-        $('#current-user').html(`<a href="admin/edit/?type=users&amp;title=user&amp;id=${currentUser.id}" target="_blank">${currentUser.name}</a>`);
-
-      }
-
-    }
-
-  });
-
-}
-
-checkUser();
-
-setInterval(checkUser, 3000);
-
 // Decide whether to use cache or pull new quotes
 
 if (localStorage.getItem('cachedQuotes') && localStorage.getItem('cachedVersionQuotes') && localStorage.getItem('disable_caching') !== 'true') {
@@ -561,6 +535,81 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   moodEngine.log('log', `Successfully pulled ${Object.keys(settings).length} settings from backend in ${pullTime.settings}ms.`);
 
+  // Check current user
+
+  moodEngine.checkUser = (method) => {
+
+    $.ajaxSetup({
+      async: false
+    });
+
+    $.get(`api/get/current_user/index.php`, (data) => {
+
+      profileSettings = {};
+
+      // Log out
+
+      if (data === 'no user') {
+
+        $('.logged-in').addClass('hide');
+        $('.not-logged-in').removeClass('hide');
+        $('#current-user').empty();
+        currentUser = {};
+
+      } else {
+
+        // Log in
+
+        $('.not-logged-in').addClass('hide');
+        $('.logged-in').removeClass('hide');
+
+        if (data.name !== currentUser.name) {
+
+          currentUser = data;
+          moodEngine.log('log', `Logged in as '${currentUser.name}'.`);
+          $('#current-user').html(`<a href="admin/edit/?type=users&amp;title=user&amp;id=${currentUser.id}" target="_blank">${currentUser.name}</a>`);
+
+        }
+
+        $('#saved-settings h5').addClass('hide');
+        $('#saved-settings p').empty();
+
+        try {
+
+          $.each(JSON.parse(data.settings), (key, val) => {
+
+            $('#saved-settings h5').removeClass('hide');
+
+            try {
+
+              val = JSON.parse(val);
+
+            } catch (error) {}
+
+            profileSettings[key] = val;
+
+            $('#saved-settings p').append(`<b>${key}:</b> ${val}<br>`);
+
+          });
+
+        } catch (error) {}
+
+      }
+
+    });
+
+    if (method !== 'initial') moodEngine.setSettings('userCheck');
+
+    $.ajaxSetup({
+      async: true
+    });
+
+  }
+
+  moodEngine.checkUser('initial');
+
+  setInterval(moodEngine.checkUser, 3000);
+
 }).always((data) => {
 
   // Construct settings object from backend or local
@@ -572,6 +621,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
     if (method !== 'initial') buttonOrder = JSON.stringify(fullSettings.button_order);
 
     let userSettings = 0;
+    let userPSettings = 0;
     let backendSettings = 0;
 
     let currentSettings = {};
@@ -613,9 +663,9 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       } else {
 
-        fullSettings[key] = settings[key].value;
+        fullSettings[key] = profileSettings[key] || settings[key].value;
 
-        backendSettings++;
+        profileSettings[key] ? userPSettings++ : backendSettings++;
 
       }
 
@@ -764,7 +814,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
           } catch (error) {
 
             moodEngine.log('error', `Cannot speak quote, invalid voice accent provided ('${fullSettings.speak_voice_accent}').`);
-            Materialize.toast('Invalid Voice Accent Provided.', fullSettings.toast_interval)
+            moodEngine.notify('Invalid Voice Accent Provided.')
 
           }
 
@@ -986,11 +1036,11 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
     }
 
-    if (method !== 'initial') {
+    if (!['initial', 'userCheck'].includes(method)) {
 
       moodEngine.toggleSettings('close');
 
-      Materialize.toast(toast, fullSettings.toast_interval);
+      moodEngine.notify(toast);
 
       if (fullSettings.backend_address !== backendAddress) {
 
@@ -1005,9 +1055,9 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
     if (method !== 'initial' && currentSettings.reload_interval !== fullSettings.reload_interval && !moodEngine.notAutoReloading()) moodEngine.toggleAutoReload();
 
-    if (userSettings || backendSettings) moodEngine.log('log', `Settings set successfully. ${userSettings} user defined, ${backendSettings} backend defined.`);
+    if ((userSettings || backendSettings || profileSettings) && method !== 'userCheck') moodEngine.log('log', `Settings set successfully. ${userSettings} user defined, ${userPSettings} profile defined, ${backendSettings} backend defined.`);
 
-    if (method !== 'initial' && logs.length) {
+    if (!['initial', 'userCheck'].includes(method) && logs.length) {
 
       moodEngine.log('log', 'Changed Settings:');
 
@@ -1569,7 +1619,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   });
 
-  // Set the correct values in the settings inputs on load
+  // Set correct input values
 
   moodEngine.setInputs(null, 'initial');
 
@@ -1735,7 +1785,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       icon.text(icon_text);
       $('main').toggleClass('manual-reload');
-      Materialize.toast(`Auto Reload ${toggle}!`, fullSettings.toast_interval);
+      moodEngine.notify(`Auto Reload ${toggle}!`);
 
     }
 
@@ -2120,7 +2170,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       } catch (error) {
 
-        Materialize.toast('Unable to Save Settings. An Error Occurred.', fullSettings.toast_interval);
+        moodEngine.notify('Unable to Save Settings. An Error Occurred.');
         moodEngine.log('error', `Couldn't save settings. Error: ${error}.`);
 
       }
@@ -2135,11 +2185,11 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         if (spaceInputs.length === 1) {
 
-          Materialize.toast(`${spaceInputs} Contains Spaces.`, fullSettings.toast_interval);
+          moodEngine.notify(`${spaceInputs} Contains Spaces.`);
 
         } else {
 
-          Materialize.toast(`${spaceInputs.length} Fields Contain Spaces.`, fullSettings.toast_interval);
+          moodEngine.notify(`${spaceInputs.length} Fields Contain Spaces.`);
 
         }
 
@@ -2149,11 +2199,11 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         if (emptyInputs.length === 1) {
 
-          Materialize.toast(`${emptyInputs} Is Empty.`, fullSettings.toast_interval);
+          moodEngine.notify(`${emptyInputs} Is Empty.`);
 
         } else {
 
-          Materialize.toast(`${emptyInputs.length} Fields Are Empty.`, fullSettings.toast_interval);
+          moodEngine.notify(`${emptyInputs.length} Fields Are Empty.`);
 
         }
 
@@ -2163,7 +2213,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         $.each(invalidInputs, function(key, val) {
 
-          Materialize.toast(val, fullSettings.toast_interval);
+          moodEngine.notify(val);
 
         });
 
@@ -2211,7 +2261,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       moodEngine.rewind();
 
       moodEngine.log('log', `Switched version to ${version}.`);
-      Materialize.toast(`Switched to ${version} Your Mood!`, fullSettings.toast_interval);
+      moodEngine.notify(`Switched to ${version} Your Mood!`);
 
     }
 
@@ -2277,7 +2327,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       success: function(response) {
         if (response === 'success') {
 
-          checkUser();
+          moodEngine.checkUser();
 
         } else {
 
@@ -2317,7 +2367,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
           method: 'POST',
           url: `admin/logout/index.php`,
           success: function() {
-            checkUser();
+            moodEngine.checkUser();
           },
           error: function() {
             $('.red-text').text('Failed to log out.');
@@ -2328,6 +2378,53 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       }
 
     }, 400);
+
+  });
+
+  $('.admin-settings-button').click(function() {
+
+    let object = {};
+    let successLog;
+    let successToast;
+    let failLog;
+
+    if ($(this).hasClass('clear-settings')) {
+
+      successLog = 'Successfully cleared settings from profile.';
+      successToast = 'Settings Cleared Successfully!';
+      failLog = 'Failed to clear settings from profile.';
+
+    } else {
+
+      successLog = 'Successfully saved settings to profile.';
+      successToast = 'Settings Settings Successfully!';
+      failLog = 'Failed to save settings to profile.';
+
+      $.each(localStorage, (key, val) => {
+
+        if (settings[key]) object[key] = val;
+
+      });
+
+    }
+
+    $.ajax({
+      data: {
+        id: currentUser.id,
+        settings: JSON.stringify(object)
+      },
+      method: 'POST',
+      url: `api/update/user_settings/index.php`,
+      success: function() {
+        moodEngine.log('log', successLog);
+        moodEngine.notify(successToast);
+        moodEngine.checkUser();
+      },
+      error: function() {
+        $('.red-text').text(failLog);
+        moodEngine.log('error', failLog);
+      }
+    });
 
   });
 

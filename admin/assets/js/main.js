@@ -178,34 +178,6 @@ $('.submit').click(function() {
   $('#modal-submit').addClass(`btn btn-${bsClass}`);
   $('#modal-confirm').text(confirm);
 
-  if (action === 'edit') {
-
-    let headingSet;
-
-    $('.default-field').each(function() {
-
-      let key = $(this).attr('data-key');
-      let value = $(this).attr('data-value');
-      if ($(this).attr('data-bool')) value = JSON.parse(value);
-      let input = $(`[name="values[${$(this).attr('data-key')}]"]:not('[type="hidden"]')`);
-
-      if ((!input.is('[type="checkbox"]') && value !== input.val()) || (input.is('[type="checkbox"]') && value != input.is(':checked'))) {
-
-        if (!headingSet) {
-
-          $('#modal-confirm').append('<br><br><b><u>Changes:</u></b><br>');
-          headingSet = true;
-
-        }
-
-        $('#modal-confirm').append(`<br><b>${key}:</b><br>${input.is('[type="checkbox"]') ? !!value : value} => ${input.is('[type="checkbox"]') ? input.is(':checked') : input.val()}<br>`);
-
-      }
-
-    });
-
-  }
-
   $('#modal-submit').click(function() {
 
     form.submit();

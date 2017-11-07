@@ -279,15 +279,16 @@ CREATE TABLE `users` (
   `read_only` tinyint(1) NOT NULL,
   `items_per_page` int(11) NOT NULL DEFAULT '100',
   `user` varchar(50) NOT NULL,
-  `password` varchar(50) NOT NULL
+  `password` varchar(50) NOT NULL,
+  `app_settings` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `read_only`, `items_per_page`, `user`, `password`) VALUES
-(1, 0, 100, 'admin', '5f4dcc3b5aa765d61d8327deb882cf99');
+INSERT INTO `users` (`id`, `read_only`, `items_per_page`, `user`, `password`, `app_settings`) VALUES
+(1, 0, 100, 'admin', '5f4dcc3b5aa765d61d8327deb882cf99', '{}');
 
 --
 -- Indexes for dumped tables
