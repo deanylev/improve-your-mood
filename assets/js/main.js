@@ -1971,6 +1971,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
     let spaceInputs = [];
     let emptyInputs = [];
     let invalidInputs = [];
+    let noSave;
 
     $('.settings-input:not(.select-wrapper)').each(function() {
 
@@ -2037,25 +2038,36 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         if ($(this).attr('name') === 'backend_address' && $(this).val() !== backendAddress) {
 
-          moodEngine.log('log', `Testing custom back-end address '${$(this).val()}'...`);
+          if (!$(this).val().startsWith('http://') && !$(this).val().startsWith('https://')) {
 
-          $.ajaxSetup({
-            async: false
-          });
+            let prefix = $(this).val() === 'improveyourmood.xyz' ? 'https://' : 'http://';
+            $(this).val(prefix + $(this).val());
+            noSave = true;
+            moodEngine.saveSettings();
 
-          $.getJSON(`${$(this).val()}/api/get/colours/index.php`).fail((data) => {
+          } else {
 
-            let sslMessage = pageSSL && !$(this).val().startsWith('https://') ? ' Make sure it is SSL enabled.' : '';
-            moodEngine.log('log', `Custom back-end address '${$(this).val()}' is invalid.`);
-            $(this).addClass('invalid');
-            $(this).next('label').attr('data-error', 'Address is invalid.');
-            invalidInputs.push(`${settings[$(this).attr('name')].label} '${$(this).val()}' is Invalid.${sslMessage}`);
+            moodEngine.log('log', `Testing custom back-end address '${$(this).val()}'...`);
 
-          });
+            $.ajaxSetup({
+              async: false
+            });
 
-          $.ajaxSetup({
-            async: true
-          });
+            $.getJSON(`${$(this).val()}/api/get/colours/index.php`).fail((data) => {
+
+              let sslMessage = pageSSL && !$(this).val().startsWith('https://') ? ' Make sure it is SSL enabled.' : '';
+              moodEngine.log('warn', `Custom back-end address '${$(this).val()}' is invalid.`);
+              $(this).addClass('invalid');
+              $(this).next('label').attr('data-error', 'Address is invalid.');
+              invalidInputs.push(`${settings[$(this).attr('name')].label} '${$(this).val()}' is Invalid.${sslMessage}`);
+
+            });
+
+            $.ajaxSetup({
+              async: true
+            });
+
+          }
 
         }
 
@@ -2074,7 +2086,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
     // If all inputs are not blank nor invalid
 
-    if (!spaceInputs.length && !emptyInputs.length && !invalidInputs.length) {
+    if (!spaceInputs.length && !emptyInputs.length && !invalidInputs.length && !noSave) {
 
       try {
 
