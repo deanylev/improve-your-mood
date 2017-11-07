@@ -564,6 +564,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         // Log in
 
+        $('.red-text').empty();
         $('.not-logged-in').addClass('hide');
         $('.logged-in').removeClass('hide');
 
