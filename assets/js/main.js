@@ -568,9 +568,12 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
         $('.not-logged-in').addClass('hide');
         $('.logged-in').removeClass('hide');
 
-        if (data.name !== currentUser.name) {
+        let name = currentUser.name;
 
-          currentUser = data;
+        currentUser = data;
+
+        if (name !== currentUser.name) {
+
           moodEngine.log('log', `Logged in as '${currentUser.name}'.`);
           $('#current-user').html(`<a href="admin/edit/?type=users&amp;title=user&amp;id=${currentUser.id}" target="_blank">${currentUser.name}</a>`);
 
