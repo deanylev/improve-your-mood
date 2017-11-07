@@ -2405,7 +2405,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
     } else {
 
       successLog = 'Successfully saved settings to profile.';
-      successToast = 'Settings Settings Successfully!';
+      successToast = 'Settings Saved Successfully!';
       failLog = 'Failed to save settings to profile.';
 
       $.each(localStorage, (key, val) => {
