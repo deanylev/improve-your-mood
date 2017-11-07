@@ -539,9 +539,13 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   moodEngine.checkUser = (method) => {
 
-    $.ajaxSetup({
-      async: false
-    });
+    if (method === 'initial') {
+
+      $.ajaxSetup({
+        async: false
+      });
+
+    }
 
     $.get(`api/get/current_user/index.php`, (data) => {
 
@@ -596,9 +600,9 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       }
 
-    });
+      if (method !== 'initial') moodEngine.setSettings('userCheck');
 
-    if (method !== 'initial') moodEngine.setSettings('userCheck');
+    });
 
     $.ajaxSetup({
       async: true
