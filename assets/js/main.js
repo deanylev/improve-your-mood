@@ -2040,10 +2040,14 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
           if (!$(this).val().startsWith('http://') && !$(this).val().startsWith('https://')) {
 
-            let prefix = $(this).val() === 'improveyourmood.xyz' ? 'https://' : 'http://';
+            let prefix = $(this).val() === 'improveyourmood.xyz' || pageSSL ? 'https://' : 'http://';
             $(this).val(prefix + $(this).val());
             noSave = true;
             moodEngine.saveSettings();
+
+          } else if (pageSSL && $(this).val().startsWith('http://')) {
+
+            invalidInputs.push(`${settings[$(this).attr('name')].label} Must Be SSL enabled.`);
 
           } else {
 
