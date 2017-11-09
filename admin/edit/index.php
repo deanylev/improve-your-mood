@@ -37,7 +37,7 @@
 
   set_error_handler("warning_handler", E_WARNING);
   foreach ($row as $key => $val) {
-      if ($key !== "id" && $key !== "password" && $key !== "app_settings") {
+      if ($key !== "id" && $key !== "password" && ($key !== "app_settings" || $currentUser["is_admin"])) {
       $columnType = $columnTypes[$key]; ?>
         <div class="default-field" data-key="<?php echo $key; ?>" data-value="<?php echo $val; ?>" <?php echo $columnType === 1 ? "data-bool=\"true\"" : "" ?>></div>
 <?php
