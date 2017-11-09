@@ -78,6 +78,7 @@
 
 ?>
 
+
             <div class="form-group">
               <label for="<?php echo $key; ?>"><?php echo $key; ?></label>
               <input type="text" class="form-control" id="<?php echo $key; ?>" value="<?php echo $val; ?>" name="values[<?php echo $key; ?>]">
@@ -92,12 +93,14 @@
 
 ?>
 
-            <div class="form-group">
-              <label for="<?php echo $key; ?>"><?php echo $key; ?></label>
-              <input type="number" class="form-control" id="<?php echo $key; ?>" value="<?php echo $val; ?>" name="values[<?php echo $key; ?>]">
+            <div class="<?php echo $key === "items_per_page" && !$currentUser["is_admin"] ? "d-none" : ""; ?>">
+              <div class="form-group">
+                <label for="<?php echo $key; ?>"><?php echo $key; ?></label>
+                <input type="number" class="form-control" id="<?php echo $key; ?>" value="<?php echo $val; ?>" name="values[<?php echo $key; ?>]">
+              </div>
+              <div class="validation-errors text-danger" data-input="<?php echo $key; ?>"></div>
+              <br>
             </div>
-            <div class="validation-errors text-danger" data-input="<?php echo $key; ?>"></div>
-            <br>
 
 <?php
 
