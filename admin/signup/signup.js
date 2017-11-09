@@ -11,6 +11,7 @@ $('form:not(.errors)').submit(function() {
         window.location.href = '../home';
       } else {
         $('.response').text(response);
+        $('.fa-spinner').addClass('d-none');
       }
     }
   });
