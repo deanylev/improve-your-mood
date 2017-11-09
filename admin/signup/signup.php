@@ -13,7 +13,7 @@
   }
 
 
-  if (!$userExists && $username && $password === $passwordConfirmation && strlen($password) >= 8) {
+  if (!$userExists && $username && $password === $passwordConfirmation && strlen($password) >= 8 && !strpos($username, " ")) {
     $password = md5($password);
     $mysqli->query("INSERT INTO yourmood.users (user, password) VALUES ('$username', '$password')");
     $_SESSION["user"] = $mysqli->insert_id;
