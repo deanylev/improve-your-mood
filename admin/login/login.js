@@ -1,4 +1,5 @@
 $('form').submit(function() {
+  
   $('#password').removeClass('wrong');
   $('.fa-spinner').removeClass('d-none');
 

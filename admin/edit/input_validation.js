@@ -13,7 +13,7 @@ function clearError(input, id) {
 
   $(`#${input}_${id}`).remove();
 
-  if (!$('.validation-errors p').length) {
+  if (!$('.validation-errors p').length && (!$('form').hasClass('signup') || !$('form input').filter(function() { return !$(this).val(); }).length)) {
 
     $('form').removeClass('errors');
     $('#save-button').removeAttr('disabled');
@@ -45,7 +45,7 @@ $('#user').on('keyup change', function(e) {
           id: itemId
         },
         method: 'POST',
-        url: 'check_username.php',
+        url: '../edit/check_username.php',
         success: function(response) {
           if (response === 'exists' && !$('#user_spaces').length) {
 
@@ -81,7 +81,7 @@ $('#password').on('keypress keydown keyup change', function() {
 
   $('#password_confirmation').attr('disabled', !input);
 
-  if (input) {
+  if (input || $(this).attr('data-required')) {
 
     if (input.length >= 8) {
 

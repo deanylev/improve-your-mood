@@ -20,7 +20,7 @@
         $query = "DELETE FROM yourmood.{$table} WHERE id='{$id}'";
         $message = "Successfully deleted {$type}.";
         $url = "{$type}s?type={$table}";
-        if ($table === "users" && $id === $_SESSION["user"]) {
+        if ($table === "users" && $id == $_SESSION["user"]) {
           $url = "logout";
         }
     } elseif (isset($_POST["deletemultiple"]) && in_array("delete", $actions)) {
@@ -39,11 +39,11 @@
           unset($_POST["values"]["password"]);
         }
         // Don't allow user to change their own read_only value
-        if (isset($_POST["values"]["read_only"]) && $id === $_SESSION["user"]) {
+        if (isset($_POST["values"]["read_only"]) && $id == $_SESSION["user"]) {
           unset($_POST["values"]["read_only"]);
         }
         // Don't allow user to change their own is_admin value
-        if (isset($_POST["values"]["is_admin"]) && $id === $_SESSION["user"]) {
+        if (isset($_POST["values"]["is_admin"]) && $id == $_SESSION["user"]) {
           unset($_POST["values"]["is_admin"]);
         }
         // Construct SQL statement
@@ -55,7 +55,7 @@
         $query = "UPDATE yourmood.{$table} SET {$statement} WHERE id = '{$id}'";
         $message = "Successfully updated {$type}.";
         if ($currentUser["is_admin"]) {
-          $url = in_array("view", $actions) ? "view/?type={$table}&title={$type}&id={$id}" : "{$type}s?type={$table}";  
+          $url = in_array("view", $actions) ? "view/?type={$table}&title={$type}&id={$id}" : "{$type}s?type={$table}";
         }
         if ($table === "users") {
           $user = $_POST["values"]["user"];

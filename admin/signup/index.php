@@ -15,7 +15,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Admin Panel - Log In</title>
+  <title>Admin Panel - Sign Up</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="../assets/css/main.css">
@@ -43,30 +43,32 @@
   ?>
   <div class="card">
     <div class="card-body">
-      <h1 class="text-center">Log In</h1>
-      <form action="authenticate.php" method="POST">
+      <h1 class="text-center">Sign Up</h1>
+      <form class="signup" action="modify.php" method="POST">
         <div class="form-group">
           <label for="username">Username</label>
-          <input type="text" name="user" class="form-control" id="username">
+          <input type="text" name="username" class="form-control" id="user">
         </div>
+        <div class="validation-errors text-danger" data-input="user"></div>
         <div class="form-group">
           <label for="password">Password</label>
-          <input type="password" name="password" class="form-control" id="password">
+          <input data-required="true" type="password" name="password" class="form-control" id="password">
         </div>
-        <div class="form-check">
-          <label class="form-check-label">
-            <input type="checkbox" class="form-check-input" name="remember" value="1">
-            Remember Me
-          </label>
+        <div class="validation-errors text-danger" data-input="password"></div>
+        <div class="form-group">
+          <label for="password_confirmation">Password Confirmation</label>
+          <input type="password" name="password_confirmation" class="form-control" id="password_confirmation">
         </div>
-        <p class="text-danger"></p>
-        <button type="submit" class="btn btn-primary">Log In<i class="d-none fa fa-spinner fa-pulse fa-fw"></i></button>
-        <a class="btn btn-link" href="../signup">Sign Up</a>
-        <a class="btn btn-link" href="../reset">I Can't Log In</a>
+        <div class="validation-errors text-danger" data-input="password_confirmation"></div>
+        <p class="response text-danger"></p>
+        <button id="save-button" class="btn btn-primary" type="submit" disabled>Sign Up<i class="d-none fa fa-spinner fa-pulse fa-fw"></i></button>
+        <a class="btn btn-link" href="../login">Log In</a>
       </form>
     </div>
   </div>
-  <script src="login.js"></script>
+  <script>itemId = null</script>
+  <script src="../edit/input_validation.js"></script>
+  <script src="signup.js"></script>
 </body>
 
 </html>

@@ -8,7 +8,7 @@
   $singular = true;
   $action = "edit";
   $otherTitle = ucwords($action) . " " . ucwords($title);
-  if ($id === $_SESSION["user"]) {
+  if ($id == $_SESSION["user"]) {
       $userPage = true;
   }
   include("../assets/php/header.php");
@@ -55,7 +55,7 @@
 
           case 1:
 
-            if ($type === "users" && $id === $_SESSION["user"] && ($key === "read_only" || $key === "is_admin")) {
+            if ($type === "users" && $id == $_SESSION["user"] && ($key === "read_only" || $key === "is_admin")) {
               $hidden = true;
             }
 
