@@ -10,10 +10,12 @@
 
   if ($userQuery->num_rows) {
     $userRow = $userQuery->fetch_assoc();
-    if ($userRow["is_admin"] != "1") {
-      die("You do not have access to this.");
+    $userID = $userRow["id"];
+    if ($userRow["is_admin"] !== "1" && $type !== "users" && $id !== $userID) {
+      header("location: ../edit?type=users&title=user&id={$userID}");
     }
     $currentUser["name"] = $userRow["user"];
+    $currentUser["is_admin"] = $userRow["is_admin"];
     $currentUser["read_only"] = $userRow["read_only"];
     $currentUser["items_per_page"] = intval($userRow["items_per_page"]);
   } else {

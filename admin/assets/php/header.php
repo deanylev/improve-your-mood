@@ -35,62 +35,64 @@
 </head>
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <a href="../home" class="navbar-brand">MoodBackend</a>
+    <a <?php echo $currentUser["is_admin"] ? "href=\"../home\"" : "" ?> class="navbar-brand">MoodBackend</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-nav" aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="main-nav">
-      <ul class="nav navbar-nav">
-        <li class="nav-item <?php echo $title === "user" ? "active" : "" ?>">
-          <a class="nav-link" href="../users">
-            <span class="fa fa-user"></span>
-            <span class="icon-text">Users</span>
-          </a>
-        </li>
-        <li class="nav-item <?php echo isset($type) && $type === "improve" ? "active" : "" ?>">
-          <a class="nav-link" href="../quotes?type=improve">
-            <span class="fa fa-quote-left"></span>
-            <span class="icon-text">Improve Quotes</span>
-          </a>
-        </li>
-        <li class="nav-item <?php echo isset($type) && $type === "decrease" ? "active" : "" ?>">
-          <a class="nav-link" href="../quotes?type=decrease">
-            <span class="fa fa-quote-right"></span>
-            <span class="icon-text">Decrease Quotes</span>
-          </a>
-        </li>
-        <li class="nav-item <?php echo $title === "colour" ? "active" : "" ?>">
-          <a class="nav-link" href="../colours">
-            <span class="fa fa-eyedropper"></span>
-            <span class="icon-text">Colours</span>
-          </a>
-        </li>
-        <li class="nav-item <?php echo $title === "setting" ? "active" : "" ?>">
-          <a class="nav-link" href="../settings">
-            <span class="fa fa-cog"></span>
-            <span class="icon-text">Settings</span>
-          </a>
-        </li>
-        <li class="nav-item <?php echo $title === "log" ? "active" : "" ?>">
-          <a class="nav-link" href="../logs">
-            <span class="fa fa-file-text"></span>
-            <span class="icon-text">Logs</span>
-          </a>
-        </li>
-        <div class="dropdown-divider"></div>
-        <li class="nav-item d-lg-none <?php echo isset($userPage) ? "active" : "" ?>">
-          <a class="nav-link"  href="../edit/?type=users&amp;title=user&amp;id=<?php echo $_SESSION["user"]; ?>">
-            <span class="fa fa-user"></span>
-            <span class="icon-text"><?php echo $currentUser["name"]; ?></span>
-          </a>
-        </li>
-        <li class="nav-item d-lg-none <?php echo $title === "log" ? "active" : "" ?>">
-          <a class="nav-link" href="../logout">
-            <span class="fa fa-sign-out"></span>
-            <span class="icon-text">Log Out</span>
-          </a>
-        </li>
-      </ul>
+      <?php if ($currentUser["is_admin"]): ?>
+        <ul class="nav navbar-nav">
+          <li class="nav-item <?php echo $title === "user" ? "active" : "" ?>">
+            <a class="nav-link" href="../users">
+              <span class="fa fa-user"></span>
+              <span class="icon-text">Users</span>
+            </a>
+          </li>
+          <li class="nav-item <?php echo isset($type) && $type === "improve" ? "active" : "" ?>">
+            <a class="nav-link" href="../quotes?type=improve">
+              <span class="fa fa-quote-left"></span>
+              <span class="icon-text">Improve Quotes</span>
+            </a>
+          </li>
+          <li class="nav-item <?php echo isset($type) && $type === "decrease" ? "active" : "" ?>">
+            <a class="nav-link" href="../quotes?type=decrease">
+              <span class="fa fa-quote-right"></span>
+              <span class="icon-text">Decrease Quotes</span>
+            </a>
+          </li>
+          <li class="nav-item <?php echo $title === "colour" ? "active" : "" ?>">
+            <a class="nav-link" href="../colours">
+              <span class="fa fa-eyedropper"></span>
+              <span class="icon-text">Colours</span>
+            </a>
+          </li>
+          <li class="nav-item <?php echo $title === "setting" ? "active" : "" ?>">
+            <a class="nav-link" href="../settings">
+              <span class="fa fa-cog"></span>
+              <span class="icon-text">Settings</span>
+            </a>
+          </li>
+          <li class="nav-item <?php echo $title === "log" ? "active" : "" ?>">
+            <a class="nav-link" href="../logs">
+              <span class="fa fa-file-text"></span>
+              <span class="icon-text">Logs</span>
+            </a>
+          </li>
+          <div class="dropdown-divider"></div>
+          <li class="nav-item d-lg-none <?php echo isset($userPage) ? "active" : "" ?>">
+            <a class="nav-link"  href="../edit/?type=users&amp;title=user&amp;id=<?php echo $_SESSION["user"]; ?>">
+              <span class="fa fa-user"></span>
+              <span class="icon-text"><?php echo $currentUser["name"]; ?></span>
+            </a>
+          </li>
+          <li class="nav-item d-lg-none <?php echo $title === "log" ? "active" : "" ?>">
+            <a class="nav-link" href="../logout">
+              <span class="fa fa-sign-out"></span>
+              <span class="icon-text">Log Out</span>
+            </a>
+          </li>
+        </ul>
+      <?php endif; ?>
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
           <div class="btn-group d-none d-lg-block d-xl-block">

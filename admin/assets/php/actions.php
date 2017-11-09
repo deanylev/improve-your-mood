@@ -14,7 +14,9 @@
     // Delete All - delete all existing records in a table
 
     if (isset($type)) {
-      if (!$currentUser["read_only"]) {
+      if (!$currentUser["is_admin"]) {
+        $actions = array("edit");
+      } elseif (!$currentUser["read_only"]) {
         switch ($type) {
           case "log":
           case "logs":

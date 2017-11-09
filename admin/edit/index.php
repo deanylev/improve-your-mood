@@ -143,7 +143,7 @@
   <button id="save-button" class="btn btn-lg btn-success submit" type="button" data-action="edit" data-confirm="saving an edited <?php echo $title; ?>" data-class="success" data-toggle="modal" data-target="#modal">Save</button>
   <?php if (in_array("view", $actions)): ?>
     <a class="btn btn-lg btn-primary" href="../view?type=<?php echo $type; ?>&amp;title=<?php echo $title; ?>&amp;id=<?php echo $row["id"]; ?>">Cancel</a>
-  <?php else: ?>
+  <?php elseif ($currentUser["is_admin"]): ?>
     <a class="btn btn-lg btn-primary" href="../<?php echo $title; ?>s?type=<?php echo $type; ?>">Cancel</a>
   <?php endif; ?>
   <?php if (in_array("delete", $actions)): ?>

@@ -54,7 +54,9 @@
         $statement = substr($statement, 0, -1);
         $query = "UPDATE yourmood.{$table} SET {$statement} WHERE id = '{$id}'";
         $message = "Successfully updated {$type}.";
-        $url = in_array("view", $actions) ? "view/?type={$table}&title={$type}&id={$id}" : "{$type}s?type={$table}";
+        if ($currentUser["is_admin"]) {
+          $url = in_array("view", $actions) ? "view/?type={$table}&title={$type}&id={$id}" : "{$type}s?type={$table}";  
+        }
         if ($table === "users") {
           $user = $_POST["values"]["user"];
           $result = $mysqli->query("SELECT * FROM yourmood.{$table} WHERE user='{$user}'");
