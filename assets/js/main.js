@@ -1231,20 +1231,22 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         let input = $(this);
         let max = parseInt(input.attr('max'));
-        let amount = max % 250 === 0 ? max / 250 : 10;
+        let amount = max / 250;
         let currentValue = Math.ceil((parseInt(input.val()) + 1) / amount) * amount;
+        let method = currentValue > value ? 'decrease' : 'increase';
 
         input.attr('disabled', true);
 
         let interval = setInterval(function() {
 
-          currentValue > value ? currentValue -= amount : currentValue += amount;
+          method === 'decrease' ? currentValue -= amount : currentValue += amount;
 
           input.val(currentValue);
 
-          if (currentValue === value) {
+          if ((method === 'decrease' && currentValue <= value) || (method === 'increase' && currentValue >= value)) {
 
             clearInterval(interval);
+            input.val(value);
             input.removeAttr('disabled');
 
           }
