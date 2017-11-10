@@ -1231,7 +1231,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         let input = $(this);
         let max = parseInt(input.attr('max'));
-        let amount = max / 250;
+        let amount = max > 250 ? max / 250 : 1;
         let currentValue = Math.ceil((parseInt(input.val()) + 1) / amount) * amount;
         let method = currentValue > value ? 'decrease' : 'increase';
 
