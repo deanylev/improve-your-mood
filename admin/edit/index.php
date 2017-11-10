@@ -37,10 +37,9 @@
 
   set_error_handler("warning_handler", E_WARNING);
   foreach ($row as $key => $val) {
-      if ($key !== "id" && $key !== "password" && ($key !== "app_settings" || $currentUser["is_admin"])) {
-      $columnType = $columnTypes[$key]; ?>
-        <div class="default-field" data-key="<?php echo $key; ?>" data-value="<?php echo $val; ?>" <?php echo $columnType === 1 ? "data-bool=\"true\"" : "" ?>></div>
-<?php
+      if ($key !== "id" && $key !== "password" && (($key !== "app_settings" && $key !== "items_per_page") || $currentUser["is_admin"]) && (($key !== "read_only" && $key !== "is_admin") || $id != $_SESSION["user"])) {
+        $columnType = $columnTypes[$key];
+
           switch ($columnType):
           case 252:
 ?>
@@ -55,21 +54,16 @@
 
           case 1:
 
-            if ($type === "users" && $id == $_SESSION["user"] && ($key === "read_only" || $key === "is_admin")) {
-              $hidden = true;
-            }
-
 ?>
-            <div class="<?php echo isset($hidden) ? "d-none" : ""; ?>">
-              <div class="form-check">
-                <label class="form-check-label">
-                  <input type="hidden" name="values[<?php echo $key; ?>]" value="0">
-                  <input type="checkbox" class="form-check-input" <?php echo $val ? "checked" : ""; ?> name="values[<?php echo $key; ?>]" value="1">
-                  <?php echo $key; ?>
-                </label>
-              </div>
-              <br>
+
+            <div class="form-check">
+              <label class="form-check-label">
+                <input type="hidden" name="values[<?php echo $key; ?>]" value="0">
+                <input type="checkbox" class="form-check-input" <?php echo $val ? "checked" : ""; ?> name="values[<?php echo $key; ?>]" value="1">
+                <?php echo $key; ?>
+              </label>
             </div>
+            <br>
 
 <?php
           break;
@@ -93,14 +87,12 @@
 
 ?>
 
-            <div class="<?php echo $key === "items_per_page" && !$currentUser["is_admin"] ? "d-none" : ""; ?>">
-              <div class="form-group">
-                <label for="<?php echo $key; ?>"><?php echo $key; ?></label>
-                <input type="number" class="form-control" id="<?php echo $key; ?>" value="<?php echo $val; ?>" name="values[<?php echo $key; ?>]">
-              </div>
-              <div class="validation-errors text-danger" data-input="<?php echo $key; ?>"></div>
-              <br>
+            <div class="form-group">
+              <label for="<?php echo $key; ?>"><?php echo $key; ?></label>
+              <input type="number" class="form-control" id="<?php echo $key; ?>" value="<?php echo $val; ?>" name="values[<?php echo $key; ?>]">
             </div>
+            <div class="validation-errors text-danger" data-input="<?php echo $key; ?>"></div>
+            <br>
 
 <?php
 
