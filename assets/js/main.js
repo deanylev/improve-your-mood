@@ -493,28 +493,39 @@ moodEngine.log('log', 'Pulling settings from backend...');
 
 $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
-  moodEngine.log('warn', 'Failed to pull settings from backend, running in default settings mode...');
+  moodEngine.log('error', 'Failed to pull settings from backend.');
 
-  $.ajaxSetup({
-    async: false
-  });
+  if (localStorage.getItem('cachedSettings')) {
 
-  $.getJSON('assets/json/default_settings.json').done((data) => {
+    moodEngine.log('warn', 'Using cached settings...');
+    settings = JSON.parse(localStorage.getItem('cachedSettings'));
 
-    defaultMode = true;
-    fullSettings = data;
+  } else {
 
-  }).fail((data) => {
+    $.ajaxSetup({
+      async: false
+    });
 
-    let reason = data.status === 404 ? 'missing' : 'damaged';
+    moodEngine.log('warn', 'No cached settings, running in default settings mode...');
 
-    moodEngine.log('warn', `Failed to pull default settings, local JSON file is ${reason}.`);
+    $.getJSON('assets/json/default_settings.json').done((data) => {
 
-  });
+      defaultMode = true;
+      fullSettings = data;
 
-  $.ajaxSetup({
-    async: true
-  });
+    }).fail((data) => {
+
+      let reason = data.status === 404 ? 'missing' : 'damaged';
+
+      moodEngine.log('warn', `Failed to pull default settings, local JSON file is ${reason}.`);
+
+    });
+
+    $.ajaxSetup({
+      async: true
+    });
+
+  }
 
 }).done((data) => {
 
@@ -542,7 +553,11 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   });
 
+  localStorage.setItem('cachedSettings', JSON.stringify(settings));
+
   moodEngine.log('log', `Successfully pulled ${Object.keys(settings).length} settings from backend in ${pullTime.settings}ms.`);
+
+  if (localStorage.getItem('disable_caching') !== 'true') moodEngine.log('log', 'Cached settings for next load (if needed).');
 
   // Check current user
 
