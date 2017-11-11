@@ -553,11 +553,19 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   });
 
-  localStorage.setItem('cachedSettings', JSON.stringify(settings));
-
   moodEngine.log('log', `Successfully pulled ${Object.keys(settings).length} settings from backend in ${pullTime.settings}ms.`);
 
-  if (localStorage.getItem('disable_caching') !== 'true') moodEngine.log('log', 'Cached settings for next load (if needed).');
+  if (localStorage.getItem('disable_caching') !== 'true') {
+
+    localStorage.setItem('cachedSettings', JSON.stringify(settings));
+
+    moodEngine.log('log', 'Cached settings for next load (if needed).');
+
+  } else {
+
+    localStorage.removeItem('cachedSettings');
+
+  }
 
   // Check current user
 
@@ -2033,37 +2041,9 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   moodEngine.setAllDefault = function() {
 
-    let restoreSettings = {};
-    let cachedQuotes = localStorage.getItem('cachedQuotes');
-    let cachedVersionQuotes = localStorage.getItem('cachedVersionQuotes');
-    let cachedColours = localStorage.getItem('cachedColours');
-    let lastQuote = localStorage.getItem('lastQuote');
-    let lastColour = localStorage.getItem('lastColour');
-    let lastTab = localStorage.getItem('lastTab');
-    let verticalMenu = localStorage.getItem('vertical_menu');
-
     $.each(settings, function(key, val) {
 
-      if (val.advanced) restoreSettings[key] = localStorage.getItem(key);
-
-    });
-
-    localStorage.clear();
-    localStorage.setItem('cachedQuotes', cachedQuotes);
-    localStorage.setItem('cachedVersionQuotes', cachedVersionQuotes);
-    localStorage.setItem('cachedColours', cachedColours);
-    localStorage.setItem('lastQuote', lastQuote);
-    localStorage.setItem('lastColour', lastColour);
-    localStorage.setItem('lastTab', lastTab);
-    localStorage.setItem('vertical_menu', verticalMenu);
-
-    $.each(restoreSettings, function(key, val) {
-
-      if (fullSettings.keep_advanced_settings) {
-
-        if (val) localStorage.setItem(key, restoreSettings[key]);
-
-      }
+      if (!(val.advanced && fullSettings.keep_advanced_settings)) localStorage.removeItem(key);
 
     });
 
