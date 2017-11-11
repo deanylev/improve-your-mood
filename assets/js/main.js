@@ -279,12 +279,21 @@ moodEngine.setText = function(text) {
 
 };
 
+// Function for setting theme
+
+moodEngine.setTheme = function(colour) {
+
+  $('.theme-text').css('cssText', `color: ${colour} !important`);
+  $('.js-margin').css('margin-top', $(document).height() / 4.5);
+
+}
+
 // Function for displaying and logging errors
 
 moodEngine.error = function(display, log, code, type) {
 
   moodEngine.setColour('black');
-  $('.theme-text').css('color', 'white');
+  moodEngine.setTheme('white');
   $('#quote').addClass('scale-in');
   $('.preloader-wrapper').addClass('hide');
   $('.fixed-action-btn').addClass('hide');
@@ -872,7 +881,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
     // Theme colour
 
-    $('.theme-text').css('cssText', `color: ${fullSettings.theme_colour} !important`);
+    moodEngine.setTheme(fullSettings.theme_colour);
 
     // Touch / click gestures
 

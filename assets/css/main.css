@@ -123,6 +123,10 @@ label:not(.active) b, #advanced-settings, .fade-in-on-load {
   font-weight: bold;
 }
 
+.js-margin {
+  margin-top: 200px; /* for before the JS loads */
+}
+
 #logo {
   font-family: 'Raleway', Helvetica, Arial;
 }
@@ -130,7 +134,6 @@ label:not(.active) b, #advanced-settings, .fade-in-on-load {
 #quote {
   font-family: 'Oxygen', Helvetica, Arial;
   font-size: 43px;
-  margin-top: 200px; /* for before the JS loads */
 }
 
 @media only screen and (max-width: 599px) {
