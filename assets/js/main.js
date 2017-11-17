@@ -1823,41 +1823,52 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       let icon_text = moodEngine.notAutoReloading() ? 'close' : 'autorenew';
       let icon = $('#toggle-auto-reload i.main-icon');
 
-      // Enabling
+      try {
 
-      if (moodEngine.notAutoReloading()) {
+        // Enabling
 
-        $('#go-back-button').addClass('disabled');
+        if (moodEngine.notAutoReloading()) {
 
-        moodEngine.log('log', `Set timeout for auto reload to ${fullSettings.reload_interval}ms.`);
+          if (typeof(fullSettings.reload_interval) !== 'number') throw new Error('Reload interval is not a number.');
 
-        (autoReload = function() {
+          $('#go-back-button').addClass('disabled');
 
-          timeout = setTimeout(function() {
+          moodEngine.log('log', `Set timeout for auto reload to ${fullSettings.reload_interval}ms.`);
 
-            if (!moodEngine.notAutoReloading() && !appError) moodEngine.reload('Auto');
+          (autoReload = function() {
 
-            autoReload();
+            timeout = setTimeout(function() {
 
-          }, fullSettings.reload_interval);
+              if (!moodEngine.notAutoReloading() && !appError) moodEngine.reload('Auto');
 
-        })();
+              autoReload();
 
-        // Disabling
+            }, fullSettings.reload_interval);
 
-      } else {
+          })();
 
-        moodEngine.log('log', 'Cleared auto reload timeout.');
+          // Disabling
 
-        clearTimeout(timeout);
+        } else {
 
-        if (quoteHistory.length > 1) $('#go-back-button').removeClass('disabled');
+          moodEngine.log('log', 'Cleared auto reload timeout.');
+
+          clearTimeout(timeout);
+
+          if (quoteHistory.length > 1) $('#go-back-button').removeClass('disabled');
+
+        }
+
+        icon.text(icon_text);
+        $('main').toggleClass('manual-reload');
+        moodEngine.notify(`Auto Reload ${toggle}!`);
+
+      } catch (error) {
+
+        moodEngine.notify(`Failed To Enable Auto Reload.`);
+        moodEngine.log('error', `Couldn't enable auto reload. ${error}`);
 
       }
-
-      icon.text(icon_text);
-      $('main').toggleClass('manual-reload');
-      moodEngine.notify(`Auto Reload ${toggle}!`);
 
     }
 
