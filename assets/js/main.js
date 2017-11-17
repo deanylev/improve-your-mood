@@ -2190,6 +2190,10 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         $.each(localSettings, function(key, val) {
 
+          let length = JSON.stringify(val).length;
+
+          if (length > 500) throw new Error(`Excessively long value length of ${length}.`);
+
           // If the set value is the same as the default, just remove it from localStorage and use backend value
 
           if (val === settings[key].value || val === JSON.stringify(settings[key].value) || `[${val}]` === JSON.stringify(settings[key].value)) {
@@ -2206,22 +2210,21 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         });
 
+        //throw new Error();
+
         // Set settings for new ones to come into effect
 
         moodEngine.setSettings(null, 'Settings Saved!');
+        moodEngine.toggleSettings('close');
 
         // Catch any unexpected errors and display/log them
 
       } catch (error) {
 
         moodEngine.notify('Unable to Save Settings. An Error Occurred.');
-        moodEngine.log('error', `Couldn't save settings. Error: ${error}.`);
+        moodEngine.log('error', `Couldn't save settings. ${error}`);
 
       }
-
-      // Close the modal no matter what
-
-      moodEngine.toggleSettings('close');
 
     } else {
 
