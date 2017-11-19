@@ -743,23 +743,8 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         $(`.settings-input[name="${key}"]`).addClass('dirty');
 
-        let currentValue;
-        let newValue;
-
-        switch (typeof(fullSettings[key])) {
-
-          case 'boolean':
-          case 'number':
-            currentValue = currentSettings[key];
-            newValue = fullSettings[key];
-            break;
-          case 'object':
-          case 'string':
-            currentValue = JSON.stringify(currentSettings[key]);
-            newValue = JSON.stringify(fullSettings[key]);
-            break;
-
-        }
+        let currentValue = ['object', 'string'].includes(typeof(currentSettings[key])) ? JSON.stringify(currentSettings[key]) : currentSettings[key];
+        let newValue = ['object', 'string'].includes(typeof(fullSettings[key])) ? JSON.stringify(fullSettings[key]) : fullSettings[key];
 
         logs.push(`${key}: ${currentValue} => ${newValue}`);
 
