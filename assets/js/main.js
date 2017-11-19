@@ -1001,7 +1001,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
     }
 
-    // Rewind
+    // Rewind + Full Rewind
 
     if (typeof(fullSettings.back_keys) === 'object') {
 
@@ -1011,13 +1011,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       });
 
-    }
-
-    // Rewind
-
-    if (typeof(fullSettings.full_rewind_keys) === 'object') {
-
-      Mousetrap.bind(fullSettings.full_rewind_keys, function(e) {
+      Mousetrap.bind(fullSettings.back_keys.map(k => `shift+${k}`), function(e) {
 
         if (!appError && !modalOpen) moodEngine.fullRewind();
 
@@ -1025,7 +1019,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
     }
 
-    // Toggle Auto Reload
+    // Toggle Auto Reload + Switch Version
 
     if (typeof(fullSettings.auto_reload_keys) === 'object') {
 
@@ -1035,9 +1029,15 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       });
 
+      Mousetrap.bind(fullSettings.auto_reload_keys.map(k => `shift+${k}`), function(e) {
+
+        if (!appError && !modalOpen) moodEngine.switchVersion();
+
+      });
+
     }
 
-    // Toggle Button Menu
+    // Toggle Button Menu + Change Button Menu Orientation
 
     if (typeof(fullSettings.menu_keys) === 'object') {
 
@@ -1053,6 +1053,12 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       });
 
+      Mousetrap.bind(fullSettings.menu_keys.map(k => `shift+${k}`), function(e) {
+
+        if (!appError && !modalOpen) moodEngine.changeMenuOrientation();
+
+      });
+
     }
 
     // Toggle Settings Panel
@@ -1062,6 +1068,12 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       Mousetrap.bindGlobal(fullSettings.settings_keys, function(e) {
 
         if (!appError && !$('#settings-modal input:not([type="range"]):not([type="checkbox"]):focus').length) moodEngine.toggleSettings();
+
+      });
+
+      Mousetrap.bindGlobal(fullSettings.settings_keys.map(k => `shift+${k}`), function(e) {
+
+        if (!appError && !modalOpen) moodEngine.setAllDefault();
 
       });
 
@@ -1708,21 +1720,23 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   });
 
+  moodEngine.changeMenuOrientation = function() {
+
+    $('.fixed-action-btn').toggleClass('horizontal');
+    $('#menu-button .alt-icon').toggleClass('inactive-icon');
+
+    localStorage.setItem('vertical_menu', !$('.fixed-action-btn').hasClass('horizontal'));
+
+    // Keep the button menu closed
+    $('.fixed-action-btn').openFAB();
+
+  };
+
   // Menu Button
 
   $('#menu-button').click(function(e) {
 
-    if (e.shiftKey) {
-
-      $(this).parent().toggleClass('horizontal');
-      $(this).find('.alt-icon').toggleClass('inactive-icon');
-
-      localStorage.setItem('vertical_menu', !$(this).parent().hasClass('horizontal'));
-
-      // Keep the button menu closed
-      $('.fixed-action-btn').openFAB();
-
-    }
+    if (e.shiftKey) moodEngine.changeMenuOrientation();
 
   });
 
