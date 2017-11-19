@@ -1045,9 +1045,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         if (!appError && !modalOpen) {
 
-          let fabOpen = $('.fixed-action-btn').hasClass('active');
-
-          fabOpen ? $('.fixed-action-btn').closeFAB() : $('.fixed-action-btn').openFAB();
+          $('.fixed-action-btn').hasClass('active') ? $('.fixed-action-btn').closeFAB() : $('.fixed-action-btn').openFAB();
 
         }
 
