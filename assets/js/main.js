@@ -949,9 +949,15 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
     // Change Tabs
 
-    Mousetrap.bind(['`+left'], function(e) {
+    function canChange() {
 
-      if (!appError && modalOpen) {
+      return !appError && modalOpen && !$('#settings-modal input:focus').length && !$('.chip.selected').length;
+
+    }
+
+    Mousetrap.bind(['+left'], function(e) {
+
+      if (canChange()) {
 
         try {
 
@@ -967,9 +973,9 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
     });
 
-    Mousetrap.bind(['`+right'], function(e) {
+    Mousetrap.bind(['+right'], function(e) {
 
-      if (!appError && modalOpen) {
+      if (canChange()) {
 
         try {
 
