@@ -991,57 +991,31 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
     });
 
-    // Reload & Save Settings (because they share keys)
+    // Save Settings
+
+    Mousetrap.bindGlobal(['+enter'], function(e, combo) {
+
+      if (modalOpen && (!$('#settings-modal input:focus').parent().hasClass('chips') || !$('#settings-modal input:focus').val())) {
+
+        moodEngine.saveSettings();
+
+      }
+
+    });
+
+    // Reload
 
     if (typeof(fullSettings.reload_keys) === 'object') {
 
-      if (fullSettings.reload_keys.includes('enter')) {
+      Mousetrap.bindGlobal(fullSettings.reload_keys, function(e, combo) {
 
-        Mousetrap.bindGlobal(fullSettings.reload_keys, function(e, combo) {
+        if (!appError && !modalOpen) {
 
-          if (!appError) {
-
-            if (!modalOpen) {
-
-              moodEngine.reload();
-
-            } else if ($('#settings-modal').hasClass('open') && fullSettings.save_settings_keys.includes(combo) && (!$('#settings-modal input:focus').parent().hasClass('chips') || !$('#settings-modal input:focus').val())) {
-
-              moodEngine.saveSettings();
-
-            }
-
-          }
-
-        });
-
-      } else {
-
-        Mousetrap.bindGlobal(fullSettings.reload_keys, function(e, combo) {
-
-          if (!appError && !modalOpen) {
-
-            moodEngine.reload();
-
-          }
-
-        });
-
-        if (typeof(fullSettings.save_settings_keys) === 'object') {
-
-          Mousetrap.bindGlobal(fullSettings.save_settings_keys, function(e, combo) {
-
-            if (modalOpen && (!$('#settings-modal input:focus').parent().hasClass('chips') || !$('#settings-modal input:focus').val())) {
-
-              moodEngine.saveSettings();
-
-            }
-
-          });
+          moodEngine.reload();
 
         }
 
-      }
+      });
 
     }
 
