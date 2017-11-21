@@ -947,6 +947,44 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
     }, 'keyup');
 
+    // Change Tabs
+
+    Mousetrap.bind(['`+left'], function(e) {
+
+      if (!appError && modalOpen) {
+
+        try {
+
+          $('ul.tabs').tabs('select_tab', $('.tab .active').parent().prev('.tab').find('a').attr('href').substr(1));
+
+        } catch (error) {
+
+          $('ul.tabs').tabs('select_tab', $('.tab').last().find('a').attr('href').substr(1));
+
+        }
+
+      }
+
+    });
+
+    Mousetrap.bind(['`+right'], function(e) {
+
+      if (!appError && modalOpen) {
+
+        try {
+
+          $('ul.tabs').tabs('select_tab', $('.tab .active').parent().next('.tab').find('a').attr('href').substr(1));
+
+        } catch (error) {
+
+          $('ul.tabs').tabs('select_tab', $('.tab').first().find('a').attr('href').substr(1));
+
+        }
+
+      }
+
+    });
+
     // Reload & Save Settings (because they share keys)
 
     if (typeof(fullSettings.reload_keys) === 'object') {
