@@ -1,4 +1,4 @@
-let appError, defaultMode, startTime, modalOpen, lastNum, disableSwitch, quoteNum, colourNum, isProd;
+let appError, defaultMode, startTime, modalOpen, lastNum, disableSwitch, quoteNum, colourNum, isProd, userCheck;
 let quotes = [];
 let colours = [];
 let usedQuotes = [];
@@ -81,14 +81,12 @@ moodEngine.sendLogs = function(method, amount) {
 
         console.log('\nLogs sent to backend successfully.');
         if (method === 'button') moodEngine.notify('Logs Sent To Back-End Successfully.');
-        if (response) console.log(`Response: ${response}`);
 
       },
       error: function(response) {
 
         console.log('\nFailed to send logs to backend.');
         if (method === 'button') moodEngine.notify('Failed To Send Logs to Back-End.');
-        if (response) console.log(`Response: ${response}`);
 
       }
     });
@@ -678,8 +676,6 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   moodEngine.checkUser('initial');
 
-  setInterval(moodEngine.checkUser, 3000);
-
 }).always((data) => {
 
   // Construct settings object from backend or local
@@ -918,6 +914,12 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       }
 
     });
+
+    // Check user automatically
+
+    clearInterval(userCheck);
+
+    if (fullSettings.user_check_interval) userCheck = setInterval(moodEngine.checkUser, fullSettings.user_check_interval);
 
     // Keyboard shortcuts
 
@@ -2201,6 +2203,15 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
           $(this).addClass('invalid');
           invalidInputs.push(`${settings[$(this).attr('name')].label} Needs to Include Settings`);
+
+        }
+
+        // User Check interval
+
+        if ($(this).attr('name') === 'user_check_interval' && $(this).val() < 0) {
+
+          $(this).addClass('invalid');
+          invalidInputs.push(`${settings[$(this).attr('name')].label} Cannot Be Below 0`);
 
         }
 
