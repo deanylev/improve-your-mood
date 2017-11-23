@@ -1746,19 +1746,9 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
   $('.tooltipped').each(function() {
 
     let setting = $(this).attr('data-setting');
-    let text;
+    let text = Array.isArray(settings[setting].value) ? settings[setting].value.join(', ') : settings[setting].value;;
+    let value = `${settings[setting].description}<br>The default is ${text}.`;
 
-    if (Array.isArray(settings[setting].value)) {
-
-      text = settings[setting].value.join(', ');
-
-    } else {
-
-      text = settings[setting].value;
-
-    }
-
-    let value = `${settings[setting].description}<br>The default is ${text}.`
     $(this).attr('data-tooltip', value);
 
     // Initialize the Materialize tooltip plugin
