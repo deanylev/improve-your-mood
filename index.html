@@ -58,9 +58,9 @@
       <button id="send-logs-button" class="btn-flat coloured coloured-background white-text waves-effect">Send Logs</button>
     </div>
   </div>
-  <div id="admin-modal" class="modal modal-fixed-footer bottom-sheet">
+  <div id="profile-modal" class="modal modal-fixed-footer bottom-sheet">
     <div class="modal-content">
-      <h4 class="coloured coloured-text">Admin Centre</h4>
+      <h4 class="coloured coloured-text">User Profile</h4>
       <form class="not-logged-in">
         <input type="hidden" name="no_message" value="true">
         <div class="row">
@@ -78,13 +78,13 @@
           <label for="remember">Remember Me</label>
         </p>
       </form>
-      <p id="admin-error" class="red-text"></p>
+      <p id="profile-error" class="red-text"></p>
       <div class="logged-in center">
         <br>
         <h5>You are logged in as: <span id="current-user"></span></h5>
         <br>
-        <button class="btn-flat coloured coloured-background white-text waves-effect admin-settings-button">Save Settings</button>
-        <button class="btn-flat coloured coloured-background white-text waves-effect admin-settings-button clear-settings">Clear Settings</button>
+        <button class="btn-flat coloured coloured-background white-text waves-effect profile-settings-button">Save Settings</button>
+        <button class="btn-flat coloured coloured-background white-text waves-effect profile-settings-button clear-settings">Clear Settings</button>
         <br><br>
         <div id="saved-settings">
           <h5>Saved Settings:</h5>
@@ -93,8 +93,8 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button id="admin-login-button" class="btn-flat coloured coloured-background white-text waves-effect not-logged-in">Log In</button>
-      <button id="admin-logout-button" class="btn-flat coloured coloured-background white-text waves-effect logged-in">Log Out</button>
+      <button id="profile-login-button" class="btn-flat coloured coloured-background white-text waves-effect not-logged-in">Log In</button>
+      <button id="profile-logout-button" class="btn-flat coloured coloured-background white-text waves-effect logged-in">Log Out</button>
     </div>
   </div>
   <div class="container clickable">
