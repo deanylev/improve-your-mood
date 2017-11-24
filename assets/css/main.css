@@ -122,6 +122,10 @@ label:not(.active) b, #advanced-settings, .fade-in-on-load {
   margin-top: 200px;
 }
 
+.modal.bottom-sheet.tall {
+  max-height: 55%;
+}
+
 #go-to-signup, #go-to-login {
   display: block;
 }
@@ -150,5 +154,8 @@ label:not(.active) b, #advanced-settings, .fade-in-on-load {
   }
   #logo {
     font-size: 36px;
+  }
+  .modal.bottom-sheet.tall {
+    max-height: 65%;
   }
 }
