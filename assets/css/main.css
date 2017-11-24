@@ -33,7 +33,7 @@ label:not(.active) b, #advanced-settings, .fade-in-on-load {
   color: black;
 }
 
-.settings-link, .reset-input {
+.settings-link, .reset-input, .delete-saved-setting, #go-to-signup, #go-to-login, #clear-profile-error {
   cursor: pointer;
 }
 
@@ -67,7 +67,7 @@ label:not(.active) b, #advanced-settings, .fade-in-on-load {
   -webkit-box-shadow: 0 1px 0 0 #F44336 !important;
 }
 
-.darken, .darken:hover{
+.darken, .darken:hover {
   background-color: black !important;
 }
 
@@ -113,18 +113,25 @@ label:not(.active) b, #advanced-settings, .fade-in-on-load {
 }
 
 .delete-saved-setting {
-  cursor: pointer;
-  position: relative;
-  top: 5px;
-  margin-left: 15px;
-}
-
-.delete-saved-setting i {
+  margin-left: 10px;
+  color: red;
   font-weight: bold;
 }
 
 .js-margin {
-  margin-top: 200px; /* for before the JS loads */
+  margin-top: 200px;
+}
+
+#go-to-signup, #go-to-login {
+  display: block;
+}
+
+#go-to-signup {
+  margin-top: 10px;
+}
+
+#go-to-login {
+  margin-top: -15px;
 }
 
 #logo {

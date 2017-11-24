@@ -594,7 +594,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         // Log in
 
-        $('#profile-error').empty();
+        if (method !== 'initial') moodEngine.profileError();
         $('.not-logged-in').addClass('hide');
         $('.logged-in').removeClass('hide');
 
@@ -626,7 +626,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
             profileSettings[key] = val;
 
-            $('#saved-settings p').append(`<div><b>${key}:</b> ${val}<a class="delete-saved-setting" data-setting="${key}"><i class="material-icons red-text">close</i></a><br></div>`);
+            $('#saved-settings p').append(`<div><b>${key}:</b> ${val}<a class="delete-saved-setting" data-setting="${key}">&times;</a><br></div>`);
 
           });
 
@@ -653,11 +653,11 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
               moodEngine.log('log', `Cleared setting '${setting}' from profile.`);
               moodEngine.checkUser();
             } else {
-              $('#profile-error').text(response);
+              moodEngine.profileError(response);
             }
           },
           error: function(response) {
-            $('#profile-error').text(`Failed to clear setting '${setting}' from profile.`);
+            moodEngine.profileError(`Failed to clear setting '${setting}' from profile.`);
             moodEngine.log('error', 'Failed to clear setting.');
           }
         });
@@ -2419,15 +2419,81 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   });
 
+  moodEngine.profileError = function(error) {
+
+    if (error) {
+
+      $('#profile-error').text(error);
+      $('#clear-profile-error').removeClass('hide');
+
+    } else {
+
+      $('#profile-error').empty();
+      $('#clear-profile-error').addClass('hide');
+
+    }
+
+  }
+
+  $('#clear-profile-error').click(function() {
+
+    moodEngine.profileError();
+
+  });
+
+  $('#go-to-login').click(function() {
+
+    moodEngine.profileError();
+    $('.signup').addClass('hide');
+    $('.login').removeClass('hide');
+
+  });
+
+  $('#go-to-signup').click(function() {
+
+    moodEngine.profileError();
+    $('.login').addClass('hide');
+    $('.signup').removeClass('hide');
+
+  });
+
+  // User Signup
+
+  moodEngine.signUp = function() {
+
+    moodEngine.profileError();
+
+    $.ajax({
+      data: $('#signup').serialize(),
+      method: 'POST',
+      url: `admin/signup/signup.php`,
+      success: function(response) {
+        if (response === 'success') {
+
+          moodEngine.checkUser();
+          $('.signup').addClass('hide');
+
+        } else {
+
+          moodEngine.profileError(response);
+
+        }
+      }
+    });
+
+  }
+
+  $('#profile-signup-button').click(moodEngine.signUp);
+
   // User Login
 
   moodEngine.logIn = function() {
 
-    $('#profile-error').empty();
+    moodEngine.profileError();
     $('li[data-button="profile"] i').removeClass('ignore');
 
     $.ajax({
-      data: $('#profile-modal form').serialize(),
+      data: $('#login').serialize(),
       method: 'POST',
       url: `admin/login/authenticate.php`,
       success: function(response) {
@@ -2437,7 +2503,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         } else {
 
-          $('#profile-error').text(response);
+          moodEngine.profileError(response);
 
         }
       }
@@ -2447,9 +2513,15 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   $('#profile-login-button').click(moodEngine.logIn);
 
-  $('form.not-logged-in input').keydown(function(e) {
+  $('#login').keydown(function(e) {
 
     if (e.keyCode === 13) moodEngine.logIn();
+
+  });
+
+  $('#signup').keydown(function(e) {
+
+    if (e.keyCode === 13) moodEngine.signUp();
 
   });
 
@@ -2457,7 +2529,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   moodEngine.logOut = function() {
 
-    $('#profile-error').empty();
+    moodEngine.profileError();
     $('li[data-button="profile"] .main-icon').removeClass('hide')
     $('li[data-button="profile"] .alt-icon').addClass('hide')
     $('li[data-button="profile"] i').addClass('ignore');
@@ -2481,7 +2553,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
             moodEngine.checkUser();
           },
           error: function() {
-            $('#profile-error').text('Failed to log out.');
+            moodEngine.profileError('Failed to log out.');
             moodEngine.log('error', 'Failed to log out.')
           }
         });
@@ -2534,11 +2606,11 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
           moodEngine.notify(successToast);
           moodEngine.checkUser();
         } else {
-          $('#profile-error').text(response);
+          moodEngine.profileError(response);
         }
       },
       error: function(response) {
-        $('#profile-error').text(failLog);
+        moodEngine.profileError(failLog);
         moodEngine.log('error', failLog);
       }
     });

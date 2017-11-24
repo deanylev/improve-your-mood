@@ -18,9 +18,13 @@
     $mysqli->query("INSERT INTO yourmood.users (user, password) VALUES ('$username', '$password')");
     $_SESSION["user"] = $mysqli->insert_id;
     $mysqli->close();
-    $_SESSION["message"]["success"] = "New user <b>{$username}</b> created successfully.";
+    if (!isset($_POST["no_message"])) {
+      $_SESSION["message"]["success"] = "New user <b>{$username}</b> created successfully.";
+    }
     echo "success";
   } else {
-    $_SESSION["message"]["danger"] = "Validation errors. Please enable JavaScript.";
+    if (!isset($_POST["no_message"])) {
+      $_SESSION["message"]["danger"] = "Validation errors. Please enable JavaScript.";
+    }
     echo "Validation errors.";
   }

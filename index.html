@@ -61,7 +61,11 @@
   <div id="profile-modal" class="modal modal-fixed-footer bottom-sheet">
     <div class="modal-content">
       <h4 class="coloured coloured-text">User Profile</h4>
-      <form class="not-logged-in">
+      <p class="red-text">
+        <span id="profile-error"></span>
+        <span id="clear-profile-error" class="hide">&nbsp;<b>&times;</b></span>
+      </p>
+      <form id="login" class="login not-logged-in">
         <input type="hidden" name="no_message" value="true">
         <div class="row">
           <div class="input-field col s6 offset-s3">
@@ -76,9 +80,28 @@
         <p class="center">
           <input id="remember" class="filled-in" type="checkbox" name="remember">
           <label for="remember">Remember Me</label>
+          <a id="go-to-signup" class="coloured coloured-text">Sign Up</a>
         </p>
       </form>
-      <p id="profile-error" class="red-text"></p>
+      <form id="signup" class="signup hide">
+        <input type="hidden" name="no_message" value="true">
+        <div class="row">
+          <div class="input-field col s6 offset-s3">
+            <input type="text" name="username" placeholder="Username">
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s6 offset-s3">
+            <input type="password" name="password" placeholder="Password">
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s6 offset-s3">
+            <input type="password" name="password_confirmation" placeholder="Password Confirmation">
+          </div>
+        </div>
+        <a id="go-to-login" class="center coloured coloured-text">Log In</a>
+      </form>
       <div class="logged-in center">
         <br>
         <h5>You are logged in as: <span id="current-user"></span></h5>
@@ -93,7 +116,8 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button id="profile-login-button" class="btn-flat coloured coloured-background white-text waves-effect not-logged-in">Log In</button>
+      <button id="profile-login-button" class="btn-flat coloured coloured-background white-text waves-effect login not-logged-in">Log In</button>
+      <button id="profile-signup-button" class="btn-flat coloured coloured-background white-text waves-effect signup hide">Sign Up</button>
       <button id="profile-logout-button" class="btn-flat coloured coloured-background white-text waves-effect logged-in">Log Out</button>
     </div>
   </div>
