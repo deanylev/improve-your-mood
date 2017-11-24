@@ -94,7 +94,7 @@
           // If the username is taken, or the password doesn't match the confirmation
           if ((isset($row) && $row["id"] !== $id) || isset($_POST["values"]["password"]) && $_POST["values"]["password"] !== $_POST["password_confirmation"]) {
               $messageType = "danger";
-              $message = $_POST["values"]["password"] !== $_POST["password_confirmation"] ? "Passwords don't match." : "Username already exists.";
+              $message = $_POST["values"]["password"] !== $_POST["password_confirmation"] ? "Passwords don't match." : "Username already in use.";
               $url = $_SERVER['HTTP_REFERER'];
               $query = "";
           }

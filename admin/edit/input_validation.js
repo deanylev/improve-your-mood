@@ -49,7 +49,7 @@ $('#user').on('keyup change', function(e) {
         success: function(response) {
           if (response === 'exists' && !$('#user_spaces').length) {
 
-            valError('user', 'exists', 'Username already exists.');
+            valError('user', 'exists', 'Username already in use.');
 
           } else {
 

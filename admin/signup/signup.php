@@ -6,14 +6,23 @@
   $password = $_POST["password"];
   $passwordConfirmation = $_POST["password_confirmation"];
 
-  $userExists = false;
+  $reason = false;
   $result = $mysqli->query("SELECT * FROM yourmood.users WHERE user='{$username}'");
-  if ($result->num_rows) {
-    $userExists = true;
+
+  if (!$username) {
+    $reason = "Username can't be blank.";
+  } elseif (strpos($username, " ")) {
+    $reason = "Username can't contain spaces.";
+  } elseif ($result->num_rows) {
+    $reason = "Username already in use.";
+  } elseif (strlen($password) < 8) {
+    $reason = "Password must be at least 8 characters.";
+  } elseif ($password !== $passwordConfirmation) {
+    $reason = "Passwords don't match.";
   }
 
 
-  if (!$userExists && $username && $password === $passwordConfirmation && strlen($password) >= 8 && !strpos($username, " ")) {
+  if (!$reason) {
     $password = md5($password);
     $mysqli->query("INSERT INTO yourmood.users (user, password) VALUES ('$username', '$password')");
     $_SESSION["user"] = $mysqli->insert_id;
@@ -24,7 +33,7 @@
     echo "success";
   } else {
     if (!isset($_POST["no_message"])) {
-      $_SESSION["message"]["danger"] = "Validation errors. Please enable JavaScript.";
+      $_SESSION["message"]["danger"] = $reason;
     }
-    echo "Validation errors.";
+    echo $reason;
   }
