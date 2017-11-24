@@ -657,8 +657,8 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
             }
           },
           error: function(response) {
-            moodEngine.profileError(`Failed to clear setting '${setting}' from profile.`);
-            moodEngine.log('error', 'Failed to clear setting.');
+            moodEngine.profileError('Failed to clear setting.');
+            moodEngine.log('error', `Failed to clear setting '${setting}' from profile.`);
           }
         });
 
