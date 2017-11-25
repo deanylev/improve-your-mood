@@ -3,7 +3,7 @@ $('form:not(.errors)').submit(function() {
   $('.fa-spinner').removeClass('d-none');
 
   $.ajax({
-    data: $(this).serialize(),
+    data: `${$(this).serialize()}&no_message=true`,
     method: 'POST',
     url: 'signup.php',
     success: function(response) {

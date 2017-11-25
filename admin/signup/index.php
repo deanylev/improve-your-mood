@@ -44,7 +44,7 @@
   <div class="card">
     <div class="card-body">
       <h1 class="text-center">Sign Up</h1>
-      <form class="signup" action="modify.php" method="POST">
+      <form class="signup" action="signup.php" method="POST">
         <div class="form-group">
           <label for="username">Username</label>
           <input type="text" name="username" class="form-control" id="user">
@@ -61,13 +61,12 @@
         </div>
         <div class="validation-errors text-danger" data-input="password_confirmation"></div>
         <p class="response text-danger"></p>
-        <button id="save-button" class="btn btn-primary" type="submit" disabled>Sign Up<i class="d-none fa fa-spinner fa-pulse fa-fw"></i></button>
+        <button id="save-button" class="btn btn-primary" type="submit">Sign Up<i class="d-none fa fa-spinner fa-pulse fa-fw"></i></button>
         <a class="btn btn-link" href="../login">Log In</a>
       </form>
     </div>
   </div>
   <script>itemId = null</script>
-  <script src="../edit/input_validation.js"></script>
   <script src="signup.js"></script>
 </body>
 

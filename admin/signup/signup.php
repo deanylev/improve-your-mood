@@ -22,7 +22,14 @@
   }
 
 
-  if (!$reason) {
+  if ($reason) {
+    if (!isset($_POST["no_message"])) {
+      $_SESSION["message"]["danger"] = $reason;
+      header("location: .");
+    } else {
+      echo $reason;
+    }
+  } else {
     $password = md5($password);
     $mysqli->query("INSERT INTO yourmood.users (user, password) VALUES ('$username', '$password')");
     $_SESSION["user"] = $mysqli->insert_id;
@@ -31,9 +38,4 @@
       $_SESSION["message"]["success"] = "New user <b>{$username}</b> created successfully.";
     }
     echo "success";
-  } else {
-    if (!isset($_POST["no_message"])) {
-      $_SESSION["message"]["danger"] = $reason;
-    }
-    echo $reason;
   }
