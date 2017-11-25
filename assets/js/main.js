@@ -610,6 +610,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
         }
 
         $('#saved-settings h5').addClass('hide');
+        $('button.clear-settings').addClass('hide');
         $('#saved-settings p').empty();
 
         try {
@@ -617,6 +618,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
           $.each(JSON.parse(data.settings), (key, val) => {
 
             $('#saved-settings h5').removeClass('hide');
+            $('button.clear-settings').removeClass('hide');
 
             try {
 
@@ -702,6 +704,8 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       });
 
     }
+
+    $('.profile-settings-button.save-settings').addClass('hide');
 
     $.each(settings, function(key, val) {
 
@@ -1156,6 +1160,8 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
     if (method !== 'initial' && currentSettings.reload_interval !== fullSettings.reload_interval && !moodEngine.notAutoReloading()) moodEngine.toggleAutoReload();
 
     if ((userSettings || backendSettings || profileSettings) && method !== 'userCheck') moodEngine.log('log', `Settings set successfully. ${userSettings} user defined, ${userPSettings} profile defined, ${backendSettings} backend defined.`);
+
+    if (userSettings) $('.profile-settings-button.save-settings').removeClass('hide');
 
     if (!['initial', 'userCheck'].includes(method) && logs.length) {
 
