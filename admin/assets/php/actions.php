@@ -24,7 +24,7 @@
 
             case "user":
             case "users":
-              $actions = array("create", "edit", "delete");
+              $actions = array("create", "view", "edit", "delete");
               break;
 
             default:

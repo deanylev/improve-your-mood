@@ -126,7 +126,7 @@
         <div class="modal-body"><span id="modal-confirm"></span></div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <button id="modal-submit" type="button" class="btn">OK</button>
+          <button id="modal-submit" type="button" class="btn">OK<i class="d-none fa fa-spinner fa-pulse fa-fw"></i></button>
         </div>
       </div>
     </div>

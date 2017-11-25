@@ -63,40 +63,40 @@
           if ($result->num_rows) {
             $row = $result->fetch_assoc();
           }
-          // Items per page must be between 1 and 50000
           if (isset($_POST["values"]["items_per_page"]) && intval($_POST["values"]["items_per_page"]) < 1 || intval($_POST["values"]["items_per_page"]) > 50000) {
             $messageType = "danger";
             $message = "Items per page must be between 1 and 50,000.";
             $url = $_SERVER['HTTP_REFERER'];
             $query = "";
-          }
-          // Minimum password length is 8
-          if (isset($_POST["values"]["password"]) && strlen($_POST["values"]["password"]) < 8) {
-            $messageType = "danger";
-            $message = "Password must be at least 8 characters.";
-            $url = $_SERVER['HTTP_REFERER'];
-            $query = "";
-          }
-          // Username can't be blank
-          if (isset($_POST["values"]["user"]) && !$_POST["values"]["user"]) {
+          } elseif (isset($_POST["values"]["user"]) && !$_POST["values"]["user"]) {
             $messageType = "danger";
             $message = "Username can't be blank.";
             $url = $_SERVER['HTTP_REFERER'];
             $query = "";
-          }
-          // Username can't contain spaces
-          if (isset($_POST["values"]["user"]) && strpos($_POST["values"]["user"], " ")) {
+          } elseif (isset($_POST["values"]["user"]) && strpos($_POST["values"]["user"], " ")) {
             $messageType = "danger";
             $message = "Username can't contain spaces.";
             $url = $_SERVER['HTTP_REFERER'];
             $query = "";
+          } elseif ((isset($row) && $row["id"] !== $id)) {
+            $messageType = "danger";
+            $message = "Username already in use.";
+            $url = $_SERVER['HTTP_REFERER'];
+            $query = "";
+          } elseif (isset($_POST["values"]["password"]) && strlen($_POST["values"]["password"]) < 8) {
+            $messageType = "danger";
+            $message = "Password must be at least 8 characters.";
+            $url = $_SERVER['HTTP_REFERER'];
+            $query = "";
+          } elseif (isset($_POST["values"]["password"]) && $_POST["values"]["password"] !== $_POST["password_confirmation"]) {
+            $messageType = "danger";
+            $message = "Passwords don't match.";
+            $url = $_SERVER['HTTP_REFERER'];
+            $query = "";
           }
-          // If the username is taken, or the password doesn't match the confirmation
-          if ((isset($row) && $row["id"] !== $id) || isset($_POST["values"]["password"]) && $_POST["values"]["password"] !== $_POST["password_confirmation"]) {
-              $messageType = "danger";
-              $message = $_POST["values"]["password"] !== $_POST["password_confirmation"] ? "Passwords don't match." : "Username already in use.";
-              $url = $_SERVER['HTTP_REFERER'];
-              $query = "";
+          // Provide error to AJAX call
+          if (isset($_POST["no_message"]) && $messageType === "danger") {
+            die("{\"type\": \"{$messageType}\", \"message\": \"{$message}\"}");
           }
         }
     } elseif (isset($_POST["deleteall"]) && in_array("deleteall", $actions)) {
@@ -131,7 +131,9 @@
     $mysqli->close();
 
     $_SESSION["message"][$messageType] = $message;
-    header("location: {$url}");
+    if (!isset($_POST["no_message"])) {
+      header("location: {$url}");
+    }
   } else {
       $_SESSION["message"]["danger"] = "An error occured.";
       header("location: home");

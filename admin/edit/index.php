@@ -28,7 +28,7 @@
 <h1 class="text-center">Edit <?php echo $title === "user" && $id == $_SESSION["user"] ? "Your Profile" : ucwords($title); ?></h1>
 <br>
 
-<form class="form-group text-center container" action="../modify.php" method="POST">
+<form class="form-group text-center container" action="../modify.php" method="POST" data-go-to="../<?php echo in_array("view", $actions) ? "view/?type={$type}&title={$title}&id={$id}" : "{$title}s?type={$type}"; ?>">
   <input type="hidden" name="table" value="<?php echo $type; ?>">
   <input type="hidden" name="id" value="<?php echo $row["id"]; ?>">
   <input type="hidden" name="type" value="<?php echo $title; ?>">
@@ -117,7 +117,6 @@
       <input type="password" id="password_confirmation" class="form-control" name="password_confirmation" disabled></input>
     </div>
     <div class="validation-errors text-danger" data-input="password_confirmation"></div>
-    <br>
 
 <?php
 
@@ -134,6 +133,8 @@
   }
 
 ?>
+
+  <p class="text-danger response"></p>
 
   <button id="save-button" class="btn btn-lg btn-success submit" type="button" data-action="edit" data-confirm="saving an edited <?php echo $title; ?>" data-class="success" data-toggle="modal" data-target="#modal">Save</button>
   <?php if (in_array("view", $actions)): ?>

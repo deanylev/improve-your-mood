@@ -1,4 +1,4 @@
-$('form:not(.errors)').submit(function() {
+$('form').submit(function() {
 
   $('.fa-spinner').removeClass('d-none');
 
