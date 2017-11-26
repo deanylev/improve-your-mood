@@ -2450,16 +2450,16 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
   $('#go-to-login').click(function() {
 
     moodEngine.profileError();
-    $('.signup').addClass('hide');
-    $('.login').removeClass('hide');
+    $('.signup').addClass('hide-also');
+    $('.login').removeClass('hide-also');
 
   });
 
   $('#go-to-signup').click(function() {
 
     moodEngine.profileError();
-    $('.login').addClass('hide');
-    $('.signup').removeClass('hide');
+    $('.login').addClass('hide-also');
+    $('.signup').removeClass('hide-also');
 
   });
 

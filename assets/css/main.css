@@ -76,7 +76,7 @@ label:not(.active) b, #advanced-settings, .fade-in-on-load {
   z-index: 0;
 }
 
-.inactive-icon {
+.inactive-icon, .hide-also {
   display: none !important;
 }
 
