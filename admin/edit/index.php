@@ -11,12 +11,16 @@
   if ($id == $_SESSION["user"]) {
       $userPage = true;
   }
-  include("../assets/php/header.php");
+  include("../../assets/php/sql.php");
   $result = $mysqli->query("SELECT * FROM yourmood.{$type} WHERE id='{$id}'");
 
   if ($result->num_rows) {
       $row = $result->fetch_assoc();
       $fieldInfo = mysqli_fetch_field($result);
+      include("../assets/php/header.php");
+  } else {
+      $_SESSION["message"]["danger"] = "An error occured.";
+      header("location: ../{$title}s?type={$type}");
   }
 
   while ($column = $result->fetch_field()) {
@@ -35,13 +39,12 @@
 
 <?php
 
-  set_error_handler("warning_handler", E_WARNING);
   foreach ($row as $key => $val) {
       if ($key !== "id" && $key !== "password" && (($key !== "app_settings" && $key !== "items_per_page") || $currentUser["is_admin"]) && (($key !== "read_only" && $key !== "is_admin") || $id != $_SESSION["user"])) {
         $columnType = $columnTypes[$key];
 
           switch ($columnType):
-          case 252:
+            case 252:
 ?>
 
             <label for="<?php echo $key; ?>"><?php echo $key; ?></label>
@@ -50,9 +53,9 @@
             <br>
 
 <?php
-          break;
+            break;
 
-          case 1:
+            case 1:
 
 ?>
 
@@ -66,9 +69,9 @@
             <br>
 
 <?php
-          break;
+            break;
 
-          case 253:
+            case 253:
 
 ?>
 
@@ -81,9 +84,9 @@
             <br>
 
 <?php
-        break;
+            break;
 
-        case 3:
+            case 3:
 
 ?>
 
@@ -96,9 +99,9 @@
 
 <?php
 
-        break;
+            break;
 
-        endswitch;
+          endswitch;
       }
   }
 
@@ -121,16 +124,6 @@
 <?php
 
     endif;
-
-  restore_error_handler();
-
-  function warning_handler($errno, $errstr)
-  {
-      global $title;
-      global $type;
-      $_SESSION["message"]["danger"] = "An error occured.";
-      header("location: ../{$title}s?type={$type}");
-  }
 
 ?>
 

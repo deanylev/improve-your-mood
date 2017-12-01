@@ -11,11 +11,15 @@
   if ($id == $_SESSION["user"]) {
     $userPage = true;
   }
-  include("../assets/php/header.php");
+  include("../../assets/php/sql.php");
   $result = $mysqli->query("SELECT * FROM yourmood.{$type} WHERE id='{$id}'");
 
   if ($result->num_rows) {
       $row = $result->fetch_assoc();
+      include("../assets/php/header.php");
+  } else {
+      $_SESSION["message"]["danger"] = "An error occured.";
+      header("location: ../{$title}s?type={$type}");
   }
 
 ?>
@@ -30,7 +34,6 @@
 
 <?php
 
-  set_error_handler("warning_handler", E_WARNING);
   foreach ($row as $key => $val) {
       if ($key !== "id" && $key !== "password"):
 
@@ -41,16 +44,6 @@
 <?php
 
     endif;
-  }
-
-  restore_error_handler();
-
-  function warning_handler($errno, $errstr)
-  {
-      global $title;
-      global $type;
-      $_SESSION["message"]["danger"] = "An error occured.";
-      header("location: ../{$title}s?type={$type}");
   }
 
   if (in_array("edit", $actions)):
