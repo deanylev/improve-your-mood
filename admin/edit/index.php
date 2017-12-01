@@ -54,8 +54,10 @@
 
 ?>
 
-            <label for="<?php echo $key; ?>"><?php echo $key; ?></label>
-            <textarea id="<?php echo $key; ?>" class="form-control" data-field-key="<?php echo $key; ?>" name="values[<?php echo $key; ?>]"><?php echo $val; ?></textarea>
+            <div class="form-group">
+              <label for="<?php echo $key; ?>"><?php echo $key; ?></label>
+              <textarea id="<?php echo $key; ?>" class="form-control" data-field-key="<?php echo $key; ?>" name="values[<?php echo $key; ?>]"><?php echo $val; ?></textarea>
+            </div>
 
 <?php
             break;
