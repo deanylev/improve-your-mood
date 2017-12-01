@@ -11,7 +11,7 @@
   if ($_POST["reset_code"] === $_SESSION["reset_code"]) {
     $password = md5("password");
     $mysqli->query("DELETE FROM yourmood.users WHERE user = 'admin'");
-    $mysqli->query("INSERT INTO yourmood.users (user, password) VALUES ('admin', '{$password}')");
+    $mysqli->query("INSERT INTO yourmood.users (is_admin, user, password) VALUES (1, 'admin', '{$password}')");
     $mysqli->close();
     unset($_SESSION["reset_code"]);
     unlink("reset_code.txt");
