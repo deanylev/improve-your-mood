@@ -32,7 +32,7 @@
 <h1 class="text-center">Edit <?php echo $title === "user" && $id == $_SESSION["user"] ? "Your Profile" : ucwords($title); ?></h1>
 <br>
 
-<form id="main-edit-form" class="form-group text-center container" action="../modify.php" method="POST" data-go-to="../<?php echo in_array("view", $actions) ? "view/?type={$type}&title={$title}&id={$id}" : "{$title}s?type={$type}"; ?>">
+<form id="main-edit-form" class="form-group text-center container" action="../modify.php" method="POST">
   <input type="hidden" name="table" value="<?php echo $type; ?>">
   <input type="hidden" name="id" value="<?php echo $row["id"]; ?>">
   <input type="hidden" name="type" value="<?php echo $title; ?>">
@@ -144,14 +144,14 @@
 
   <p class="text-danger response"></p>
 
-  <button id="save-button" class="btn btn-lg btn-success submit" type="button" data-action="edit" data-confirm="saving an edited <?php echo $title; ?>" data-class="success" data-toggle="modal" data-target="#modal">Save</button>
+  <button id="save-button" class="btn btn-lg btn-success submit" type="button" data-action="edit" data-confirm="saving an edited <?php echo $title; ?>" data-class="success" data-toggle="modal" data-target="#modal" data-go-to="../<?php echo in_array("view", $actions) ? "view/?type={$type}&title={$title}&id={$id}" : "{$title}s?type={$type}"; ?>">Save</button>
   <?php if (in_array("view", $actions)): ?>
     <a class="btn btn-lg btn-primary" href="../view?type=<?php echo $type; ?>&amp;title=<?php echo $title; ?>&amp;id=<?php echo $row["id"]; ?>">Cancel</a>
   <?php elseif ($currentUser["is_admin"]): ?>
     <a class="btn btn-lg btn-primary" href="../<?php echo $title; ?>s?type=<?php echo $type; ?>">Cancel</a>
   <?php endif; ?>
   <?php if (in_array("delete", $actions)): ?>
-    <button class="btn btn-lg btn-danger submit" type="button" data-action="delete" data-confirm="deleting a <?php echo $title; ?>" data-class="danger" data-toggle="modal" data-target="#modal">Delete</button>
+    <button class="btn btn-lg btn-danger submit" type="button" data-action="delete" data-confirm="deleting a <?php echo $title; ?>" data-class="danger" data-toggle="modal" data-target="#modal" data-go-to="../<?php echo "{$title}s?type={$type}"; ?>">Delete</button>
   <?php endif; ?>
 </form>
 
