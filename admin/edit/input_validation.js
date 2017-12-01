@@ -73,8 +73,8 @@ $('form').submit(function() {
           let field = Object.keys(val)[0];
           $(`div[data-field="${field}"]`).find('.validation-errors').append(val[field]);
         });
-        $('.fa-spinner').addClass('d-none');
         $('#modal').modal('hide');
+        $('.fa-spinner').addClass('d-none');
       } catch (error) {
         window.location.href = form.attr('data-go-to');
       }
