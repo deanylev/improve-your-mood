@@ -76,7 +76,7 @@
             $errors[] = (object) array("user" => "Can't be blank.");
             $url = $_SERVER['HTTP_REFERER'];
             $query = "";
-          } elseif (isset($_POST["values"]["user"]) && strpos($_POST["values"]["user"], " ")) {
+          } elseif (isset($_POST["values"]["user"]) && $_POST["values"]["user"] !== trim($_POST["values"]["user"])) {
             $errors[] = (object) array("user" => "Can't contain spaces.");
             $url = $_SERVER['HTTP_REFERER'];
             $query = "";
