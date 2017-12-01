@@ -149,5 +149,25 @@
       }
 
     ?>
+
+    <?php
+
+      if (isset($_SESSION["errors"])) {
+          foreach ($_SESSION["errors"] as $object) {
+            foreach ($object as $key => $val): ?>
+
+      <div class="alert margin alert-danger">
+        <?php echo $key; ?>: <?php echo $val; ?>
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+      </div>
+
+    <?php
+
+      unset($_SESSION["errors"]);
+          endforeach;
+        }
+      }
+
+    ?>
   </div>
   <br>

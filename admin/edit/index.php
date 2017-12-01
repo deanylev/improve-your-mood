@@ -43,14 +43,19 @@
       if ($key !== "id" && $key !== "password" && (($key !== "app_settings" && $key !== "items_per_page") || $currentUser["is_admin"]) && (($key !== "read_only" && $key !== "is_admin") || $id != $_SESSION["user"])) {
         $columnType = $columnTypes[$key];
 
+?>
+
+<div data-field="<?php echo $key; ?>">
+
+<?php
+
           switch ($columnType):
             case 252:
+
 ?>
 
             <label for="<?php echo $key; ?>"><?php echo $key; ?></label>
             <textarea id="<?php echo $key; ?>" class="form-control" data-field-key="<?php echo $key; ?>" name="values[<?php echo $key; ?>]"><?php echo $val; ?></textarea>
-            <div class="validation-errors text-danger" data-input="<?php echo $key; ?>"></div>
-            <br>
 
 <?php
             break;
@@ -66,7 +71,6 @@
                 <?php echo $key; ?>
               </label>
             </div>
-            <br>
 
 <?php
             break;
@@ -80,8 +84,6 @@
               <label for="<?php echo $key; ?>"><?php echo $key; ?></label>
               <input type="text" class="form-control" id="<?php echo $key; ?>" value="<?php echo $val; ?>" name="values[<?php echo $key; ?>]">
             </div>
-            <div class="validation-errors text-danger" data-input="<?php echo $key; ?>"></div>
-            <br>
 
 <?php
             break;
@@ -94,32 +96,43 @@
               <label for="<?php echo $key; ?>"><?php echo $key; ?></label>
               <input type="number" class="form-control" id="<?php echo $key; ?>" value="<?php echo $val; ?>" name="values[<?php echo $key; ?>]">
             </div>
-            <div class="validation-errors text-danger" data-input="<?php echo $key; ?>"></div>
-            <br>
 
 <?php
 
             break;
 
           endswitch;
+
+?>
+
+<div class="validation-errors text-danger"></div>
+<br>
+</div>
+
+<?php
+
       }
   }
 
   if ($type === "users"):
 
 ?>
-
-    <div class="form-group">
-      <label for="password">password <span id="password_strength"></span></label>
-      <input type="password" id="password" class="form-control" name="values[password]" placeholder="Unchanged" autocomplete="new-password"></input>
+    <div data-field="password">
+      <div class="form-group">
+        <label for="password">password <span id="password_strength"></span></label>
+        <input type="password" id="password" class="form-control" name="values[password]" placeholder="Unchanged" autocomplete="new-password"></input>
+      </div>
+      <div class="validation-errors text-danger"></div>
+      <br>
     </div>
-    <div class="validation-errors text-danger" data-input="password"></div>
-    <br>
-    <div class="form-group">
-      <label for="password_confirmation">password confirmation</label>
-      <input type="password" id="password_confirmation" class="form-control" name="password_confirmation" disabled></input>
+    <div data-field="password_confirmation">
+      <div class="form-group">
+        <label for="password_confirmation">password confirmation</label>
+        <input type="password" id="password_confirmation" class="form-control" name="password_confirmation" disabled></input>
+      </div>
+      <div class="validation-errors text-danger"></div>
+      <br>
     </div>
-    <div class="validation-errors text-danger" data-input="password_confirmation"></div>
 
 <?php
 

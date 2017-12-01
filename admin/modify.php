@@ -68,44 +68,41 @@
             $row = $result->fetch_assoc();
           }
           if (isset($_POST["values"]["items_per_page"]) && (intval($_POST["values"]["items_per_page"]) < 1 || intval($_POST["values"]["items_per_page"]) > 50000)) {
-            $messageType = "danger";
-            $message = "Items per page must be between 1 and 50,000.";
+            $errors[] = (object) array("items_per_page" => "Must be between 1 and 50,000.");
             $url = $_SERVER['HTTP_REFERER'];
             $query = "";
-          } elseif (isset($_POST["values"]["user"]) && !$_POST["values"]["user"]) {
-            $messageType = "danger";
-            $message = "Username can't be blank.";
+          }
+          if (isset($_POST["values"]["user"]) && !$_POST["values"]["user"]) {
+            $errors[] = (object) array("user" => "Can't be blank.");
             $url = $_SERVER['HTTP_REFERER'];
             $query = "";
           } elseif (isset($_POST["values"]["user"]) && strpos($_POST["values"]["user"], " ")) {
-            $messageType = "danger";
-            $message = "Username can't contain spaces.";
+            $errors[] = (object) array("user" => "Can't contain spaces.");
             $url = $_SERVER['HTTP_REFERER'];
             $query = "";
           } elseif ((isset($row) && $row["id"] !== $id)) {
-            $messageType = "danger";
-            $message = "Username already in use.";
+            $errors[] = (object) array("user" => "Already in use.");
             $url = $_SERVER['HTTP_REFERER'];
             $query = "";
-          } elseif (isset($_POST["values"]["app_settings"]) && !json_decode($_POST["values"]["app_settings"])) {
-            $messageType = "danger";
-            $message = "App Settings must be a valid JSON object.";
+          }
+          if (isset($_POST["values"]["app_settings"]) && !json_decode($_POST["values"]["app_settings"])) {
+            $errors[] = (object) array("app_settings" => "Must be a valid JSON object.");
             $url = $_SERVER['HTTP_REFERER'];
             $query = "";
-          } elseif (isset($_POST["values"]["password"]) && strlen($_POST["values"]["password"]) < 8) {
-            $messageType = "danger";
-            $message = "Password must be at least 8 characters.";
+          }
+          if (isset($_POST["values"]["password"]) && strlen($_POST["values"]["password"]) < 8) {
+            $errors[] = (object) array("password" => "Must be at least 8 characters.");
             $url = $_SERVER['HTTP_REFERER'];
             $query = "";
-          } elseif (isset($_POST["values"]["password"]) && $_POST["values"]["password"] !== $_POST["password_confirmation"]) {
-            $messageType = "danger";
-            $message = "Passwords don't match.";
+          }
+          if (isset($_POST["values"]["password"]) && $_POST["values"]["password"] !== $_POST["password_confirmation"]) {
+            $errors[] = (object) array("password_confirmation" => "Doesn't match password.");
             $url = $_SERVER['HTTP_REFERER'];
             $query = "";
           }
           // Provide error to AJAX call
-          if (isset($_POST["no_message"]) && $messageType === "danger") {
-            die("{\"type\": \"{$messageType}\", \"message\": \"{$message}\"}");
+          if (isset($_POST["no_message"])) {
+            die(isset($errors) ? json_encode($errors) : "");
           }
         }
     } elseif (isset($_POST["deleteall"]) && in_array("deleteall", $actions)) {
@@ -139,7 +136,12 @@
 
     $mysqli->close();
 
-    $_SESSION["message"][$messageType] = $message;
+    if (isset($errors)) {
+      $_SESSION["errors"] = $errors;
+    } else {
+      $_SESSION["message"][$messageType] = $message;
+    }
+
     if (!isset($_POST["no_message"])) {
       header("location: {$url}");
     }

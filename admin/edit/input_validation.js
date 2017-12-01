@@ -60,20 +60,22 @@ $('form').submit(function() {
   let form = $(this);
 
   $('.fa-spinner').removeClass('d-none');
+  $('.validation-errors').empty();
 
   $.ajax({
     data: `${form.serialize()}&no_message=true`,
     method: 'POST',
     url: '../modify.php',
     success: function(response) {
-      if (response) {
+      try {
         response = JSON.parse(response);
-        if (response.type === 'danger') {
-          $('.response').text(response.message);
-          $('.fa-spinner').addClass('d-none');
-          $('#modal').modal('hide');
-        }
-      } else {
+        $.each(response, function(key, val) {
+          let field = Object.keys(val)[0];
+          $(`div[data-field="${field}"]`).find('.validation-errors').append(val[field]);
+        });
+        $('.fa-spinner').addClass('d-none');
+        $('#modal').modal('hide');
+      } catch (error) {
         window.location.href = form.attr('data-go-to');
       }
     }
