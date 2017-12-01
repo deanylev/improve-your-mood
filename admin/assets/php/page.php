@@ -142,7 +142,7 @@
           <?php isset($customFields) ? include($customFields) : ""; ?>
           <td class="preview d-none"></td>
           <td class="actions">
-            <?php if (in_array("view", $actions) && !($table === "users" && $row["id"] == $_SESSION["user"])): ?>
+            <?php if (in_array("view", $actions)): ?>
               <a class="btn btn-success action-button" href="../view?type=<?php echo $table; ?>&amp;title=<?php echo $title; ?>&amp;id=<?php echo $row["id"]; ?>">View</a>
             <?php endif; ?>
             <?php if (in_array("edit", $actions) || ($table === "users" && $row["id"] == $_SESSION["user"])): ?>

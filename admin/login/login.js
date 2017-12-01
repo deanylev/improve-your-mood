@@ -1,6 +1,6 @@
 $('form').submit(function() {
-  
-  $('#password').removeClass('wrong');
+
+  $('input').removeClass('wrong');
   $('.fa-spinner').removeClass('d-none');
 
   $.ajax({
@@ -14,8 +14,9 @@ $('form').submit(function() {
         $('.text-danger').text(response);
         $('.fa-spinner').addClass('d-none');
         if (response === 'Invalid credentials.') {
-          $('#password').addClass('wrong');
-          $('#password').focus();
+          let input = $('#username').val() ? '#password' : '#username';
+          $(input).addClass('wrong');
+          $(input).focus();
         }
       }
     }

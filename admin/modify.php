@@ -3,12 +3,12 @@
   if (isset($_SERVER["HTTP_REFERER"])) {
     session_start();
     include("assets/php/force_auth.php");
-    include("assets/php/user.php");
     $messageType = "success";
     $id = $_POST["id"];
     $table = $_POST["table"];
     $title = $type = $_POST["type"];
     $url = $_SERVER["HTTP_REFERER"];
+    include("assets/php/user.php");
     include("assets/php/actions.php");
     include("../assets/php/sql.php");
 
@@ -46,6 +46,10 @@
         if (isset($_POST["values"]["is_admin"]) && $id == $_SESSION["user"]) {
           unset($_POST["values"]["is_admin"]);
         }
+        // Turn blank app settings into empty object
+        if (isset($_POST["values"]["app_settings"]) && $_POST["values"]["app_settings"] === "") {
+          $_POST["values"]["app_settings"] = "{}";
+        }
         // Construct SQL statement
         foreach ($_POST["values"] as $key => $val) {
             $val = $key === "password" ? md5($val) : $val;
@@ -63,7 +67,7 @@
           if ($result->num_rows) {
             $row = $result->fetch_assoc();
           }
-          if (isset($_POST["values"]["items_per_page"]) && intval($_POST["values"]["items_per_page"]) < 1 || intval($_POST["values"]["items_per_page"]) > 50000) {
+          if (isset($_POST["values"]["items_per_page"]) && (intval($_POST["values"]["items_per_page"]) < 1 || intval($_POST["values"]["items_per_page"]) > 50000)) {
             $messageType = "danger";
             $message = "Items per page must be between 1 and 50,000.";
             $url = $_SERVER['HTTP_REFERER'];
@@ -81,6 +85,11 @@
           } elseif ((isset($row) && $row["id"] !== $id)) {
             $messageType = "danger";
             $message = "Username already in use.";
+            $url = $_SERVER['HTTP_REFERER'];
+            $query = "";
+          } elseif (isset($_POST["values"]["app_settings"]) && !json_decode($_POST["values"]["app_settings"])) {
+            $messageType = "danger";
+            $message = "App Settings must be a valid JSON object.";
             $url = $_SERVER['HTTP_REFERER'];
             $query = "";
           } elseif (isset($_POST["values"]["password"]) && strlen($_POST["values"]["password"]) < 8) {

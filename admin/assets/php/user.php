@@ -11,7 +11,7 @@
   if ($userQuery->num_rows) {
     $userRow = $userQuery->fetch_assoc();
     $userID = $userRow["id"];
-    if ($userRow["is_admin"] !== "1" && $type !== "users" && $id !== $userID) {
+    if ($userRow["is_admin"] !== "1" && $type !== "users" && $id !== $userID && basename($_SERVER["PHP_SELF"]) !== "modify.php") {
       header("location: ../edit?type=users&title=user&id={$userID}");
     }
     $currentUser["name"] = $userRow["user"];
