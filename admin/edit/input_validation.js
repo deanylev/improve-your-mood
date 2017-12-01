@@ -55,7 +55,7 @@ $('#password').on('keypress keydown keyup change', function() {
 
 });
 
-$('form').submit(function() {
+$('#main-edit-form').submit(function() {
 
   let form = $(this);
 

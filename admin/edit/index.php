@@ -32,7 +32,7 @@
 <h1 class="text-center">Edit <?php echo $title === "user" && $id == $_SESSION["user"] ? "Your Profile" : ucwords($title); ?></h1>
 <br>
 
-<form class="form-group text-center container" action="../modify.php" method="POST" data-go-to="../<?php echo in_array("view", $actions) ? "view/?type={$type}&title={$title}&id={$id}" : "{$title}s?type={$type}"; ?>">
+<form id="main-edit-form" class="form-group text-center container" action="../modify.php" method="POST" data-go-to="../<?php echo in_array("view", $actions) ? "view/?type={$type}&title={$title}&id={$id}" : "{$title}s?type={$type}"; ?>">
   <input type="hidden" name="table" value="<?php echo $type; ?>">
   <input type="hidden" name="id" value="<?php echo $row["id"]; ?>">
   <input type="hidden" name="type" value="<?php echo $title; ?>">

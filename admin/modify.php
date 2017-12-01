@@ -101,8 +101,8 @@
             $query = "";
           }
           // Provide error to AJAX call
-          if (isset($_POST["no_message"])) {
-            die(isset($errors) ? json_encode($errors) : "");
+          if (isset($_POST["no_message"]) && isset($errors)) {
+            die(json_encode($errors));
           }
         }
     } elseif (isset($_POST["deleteall"]) && in_array("deleteall", $actions)) {
@@ -136,7 +136,7 @@
 
     $mysqli->close();
 
-    if (isset($errors)) {
+    if (isset($errors) && !isset($_POST["no_message"])) {
       $_SESSION["errors"] = $errors;
     } else {
       $_SESSION["message"][$messageType] = $message;
