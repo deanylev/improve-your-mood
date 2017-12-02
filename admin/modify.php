@@ -131,6 +131,11 @@
             if (isset($row) && $row["id"] !== $id && $_POST["values"]["user"]) {
               $errors[] = (object) array("label" => "Already in use.");
             }
+        } elseif ($table === "colours") {
+            $colour = $_POST["values"]["colour"];
+            if (!(ctype_xdigit($colour) && (strlen($colour) === 6 || strlen($colour) === 3))) {
+              $errors[] = (object) array("colour" => "Must be a valid hex code.");
+            }
         }
 
         // Provide errors to AJAX call
@@ -180,11 +185,11 @@
         $randomUsername = "user_" . uniqid();
         $randomPassword = md5(uniqid());
         $mysqli->query("UPDATE yourmood.{$table} SET user = '{$randomUsername}', password = '{$randomPassword}' WHERE id = '{$newId}'");
-      } else {
-        // Make active by default
-        $mysqli->query("UPDATE yourmood.{$table} SET active = 1 WHERE id = '{$newId}'");
+      } elseif ($table === "colours") {
+        // Default black colour
+        $mysqli->query("UPDATE yourmood.{$table} SET colour = '000000' WHERE id = '{$newId}'");
       }
-      $mysqli->query("UPDATE yourmood.{$table} SET created_at = '{$dateNow}' WHERE id = '{$newId}'");
+      $mysqli->query("UPDATE yourmood.{$table} SET active = 1, created_at = '{$dateNow}' WHERE id = '{$newId}'");
     } elseif (isset($_POST["clone"]) && in_array("clone", $actions)) {
         if ($table === "users") {
           $username = $mysqli->query("SELECT user FROM yourmood.{$table} WHERE id = '{$newId}'")->fetch_object()->user . "_" . uniqid();
