@@ -79,13 +79,19 @@
             </a>
           </li>
           <div class="dropdown-divider"></div>
-          <li class="nav-item d-lg-none <?php echo isset($userPage) ? "active" : "" ?>">
-            <a class="nav-link"  href="../edit/?type=users&amp;title=user&amp;id=<?php echo $_SESSION["user"]; ?>">
+          <li class="nav-item d-lg-none <?php echo isset($userPage) && $userPage === "view" ? "active" : "" ?>">
+            <a class="nav-link"  href="../view/?type=users&amp;title=user&amp;id=<?php echo $_SESSION["user"]; ?>">
               <span class="fa fa-user"></span>
               <span class="icon-text"><?php echo $currentUser["name"]; ?></span>
             </a>
           </li>
-          <li class="nav-item d-lg-none <?php echo $title === "log" ? "active" : "" ?>">
+          <li class="nav-item d-lg-none <?php echo isset($userPage) && $userPage === "edit" ? "active" : "" ?>">
+            <a class="nav-link" href="../edit/?type=users&amp;title=user&amp;id=<?php echo $_SESSION["user"]; ?>">
+              <span class="fa fa-cog"></span>
+              <span class="icon-text">Edit Profile</span>
+            </a>
+          </li>
+          <li class="nav-item d-lg-none">
             <a class="nav-link" href="../logout">
               <span class="fa fa-sign-out"></span>
               <span class="icon-text">Log Out</span>
@@ -96,7 +102,7 @@
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
           <div class="btn-group d-none d-lg-block d-xl-block">
-            <a class="btn btn-primary <?php echo isset($userPage) ? "active" : "" ?>" href="../edit/?type=users&amp;title=user&amp;id=<?php echo $_SESSION["user"]; ?>">
+            <a class="btn btn-primary <?php echo isset($userPage) && $userPage === "view" ? "active" : "" ?>" href="../view/?type=users&amp;title=user&amp;id=<?php echo $_SESSION["user"]; ?>">
               <span class="fa fa-user"></span>
               <span class="icon-text"><?php echo $currentUser["name"]; ?></span>
             </a>
@@ -104,6 +110,10 @@
               <span class="sr-only">Toggle Dropdown</span>
             </button>
             <div class="dropdown-menu dropdown-menu-right">
+              <a class="dropdown-item <?php echo isset($userPage) && $userPage === "edit" ? "active" : "" ?>" href="../edit/?type=users&amp;title=user&amp;id=<?php echo $_SESSION["user"]; ?>">
+                <span class="fa fa-cog"></span>
+                <span class="icon-text">Edit Profile</span>
+              </a>
               <a class="dropdown-item" href="../logout">
                 <span class="fa fa-sign-out"></span>
                 <span class="icon-text">Log Out</span>

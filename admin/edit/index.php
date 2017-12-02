@@ -9,7 +9,7 @@
   $action = "edit";
   $otherTitle = ucwords($action) . " " . ucwords($title);
   if ($id == $_SESSION["user"]) {
-      $userPage = true;
+      $userPage = "edit";
   }
   include("../../assets/php/sql.php");
   $result = $mysqli->query("SELECT * FROM yourmood.{$type} WHERE id='{$id}'");
