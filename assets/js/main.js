@@ -397,7 +397,16 @@ if (localStorage.getItem('cachedQuotes') && localStorage.getItem('cachedVersionQ
     if (localStorage.getItem('disable_caching') !== 'true' && quotes.length > 1) {
 
       localStorage.setItem('cachedQuotes', JSON.stringify(quotes));
-      localStorage.setItem('cachedVersionQuotes', JSON.stringify(versionQuotes));
+
+      if (versionQuotes[otherVersion].length > 1) {
+
+        localStorage.setItem('cachedVersionQuotes', JSON.stringify(versionQuotes));
+
+      } else {
+
+        disableSwitch = true;
+
+      }
 
       moodEngine.log('log', 'Cached quotes for next load.');
 
