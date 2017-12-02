@@ -168,4 +168,17 @@
     </table>
   </div>
 </form>
+<div class="text-center">
+  <?php if (isset($page) && $totalPages > 1): ?>
+    <?php if ($page > 1): ?>
+      <a href="?type=<?php echo $type; ?>&amp;page=1&amp;items=<?php echo $items; ?>" class="btn btn-default"><span class="arrow fa fa-angle-double-left"></span></a>
+      <a href="?type=<?php echo $type; ?>&amp;page=<?php echo $page - 1; ?>&amp;items=<?php echo $items; ?>" class="btn btn-default"><span class="arrow fa fa-angle-left"></span></a>
+    <?php endif; ?>
+    <span>&nbsp;Page: <?php echo $page; ?>/<?php echo $totalPages; ?>&nbsp;</span>
+    <?php if ($page < $totalPages): ?>
+      <a href="?type=<?php echo $type; ?>&amp;page=<?php echo $page + 1; ?>&amp;items=<?php echo $items; ?>" class="btn btn-default"><span class="arrow fa fa-angle-right"></span></a>
+      <a href="?type=<?php echo $type; ?>&amp;page=<?php echo $totalPages; ?>&amp;items=<?php echo $items; ?>" class="btn btn-default"><span class="arrow fa fa-angle-double-right"></span></a>
+    <?php endif; ?>
+  <?php endif; ?>
+</div>
 <?php include("footer.html"); ?>

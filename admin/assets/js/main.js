@@ -145,7 +145,7 @@ function search() {
     });
 
     $('#results-number').text(results);
-    if (!results) $('table').after('<div class="text-center no-results"><br><h3>No Results</h3></div>');
+    if (!results) $('table').after('<div class="text-center no-results"><br><h3>No Results</h3><br><br></div>');
 
   } else {
 
