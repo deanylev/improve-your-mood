@@ -19,7 +19,7 @@
       $fieldInfo = mysqli_fetch_field($result);
       include("../assets/php/header.php");
   } else {
-      $_SESSION["message"]["danger"] = "An error occured.";
+      $_SESSION["message"]["danger"] = "An error occured. (002)";
       header("location: ../{$title}s?type={$type}");
   }
 
@@ -40,8 +40,9 @@
 <?php
 
   foreach ($row as $key => $val) {
-      if ($key !== "id" && $key !== "password" && (($key !== "app_settings" && $key !== "items_per_page") || $currentUser["is_admin"]) && (($key !== "read_only" && $key !== "is_admin") || $id != $_SESSION["user"])) {
+      if ($key !== "id" && $key !== "created_at" && $key !== "created_by" && $key !== "password" && (($key !== "app_settings" && $key !== "items_per_page") || $currentUser["is_admin"]) && (($key !== "read_only" && $key !== "is_admin") || $id != $_SESSION["user"])) {
         $columnType = $columnTypes[$key];
+        $blockDiv = true;
 
 ?>
 
@@ -81,7 +82,6 @@
 
 ?>
 
-
             <div class="form-group">
               <label for="<?php echo $key; ?>"><?php echo $key; ?></label>
               <input type="text" class="form-control" id="<?php echo $key; ?>" value="<?php echo $val; ?>" name="values[<?php echo $key; ?>]">
@@ -103,12 +103,26 @@
 
             break;
 
+            default:
+              $blockDiv = false;
+
+?>
+
+            <input type="hidden" value="<?php echo $val; ?>" name="values[<?php echo $key; ?>]">
+
+<?php
+
+            break;
+
           endswitch;
+
+          if ($blockDiv):
 
 ?>
 
 <div class="validation-errors text-danger"></div>
 <br>
+<?php endif; ?>
 </div>
 
 <?php

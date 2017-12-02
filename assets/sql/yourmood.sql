@@ -28,6 +28,8 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `colours` (
   `id` int(11) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `created_by` int(11) NOT NULL,
   `active` tinyint(1) NOT NULL,
   `colour` varchar(6) NOT NULL,
   `notes` text NOT NULL
@@ -41,6 +43,8 @@ CREATE TABLE `colours` (
 
 CREATE TABLE `decrease` (
   `id` int(11) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `created_by` int(11) NOT NULL,
   `active` tinyint(1) NOT NULL,
   `quote` text NOT NULL,
   `notes` text NOT NULL
@@ -54,6 +58,8 @@ CREATE TABLE `decrease` (
 
 CREATE TABLE `improve` (
   `id` int(11) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `created_by` int(11) NOT NULL,
   `active` tinyint(1) NOT NULL,
   `quote` text NOT NULL,
   `notes` text NOT NULL
@@ -67,7 +73,7 @@ CREATE TABLE `improve` (
 
 CREATE TABLE `logs` (
   `id` int(11) NOT NULL,
-  `sent_at` varchar(30) NOT NULL,
+  `created_at` datetime NOT NULL,
   `ip_address` varchar(20) NOT NULL,
   `version` varchar(10) NOT NULL,
   `useragent` text NOT NULL,
@@ -82,6 +88,8 @@ CREATE TABLE `logs` (
 
 CREATE TABLE `settings` (
   `id` int(11) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `created_by` int(11) NOT NULL,
   `active` tinyint(1) NOT NULL,
   `setting` varchar(30) NOT NULL,
   `value` text NOT NULL,
@@ -107,6 +115,8 @@ CREATE TABLE `settings` (
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `created_by` int(11) NOT NULL,
   `is_admin` tinyint(1) NOT NULL,
   `read_only` tinyint(1) NOT NULL,
   `items_per_page` int(11) NOT NULL DEFAULT '100',
@@ -195,7 +205,7 @@ ALTER TABLE `settings`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

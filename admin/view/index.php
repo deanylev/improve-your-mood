@@ -18,7 +18,7 @@
       $row = $result->fetch_assoc();
       include("../assets/php/header.php");
   } else {
-      $_SESSION["message"]["danger"] = "An error occured.";
+      $_SESSION["message"]["danger"] = "An error occured. (006)";
       header("location: ../{$title}s?type={$type}");
   }
 
@@ -35,15 +35,37 @@
 <?php
 
   foreach ($row as $key => $val) {
-      if ($key !== "id" && $key !== "password"):
+    if ($key !== "id" && $key !== "password") {
+      if ($key === "created_by") {
+        if ($mysqli->query("SELECT * FROM yourmood.users WHERE id = {$val}")->num_rows):
+          $user = $mysqli->query("SELECT * FROM yourmood.users WHERE id = '{$val}'")->fetch_object();
 
 ?>
 
-    <p><b><?php echo $key; ?>:</b><br><?php echo $val; ?></p><br>
+          <p><b><?php echo $key; ?>:</b><br><a href="../view/?type=users&title=user&id=<?php echo $user->id; ?>"><?php echo $user->user; ?></a></p><br>
+
+<?php else: ?>
+
+          <p><b><?php echo $key; ?>:</b><br>unknown</p><br>
+
+<?php
+        endif;
+      } elseif ($key === "created_at" && $val === "0000-00-00 00:00:00") {
+?>
+
+          <p><b><?php echo $key; ?>:</b><br>unknown</p><br>
+
+<?php
+      } else {
+
+?>
+
+          <p><b><?php echo $key; ?>:</b><br><?php echo $val; ?></p><br>
 
 <?php
 
-    endif;
+      }
+    }
   }
 
   if (in_array("edit", $actions)):

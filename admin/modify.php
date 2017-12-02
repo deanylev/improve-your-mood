@@ -25,12 +25,15 @@
         }
     } elseif (isset($_POST["deletemultiple"]) && in_array("delete", $actions)) {
         $statement = "";
+        $length = 0;
         foreach($_POST["items"] as $item) {
           $statement .= "id = '{$item}' OR ";
+          $length++;
         }
         $statement = substr($statement, 0, -3);
         $query = "DELETE FROM yourmood.{$table} WHERE {$statement}";
-        $message = "Successfully deleted multiple {$type}s.";
+        $phrase = $length === 1 ? $type : "{$length} {$type}s";
+        $message = "Successfully deleted {$phrase}.";
         $url = "{$type}s?type={$table}";
     } elseif (isset($_POST["edit"]) && in_array("edit", $actions)) {
         $statement = "";
@@ -49,6 +52,14 @@
         // Turn blank app settings into empty object
         if (isset($_POST["values"]["app_settings"]) && $_POST["values"]["app_settings"] === "") {
           $_POST["values"]["app_settings"] = "{}";
+        }
+        // Don't allow editing of created_at
+        if (isset($_POST["values"]["created_at"])) {
+          unset($_POST["values"]["created_at"]);
+        }
+        // Don't allow editing of created_by
+        if (isset($_POST["values"]["created_by"])) {
+          unset($_POST["values"]["created_by"]);
         }
         // Construct SQL statement
         foreach ($_POST["values"] as $key => $val) {
@@ -147,7 +158,7 @@
         $goToID = true;
     } else {
         $messageType = "danger";
-        $message = "An error occured.";
+        $message = "An error occured. (003)";
     }
 
     $mysqli->query($query);
@@ -156,9 +167,14 @@
     if (isset($goToID)) {
       // Go to the newly created item
       $url = "edit/?type={$table}&title={$type}&id={$newId}";
+      // Set the created_by
+      $createdBy = $_SESSION["user"];
+      $mysqli->query("UPDATE yourmood.{$table} SET created_by = '{$createdBy}' WHERE id = '{$newId}'");
     }
 
-    if (isset($_POST["edit"]) && in_array("edit", $actions)) {
+    $dateNow = date("Y-m-d H:i:s");
+
+    if (isset($_POST["new"]) && in_array("create", $actions)) {
       if ($table === "users") {
         // Generate a random username/password for a new user
         $randomUsername = "user_" . uniqid();
@@ -168,6 +184,7 @@
         // Make active by default
         $mysqli->query("UPDATE yourmood.{$table} SET active = 1 WHERE id = '{$newId}'");
       }
+      $mysqli->query("UPDATE yourmood.{$table} SET created_at = '{$dateNow}' WHERE id = '{$newId}'");
     } elseif (isset($_POST["clone"]) && in_array("clone", $actions)) {
         if ($table === "users") {
           $username = $mysqli->query("SELECT user FROM yourmood.{$table} WHERE id = '{$newId}'")->fetch_object()->user . "_" . uniqid();
@@ -178,6 +195,7 @@
           $settingLabel = $setting->label . "_" . uniqid();
           $mysqli->query("UPDATE yourmood.{$table} SET setting = '{$settingName}', label = '{$settingLabel}' WHERE id = '{$newId}'");
         }
+        $mysqli->query("UPDATE yourmood.{$table} SET created_at = '{$dateNow}' WHERE id = '{$newId}'");
     }
 
     $mysqli->close();
@@ -193,6 +211,6 @@
       header("location: {$url}");
     }
   } else {
-      $_SESSION["message"]["danger"] = "An error occured.";
+      $_SESSION["message"]["danger"] = "An error occured. (004)";
       header("location: home");
   }

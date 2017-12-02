@@ -11,7 +11,7 @@
   $titlePairs = array("users" => "user", "improve"=>"quote", "decrease"=>"quote", "colours"=>"colour", "settings"=>"setting", "logs"=>"log");
 
   if (!in_array($title, $titles) || (isset($id) && $id === "0") || (isset($type) && !array_key_exists($type, $titlePairs) && !array_key_exists("{$type}s", $titlePairs)) || (isset($type) && array_key_exists($type, $titlePairs) && $titlePairs[$type] !== $title) || (isset($action) && !in_array($action, $actions))) {
-      $_SESSION["message"]["danger"] = "An error occured";
+      $_SESSION["message"]["danger"] = "An error occured. (001)";
       header("location: ../home");
       die();
   }

@@ -15,8 +15,8 @@
         cookie = LongRandomValue (eg. ejr890e9ah8453h89rnudfn)
       </b>");
     } else {
-      $text = "[MYSQL]\nhost = YourHost\nusername = YourUsername\npassword = YourPassword\n[KEYS]\ncookie = LongRandomValue
-      ";
+      $cookieKey = md5(uniqid());
+      $text = "[MYSQL]\nhost = YourHost\nusername = YourUsername\npassword = YourPassword\n[KEYS]\ncookie = {$cookieKey}";
       fwrite($file, $text);
       fclose($file);
     }

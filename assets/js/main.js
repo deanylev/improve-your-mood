@@ -34,11 +34,7 @@ moodEngine.log = function(type, message, display) {
       message: message
     });
 
-    if (display !== false) {
-
-      console[type](`\n${message}`);
-
-    }
+    if (display !== false) console[type](`\n${message}`);
 
     $('#visible-logs').empty();
 

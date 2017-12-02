@@ -4,7 +4,7 @@
     $table = $type = $_GET["type"];
   } else {
     session_start();
-    $_SESSION["message"]["danger"] = "An error occured.";
+    $_SESSION["message"]["danger"] = "An error occured. (005)";
     header("location: ../home");
     die();
   }
