@@ -936,7 +936,19 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
     clearInterval(userCheck);
 
-    if (fullSettings.user_check_interval) userCheck = setInterval(moodEngine.checkUser, fullSettings.user_check_interval);
+    if (fullSettings.user_check_interval) {
+
+      if (fullSettings.user_check_interval >= 1000) {
+
+        userCheck = setInterval(moodEngine.checkUser, fullSettings.user_check_interval);
+
+      } else {
+
+        moodEngine.error(null, 'User check interval is too often.', 4);
+
+      }
+
+    }
 
     // Keyboard shortcuts
 
@@ -2239,10 +2251,10 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         // User Check interval
 
-        if ($(this).attr('name') === 'user_check_interval' && $(this).val() < 0) {
+        if ($(this).attr('name') === 'user_check_interval' && parseInt($(this).val()) && $(this).val() < 1000) {
 
           $(this).addClass('invalid');
-          invalidInputs.push(`${settings[$(this).attr('name')].label} Cannot Be Below 0`);
+          invalidInputs.push(`${settings[$(this).attr('name')].label} Must Be Either 0 or 1000+`);
 
         }
 
