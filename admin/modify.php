@@ -171,7 +171,8 @@
 
     if (isset($goToID)) {
       // Go to the newly created item
-      $url = "edit/?type={$table}&title={$type}&id={$newId}";
+      $page = in_array("edit", $actions) ? "edit" : "view";
+      $url = "{$page}/?type={$table}&title={$type}&id={$newId}";
       // Set the created_by
       $createdBy = $_SESSION["user"];
       $mysqli->query("UPDATE yourmood.{$table} SET created_by = '{$createdBy}' WHERE id = '{$newId}'");
