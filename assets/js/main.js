@@ -772,7 +772,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       if (!defaultMode && (!fullSettings.button_order || typeof(fullSettings.button_order) !== 'object' || !fullSettings.button_order.includes('settings'))) {
 
         moodEngine.log('warn', 'Invalid button order provided, falling back to defaults...');
-        fullSettings.button_order = ['autoreload', 'settings', 'rewind'];
+        fullSettings.button_order = ['autoreload', 'settings', 'profile', 'speak', 'rewind'];
 
       }
 
