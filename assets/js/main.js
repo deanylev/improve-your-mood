@@ -389,8 +389,6 @@ if (localStorage.getItem('cachedQuotes') && localStorage.getItem('cachedVersionQ
 
       });
 
-      localStorage.setItem('cachedVersionQuotes', JSON.stringify(versionQuotes));
-
     }).fail((data) => {
 
       disableSwitch = true;
@@ -400,9 +398,10 @@ if (localStorage.getItem('cachedQuotes') && localStorage.getItem('cachedVersionQ
 
     moodEngine.log('log', `Successfully pulled ${quotes.length} quotes from backend in ${pullTime.quotes}ms.`);
 
-    if (localStorage.getItem('disable_caching') !== 'true') {
+    if (localStorage.getItem('disable_caching') !== 'true' && quotes.length > 1) {
 
       localStorage.setItem('cachedQuotes', JSON.stringify(quotes));
+      localStorage.setItem('cachedVersionQuotes', JSON.stringify(versionQuotes));
 
       moodEngine.log('log', 'Cached quotes for next load.');
 
@@ -459,7 +458,7 @@ if (localStorage.getItem('cachedColours') && localStorage.getItem('disable_cachi
 
     moodEngine.log('log', `Successfully pulled ${colours.length} colours from backend in ${pullTime.colours}ms.`);
 
-    if (localStorage.getItem('disable_caching') !== 'true') {
+    if (localStorage.getItem('disable_caching') !== 'true' && colours.length > 1) {
 
       localStorage.setItem('cachedColours', JSON.stringify(colours));
 
@@ -553,7 +552,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   moodEngine.log('log', `Successfully pulled ${Object.keys(settings).length} settings from backend in ${pullTime.settings}ms.`);
 
-  if (localStorage.getItem('disable_caching') !== 'true') {
+  if (localStorage.getItem('disable_caching') !== 'true' && Object.keys(settings).length) {
 
     localStorage.setItem('cachedSettings', JSON.stringify(settings));
 
