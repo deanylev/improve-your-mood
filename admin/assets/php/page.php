@@ -148,6 +148,9 @@
             <?php if (in_array("edit", $actions) || ($table === "users" && $row["id"] == $_SESSION["user"])): ?>
               <a class="btn btn-warning action-button" href="../edit?type=<?php echo $table; ?>&amp;title=<?php echo $title; ?>&amp;id=<?php echo $row["id"]; ?>">Edit</a>
             <?php endif; ?>
+            <?php if (in_array("clone", $actions)): ?>
+              <button class="btn btn-info submit" type="button" data-id="<?php echo $row["id"]; ?>" data-action="clone" data-undo="true" data-confirm="cloning a <?php echo $title; ?>" data-class="info" data-toggle="modal" data-target="#modal">Clone</button>
+            <?php endif; ?>
             <?php if (in_array("delete", $actions)): ?>
               <button class="btn btn-danger submit" type="button" data-id="<?php echo $row["id"]; ?>" data-action="delete" data-confirm="deleting a <?php echo $title; ?>" data-class="danger" data-toggle="modal" data-target="#modal">Delete</button>
             <?php endif; ?>

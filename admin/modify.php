@@ -100,10 +100,31 @@
             $url = $_SERVER['HTTP_REFERER'];
             $query = "";
           }
-          // Provide error to AJAX call
-          if (isset($_POST["no_message"]) && isset($errors)) {
-            die(json_encode($errors));
-          }
+        } elseif ($table === "settings") {
+            $setting = $_POST["values"]["setting"];
+            $label = $_POST["values"]["label"];
+            $result = $mysqli->query("SELECT * FROM yourmood.{$table} WHERE setting='{$setting}'");
+            if ($result->num_rows) {
+              $row = $result->fetch_assoc();
+            }
+            if ((isset($row) && $row["id"] !== $id)) {
+              $errors[] = (object) array("setting" => "Already in use.");
+              $url = $_SERVER['HTTP_REFERER'];
+              $query = "";
+            }
+            unset($row);
+            $result = $mysqli->query("SELECT * FROM yourmood.{$table} WHERE label='{$label}'");
+            if ($result->num_rows) {
+              $row = $result->fetch_assoc();
+            }
+            if (isset($row) && $row["id"] !== $id && $_POST["values"]["user"]) {
+              $errors[] = (object) array("label" => "Already in use.");
+            }
+        }
+
+        // Provide errors to AJAX call
+        if (isset($_POST["no_message"]) && isset($errors)) {
+          die(json_encode($errors));
         }
     } elseif (isset($_POST["deleteall"]) && in_array("deleteall", $actions)) {
         $query = "DELETE FROM yourmood.{$table}";
@@ -112,6 +133,18 @@
         if ($table === "users") {
           $url = "logout";
         }
+    } elseif (isset($_POST["clone"]) && in_array("clone", $actions)) {
+        $columns = $mysqli->query("DESCRIBE yourmood.{$table}");
+        $list = "";
+        while ($row = $columns->fetch_assoc()) {
+          if ($row["Field"] !== "id") {
+            $list .= $row["Field"] . ",";
+          }
+        }
+        $list = substr($list, 0, -1);
+        $query = "INSERT INTO yourmood.{$table} ($list) (SELECT $list FROM yourmood.{$table} WHERE id = '$id')";
+        $message = "Successfully cloned {$type}.";
+        $goToID = true;
     } else {
         $messageType = "danger";
         $message = "An error occured.";
@@ -121,17 +154,30 @@
     $newId = $mysqli->insert_id;
 
     if (isset($goToID)) {
-      // Generate a random username/password for a new user
+      // Go to the newly created item
+      $url = "edit/?type={$table}&title={$type}&id={$newId}";
+    }
+
+    if (isset($_POST["edit"]) && in_array("edit", $actions)) {
       if ($table === "users") {
+        // Generate a random username/password for a new user
         $randomUsername = "user_" . uniqid();
         $randomPassword = md5(uniqid());
         $mysqli->query("UPDATE yourmood.{$table} SET user = '{$randomUsername}', password = '{$randomPassword}' WHERE id = '{$newId}'");
-        // Make active by default
       } else {
+        // Make active by default
         $mysqli->query("UPDATE yourmood.{$table} SET active = 1 WHERE id = '{$newId}'");
       }
-      // Go to the newly created item
-      $url = "edit/?type={$table}&title={$type}&id={$newId}";
+    } elseif (isset($_POST["clone"]) && in_array("clone", $actions)) {
+        if ($table === "users") {
+          $username = $mysqli->query("SELECT user FROM yourmood.{$table} WHERE id = '{$newId}'")->fetch_object()->user . "_" . uniqid();
+          $mysqli->query("UPDATE yourmood.{$table} SET user = '{$username}' WHERE id = '{$newId}'");
+        } elseif ($table === "settings") {
+          $setting = $mysqli->query("SELECT setting, label FROM yourmood.{$table} WHERE id = '{$newId}'")->fetch_object();
+          $settingName = $setting->setting . "_" . uniqid();
+          $settingLabel = $setting->label . "_" . uniqid();
+          $mysqli->query("UPDATE yourmood.{$table} SET setting = '{$settingName}', label = '{$settingLabel}' WHERE id = '{$newId}'");
+        }
     }
 
     $mysqli->close();
@@ -140,6 +186,7 @@
       $_SESSION["errors"] = $errors;
     } else {
       $_SESSION["message"][$messageType] = $message;
+      echo "{$url}";
     }
 
     if (!isset($_POST["no_message"])) {

@@ -76,7 +76,8 @@ $('#main-edit-form').submit(function() {
         $('#modal').modal('hide');
         $('.fa-spinner').addClass('d-none');
       } catch (error) {
-        window.location.href = form.attr('data-go-to');
+        let url = response.startsWith('http') ? response : `../${response}`;
+        window.location.href = url;
       }
     }
   });

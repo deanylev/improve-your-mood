@@ -56,6 +56,16 @@
 
   endif;
 
+  if (in_array("clone", $actions)):
+
+?>
+
+  <button class="btn btn-lg btn-info submit" type="button" data-action="clone" data-undo="true" data-confirm="cloning a <?php echo $title; ?>" data-class="info" data-toggle="modal" data-target="#modal">Clone</button>
+
+<?php
+
+  endif;
+
   if (in_array("delete", $actions)):
 
 ?>
@@ -63,6 +73,7 @@
   <button class="btn btn-lg btn-danger submit" type="button" data-action="delete" data-confirm="deleting a <?php echo $title; ?>" data-class="danger" data-toggle="modal" data-target="#modal">Delete</button>
 
 <?php endif; ?>
+
 </form>
 
 <?php include("../assets/php/footer.html"); ?>

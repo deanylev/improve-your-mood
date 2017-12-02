@@ -3,14 +3,16 @@
   if (isset($_SESSION["user"])) {
     include("user.php");
 
+    // ** DEFAULT **
+
     // Create - make a new record
-
     // View - view an existing record
-
     // Edit - update an existing record
-
     // Delete - delete an existing record
 
+    // ** ADDITIONAL **
+
+    // Clone - make a copy of an existing record
     // Delete All - delete all existing records in a table
 
     if (isset($type)) {
@@ -24,7 +26,9 @@
 
             case "user":
             case "users":
-              $actions = array("create", "view", "edit", "delete");
+            case "setting":
+            case "settings":
+              $actions = array("create", "view", "edit", "clone", "delete");
               break;
 
             default:
