@@ -18,7 +18,7 @@
 
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-type="<?php echo isset($type) ? $type : "unknown"; ?>">
 
 <head>
   <meta charset="UTF-8">

@@ -59,19 +59,19 @@
       <?php while ($row = $dbColumns->fetch_assoc()) { ?>
         <?php $field = $row["Field"]; ?>
         <?php if (!in_array($field, $forbiddenKeys)): ?>
-          <option value="<?php echo $field; ?>" <?php echo $field === $title ? "selected" : ""; ?>><?php echo $field; ?></option>
+          <option value="<?php echo $field; ?>" <?php echo ($field === $title && !isset($_GET["f"])) || (isset($_GET["f"]) && $_GET["f"] === $field) ? "selected" : ""; ?>><?php echo $field; ?></option>
         <?php endif; ?>
       <?php } ?>
     </select>
     <select name="query">
-      <option value="contains">contains</option>
-      <option value="equals">equals</option>
-      <option value="startswith">starts with</option>
-      <option value="endswith">ends with</option>
+      <option value="contains" <?php echo isset($_GET["q"]) && $_GET["q"] === "contains" ? "selected" : ""; ?>>contains</option>
+      <option value="equals" <?php echo isset($_GET["q"]) && $_GET["q"] === "equals" ? "selected" : ""; ?>>equals</option>
+      <option value="startswith" <?php echo isset($_GET["q"]) && $_GET["q"] === "startswith" ? "selected" : ""; ?>>starts with</option>
+      <option value="endswith" <?php echo isset($_GET["q"]) && $_GET["q"] === "endswith" ? "selected" : ""; ?>>ends with</option>
     </select>
-    <input id="search-bar" type="text" name="search" placeholder="search">
+    <input id="search-bar" type="text" name="search" placeholder="search" value="<?php echo isset($_GET["s"]) ? $_GET["s"] : ""; ?>">
     <br><br>
-    <input id="case-sensitive" type="checkbox">
+    <input id="case-sensitive" type="checkbox" <?php echo isset($_GET["c"]) && $_GET["c"] === "true" ? "checked" : ""; ?>>
     <label>Case Sensitive?</label>
   </div>
 <?php endif; ?>

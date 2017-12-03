@@ -169,7 +169,13 @@ function search() {
 }
 
 if ($('#search-bar').val()) search();
-$('#search-bar, select[name], #case-sensitive').on('keypress keydown keyup change', search);
+
+$('#search-bar, select[name], #case-sensitive').on('keypress keydown keyup change', function() {
+
+  search();
+  window.history.pushState(null, null, `?type=${$('html').data('type')}&s=${$('#search-bar').val()}&f=${$('select[name="field"]').val()}&q=${$('select[name="query"]').val()}&c=${$('#case-sensitive').is(':checked')}`);
+
+});
 
 $('.submit').click(function() {
 
