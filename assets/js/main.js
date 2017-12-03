@@ -569,6 +569,35 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   }
 
+  // Delete setting from profile
+
+  moodEngine.removeProfileSetting = function(setting) {
+
+    delete profileSettings[setting];
+
+    $.ajax({
+      data: {
+        id: currentUser.id,
+        settings: JSON.stringify(profileSettings)
+      },
+      method: 'POST',
+      url: `api/update/user_settings/index.php`,
+      success: function(response) {
+        if (response === 'success') {
+          moodEngine.log('log', `Cleared setting '${setting}' from profile.`);
+          moodEngine.checkUser();
+        } else {
+          moodEngine.profileError(response);
+        }
+      },
+      error: function(response) {
+        moodEngine.profileError('Failed to clear setting.');
+        moodEngine.log('error', `Failed to clear setting '${setting}' from profile.`);
+      }
+    });
+
+  }
+
   // Check current user
 
   moodEngine.checkUser = (method) => {
@@ -644,29 +673,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       $('.delete-saved-setting').click(function() {
 
         let setting = $(this).attr('data-setting');
-
-        delete profileSettings[setting];
-
-        $.ajax({
-          data: {
-            id: currentUser.id,
-            settings: JSON.stringify(profileSettings)
-          },
-          method: 'POST',
-          url: `api/update/user_settings/index.php`,
-          success: function(response) {
-            if (response === 'success') {
-              moodEngine.log('log', `Cleared setting '${setting}' from profile.`);
-              moodEngine.checkUser();
-            } else {
-              moodEngine.profileError(response);
-            }
-          },
-          error: function(response) {
-            moodEngine.profileError('Failed to clear setting.');
-            moodEngine.log('error', `Failed to clear setting '${setting}' from profile.`);
-          }
-        });
+        moodEngine.removeProfileSetting(setting);
 
       });
 
@@ -737,9 +744,9 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       } else {
 
-        fullSettings[key] = profileSettings[key] || settings[key].value;
+        fullSettings[key] = profileSettings[key] !== undefined ? profileSettings[key] : settings[key].value;
 
-        profileSettings[key] ? userPSettings++ : backendSettings++;
+        profileSettings[key] !== undefined ? userPSettings++ : backendSettings++;
 
       }
 
@@ -944,7 +951,21 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       } else {
 
-        moodEngine.error(null, 'User check interval is too often.', 4);
+        let location;
+
+        if (localStorage.getItem('user_check_interval')) {
+
+          localStorage.removeItem('user_check_interval');
+          location = 'local';
+
+        } else {
+
+          moodEngine.removeProfileSetting('user_check_interval');
+          location = 'profile';
+
+        }
+
+        moodEngine.error(null, `User check interval is too often. Cleared from your ${location} settings.`, 4);
 
       }
 
