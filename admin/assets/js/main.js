@@ -63,7 +63,7 @@ checkBoxes.change(function() {
 
   $('#select-all-checkbox').prop('checked', !!checked);
 
-  button.attr('data-confirm', `deleting ${number} ${button.attr('data-title')}${plural}`);
+  button.data('confirm', `deleting ${number} ${button.data('title')}${plural}`);
 
 });
 
@@ -179,12 +179,12 @@ $('#search-bar, select[name], #case-sensitive').on('keypress keydown keyup chang
 
 $('.submit').click(function() {
 
-  let action = $(this).attr('data-action');
-  let bsClass = $(this).attr('data-class');
-  let undo = $(this).attr('data-undo') === 'true' ? 'You will be able to undo this action.' : 'You will not be able to undo this action.';
-  let confirm = `You are ${$(this).attr('data-confirm')}. ${undo}`;
+  let action = $(this).data('action');
+  let bsClass = $(this).data('class');
+  let undo = $(this).data('undo') === 'true' ? 'You will be able to undo this action.' : 'You will not be able to undo this action.';
+  let confirm = `You are ${$(this).data('confirm')}. ${undo}`;
   let form = action === 'deletemultiple' ? $('#main-form') : $(this).closest('form');
-  let id = $(this).attr('data-id');
+  let id = $(this).data('id');
 
   form.prepend(`<input class="hidden-submit-input" type="hidden" name="${action}" value="true">`);
   if (id) form.prepend(`<input class="hidden-submit-input" type="hidden" name="id" value="${id}">`);
@@ -204,21 +204,7 @@ $('.submit').click(function() {
 
 $('#items-per-page').change(function() {
 
-  let string = `?items=${$(this).val()}`;
-
-  // hacky method of keeping quote type
-
-  if (location.href.includes('type=improve')) {
-
-    string += '&type=improve';
-
-  } else if (location.href.includes('type=decrease')) {
-
-    string += '&type=decrease';
-
-  }
-
-  location.href = string;
+  location.href = `?type=${$('html').data('type')}&items=${$(this).val()}`;
 
 });
 
