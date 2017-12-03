@@ -102,7 +102,7 @@
       <thead>
         <tr>
           <?php if (!$currentUser["read_only"]): ?>
-            <th></th>
+            <th><input id="select-all-checkbox" type="checkbox"></th>
           <?php endif; ?>
           <?php if (!isset($notDefault)): ?>
             <th><?php echo ucwords($title); ?></th>

@@ -12,6 +12,14 @@ if (!$('.action-button').length) $('.actions').remove();
 let lastChecked = null;
 let checkBoxes = $('.item:not(.d-none) .select-checkbox');
 
+$('#select-all-checkbox').click(function() {
+
+  let checked = !!$('.item:not(.d-none) .select-checkbox:not(:checked)').length;
+  checkBoxes.prop('checked', checked);
+  checkBoxes.first().change();
+
+});
+
 checkBoxes.click(function(e) {
 
   if (!lastChecked) {
@@ -52,6 +60,8 @@ checkBoxes.change(function() {
     $('#selected-number').text(checked);
 
   }
+
+  $('#select-all-checkbox').prop('checked', !!checked);
 
   button.attr('data-confirm', `deleting ${number} ${button.attr('data-title')}${plural}`);
 
