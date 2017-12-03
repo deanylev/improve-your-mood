@@ -965,7 +965,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         }
 
-        moodEngine.error(null, `User check interval is too often. Cleared from your ${location} settings.`, 4);
+        moodEngine.error(null, `User check interval is too low. Cleared from your ${location} settings.`, 4);
 
       }
 

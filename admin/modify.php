@@ -80,36 +80,22 @@
           }
           if (isset($_POST["values"]["items_per_page"]) && (intval($_POST["values"]["items_per_page"]) < 1 || intval($_POST["values"]["items_per_page"]) > 50000)) {
             $errors[] = (object) array("items_per_page" => "Must be between 1 and 50,000.");
-            $url = $_SERVER['HTTP_REFERER'];
-            $query = "";
           }
           if (isset($_POST["values"]["user"]) && !$_POST["values"]["user"]) {
             $errors[] = (object) array("user" => "Can't be blank.");
-            $url = $_SERVER['HTTP_REFERER'];
-            $query = "";
           } elseif (isset($_POST["values"]["user"]) && $_POST["values"]["user"] !== trim($_POST["values"]["user"])) {
             $errors[] = (object) array("user" => "Can't contain spaces.");
-            $url = $_SERVER['HTTP_REFERER'];
-            $query = "";
           } elseif ((isset($row) && $row["id"] !== $id)) {
             $errors[] = (object) array("user" => "Already in use.");
-            $url = $_SERVER['HTTP_REFERER'];
-            $query = "";
           }
           if (isset($_POST["values"]["app_settings"]) && !json_decode($_POST["values"]["app_settings"])) {
             $errors[] = (object) array("app_settings" => "Must be a valid JSON object.");
-            $url = $_SERVER['HTTP_REFERER'];
-            $query = "";
           }
           if (isset($_POST["values"]["password"]) && strlen($_POST["values"]["password"]) < 8) {
             $errors[] = (object) array("password" => "Must be at least 8 characters.");
-            $url = $_SERVER['HTTP_REFERER'];
-            $query = "";
           }
           if (isset($_POST["values"]["password"]) && $_POST["values"]["password"] !== $_POST["password_confirmation"]) {
             $errors[] = (object) array("password_confirmation" => "Doesn't match password.");
-            $url = $_SERVER['HTTP_REFERER'];
-            $query = "";
           }
         } elseif ($table === "settings") {
             $setting = $_POST["values"]["setting"];
@@ -120,8 +106,6 @@
             }
             if ((isset($row) && $row["id"] !== $id)) {
               $errors[] = (object) array("setting" => "Already in use.");
-              $url = $_SERVER['HTTP_REFERER'];
-              $query = "";
             }
             unset($row);
             $result = $mysqli->query("SELECT * FROM yourmood.{$table} WHERE label='{$label}'");
@@ -166,7 +150,10 @@
         $message = "An error occured. (003)";
     }
 
-    $mysqli->query($query);
+    if (!isset($errors)) {
+      $mysqli->query($query);
+    }
+
     $newId = $mysqli->insert_id;
 
     if (isset($goToID)) {
@@ -207,6 +194,7 @@
     $mysqli->close();
 
     if (isset($errors) && !isset($_POST["no_message"])) {
+      $url = $_SERVER["HTTP_REFERER"];
       $_SESSION["errors"] = $errors;
     } else {
       $_SESSION["message"][$messageType] = $message;
