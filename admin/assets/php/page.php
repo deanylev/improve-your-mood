@@ -125,6 +125,15 @@
 
             foreach ($row as $key => $val) {
               if (!in_array($key, $forbiddenKeys)) {
+                if ($key === "created_at" && $val === "0000-00-00 00:00:00") {
+                  $val = "unknown";
+                } elseif ($key === "created_by") {
+                  if ($mysqli->query("SELECT * FROM yourmood.users WHERE id = {$val}")->num_rows) {
+                    $val = $mysqli->query("SELECT * FROM yourmood.users WHERE id = '{$val}'")->fetch_object()->user;
+                  } else {
+                    $val = "unknown";
+                  }
+                }
                 $quote = strpos($val, "\"") ? "'" : "\"";
                 $fields .= " data-{$key}={$quote}{$val}{$quote}";
               }
