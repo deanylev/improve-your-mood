@@ -108,7 +108,7 @@ $(window).on('error', function(error) {
 
     $('#error-message').text('Your settings have been cleared to try resolve the issue, reloading in 2 seconds...');
 
-    setTimeout(function() {
+    setTimeout(() => {
 
       window.location.reload();
 
@@ -311,7 +311,7 @@ moodEngine.error = function(display, log, code, type) {
       localStorage.removeItem('backend_address');
       $('#error-message').text('Back-end address reset, reloading in 2 seconds...');
 
-      setTimeout(function() {
+      setTimeout(() => {
 
         window.location.reload();
 
@@ -967,6 +967,12 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         moodEngine.error(null, `User check interval is too low. Cleared from your ${location} settings.`, 4);
 
+        setTimeout(() => {
+
+          window.location.reload();
+
+        }, 2000)
+
       }
 
     }
@@ -1342,7 +1348,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         input.attr('disabled', true);
 
-        let interval = setInterval(function() {
+        let interval = setInterval(() => {
 
           method === 'decrease' ? currentValue -= amount : currentValue += amount;
 
@@ -1918,7 +1924,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
           (autoReload = function() {
 
-            timeout = setTimeout(function() {
+            timeout = setTimeout(() => {
 
               if (!moodEngine.notAutoReloading() && !appError) moodEngine.reload('Auto');
 
