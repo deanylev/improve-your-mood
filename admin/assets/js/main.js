@@ -169,12 +169,9 @@ $('.submit').click(function() {
   let confirm = `You are ${$(this).attr('data-confirm')}. ${undo}`;
   let form = action === 'deletemultiple' ? $('#main-form') : $(this).closest('form');
   let id = $(this).attr('data-id');
-  let goTo = $(this).attr('data-go-to');
 
   form.prepend(`<input class="hidden-submit-input" type="hidden" name="${action}" value="true">`);
   if (id) form.prepend(`<input class="hidden-submit-input" type="hidden" name="id" value="${id}">`);
-
-  if (goTo) form.attr('data-go-to', goTo);
 
   $('#modal-submit').off();
   $('#modal-submit').removeClass();
