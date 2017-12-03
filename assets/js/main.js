@@ -672,7 +672,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       $('.delete-saved-setting').off();
       $('.delete-saved-setting').click(function() {
 
-        let setting = $(this).data('setting');
+        let setting = $(this).attr('data-setting');
         moodEngine.removeProfileSetting(setting);
 
       });
@@ -838,19 +838,19 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         let icon;
 
-        if (fullSettings.button_icons && fullSettings.button_icons[$(this).data('icon')]) {
+        if (fullSettings.button_icons && fullSettings.button_icons[$(this).attr('data-icon')]) {
 
-          icon = fullSettings.button_icons[$(this).data('icon')]
+          icon = fullSettings.button_icons[$(this).attr('data-icon')]
 
         } else {
 
           if (fullSettings.button_icons && $(this).is('[data-icon]')) {
 
-            moodEngine.log('warn', `No icon for ${$(this).data('icon')}, using default...`);
+            moodEngine.log('warn', `No icon for ${$(this).attr('data-icon')}, using default...`);
 
           }
 
-          icon = $(this).data('default');
+          icon = $(this).attr('data-default');
 
         }
 
@@ -1762,7 +1762,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   $('.default-button').click(function() {
 
-    let setting = $(this).data('setting');
+    let setting = $(this).attr('data-setting');
     localStorage.removeItem(setting);
     moodEngine.setSettings(null, `Set ${settings[setting].label} to Default!`);
 
@@ -1775,7 +1775,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
     $('input').focusout();
     $('.thumb').remove();
 
-    let setting = $(this).data('setting');
+    let setting = $(this).attr('data-setting');
     moodEngine.setInputs(setting);
 
   });
@@ -1788,11 +1788,11 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   $('.tooltipped').each(function() {
 
-    let setting = $(this).data('setting');
+    let setting = $(this).attr('data-setting');
     let text = Array.isArray(settings[setting].value) ? settings[setting].value.join(', ') : settings[setting].value;;
     let value = `${settings[setting].description}<br>The default is ${text}.`;
 
-    $(this).data('tooltip', value);
+    $(this).attr('data-tooltip', value);
 
     // Initialize the Materialize tooltip plugin
 
@@ -2197,20 +2197,20 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         $(this).addClass('invalid');
 
-        if ($(this).data('optional') !== '1' && ((!$(this).hasClass('chips') && !$(this).val() || $(this).val() === 'null') || $(this).hasClass('chips') && !$(this).material_chip('data').length)) {
+        if ($(this).attr('data-optional') !== '1' && ((!$(this).hasClass('chips') && !$(this).val() || $(this).val() === 'null') || $(this).hasClass('chips') && !$(this).material_chip('data').length)) {
 
           emptyInputs.push(` ${settings[$(this).attr('name')].label}`);
-          $(this).next('label').data('error', 'Can\'t be empty.');
+          $(this).next('label').attr('data-error', 'Can\'t be empty.');
 
         } else if ($(this).val().indexOf(' ') >= 0 && !$(this).is('select')) {
 
           spaceInputs.push(` ${settings[$(this).attr('name')].label}`);
-          $(this).next('label').data('error', 'Can\'t contain spaces.');
+          $(this).next('label').attr('data-error', 'Can\'t contain spaces.');
 
         } else {
 
           $(this).removeClass('invalid');
-          $(this).next('label').data('error', '');
+          $(this).next('label').attr('data-error', '');
 
         }
 
@@ -2248,7 +2248,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
               let sslMessage = pageSSL && !$(this).val().startsWith('https://') ? ' Make Sure It Is SSL Enabled.' : '';
               moodEngine.log('warn', `Custom back-end address '${$(this).val()}' is invalid.`);
               $(this).addClass('invalid');
-              $(this).next('label').data('error', 'Address is invalid.');
+              $(this).next('label').attr('data-error', 'Address is invalid.');
               invalidInputs.push(`${settings[$(this).attr('name')].label} '${$(this).val()}' Is Invalid.${sslMessage}`);
 
             });
