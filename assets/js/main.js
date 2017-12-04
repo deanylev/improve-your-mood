@@ -2169,6 +2169,8 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
     $('.settings-input:not(.select-wrapper)').each(function() {
 
+      let name = $(this).attr('name');
+
       // Construct the object using values
 
       if ($(this).hasClass('chips')) {
@@ -2181,21 +2183,19 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         });
 
-        localSettings[$(this).attr('name')] = JSON.stringify(array);
+        localSettings[name] = JSON.stringify(array);
 
       } else if ($(this).is('[type="checkbox"]')) {
 
-        localSettings[$(this).attr('name')] = $(this).is(':checked');
+        localSettings[name] = $(this).is(':checked');
 
       } else if ($(this).is('[type="radio"]')) {
-
-        let name = $(this).attr('name');
 
         localSettings[name] = $(`.settings-input[name="${name}"]:checked`).val();
 
       } else {
 
-        localSettings[$(this).attr('name')] = $(this).val();
+        localSettings[name] = $(this).val();
 
       }
 
@@ -2207,12 +2207,12 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         if ($(this).attr('data-optional') !== '1' && ((!$(this).hasClass('chips') && !$(this).val() || $(this).val() === 'null') || $(this).hasClass('chips') && !$(this).material_chip('data').length)) {
 
-          emptyInputs.push(` ${settings[$(this).attr('name')].label}`);
+          emptyInputs.push(` ${settings[name].label}`);
           $(this).next('label').attr('data-error', 'Can\'t be empty.');
 
         } else if ($(this).val().indexOf(' ') >= 0 && !$(this).is('select')) {
 
-          spaceInputs.push(` ${settings[$(this).attr('name')].label}`);
+          spaceInputs.push(` ${settings[name].label}`);
           $(this).next('label').attr('data-error', 'Can\'t contain spaces.');
 
         } else {
@@ -2230,7 +2230,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         // Backend Address
 
-        if ($(this).attr('name') === 'backend_address' && $(this).val() !== backendAddress) {
+        if (name === 'backend_address' && $(this).val() !== backendAddress) {
 
           if (!$(this).val().startsWith('http://') && !$(this).val().startsWith('https://')) {
 
@@ -2241,7 +2241,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
           } else if (pageSSL && $(this).val().startsWith('http://')) {
 
-            invalidInputs.push(`${settings[$(this).attr('name')].label} Must Be SSL Enabled.`);
+            invalidInputs.push(`${settings[name].label} Must Be SSL Enabled.`);
 
           } else {
 
@@ -2257,7 +2257,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
               moodEngine.log('warn', `Custom back-end address '${$(this).val()}' is invalid.`);
               $(this).addClass('invalid');
               $(this).next('label').attr('data-error', 'Address is invalid.');
-              invalidInputs.push(`${settings[$(this).attr('name')].label} '${$(this).val()}' Is Invalid.${sslMessage}`);
+              invalidInputs.push(`${settings[name].label} '${$(this).val()}' Is Invalid.${sslMessage}`);
 
             });
 
@@ -2271,19 +2271,19 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         // Button Order
 
-        if ($(this).attr('name') === 'button_order' && settings.button_order.value.includes('settings') && !localSettings.button_order.includes('settings')) {
+        if (name === 'button_order' && settings.button_order.value.includes('settings') && !localSettings.button_order.includes('settings')) {
 
           $(this).addClass('invalid');
-          invalidInputs.push(`${settings[$(this).attr('name')].label} Needs to Include Settings`);
+          invalidInputs.push(`${settings[name].label} Needs to Include Settings`);
 
         }
 
         // User Check interval
 
-        if ($(this).attr('name') === 'user_check_interval' && parseInt($(this).val()) && $(this).val() < 1000) {
+        if (name === 'user_check_interval' && parseInt($(this).val()) && $(this).val() < 1000) {
 
           $(this).addClass('invalid');
-          invalidInputs.push(`${settings[$(this).attr('name')].label} Must Be Either 0 or 1000+`);
+          invalidInputs.push(`${settings[name].label} Must Be Either 0 or 1000+`);
 
         }
 
