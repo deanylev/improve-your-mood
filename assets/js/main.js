@@ -2492,11 +2492,17 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   });
 
-  $('#go-to-login').click(function() {
+  moodEngine.goToLogin = function() {
 
     moodEngine.profileError();
     $('.signup').addClass('hide-also');
     $('.login').removeClass('hide-also');
+
+  }
+
+  $('#go-to-login').click(function() {
+
+    moodEngine.goToLogin();
 
   });
 
@@ -2581,6 +2587,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
   moodEngine.logOut = function() {
 
     moodEngine.profileError();
+    moodEngine.goToLogin();
     $('li[data-button="profile"] .main-icon').removeClass('hide')
     $('li[data-button="profile"] .alt-icon').addClass('hide')
     $('li[data-button="profile"] i').addClass('ignore');
