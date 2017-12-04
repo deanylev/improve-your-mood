@@ -63,7 +63,7 @@
         }
         // Construct SQL statement
         foreach ($_POST["values"] as $key => $val) {
-            $val = $key === "password" ? md5($val) : $val;
+            $val = $key === "password" ? md5($val) : htmlspecialchars($val);
             $statement .= $key . " = '" . addslashes($val) . "',";
         }
         $statement = substr($statement, 0, -1);
