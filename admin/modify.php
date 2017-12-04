@@ -96,6 +96,9 @@
           if (isset($_POST["values"]["password"]) && $_POST["values"]["password"] !== $_POST["password_confirmation"]) {
             $errors[] = (object) array("password_confirmation" => "Doesn't match password.");
           }
+          if ((isset($_POST["values"]["is_admin"]) || isset($_POST["values"]["read_only"])) && !$_POST["values"]["is_admin"] && $_POST["values"]["read_only"]) {
+            $errors[] = (object) array("read_only" => "Must be admin to be read_only.");
+          }
         } elseif ($table === "settings") {
             $setting = $_POST["values"]["setting"];
             $value = $_POST["values"]["value"];
