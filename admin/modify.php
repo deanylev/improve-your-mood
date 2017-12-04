@@ -107,7 +107,7 @@
             if ($result->num_rows) {
               $row = $result->fetch_assoc();
             }
-            if (!$setting) {
+            if ($setting === "") {
               $errors[] = (object) array("setting" => "Can't be blank.");
             }
             if ((isset($row) && $row["id"] !== $id)) {
@@ -118,7 +118,7 @@
             if ($result->num_rows) {
               $row = $result->fetch_assoc();
             }
-            if (!$value) {
+            if ($value === "") {
               $errors[] = (object) array("value" => "Can't be blank.");
             } elseif ($_POST["values"]["user"]) {
               if ($input === "chips" && !json_decode($value)) {
@@ -130,21 +130,21 @@
               }
             }
             if ($_POST["values"]["user"]) {
-              if (!$label) {
+              if ($label === "") {
                 $errors[] = (object) array("label" => "Can't be blank, as it will be accessible to the user.");
               } elseif (isset($row) && $row["id"] !== $id) {
                 $errors[] = (object) array("label" => "Already in use.");
               }
-              if (!$input) {
+              if ($input === "") {
                 $errors[] = (object) array("input" => "Can't be blank, as it will be accessible to the user.");
               } elseif (!in_array($input, $validInputs)) {
                 $inputString = implode(", ", $validInputs);
                 $errors[] = (object) array("input" => "Must be one of: {$inputString}.");
               }
-              if (!$_POST["values"]["tab"]) {
+              if ($_POST["values"]["tab"] === "") {
                 $errors[] = (object) array("tab" => "Can't be blank, as it will be accessible to the user.");
               }
-              if (!$_POST["values"]["description"]) {
+              if ($_POST["values"]["description"] === "") {
                 $errors[] = (object) array("description" => "Can't be blank, as it will be accessible to the user.");
               }
             }
