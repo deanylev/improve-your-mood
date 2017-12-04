@@ -630,6 +630,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
         if (method !== 'initial') moodEngine.profileError();
         $('.not-logged-in').addClass('hide');
         $('.logged-in').removeClass('hide');
+        $('.signup').addClass('also-hide');
 
         let name = currentUser.name;
 
