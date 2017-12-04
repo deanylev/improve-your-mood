@@ -25,10 +25,9 @@
         }
     } elseif (isset($_POST["deletemultiple"]) && in_array("delete", $actions)) {
         $statement = "";
-        $length = 0;
+        $length = sizeof($_POST["items"]);
         foreach($_POST["items"] as $item) {
           $statement .= "id = '{$item}' OR ";
-          $length++;
         }
         $statement = substr($statement, 0, -3);
         $query = "DELETE FROM yourmood.{$table} WHERE {$statement}";

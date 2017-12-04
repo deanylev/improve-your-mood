@@ -173,7 +173,7 @@ if ($('#search-bar').val()) search();
 $('#search-bar, select[name], #case-sensitive').on('keypress keydown keyup change', function() {
 
   search();
-  window.history.pushState(null, null, `?type=${$('html').data('type')}&s=${$('#search-bar').val()}&f=${$('select[name="field"]').val()}&q=${$('select[name="query"]').val()}&c=${$('#case-sensitive').is(':checked')}`);
+  window.history.pushState(null, null, `?type=${$('html').data('type')}&items=${$('html').data('items')}&s=${$('#search-bar').val()}&f=${$('select[name="field"]').val()}&q=${$('select[name="query"]').val()}&c=${$('#case-sensitive').is(':checked')}`);
 
 });
 
@@ -204,21 +204,24 @@ $('.submit').click(function() {
 
 $('#items-per-page').change(function() {
 
-  let string = `?items=${$(this).val()}`;
+  let string = '';
+  let symbol = '?';
 
   // hacky method of keeping quote type
 
   if (location.href.includes('type=improve')) {
 
-    string += '&type=improve';
+    string = `?type=improve`;
+    symbol = '&';
 
   } else if (location.href.includes('type=decrease')) {
 
-    string += '&type=decrease';
+    string += '?type=improve';
+    symbol = '&';
 
   }
 
-  location.href = string;
+  location.href = `${string}${symbol}items=${$(this).val()}`;
 
 });
 

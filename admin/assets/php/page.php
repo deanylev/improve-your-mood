@@ -1,11 +1,6 @@
 <?php
 
   include("header.php");
-  $numRows = $mysqli->query("SELECT * FROM yourmood.{$table}")->num_rows;
-  $items = isset($_GET["items"]) ? $_GET["items"] : $currentUser["items_per_page"];
-  if (!isset($_GET["page"]) && $numRows > $items) {
-    $_GET["page"] = 1;
-  }
   $itemAmounts = array(100, 200, 300, 400, 500, 600, 700, 800, 900, 1000);
   if (!in_array($currentUser["items_per_page"], $itemAmounts)) {
     $itemAmounts[] = $currentUser["items_per_page"];

@@ -16,9 +16,17 @@
       die();
   }
 
+  if (isset($table)) {
+    $numRows = $mysqli->query("SELECT * FROM yourmood.{$table}")->num_rows;
+    $items = isset($_GET["items"]) ? $_GET["items"] : $currentUser["items_per_page"];
+    if (!isset($_GET["page"]) && $numRows > $items) {
+      $_GET["page"] = 1;
+    }  
+  }
+
 ?>
 <!DOCTYPE html>
-<html lang="en" data-type="<?php echo isset($type) ? $type : "unknown"; ?>">
+<html lang="en" data-type="<?php echo isset($type) ? $type : "unknown"; ?>" data-items="<?php echo isset($items) ? $items : "unknown"; ?>">
 
 <head>
   <meta charset="UTF-8">
