@@ -2480,6 +2480,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
     } else {
 
       $('#profile-error').empty();
+      $('.validation-errors').empty();
       $('#clear-profile-error').addClass('hide');
 
     }
