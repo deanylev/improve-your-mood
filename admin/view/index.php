@@ -8,7 +8,7 @@
   $singular = true;
   $action = "view";
   $otherTitle = ucwords($action) . " " . ucwords($title);
-  if ($id == $_SESSION["user"]) {
+  if ($id == $_SESSION["user"] && $type === "users") {
     $userPage = "view";
   }
   include("../../assets/php/sql.php");
