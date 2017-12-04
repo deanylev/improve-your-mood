@@ -99,10 +99,16 @@
           }
         } elseif ($table === "settings") {
             $setting = $_POST["values"]["setting"];
+            $value = $_POST["values"]["value"];
+            $input = $_POST["values"]["input"];
             $label = $_POST["values"]["label"];
+            $validInputs = array("text", "number", "range", "checkbox", "radio", "chips", "switch");
             $result = $mysqli->query("SELECT * FROM yourmood.{$table} WHERE setting='{$setting}'");
             if ($result->num_rows) {
               $row = $result->fetch_assoc();
+            }
+            if (!$setting) {
+              $errors[] = (object) array("setting" => "Can't be blank.");
             }
             if ((isset($row) && $row["id"] !== $id)) {
               $errors[] = (object) array("setting" => "Already in use.");
@@ -112,8 +118,50 @@
             if ($result->num_rows) {
               $row = $result->fetch_assoc();
             }
-            if (isset($row) && $row["id"] !== $id && $_POST["values"]["user"]) {
-              $errors[] = (object) array("label" => "Already in use.");
+            if (!$value) {
+              $errors[] = (object) array("value" => "Can't be blank.");
+            } elseif ($_POST["values"]["user"]) {
+              if ($input === "chips" && !json_decode($value)) {
+                $errors[] = (object) array("value" => "Must be a valid array.");
+              } elseif (($input === "number" || $input === "range") && !is_numeric($value)) {
+                $errors[] = (object) array("value" => "Must be a numeric value.");
+              } else if (($input === "checkbox" || $input === "switch") && $value !== "false" && $value !== "true") {
+                $errors[] = (object) array("value" => "Must be a boolean value.");
+              }
+            }
+            if ($_POST["values"]["user"]) {
+              if (!$label) {
+                $errors[] = (object) array("label" => "Can't be blank, as it will be accessible to the user.");
+              } elseif (isset($row) && $row["id"] !== $id) {
+                $errors[] = (object) array("label" => "Already in use.");
+              }
+              if (!$input) {
+                $errors[] = (object) array("input" => "Can't be blank, as it will be accessible to the user.");
+              } elseif (!in_array($input, $validInputs)) {
+                $inputString = implode(", ", $validInputs);
+                $errors[] = (object) array("input" => "Must be one of: {$inputString}.");
+              }
+              if (!$_POST["values"]["tab"]) {
+                $errors[] = (object) array("tab" => "Can't be blank, as it will be accessible to the user.");
+              }
+              if (!$_POST["values"]["description"]) {
+                $errors[] = (object) array("description" => "Can't be blank, as it will be accessible to the user.");
+              }
+            }
+            if ($_POST["values"]["options"] && !json_decode($_POST["values"]["options"])) {
+              $errors[] = (object) array("options" => "Must be a valid object or array.");
+            }
+            if ($input === "range") {
+              if ($_POST["values"]["min"] < 0) {
+                $errors[] = (object) array("min" => "Must be 0 or higher.");
+              }
+              if ($_POST["values"]["max"] < 0) {
+                $errors[] = (object) array("max" => "Must be 0 or higher.");
+              }
+              if ($_POST["values"]["min"] >= $_POST["values"]["max"]) {
+                $errors[] = (object) array("min" => "Must be lower than max.");
+                $errors[] = (object) array("max" => "Must be higher than min.");
+              }
             }
         } elseif ($table === "colours") {
             $colour = $_POST["values"]["colour"];
@@ -176,6 +224,11 @@
       } elseif ($table === "colours") {
         // Default black colour
         $mysqli->query("UPDATE yourmood.{$table} SET colour = '000000' WHERE id = '{$newId}'");
+      } elseif ($table === "settings") {
+        // Random setting name
+        $randomSettingName = "setting_" . uniqid();
+        $randomSettingValue = uniqid();
+        $mysqli->query("UPDATE yourmood.{$table} SET setting = '{$randomSettingName}', value = '{$randomSettingValue}' WHERE id = '{$newId}'");
       }
       $mysqli->query("UPDATE yourmood.{$table} SET active = 1, created_at = '{$dateNow}' WHERE id = '{$newId}'");
     } elseif (isset($_POST["clone"]) && in_array("clone", $actions)) {
@@ -186,7 +239,8 @@
           $setting = $mysqli->query("SELECT setting, label FROM yourmood.{$table} WHERE id = '{$newId}'")->fetch_object();
           $settingName = $setting->setting . "_" . uniqid();
           $settingLabel = $setting->label . "_" . uniqid();
-          $mysqli->query("UPDATE yourmood.{$table} SET setting = '{$settingName}', label = '{$settingLabel}' WHERE id = '{$newId}'");
+          $extra = $setting->label ? ", label = '{$settingLabel}' " : "";
+          $mysqli->query("UPDATE yourmood.{$table} SET setting = '{$settingName}'{$extra}WHERE id = '{$newId}'");
         }
         $mysqli->query("UPDATE yourmood.{$table} SET created_at = '{$dateNow}' WHERE id = '{$newId}'");
     }

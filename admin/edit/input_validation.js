@@ -71,7 +71,8 @@ $('#main-edit-form').submit(function() {
         response = JSON.parse(response);
         $.each(response, function(key, val) {
           let field = Object.keys(val)[0];
-          $(`div[data-field="${field}"]`).find('.validation-errors').append(val[field]);
+          let append = $(`div[data-field="${field}"]`).find('.validation-errors').is(':empty') ? val[field] : `<br>${val[field]}`;
+          $(`div[data-field="${field}"]`).find('.validation-errors').append(append);
         });
         $('#modal').modal('hide');
         $('.fa-spinner').addClass('d-none');
