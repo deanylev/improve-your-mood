@@ -2530,7 +2530,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
         try {
 
           response = JSON.parse(response);
-          
+
           $.each(response, function(key, val) {
             let field = Object.keys(val)[0];
             let append = $(`.validation-errors[data-field="${field}"]`).is(':empty') ? val[field] : `<br>${val[field]}`;
@@ -2540,7 +2540,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
         } catch (error) {
 
           moodEngine.checkUser();
-          $('.signup').addClass('hide');
+          $('.signup').addClass('hide-also');
 
         }
       }
