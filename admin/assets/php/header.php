@@ -21,7 +21,13 @@
     $items = isset($_GET["items"]) ? $_GET["items"] : $currentUser["items_per_page"];
     if (!isset($_GET["page"]) && $numRows > $items) {
       $_GET["page"] = 1;
-    }  
+    }
+  }
+
+  $pageTitle = isset($otherTitle) ? $otherTitle : ucwords($title);
+
+  if (!isset($singular)) {
+    $pageTitle .= "s";
   }
 
 ?>
@@ -32,7 +38,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Admin Panel - <?php echo isset($otherTitle) ? $otherTitle :  ucwords($title); echo isset($singular) ? "" : "s"; ?></title>
+  <title>Admin Panel - <?php echo isset($userPage) ? ucwords($action) . " Your Profile" : $pageTitle; ?></title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="../assets/css/main.css">

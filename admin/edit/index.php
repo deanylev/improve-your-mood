@@ -29,7 +29,7 @@
 
 ?>
 
-<h1 class="text-center">Edit <?php echo $title === "user" && $id == $_SESSION["user"] ? "Your Profile" : ucwords($title); ?></h1>
+<h1 class="text-center">Edit <?php echo isset($userPage) ? "Your Profile" : ucwords($title); ?></h1>
 <br>
 
 <form id="main-edit-form" class="form-group text-center container" action="../modify.php" method="POST">
@@ -158,7 +158,7 @@
 
   <p class="text-danger response"></p>
 
-  <button id="save-button" class="btn btn-lg btn-success submit" type="button" data-action="edit" data-confirm="saving an edited <?php echo $title; ?>" data-class="success" data-toggle="modal" data-target="#modal">Save</button>
+  <button id="save-button" class="btn btn-lg btn-success submit" type="button" data-action="edit" data-confirm="<?php echo isset($userPage) ? "saving your edited profile" : "saving an edited {$title}"; ?>" data-class="success" data-toggle="modal" data-target="#modal">Save</button>
   <?php if (in_array("view", $actions)): ?>
     <a class="btn btn-lg btn-primary" href="../view?type=<?php echo $type; ?>&amp;title=<?php echo $title; ?>&amp;id=<?php echo $row["id"]; ?>">Cancel</a>
   <?php elseif ($currentUser["is_admin"]): ?>

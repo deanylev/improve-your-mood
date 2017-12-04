@@ -36,7 +36,7 @@
               break;
           }
         } elseif (($type === "user" || $type === "users") && isset($id) && $id == $_SESSION["user"]) {
-          $actions = array("edit");
+          $actions = array("view", "edit");
         } else {
           $actions = array("view");
         }
