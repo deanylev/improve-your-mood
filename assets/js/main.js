@@ -689,6 +689,8 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   moodEngine.checkUser('initial');
 
+  $('.manual-check').click(moodEngine.checkUser);
+
 }).always((data) => {
 
   // Construct settings object from backend or local
