@@ -48,18 +48,18 @@
         <div class="form-group">
           <label for="username">Username</label>
           <input type="text" name="username" class="form-control" id="user">
+          <p class="validation-errors text-danger" data-field="username"></p>
         </div>
-        <div class="validation-errors text-danger" data-input="user"></div>
         <div class="form-group">
           <label for="password">Password</label>
           <input data-required="true" type="password" name="password" class="form-control" id="password">
+          <p class="validation-errors text-danger" data-field="password"></p>
         </div>
-        <div class="validation-errors text-danger" data-input="password"></div>
         <div class="form-group">
           <label for="password_confirmation">Password Confirmation</label>
           <input type="password" name="password_confirmation" class="form-control" id="password_confirmation">
+          <p class="validation-errors text-danger" data-field="password_confirmation"></p>
         </div>
-        <div class="validation-errors text-danger" data-input="password_confirmation"></div>
         <p class="response text-danger"></p>
         <button id="save-button" class="btn btn-primary" type="submit">Sign Up<i class="d-none fa fa-spinner fa-pulse fa-fw"></i></button>
         <a class="btn btn-link" href="../login">Log In</a>

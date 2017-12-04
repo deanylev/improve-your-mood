@@ -6,28 +6,31 @@
   $password = $_POST["password"];
   $passwordConfirmation = $_POST["password_confirmation"];
 
-  $reason = false;
   $result = $mysqli->query("SELECT * FROM yourmood.users WHERE user='{$username}'");
 
-  if (!$username) {
-    $reason = "Username can't be blank.";
-  } elseif (strpos($username, " ")) {
-    $reason = "Username can't contain spaces.";
+  if ($username === "") {
+    $errors[] = (object) array("username" => "Can't be blank.");
+  } elseif ($username !== str_replace(" ", "", $username)) {
+    $errors[] = (object) array("username" => "Can't contain spaces.");
   } elseif ($result->num_rows) {
-    $reason = "Username already in use.";
-  } elseif (strlen($password) < 8) {
-    $reason = "Password must be at least 8 characters.";
-  } elseif ($password !== $passwordConfirmation) {
-    $reason = "Passwords don't match.";
+    $errors[] = (object) array("username" => "Already in use.");
+  }
+
+  if (strlen($password) < 8) {
+    $errors[] = (object) array("password" => "Must be at least 8 characters.");
+  }
+
+  if ($password !== $passwordConfirmation) {
+    $errors[] = (object) array("password_confirmation" => "Doesn't match password.");
   }
 
 
-  if ($reason) {
+  if (isset($errors)) {
     if (!isset($_POST["no_message"])) {
-      $_SESSION["message"]["danger"] = $reason;
+      $_SESSION["errors"] = $errors;
       header("location: .");
     } else {
-      echo $reason;
+      die(json_encode($errors));
     }
   } else {
     $password = md5($password);

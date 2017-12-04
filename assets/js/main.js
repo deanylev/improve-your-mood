@@ -2518,6 +2518,8 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   moodEngine.signUp = function() {
 
+    $('.validation-errors').empty();
+
     moodEngine.profileError();
 
     $.ajax({
@@ -2525,14 +2527,20 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       method: 'POST',
       url: `admin/signup/signup.php`,
       success: function(response) {
-        if (response === 'success') {
+        try {
+
+          response = JSON.parse(response);
+          
+          $.each(response, function(key, val) {
+            let field = Object.keys(val)[0];
+            let append = $(`.validation-errors[data-field="${field}"]`).is(':empty') ? val[field] : `<br>${val[field]}`;
+            $(`.validation-errors[data-field="${field}"]`).append(append);
+          });
+
+        } catch (error) {
 
           moodEngine.checkUser();
           $('.signup').addClass('hide');
-
-        } else {
-
-          moodEngine.profileError(response);
 
         }
       }
