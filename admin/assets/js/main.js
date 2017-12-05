@@ -61,7 +61,7 @@ checkBoxes.change(function() {
 
   }
 
-  $('#select-all-checkbox').prop('checked', !!checked);
+  $('#select-all-checkbox').prop('checked', checked === $('.select-checkbox').length);
 
   button.attr('data-confirm', `deleting ${number} ${button.attr('data-title')}${plural}`);
 
