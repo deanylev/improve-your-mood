@@ -60,7 +60,7 @@
 
 ?>
 
-          <p><b><?php echo $key; ?></b></p>
+          <p><b><?php echo $key; ?>:</b></p>
           <img class="user-image" src="../users/image.php?id=<?php echo $id; ?>">
           <br><br>
 
