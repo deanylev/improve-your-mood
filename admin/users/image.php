@@ -3,7 +3,7 @@
   $allowNormal = true;
   header('Content-Type: image/png');
   include("../../assets/php/sql.php");
-  include("../assets/php/user.php");
+  @include("../assets/php/user.php");
 
   $id = @$_GET["id"];
   $query = @$mysqli->query("SELECT * FROM yourmood.users WHERE id = '{$id}'");
