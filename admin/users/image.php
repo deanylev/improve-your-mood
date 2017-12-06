@@ -1,5 +1,6 @@
 <?php
 
+  $allowNormal = true;
   header('Content-Type: image/png');
   include("../../assets/php/sql.php");
   include("../assets/php/user.php");
