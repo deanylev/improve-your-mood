@@ -89,7 +89,6 @@ $('#main-edit-form').submit(function() {
 });
 
 $('#image').fineUploader({
-  debug: true,
   multiple: false,
   validation: {
     acceptFiles: 'image/png',
