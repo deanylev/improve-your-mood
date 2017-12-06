@@ -96,6 +96,20 @@ th {
   border: none !important;
 }
 
+img.user-image {
+  width: 80px;
+  height: 80px;
+}
+
+img.nav-user-image {
+  width: 20px;
+  height: 20px;
+}
+
+div[data-field="image"] .validation-errors {
+  margin-top: 10px;
+}
+
 @-webkit-keyframes shake {
   8%, 41% {
     -webkit-transform: translateX(-10px);

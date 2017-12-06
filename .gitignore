@@ -1,3 +1,5 @@
 .DS_Store
 settings.ini
 reset_code.txt
+admin/uploads/images/user/*
+!admin/uploads/images/user/placeholder.png

@@ -56,6 +56,15 @@
           <p><b><?php echo $key; ?>:</b><br>unknown</p><br>
 
 <?php
+      } elseif ($key === "image") {
+
+?>
+
+          <p><b><?php echo $key; ?></b></p>
+          <img class="user-image" src="../users/image.php?id=<?php echo $id; ?>">
+          <br><br>
+
+<?php
       } else {
 
 ?>

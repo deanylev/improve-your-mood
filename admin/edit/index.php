@@ -32,7 +32,7 @@
 <h1 class="text-center">Edit <?php echo isset($userPage) ? "Your Profile" : ucwords($title); ?></h1>
 <br>
 
-<form id="main-edit-form" class="form-group text-center container" action="../modify.php" method="POST">
+<form id="main-edit-form" class="form-group text-center container" action="../modify.php" method="POST" enctype="multipart/form-data">
   <input type="hidden" name="table" value="<?php echo $type; ?>">
   <input type="hidden" name="id" value="<?php echo $row["id"]; ?>">
   <input type="hidden" name="type" value="<?php echo $title; ?>">
@@ -40,7 +40,7 @@
 <?php
 
   foreach ($row as $key => $val) {
-      if ($key !== "id" && $key !== "created_at" && $key !== "created_by" && $key !== "password" && (($key !== "app_settings" && $key !== "items_per_page") || $currentUser["is_admin"]) && (($key !== "read_only" && $key !== "is_admin") || $id != $_SESSION["user"])) {
+      if ($key !== "id" && $key !== "created_at" && $key !== "created_by" && $key !== "password" && $key !== "image" && (($key !== "app_settings" && $key !== "items_per_page") || $currentUser["is_admin"]) && (($key !== "read_only" && $key !== "is_admin") || $id != $_SESSION["user"])) {
         $columnType = $columnTypes[$key];
         $blockDiv = true;
 
@@ -133,6 +133,22 @@
   if ($type === "users"):
 
 ?>
+
+    <div data-field="image">
+      <label>image</label>
+      <div id="image"></div>
+      <div class="validation-errors text-danger"></div>
+      <input type="hidden" value="<?php echo $row["image"]; ?>" id="image_name" name="values[image]">
+    </div>
+    <?php if ($row["image"]): ?>
+      <div id="image-preview">
+        <img class="user-image" src="../users/image.php?id=<?php echo $id; ?>">
+        <br><br>
+        <button id="remove-image" class="btn btn-dark">Remove</button>
+        <br>
+      </div>
+    <?php endif; ?>
+    <br>
     <div data-field="password">
       <div class="form-group">
         <label for="password">password <span id="password_strength"></span></label>
@@ -173,6 +189,6 @@
 </form>
 
 <script>let itemId = <?php echo $id; ?></script>
-<script src="input_validation.js"></script>
+<script src="edit.js"></script>
 
 <?php include("../assets/php/footer.html"); ?>

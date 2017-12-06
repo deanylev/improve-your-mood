@@ -122,7 +122,8 @@ CREATE TABLE `users` (
   `items_per_page` int(11) NOT NULL DEFAULT '100',
   `user` varchar(50) NOT NULL,
   `password` varchar(50) NOT NULL,
-  `app_settings` text NOT NULL
+  `app_settings` text NOT NULL,
+  `image` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --

@@ -62,7 +62,21 @@
         }
         // Construct SQL statement
         foreach ($_POST["values"] as $key => $val) {
-            $val = $key === "password" ? md5($val) : htmlspecialchars($val);
+            //$val = $key === "password" ? md5($val) : htmlspecialchars($val);
+            switch ($key) {
+              case "password":
+                $val = md5($val);
+                break;
+
+              case "image":
+                $val = str_replace("\\", "/", $val);
+                $val = basename($val);
+                break;
+
+              default:
+                $val = htmlspecialchars($val);
+                break;
+            }
             $statement .= $key . " = '" . addslashes($val) . "',";
         }
         $statement = substr($statement, 0, -1);

@@ -77,6 +77,7 @@ $('#main-edit-form').submit(function() {
         $('#modal').modal('hide');
         $('.fa-spinner').addClass('d-none');
       } catch (error) {
+        console.log(response);
         let url = response.startsWith('http') ? response : `../${response}`;
         window.location.href = url;
       }
@@ -84,5 +85,41 @@ $('#main-edit-form').submit(function() {
   });
 
   return false;
+
+});
+
+$('#image').fineUploader({
+  debug: true,
+  multiple: false,
+  validation: {
+    acceptFiles: 'image/png',
+    allowedExtensions: ['png'],
+    sizeLimit: 2000000
+  },
+  request: {
+    endpoint: 'upload.php'
+  },
+  deleteFile: {
+    enabled: true,
+    endpoint: 'upload.php'
+  }
+}).on('error', function(event, id, name, reason) {
+
+  $('span[role="reason"]').text(`- ${reason}`);
+
+}).on('complete', function(event, id, name, responseJSON) {
+
+  $('#image_name').val(responseJSON.name);
+
+}).on('delete', function(event, id, name, responseJSON) {
+
+  $('#image_name').val('');
+
+});
+
+$('#remove-image').click(function() {
+
+  $('#image_name').val('');
+  $('#image-preview').remove();
 
 });
