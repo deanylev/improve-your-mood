@@ -147,6 +147,11 @@ label:not(.active) b, #advanced-settings, .fade-in-on-load {
   font-size: 43px;
 }
 
+#current-user-image {
+  width: 90px;
+  height: 90px;
+}
+
 @media only screen and (max-width: 599px) {
   #quote {
     font-size: 30px !important;

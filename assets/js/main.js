@@ -621,6 +621,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
         $('.logged-in').addClass('hide');
         $('.not-logged-in').removeClass('hide');
         $('#current-user').empty();
+        $('#current-user-image').removeAttr('src');
         currentUser = {};
 
       } else {
@@ -639,7 +640,8 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
         if (name !== currentUser.name) {
 
           moodEngine.log('log', `Logged in as '${currentUser.name}'.`);
-          $('#current-user').html(`<a href="admin/edit/?type=users&amp;title=user&amp;id=${currentUser.id}" target="_blank">${currentUser.name}</a>`);
+          $('#current-user').html(`<a href="admin/view/?type=users&amp;title=user&amp;id=${currentUser.id}" target="_blank">${currentUser.name}</a>`);
+          $('#current-user-image').attr('src', `admin/users/image.php?id=${currentUser.id}`);
 
         }
 
