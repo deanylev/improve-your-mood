@@ -109,6 +109,7 @@ $('#image').fineUploader({
 }).on('complete', function(event, id, name, responseJSON) {
 
   $('#image_name').val(responseJSON.name);
+  $('#image-preview').remove();
 
 }).on('delete', function(event, id, name, responseJSON) {
 
