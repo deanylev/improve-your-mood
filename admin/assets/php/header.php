@@ -50,9 +50,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/file-uploader/5.15.4/jquery.fine-uploader/jquery.fine-uploader.min.js"></script>
   <script type="text/template" id="qq-template">
     <div class="qq-uploader-selector qq-uploader" qq-drop-area-text="Drop files here">
-        <div class="qq-upload-drop-area-selector qq-upload-drop-area" qq-hide-dropzone>
-            <span class="qq-upload-drop-area-text-selector"></span>
-        </div>
         <div class="qq-upload-button-selector btn-dark btn-lg" style="margin: 0 auto; width: 105px;">
             <div>Upload</div>
         </div>

@@ -135,7 +135,7 @@
 ?>
 
     <div data-field="image">
-      <label>image</label>
+      <label>image<br>(square, png, < 2MB)</label>
       <div id="image"></div>
       <div class="validation-errors text-danger"></div>
       <input type="hidden" value="<?php echo $row["image"]; ?>" id="image_name" name="values[image]">
