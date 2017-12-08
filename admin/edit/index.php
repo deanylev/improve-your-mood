@@ -188,7 +188,6 @@
   <?php endif; ?>
 </form>
 
-<script>let itemID = <?php echo $id; ?></script>
 <script src="edit.js"></script>
 
 <?php include("../assets/php/footer.html"); ?>

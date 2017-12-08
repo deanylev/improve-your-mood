@@ -66,7 +66,6 @@
       </form>
     </div>
   </div>
-  <script>itemId = null</script>
   <script src="signup.js"></script>
 </body>
 
