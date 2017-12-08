@@ -115,7 +115,9 @@
           }
           // Delete unused image
           $currentImage = $mysqli->query("SELECT * FROM yourmood.users WHERE id='{$id}'")->fetch_object()->image;
-          @unlink("uploads/images/user/{$currentImage}");
+          if ($_POST["values"]["image"] !== $currentImage) {
+            @unlink("uploads/images/user/{$currentImage}");
+          }
         } elseif ($table === "settings") {
             $setting = $_POST["values"]["setting"];
             $value = $_POST["values"]["value"];
