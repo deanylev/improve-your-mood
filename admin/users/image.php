@@ -15,5 +15,5 @@
     $image = imagecreatefrompng("../uploads/images/user/placeholder.png");
   }
 
-  imagepng($image);
+  imagepng($image, null, 0);
   imagedestroy($image);
