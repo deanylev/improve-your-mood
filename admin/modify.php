@@ -118,6 +118,7 @@
           if ($_POST["values"]["image"] !== $currentImage) {
             @unlink("uploads/images/user/{$currentImage}");
           }
+          unset($_SESSION["last_image"]);
         } elseif ($table === "settings") {
             $setting = $_POST["values"]["setting"];
             $value = $_POST["values"]["value"];
