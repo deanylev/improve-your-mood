@@ -89,15 +89,11 @@ $('#main-edit-form').submit(function() {
 });
 
 $('#image').fineUploader({
-  debug: true,
   multiple: false,
   validation: {
     acceptFiles: 'image/png',
     allowedExtensions: ['png'],
     sizeLimit: 2000000
-  },
-  customHeaders: {
-    "userID": itemID
   },
   request: {
     endpoint: 'upload.php'
