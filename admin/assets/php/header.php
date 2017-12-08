@@ -30,6 +30,13 @@
     $pageTitle .= "s";
   }
 
+  // Delete unused images
+  foreach(scandir("../uploads/images/user") as $image) {
+    if ($image !== "." && $image !== ".." && $image !== "placeholder.png" && !$mysqli->query("SELECT * FROM yourmood.users WHERE image='{$image}'")->num_rows) {
+      unlink("../uploads/images/user/{$image}");
+    }
+  }
+
 ?>
 <!DOCTYPE html>
 <html lang="en" data-type="<?php echo isset($type) ? $type : "unknown"; ?>" data-items="<?php echo isset($items) ? $items : "unknown"; ?>">

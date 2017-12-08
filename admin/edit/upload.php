@@ -8,6 +8,7 @@
   if ($_SERVER["REQUEST_METHOD"] === "DELETE") {
     $image = $_SESSION["last_image"];
     unlink("../uploads/images/user/{$image}");
+    unset($_SESSION["last_image"]);
   } else {
     foreach ($_FILES as $file) {
         $fileType = pathinfo($file["name"], PATHINFO_EXTENSION);
@@ -54,7 +55,7 @@
 
     // Delete unused images
     foreach(scandir("../uploads/images/user") as $image) {
-      if (($image !== $file["name"] && $image !== "." && $image !== ".." && $image !== "placeholder.png" && !$mysqli->query("SELECT * FROM yourmood.users WHERE image='{$image}'")->num_rows)) {
+      if ($image !== $file["name"] && $image !== "." && $image !== ".." && $image !== "placeholder.png" && !$mysqli->query("SELECT * FROM yourmood.users WHERE image='{$image}'")->num_rows) {
         unlink("../uploads/images/user/{$image}");
       }
     }
