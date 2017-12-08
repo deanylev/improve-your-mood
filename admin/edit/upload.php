@@ -1,6 +1,10 @@
 <?php
 
+  session_start();
+  include("../../assets/php/sql.php");
+
   $targetDir = "../uploads/images/user/";
+
   foreach ($_FILES as $file) {
       $fileType = pathinfo($file["name"], PATHINFO_EXTENSION);
       $file["name"] = md5(uniqid() . $file["name"]) . "." . $fileType;
@@ -37,4 +41,13 @@
           $message = (object) array("success" => "true", "name" => $file["name"]);
       }
   }
+
+  // Provide a response to Fine Uploader
   echo json_encode($message);
+
+  // Delete unused images
+  foreach(scandir("../uploads/images/user") as $image) {
+    if (($image !== $file["name"] && $image !== "." && $image !== ".." && $image !== "placeholder.png" && !$mysqli->query("SELECT * FROM yourmood.users WHERE image='{$image}'")->num_rows)) {
+      unlink("../uploads/images/user/{$image}");
+    }
+  }

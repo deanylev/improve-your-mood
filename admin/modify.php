@@ -113,6 +113,9 @@
           if ((isset($_POST["values"]["is_admin"]) || isset($_POST["values"]["read_only"])) && !$_POST["values"]["is_admin"] && $_POST["values"]["read_only"]) {
             $errors[] = (object) array("read_only" => "Must be admin to be read_only.");
           }
+          // Delete unused image
+          $currentImage = $mysqli->query("SELECT * FROM yourmood.users WHERE id='{$id}'")->fetch_object()->image;
+          @unlink("uploads/images/user/{$currentImage}");
         } elseif ($table === "settings") {
             $setting = $_POST["values"]["setting"];
             $value = $_POST["values"]["value"];
