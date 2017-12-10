@@ -297,7 +297,7 @@ moodEngine.error = function(display, log, code, type) {
   moodEngine.setColour('black');
   moodEngine.setTheme('white');
   $('#quote').addClass('scale-in');
-  $('.preloader-wrapper').addClass('hide');
+  $('.preloader-wrapper').remove();
   $('.fixed-action-btn').addClass('hide');
 
   // If network connection is detected
@@ -2112,7 +2112,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       moodEngine.reload('Auto');
       $('#quote').addClass('scale-in');
-      $('.preloader-wrapper').addClass('hide');
+      $('.preloader-wrapper').remove();
       $('.fixed-action-btn').removeClass('hide');
       moodEngine.log('log', 'MoodEngine initialized.');
       let totalLoadTime = Math.ceil(performance.now() - totalTime);
