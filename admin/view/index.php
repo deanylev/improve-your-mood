@@ -103,6 +103,16 @@
 
   <button class="btn btn-lg btn-danger submit" type="button" data-action="delete" data-confirm="deleting a <?php echo $title; ?>" data-class="danger" data-toggle="modal" data-target="#modal">Delete</button>
 
+<?php
+
+  endif;
+
+  if (isset($userPage)):
+
+?>
+
+<a class="btn btn-lg btn-success" href="../logout">Log Out</a>
+
 <?php endif; ?>
 
 </form>
