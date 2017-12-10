@@ -17,7 +17,7 @@
     $userRow = $userQuery->fetch_assoc();
     $user["id"] = $userRow["id"];
     $user["name"] = $userRow["user"];
-    $user["settings"] = $userRow["app_settings"];
+    $user["settings"] = htmlspecialchars_decode($userRow["app_settings"]);
     header("Content-Type: application/json");
     echo json_encode($user);
   } else {
