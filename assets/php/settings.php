@@ -1,3 +1,1 @@
-<?php
-
-  $settings = @parse_ini_file("settings.ini", true);
+<?php $settings = @parse_ini_file("settings.ini", true);

@@ -173,7 +173,7 @@ if ($('#search-bar').val()) search();
 $('#search-bar, select[name], #case-sensitive').on('keypress keydown keyup change', function() {
 
   search();
-  window.history.pushState(null, null, `?type=${$('html').data('type')}&items=${$('html').data('items')}&s=${$('#search-bar').val()}&f=${$('select[name="field"]').val()}&q=${$('select[name="query"]').val()}&c=${$('#case-sensitive').is(':checked')}`);
+  window.history.pushState(null, null, `?type=${$('html').data('type')}&items=${$('html').data('items')}&s=${encodeURIComponent($('#search-bar').val())}&f=${$('select[name="field"]').val()}&q=${$('select[name="query"]').val()}&c=${$('#case-sensitive').is(':checked')}`);
 
 });
 
