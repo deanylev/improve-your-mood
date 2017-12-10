@@ -890,20 +890,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       $('#speak-quote-button').click(function() {
 
-        if (!appError) {
-
-          try {
-
-            responsiveVoice.speak($('#quote').text(), fullSettings.speak_voice_accent);
-
-          } catch (error) {
-
-            moodEngine.log('error', `Cannot speak quote, invalid voice accent provided ('${fullSettings.speak_voice_accent}').`);
-            moodEngine.notify('Invalid Voice Accent Provided.')
-
-          }
-
-        }
+        moodEngine.speakQuote();
 
       });
 
@@ -1188,6 +1175,18 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       Mousetrap.bind(fullSettings.profile_keys.map(k => `shift+${k}`), function(e) {
 
         if (!appError) moodEngine.logOut();
+
+      });
+
+    }
+
+    // Speak Quote
+
+    if (typeof(fullSettings.speak_quote_keys) === 'object') {
+
+      Mousetrap.bindGlobal(fullSettings.speak_quote_keys, function(e) {
+
+        if (!appError && !modalOpen) moodEngine.speakQuote();
 
       });
 
@@ -2018,6 +2017,27 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       moodEngine.setColour(`#${colours[colour]}`);
 
       $('#go-back-button').addClass('disabled');
+
+    }
+
+  };
+
+  // Speak Quote
+
+  moodEngine.speakQuote = function() {
+
+    if (!appError) {
+
+      try {
+
+        responsiveVoice.speak($('#quote').text(), fullSettings.speak_voice_accent);
+
+      } catch (error) {
+
+        moodEngine.log('error', `Cannot speak quote, invalid voice accent provided ('${fullSettings.speak_voice_accent}').`);
+        moodEngine.notify('Invalid Voice Accent Provided.')
+
+      }
 
     }
 
