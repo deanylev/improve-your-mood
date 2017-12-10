@@ -126,6 +126,10 @@ label:not(.active) b, #advanced-settings, .fade-in-on-load {
   max-height: 55%;
 }
 
+.theme-text {
+  text-shadow: -0.3px -0.3px 0 #000000, 0.3px -0.3px 0 #000000, -0.3px 0.3px 0 #000000, 0.3px 0.3px 0 #000000;
+}
+
 #go-to-signup, #go-to-login {
   display: block;
 }
