@@ -2564,6 +2564,12 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   $('#profile-signup-button').click(moodEngine.signUp);
 
+  $.get('api/verify/admin_signup', (data) => {
+
+    if (data === 'true') $('#admin-signup').removeClass('hide');
+
+  });
+
   // User Login
 
   moodEngine.logIn = function() {

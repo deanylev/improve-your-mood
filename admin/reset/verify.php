@@ -24,5 +24,3 @@
     fwrite($file, $code);
     echo "fail";
   }
-
-?>

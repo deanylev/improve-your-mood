@@ -6,6 +6,8 @@
       header("location: ../home");
   }
 
+  include("../../assets/php/settings.php");
+
 ?>
 
 <!DOCTYPE html>
@@ -60,6 +62,13 @@
           <input type="password" name="password_confirmation" class="form-control" id="password_confirmation">
           <p class="validation-errors text-danger" data-field="password_confirmation"></p>
         </div>
+        <?php if (isset($settings["CONFIG"]["admin_signup"]) && $settings["CONFIG"]["admin_signup"] === "1" && isset($settings["CONFIG"]["admin_key"]) && $settings["CONFIG"]["admin_key"]): ?>
+          <div class="form-group">
+            <label for="admin_key">Admin Key (optional)</label>
+            <input type="password" name="admin_key" class="form-control" id="admin_key">
+            <p class="validation-errors text-danger" data-field="admin_key"></p>
+          </div>
+        <?php endif; ?>
         <p class="response text-danger"></p>
         <button id="save-button" class="btn btn-primary" type="submit">Sign Up<i class="d-none fa fa-spinner fa-pulse fa-fw"></i></button>
         <a class="btn btn-link" href="../login">Log In</a>
