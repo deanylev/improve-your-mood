@@ -17,7 +17,7 @@
           $object = (object)array();
           foreach ($row as $rowKey => $rowVal) {
               if (!in_array($rowKey, $forbiddenKeys)) {
-                  $object->{$rowKey} = $rowVal;
+                  $object->{$rowKey} = htmlspecialchars_decode($rowVal);
               }
           }
           $settings->$key = $object;
