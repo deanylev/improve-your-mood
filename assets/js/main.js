@@ -641,17 +641,14 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
         $('.logged-in').removeClass('hide');
         $('.signup').addClass('also-hide');
 
-        let name = currentUser.name;
+        let id = currentUser.id;
 
         currentUser = data;
 
-        if (name !== currentUser.name) {
+        if (id !== currentUser.id) moodEngine.log('log', `Logged in as '${currentUser.name}'.`);
 
-          moodEngine.log('log', `Logged in as '${currentUser.name}'.`);
-          $('#current-user').html(`<a href="admin/view/?type=users&amp;title=user&amp;id=${currentUser.id}" target="_blank">${currentUser.name}</a>`);
-          $('#current-user-image').attr('src', `admin/users/image.php?id=${currentUser.id}`);
-
-        }
+        $('#current-user').html(`<a href="admin/view/?type=users&amp;title=user&amp;id=${currentUser.id}" target="_blank">${currentUser.name}</a>`);
+        $('#current-user-image').attr('src', `admin/users/image.php?id=${currentUser.id}`);
 
         $('#saved-settings h5').addClass('hide');
         $('button.clear-settings').addClass('hide');
@@ -2549,7 +2546,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
             let field = Object.keys(val)[0];
             let append = $(`.validation-errors[data-field="${field}"]`).is(':empty') ? val[field] : `<br>${val[field]}`;
             $(`.validation-errors[data-field="${field}"]`).append(append);
-            
+
           });
 
         } catch (error) {
