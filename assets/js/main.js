@@ -2552,6 +2552,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
         } catch (error) {
 
           moodEngine.checkUser();
+          $('.signup input').val('');
           $('.signup').addClass('hide-also');
 
         }
