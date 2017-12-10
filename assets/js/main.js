@@ -280,6 +280,14 @@ moodEngine.setTheme = function(colour) {
   $('.theme-text').css('cssText', `color: ${colour} !important`);
   $('.js-margin').css('margin-top', $(document).height() / 4.5);
 
+  $('#theme-style').text(`
+
+    input[type="range"] + .thumb .value {
+      color: ${colour} !important;
+    }
+
+    `);
+
 }
 
 // Function for displaying and logging errors
@@ -1248,7 +1256,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       });
 
-      let html = `<li class="tab ${mobile} coloured coloured-background"><a href="#tab-${name}">${name}</a></li>`;
+      let html = `<li class="tab ${mobile} coloured coloured-background"><a class="theme-text" href="#tab-${name}">${name}</a></li>`;
 
       $('.tabs').append(html);
 
@@ -1562,7 +1570,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
         resetInput = `
                   <div class="col m1 s2">
                     <a class="btn-floating btn-flat coloured coloured-background waves-effect reset-input" data-setting="${key}">
-                      <i class="center material-icons prefix">refresh</i>
+                      <i class="center material-icons prefix theme-text" style="color: ${fullSettings.theme_colour}">refresh</i>
                     </a>
                   </div>`;
 
