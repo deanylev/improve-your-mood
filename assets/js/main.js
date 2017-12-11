@@ -1,5 +1,4 @@
 let appError, defaultMode, startTime, modalOpen, lastNum, disableSwitch, quoteNum, colourNum, isProd, userCheck;
-let quotes = [];
 let colours = [];
 let usedQuotes = [];
 let usedColours = [];
@@ -11,7 +10,7 @@ let settings = {};
 let fullSettings = {};
 let profileSettings = {};
 let pullTime = {};
-let versionQuotes = {};
+let quotes = {};
 let currentUser = {};
 let backendAddress = localStorage.getItem('backend_address') || 'https://improveyourmood.xyz';
 let pageSSL = window.location.protocol === 'https:';
@@ -352,12 +351,11 @@ $.get(`${backendAddress}/api/verify/url/index.php`, (data) => {
 
 // Decide whether to use cache or pull new quotes
 
-if (localStorage.getItem('cachedQuotes') && localStorage.getItem('cachedVersionQuotes') && localStorage.getItem('disable_caching') !== 'true') {
+if (localStorage.getItem('cachedQuotes') && localStorage.getItem('disable_caching') !== 'true') {
 
   quotes = JSON.parse(localStorage.getItem('cachedQuotes'));
-  versionQuotes = JSON.parse(localStorage.getItem('cachedVersionQuotes'));
 
-  moodEngine.log('log', `Using ${quotes.length} cached quotes...`);
+  moodEngine.log('log', `Using ${quotes[version].length + quotes[otherVersion].length} cached quotes...`);
 
 } else {
 
@@ -365,7 +363,7 @@ if (localStorage.getItem('cachedQuotes') && localStorage.getItem('cachedVersionQ
 
   startTime = performance.now();
 
-  moodEngine.log('log', 'Pulling quotes from backend...');
+  moodEngine.log('log', `Pulling quotes from backend...`);
 
   $.ajaxSetup({
     async: false
@@ -375,21 +373,25 @@ if (localStorage.getItem('cachedQuotes') && localStorage.getItem('cachedVersionQ
 
     pullTime.quotes = Math.ceil(performance.now() - startTime);
 
-    versionQuotes[version] = quotes = [];
+    quotes[version] = [];
 
     $.each(data, function(key, val) {
 
-      if ($.inArray(val, quotes) === -1) quotes.push(val);
+      if ($.inArray(val, quotes[version]) === -1) quotes[version].push(val);
 
     });
 
+    startTime = performance.now();
+
     $.getJSON(`${backendAddress}/api/get/quotes/index.php?version=${otherVersion.toLowerCase()}`).done((data) => {
 
-      versionQuotes[otherVersion] = [];
+      pullTime.quotes += Math.ceil(performance.now() - startTime);
+
+      quotes[otherVersion] = [];
 
       $.each(data, function(key, val) {
 
-        if ($.inArray(val, versionQuotes[otherVersion]) === -1) versionQuotes[otherVersion].push(val);
+        if ($.inArray(val, quotes[otherVersion]) === -1) quotes[otherVersion].push(val);
 
       });
 
@@ -400,15 +402,13 @@ if (localStorage.getItem('cachedQuotes') && localStorage.getItem('cachedVersionQ
 
     });
 
-    moodEngine.log('log', `Successfully pulled ${quotes.length} quotes from backend in ${pullTime.quotes}ms.`);
+    moodEngine.log('log', `Successfully pulled ${quotes.Improve.length + quotes.Decrease.length} quotes from backend in ${pullTime.quotes}ms.`);
 
-    if (localStorage.getItem('disable_caching') !== 'true' && quotes.length > 1) {
+    if (localStorage.getItem('disable_caching') !== 'true' && quotes[version].length > 1) {
 
-      localStorage.setItem('cachedQuotes', JSON.stringify(quotes));
+      if (quotes[otherVersion].length > 1) {
 
-      if (versionQuotes[otherVersion].length > 1) {
-
-        localStorage.setItem('cachedVersionQuotes', JSON.stringify(versionQuotes));
+        localStorage.setItem('cachedQuotes', JSON.stringify(quotes));
 
       } else {
 
@@ -421,7 +421,6 @@ if (localStorage.getItem('cachedQuotes') && localStorage.getItem('cachedVersionQ
     } else {
 
       localStorage.removeItem('cachedQuotes');
-      localStorage.removeItem('cachedVersionQuotes');
 
     }
 
@@ -1984,7 +1983,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       colourHistory.pop();
       localStorage.setItem('lastColour', colourHistory[colourNum]);
 
-      let quote = quotes[quoteHistory[quoteNum]];
+      let quote = quotes[version][quoteHistory[quoteNum]];
       let colour = colours[colourHistory[colourNum]];
 
       moodEngine.setText(quote);
@@ -2013,7 +2012,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       quoteHistory[0] = quote;
       colourHistory[0] = colour;
 
-      moodEngine.setText(quotes[quote]);
+      moodEngine.setText(quotes[version][quote]);
       moodEngine.setColour(`#${colours[colour]}`);
 
       $('#go-back-button').addClass('disabled');
@@ -2053,26 +2052,21 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       // If backend has no quotes, throw an error
 
-      if (quotes.length < 2) throw new Error('There are no quotes.');
+      if (quotes[version].length < 2) throw new Error('There are no quotes.');
 
       // Clear error message in case there is one
 
       $('#error-message').empty();
 
       lastNum = JSON.parse(localStorage.getItem('lastQuote'));
-      quoteNum = Math.floor(quotes.length * Math.random());
 
-      // If all quotes are used and no repeats is enabled, start again
+      if (usedQuotes.length === quotes[version].length) usedQuotes = [];
 
-      if (usedQuotes.length === quotes.length) usedQuotes = [];
+      do {
 
-      // If MoodEngine trys to use the same quote twice, or one that has already been used, generate a new one
+        quoteNum = Math.floor(quotes[version].length * Math.random());
 
-      while (lastNum === quoteNum || usedQuotes.includes(quoteNum)) {
-
-        quoteNum = Math.floor(quotes.length * Math.random());
-
-      }
+      } while (lastNum === quoteNum || usedQuotes.includes(quoteNum));
 
       // Add quote to used quotes, quote history and localStorage
 
@@ -2080,7 +2074,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       quoteHistory.push(quoteNum);
       localStorage.setItem('lastQuote', quoteNum);
 
-      let quote = quotes[quoteNum];
+      let quote = quotes[version][quoteNum];
 
       // Display quote on the text element
 
@@ -2093,15 +2087,12 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       if (colours.length < 2) throw new Error('There are no colours.');
 
       lastNum = JSON.parse(localStorage.getItem('lastColour'));
-      colourNum = Math.floor(colours.length * Math.random());
 
-      // If MoodEngine trys to use the same colour twice, generate a new one
-
-      while (lastNum === colourNum) {
+      do {
 
         colourNum = Math.floor(colours.length * Math.random());
 
-      }
+      } while (lastNum === colourNum);
 
       // Add colour to used colours, colour history and localStorage
 
@@ -2431,7 +2422,6 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       version = version === 'Improve' ? 'Decrease' : 'Improve';
       otherVersion = version === 'Improve' ? 'Improve' : 'Decrease';
-      quotes = versionQuotes[otherVersion];
       quoteHistory = [];
       colourHistory = [];
       usedQuotes = [];
