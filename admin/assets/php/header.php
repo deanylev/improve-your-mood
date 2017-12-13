@@ -8,6 +8,10 @@
 
   $titles = array("user", "home", "quote", "colour", "setting", "log");
 
+  if ($currentUser["is_owner"]) {
+    $titles[] = "config";
+  }
+
   $titlePairs = array("users" => "user", "improve"=>"quote", "decrease"=>"quote", "colours"=>"colour", "settings"=>"setting", "logs"=>"log");
 
   if (!in_array($title, $titles) || (isset($id) && $id === "0") || (isset($type) && !array_key_exists($type, $titlePairs) && !array_key_exists("{$type}s", $titlePairs)) || (isset($type) && array_key_exists($type, $titlePairs) && $titlePairs[$type] !== $title) || (isset($action) && !in_array($action, $actions))) {
@@ -154,6 +158,14 @@
               <span class="icon-text">Logs</span>
             </a>
           </li>
+          <?php if ($currentUser["is_owner"]): ?>
+            <li class="nav-item <?php echo $title === "config" ? "active" : "" ?>">
+              <a class="nav-link" href="../config">
+                <span class="fa fa-sliders"></span>
+                <span class="icon-text">Config</span>
+              </a>
+            </li>
+          <?php endif; ?>
           <div class="dropdown-divider"></div>
           <li class="nav-item d-lg-none <?php echo isset($userPage) && $userPage === "view" ? "active" : "" ?>">
             <a class="nav-link"  href="../view/?type=users&amp;title=user&amp;id=<?php echo $_SESSION["user"]; ?>">

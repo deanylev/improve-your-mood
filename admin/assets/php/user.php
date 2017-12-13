@@ -17,6 +17,7 @@
     $currentUser["name"] = $userRow["user"];
     $currentUser["image"] = $userRow["image"];
     $currentUser["is_admin"] = $userRow["is_admin"];
+    $currentUser["is_owner"] = $userRow["is_owner"];
     $currentUser["read_only"] = $userRow["read_only"];
     $currentUser["items_per_page"] = intval($userRow["items_per_page"]);
   } else {

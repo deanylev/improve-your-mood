@@ -117,6 +117,7 @@ CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `created_at` datetime NOT NULL,
   `created_by` int(11) NOT NULL,
+  `is_owner` tinyint(1) DEFAULT NULL,
   `is_admin` tinyint(1) NOT NULL,
   `read_only` tinyint(1) NOT NULL,
   `items_per_page` int(11) NOT NULL DEFAULT '100',
@@ -171,7 +172,8 @@ ALTER TABLE `settings`
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `is_owner` (`is_owner`);
 
 --
 -- AUTO_INCREMENT for dumped tables

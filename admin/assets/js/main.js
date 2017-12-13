@@ -182,7 +182,8 @@ $('.submit').click(function() {
   let action = $(this).attr('data-action');
   let bsClass = $(this).attr('data-class');
   let undo = $(this).attr('data-undo') === 'true' ? 'You will be able to undo this action.' : 'You will not be able to undo this action.';
-  let confirm = `You are ${$(this).attr('data-confirm')}. ${undo}`;
+  let extra = $(this).attr('data-extra') || '';
+  let confirm = `You are ${$(this).attr('data-confirm')}. ${undo} ${extra}`;
   let form = action === 'deletemultiple' ? $('#main-form') : $(this).closest('form');
   let id = $(this).attr('data-id');
 
@@ -192,7 +193,7 @@ $('.submit').click(function() {
   $('#modal-submit').off();
   $('#modal-submit').removeClass();
   $('#modal-submit').addClass(`btn btn-${bsClass}`);
-  $('#modal-confirm').text(confirm);
+  $('#modal-confirm').html(confirm);
 
   $('#modal-submit').click(function() {
 

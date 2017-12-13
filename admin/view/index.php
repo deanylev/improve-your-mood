@@ -35,7 +35,7 @@
 <?php
 
   foreach ($row as $key => $val) {
-    if ($key !== "id" && $key !== "password") {
+    if ($key !== "id" && $key !== "password" && $key !== "is_owner") {
       if ($key === "created_by") {
         if ($mysqli->query("SELECT * FROM yourmood.users WHERE id = {$val}")->num_rows):
           $user = $mysqli->query("SELECT * FROM yourmood.users WHERE id = '{$val}'")->fetch_object();
