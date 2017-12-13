@@ -111,7 +111,17 @@
 
 ?>
 
-<a class="btn btn-lg btn-success" href="../logout">Log Out</a>
+  <a class="btn btn-lg btn-success" href="../logout">Log Out</a>
+
+<?php
+
+  endif;
+
+  if ($type === "users"):
+
+?>
+
+  <a class="btn btn-lg btn-dark" href="../logout?everywhere=true">Log Out Everywhere</a>
 
 <?php endif; ?>
 

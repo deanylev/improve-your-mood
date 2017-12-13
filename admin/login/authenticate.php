@@ -27,13 +27,16 @@
   } elseif (isset($row) && md5($authPass) === $row["password"]) {
       setcookie("login_attempts", "", time() - 3600, "/");
       echo "success";
-      $_SESSION["user"] = $row["id"];
+      $user = $_SESSION["user"] = $row["id"];
+      $dateNow = date("Y-m-d H:i:s");
       if (!isset($_POST["no_message"])) {
         $_SESSION["message"]["success"] = "Logged in successfully.";
       }
       if (isset($_POST["remember"])) {
         setcookie("user", encryptCookie($row["id"]), time() + (86400 * 30), "/");
       }
+      $mysqli->query("INSERT INTO yourmood.sessions (user, created_at) VALUES ('$user', '$dateNow')");
+      $_SESSION["id"] = $mysqli->insert_id;
   } else {
       setcookie("login_attempts", $_COOKIE["login_attempts"] + 1, time() + 600, "/");
       echo "Invalid credentials.";

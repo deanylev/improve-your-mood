@@ -1,10 +1,7 @@
 <?php
 
   session_start();
-
-  if (isset($_SESSION["user"])) {
-      header("location: ../home");
-  }
+  include("../assets/php/force_unauth.php");
 
 ?>
 

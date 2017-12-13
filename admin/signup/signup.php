@@ -46,7 +46,10 @@
   } else {
     $password = md5($password);
     $mysqli->query("INSERT INTO yourmood.users (is_admin, user, password) VALUES ('$admin','$username', '$password')");
-    $_SESSION["user"] = $mysqli->insert_id;
+    $user = $_SESSION["user"] = $mysqli->insert_id;
+    $dateNow = date("Y-m-d H:i:s");
+    $mysqli->query("INSERT INTO yourmood.sessions (user, created_at) VALUES ('$user', '$dateNow')");
+    $_SESSION["id"] = $mysqli->insert_id;
     $mysqli->close();
     if (!isset($_POST["no_message"])) {
       $_SESSION["message"]["success"] = "New user <b>{$username}</b> created successfully.";
