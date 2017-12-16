@@ -105,13 +105,7 @@ $(window).on('error', function(error) {
 
     localStorage.clear();
 
-    $('#error-message').text('Your settings have been cleared to try resolve the issue, reloading in 2 seconds...');
-
-    setTimeout(() => {
-
-      window.location.reload();
-
-    }, 2000);
+    $('#error-message').text('Your settings have been cleared to try resolve the issue, please reload.');
 
   }
 
