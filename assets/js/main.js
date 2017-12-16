@@ -1,4 +1,4 @@
-let appError, defaultMode, startTime, modalOpen, lastNum, disableSwitch, quoteNum, colourNum, isProd, userCheck;
+let appError, defaultMode, startTime, modalOpen, lastNum, disableSwitch, quoteNum, colourNum, isProd, userCheck, speakingCheck;
 let colours = [];
 let usedQuotes = [];
 let usedColours = [];
@@ -832,7 +832,12 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
             break;
           case 'speak':
             hidden = fullSettings.speak_voice_accent ? '' : 'hide';
-            html = `<li data-button="speak" class="${hidden}"><a class="btn-floating menu-button waves-effect transparent" id="speak-quote-button"><i class="material-icons theme-text" data-icon="speak" data-default="volume_up"></i></a></li>`;
+            html = `
+              <li data-button="speak" class="${hidden}">
+                <a class="btn-floating menu-button waves-effect transparent" id="speak-quote-button"><i class="material-icons theme-text" data-icon="speak" data-default="volume_up"></i></a>
+                <a class="btn-floating menu-button waves-effect transparent hide" id="stop-speaking-button"><i class="material-icons theme-text" data-icon="stopspeak" data-default="stop"></i></a>
+              </li>
+            `;
             break;
           case 'rewind':
             html = '<li data-button="rewind"><a class="btn-floating menu-button waves-effect transparent disabled" id="go-back-button"><i class="material-icons main-icon theme-text" data-icon="rewind" data-default="skip_previous"></i><i class="material-icons alt-icon theme-text hide" data-icon="fullrewind" data-default="first_page"></i></a></li>';
@@ -1191,7 +1196,11 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       Mousetrap.bindGlobal(fullSettings.speak_quote_keys, function(e) {
 
-        if (!appError && !modalOpen) moodEngine.speakQuote();
+        if (!appError && !modalOpen) {
+
+          responsiveVoice.isPlaying() ? moodEngine.stopSpeaking() : moodEngine.speakQuote();
+
+        }
 
       });
 
@@ -2031,6 +2040,18 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   };
 
+  moodEngine.stopSpeaking = function() {
+
+    responsiveVoice.cancel();
+
+    clearInterval(speakingCheck);
+
+    $('#speak-quote-button').removeClass('hide');
+    $('#stop-speaking-button').addClass('hide');
+    $('#stop-speaking-button').off();
+
+  }
+
   // Speak Quote
 
   moodEngine.speakQuote = function() {
@@ -2038,6 +2059,21 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
     if (!appError) {
 
       try {
+
+        $('#speak-quote-button').addClass('hide');
+        $('#stop-speaking-button').removeClass('hide');
+
+        let speakingCheck = setInterval(() => {
+
+          if (!responsiveVoice.isPlaying()) {
+
+            moodEngine.stopSpeaking();
+
+          }
+
+        }, 500);
+
+        $('#stop-speaking-button').click(moodEngine.stopSpeaking);
 
         responsiveVoice.speak($('#quote').text(), fullSettings.speak_voice_accent);
 
