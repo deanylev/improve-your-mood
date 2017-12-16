@@ -2537,9 +2537,12 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   moodEngine.signUp = function() {
 
-    $('.validation-errors').empty();
+    let button = Ladda.create($('#profile-signup-button')[0]);
 
+    button.start();
     moodEngine.profileError();
+
+    $('.validation-errors').empty();
 
     $.ajax({
       data: $('#signup').serialize(),
@@ -2567,6 +2570,8 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         }
 
+        button.stop();
+
       }
     });
 
@@ -2584,7 +2589,11 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   moodEngine.logIn = function() {
 
+    let button = Ladda.create($('#profile-login-button')[0]);
+
+    button.start();
     moodEngine.profileError();
+
     $('li[data-button="profile"] i').removeClass('ignore');
 
     $.ajax({
@@ -2601,6 +2610,9 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
           moodEngine.profileError(response);
 
         }
+
+        button.stop();
+
       }
     });
 
@@ -2624,8 +2636,12 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   moodEngine.logOut = function() {
 
+    let button = Ladda.create($('#profile-logout-button')[0]);
+
+    button.start();
     moodEngine.profileError();
     moodEngine.goToLogin();
+
     $('li[data-button="profile"] .main-icon').removeClass('hide')
     $('li[data-button="profile"] .alt-icon').addClass('hide')
     $('li[data-button="profile"] i').addClass('ignore');
@@ -2645,6 +2661,9 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
           },
           method: 'POST',
           url: `admin/logout/index.php`,
+          complete: function() {
+            button.stop()
+          },
           success: function() {
             moodEngine.checkUser();
           },
@@ -2668,6 +2687,11 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
     let successLog;
     let successToast;
     let failLog;
+    let button = Ladda.create($(this)[0]);
+
+    console.log(button)
+
+    button.start();
 
     if ($(this).hasClass('clear-settings')) {
 
@@ -2696,6 +2720,9 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       },
       method: 'POST',
       url: `api/update/user_settings/index.php`,
+      complete: function() {
+        button.stop();
+      },
       success: function(response) {
         if (response === 'success') {
           moodEngine.log('log', successLog);

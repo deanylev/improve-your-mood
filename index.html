@@ -11,6 +11,7 @@
   <link rel="shortcut icon" type="image/x-icon">
   <link rel="icon" type="image/x-icon">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Ladda/1.0.5/ladda-themeless.min.css">
   <link rel="stylesheet" href="assets/css/main.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
@@ -18,6 +19,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mousetrap/1.6.1/plugins/global-bind/mousetrap-global-bind.min.js"></script>
   <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Ladda/1.0.5/spin.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Ladda/1.0.5/ladda.min.js"></script>
   <script src="assets/js/main.js"></script>
   <style id="colour-style"></style>
   <style id="theme-style"></style>
@@ -120,8 +123,8 @@
         <img id="current-user-image">
         <h5>You are logged in as: <span id="current-user"></span></h5>
         <br>
-        <button class="btn-flat coloured coloured-background white-text waves-effect profile-settings-button save-settings">Save Settings</button>
-        <button class="btn-flat coloured coloured-background white-text waves-effect profile-settings-button clear-settings">Clear Settings</button>
+        <button class="ladda-button btn-flat coloured coloured-background white-text profile-settings-button save-settings" data-style="expand-right"><span class="ladda-label">Save Settings</span></button>
+        <button class="ladda-button btn-flat coloured coloured-background white-text profile-settings-button clear-settings" data-style="expand-right"><span class="ladda-label">Clear Settings</span></button>
         <br><br>
         <div id="saved-settings">
           <h5>Saved Settings:</h5>
@@ -133,9 +136,9 @@
       <button class="left btn-floating btn-flat coloured coloured-background waves-effect manual-check">
         <i class="center material-icons prefix">refresh</i>
       </button>
-      <button id="profile-login-button" class="btn-flat coloured coloured-background white-text waves-effect login not-logged-in">Log In</button>
-      <button id="profile-signup-button" class="btn-flat coloured coloured-background white-text waves-effect signup hide-also">Sign Up</button>
-      <button id="profile-logout-button" class="btn-flat coloured coloured-background white-text waves-effect logged-in">Log Out</button>
+      <button id="profile-login-button" class="ladda-button btn-flat coloured coloured-background white-text login not-logged-in" data-style="expand-right"><span class="ladda-label">Log In</span></button>
+      <button id="profile-signup-button" class="ladda-button btn-flat coloured coloured-background white-text signup hide-also" data-style="expand-right"><span class="ladda-label">Sign Up</span></button>
+      <button id="profile-logout-button" class="ladda-button btn-flat coloured coloured-background white-text logged-in" data-style="expand-right"><span class="ladda-label">Log Out</span></button>
     </div>
   </div>
   <div class="container clickable">
