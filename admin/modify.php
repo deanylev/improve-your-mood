@@ -60,6 +60,10 @@
         if (isset($_POST["values"]["created_by"])) {
           unset($_POST["values"]["created_by"]);
         }
+        // Don't allow non-admin to edit app_settings directly
+        if (isset($_POST["values"]["app_settings"]) && !$currentUser["is_admin"]) {
+          unset($_POST["values"]["app_settings"]);
+        }
         // Construct SQL statement
         foreach ($_POST["values"] as $key => $val) {
             //$val = $key === "password" ? md5($val) : htmlspecialchars($val);
