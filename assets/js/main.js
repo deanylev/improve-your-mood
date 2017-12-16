@@ -570,6 +570,8 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   }
 
+}).always((data) => {
+
   // Delete setting from profile
 
   moodEngine.removeProfileSetting = function(setting) {
@@ -701,8 +703,6 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
   moodEngine.checkUser('initial');
 
   $('.manual-check').click(moodEngine.checkUser);
-
-}).always((data) => {
 
   // Construct settings object from backend or local
 
