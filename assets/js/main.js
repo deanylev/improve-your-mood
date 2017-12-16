@@ -2063,7 +2063,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
         $('#speak-quote-button').addClass('hide');
         $('#stop-speaking-button').removeClass('hide');
 
-        let speakingCheck = setInterval(() => {
+        speakingCheck = setInterval(() => {
 
           if (!responsiveVoice.isPlaying()) {
 
