@@ -2550,6 +2550,8 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       url: `admin/signup/signup.php`,
       success: function(response) {
 
+        $('.validation-errors').empty();
+        
         try {
 
           response = JSON.parse(response);
