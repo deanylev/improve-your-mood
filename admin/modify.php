@@ -94,7 +94,7 @@
           if (isset($_POST["values"]["items_per_page"]) && (intval($_POST["values"]["items_per_page"]) < 1 || intval($_POST["values"]["items_per_page"]) > 50000)) {
             $errors[] = (object) array("items_per_page" => "Must be between 1 and 50,000.");
           }
-          if (!$_POST["values"]["user"] === "") {
+          if ($_POST["values"]["user"] === "") {
             $errors[] = (object) array("user" => "Can't be blank.");
           } elseif ($_POST["values"]["user"] !== str_replace(" ", "", $_POST["values"]["user"])) {
             $errors[] = (object) array("user" => "Can't contain spaces.");
