@@ -101,7 +101,7 @@
           } elseif ((isset($row) && $row["id"] !== $id)) {
             $errors[] = (object) array("user" => "Already in use.");
           }
-          if (!json_decode($_POST["values"]["app_settings"])) {
+          if (isset($_POST["values"]["app_settings"]) && !json_decode($_POST["values"]["app_settings"])) {
             $errors[] = (object) array("app_settings" => "Must be a valid JSON object.");
           }
           if (isset($_POST["values"]["password"]) && strlen($_POST["values"]["password"]) < 8) {
