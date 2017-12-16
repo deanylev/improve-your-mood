@@ -69,6 +69,7 @@ $('#main-edit-form').submit(function() {
     success: function(response) {
       try {
         response = JSON.parse(response);
+        console.warn(response);
         $.each(response, function(key, val) {
           let field = Object.keys(val)[0];
           let append = $(`div[data-field="${field}"]`).find('.validation-errors').is(':empty') ? val[field] : `<br>${val[field]}`;
