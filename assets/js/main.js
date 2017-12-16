@@ -2737,8 +2737,6 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
     let failLog;
     let button = Ladda.create($(this)[0]);
 
-    console.log(button)
-
     button.start();
 
     if ($(this).hasClass('clear-settings')) {
