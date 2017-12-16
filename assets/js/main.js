@@ -1528,12 +1528,16 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
           attribute: 'data-button'
         });
 
-        if (JSON.stringify(array) !== JSON.stringify(fullSettings.button_order)) {
+        if (JSON.stringify(array) === JSON.stringify(settings.button_order.value)) {
+
+          localStorage.removeItem('button_order');
+
+        } else {
 
           localStorage.setItem('button_order', JSON.stringify(array));
-          moodEngine.setSettings('buttonsSorted');
-
         }
+
+        moodEngine.setSettings('buttonsSorted');
 
       }
     });
