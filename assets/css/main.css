@@ -49,7 +49,7 @@ label:not(.active) b, #advanced-settings, .fade-in-on-load {
   color: white !important;
 }
 
-.spinner-layer {
+#application-preloader .spinner-layer {
   border-color: white;
 }
 
@@ -154,6 +154,10 @@ label:not(.active) b, #advanced-settings, .fade-in-on-load {
 #current-user-image {
   width: 90px;
   height: 90px;
+}
+
+#image-preloader {
+  margin-bottom: 20px;
 }
 
 @media only screen and (max-width: 599px) {

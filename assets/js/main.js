@@ -240,7 +240,7 @@ moodEngine.setColour = function(colour) {
       background-color: ${hexToRgbA(colour, 0.15)} !important;
     }
 
-    input[type="checkbox"] + label::after, .input-field input:not([type="range"]):not(.input):focus, .chips.focus, input[type="radio"]:checked+label:after {
+    input[type="checkbox"] + label::after, .input-field input:not([type="range"]):not(.input):focus, .chips.focus, input[type="radio"]:checked+label:after, #image-preloader .spinner-layer {
       border-color: ${colour} !important;
     }
 
@@ -296,7 +296,7 @@ moodEngine.error = function(display, log, code, type) {
   moodEngine.setColour('black');
   moodEngine.setTheme('white');
   $('#quote').addClass('scale-in');
-  $('.preloader-wrapper').remove();
+  $('#application-preloader').remove();
   $('.fixed-action-btn').addClass('hide');
 
   // If network connection is detected
@@ -629,6 +629,10 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
         $('.not-logged-in').removeClass('hide');
         $('#current-user').empty();
         $('#current-user-image').removeAttr('src');
+        $('#current-user-image').addClass('hide');
+        $('#current-user-image').off();
+        $('#image-preloader').removeClass('hide');
+
         currentUser = {};
 
       } else {
@@ -648,10 +652,16 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         $('#current-user').html(`<a href="admin/view/?type=users&amp;title=user&amp;id=${currentUser.id}" target="_blank">${currentUser.name}</a>`);
         $('#current-user-image').attr('src', `admin/users/image.php?id=${currentUser.id}`);
-
         $('#saved-settings h5').addClass('hide');
         $('button.clear-settings').addClass('hide');
         $('#saved-settings p').empty();
+
+        $('#current-user-image').on('load', function() {
+
+          $('#image-preloader').addClass('hide');
+          $(this).removeClass('hide');
+
+        });
 
         try {
 
@@ -2123,7 +2133,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       moodEngine.reload('Auto');
       $('#quote').addClass('scale-in');
-      $('.preloader-wrapper').remove();
+      $('#application-preloader').remove();
       $('.fixed-action-btn').removeClass('hide');
       moodEngine.log('log', 'MoodEngine initialized.');
       let totalLoadTime = Math.ceil(performance.now() - totalTime);
@@ -2551,7 +2561,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       success: function(response) {
 
         $('.validation-errors').empty();
-        
+
         try {
 
           response = JSON.parse(response);

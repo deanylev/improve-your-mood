@@ -120,7 +120,20 @@
       </form>
       <div class="logged-in center">
         <br>
-        <img id="current-user-image">
+        <img id="current-user-image" class="hide">
+        <div id="image-preloader" class="preloader-wrapper active">
+          <div class="spinner-layer">
+            <div class="circle-clipper left">
+              <div class="circle"></div>
+            </div>
+            <div class="gap-patch">
+              <div class="circle"></div>
+            </div>
+            <div class="circle-clipper right">
+              <div class="circle"></div>
+            </div>
+          </div>
+        </div>
         <h5>You are logged in as: <span id="current-user"></span></h5>
         <br>
         <button class="ladda-button btn-flat coloured coloured-background white-text profile-settings-button save-settings" data-style="expand-right"><span class="ladda-label">Save Settings</span></button>
@@ -145,7 +158,7 @@
     <h2 id="logo" class="theme-text fade-in-on-ready"><span id="logo-version">improve</span> your mood</h2>
   </div>
   <main class="container clickable manual-reload">
-    <div class="preloader-wrapper big active js-margin">
+    <div id="application-preloader" class="preloader-wrapper big active js-margin">
       <div class="spinner-layer">
         <div class="circle-clipper left">
           <div class="circle"></div>
