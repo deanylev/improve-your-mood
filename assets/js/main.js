@@ -981,12 +981,8 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
     Mousetrap.bind(['shift'], function(e) {
 
-      $('.menu-button').each(function() {
-
-        $(this).find('.main-icon:not(.ignore)').addClass('hide');
-        $(this).find('.alt-icon:not(.ignore)').removeClass('hide');
-
-      });
+      $('.main-icon:not(.ignore)').addClass('hide');
+      $('.alt-icon:not(.ignore)').removeClass('hide');
 
     }, 'keydown');
 
@@ -994,8 +990,8 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       $('.menu-button').each(function() {
 
-        $(this).find('.main-icon').removeClass('hide');
-        $(this).find('.alt-icon').addClass('hide');
+        $('.main-icon').removeClass('hide');
+        $('.alt-icon').addClass('hide');
 
       });
 
