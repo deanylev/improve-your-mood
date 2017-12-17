@@ -18,7 +18,7 @@
   $result = $mysqli->query("SELECT * FROM yourmood.{$table} {$limit}");
   $currentRows = $result->num_rows;
   $dbColumns = $mysqli->query("DESCRIBE yourmood.{$table}");
-  $forbiddenKeys = array("id", "active", "log", "password");
+  $forbiddenKeys = array("id", "active", "log", "localstorage", "password");
 
 ?>
 
