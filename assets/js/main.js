@@ -732,8 +732,6 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   }
 
-  moodEngine.checkUser('initial');
-
   $('.manual-check').click(moodEngine.checkUser);
 
   // Construct settings object from backend or local
@@ -1319,6 +1317,10 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
   // Set settings
 
   moodEngine.setSettings('initial');
+
+  // Sync user
+
+  moodEngine.checkUser('initial');
 
   // Set inputs in modal
 
