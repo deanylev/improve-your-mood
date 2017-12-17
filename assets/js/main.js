@@ -634,6 +634,9 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
         $('#current-user-image').addClass('hide');
         $('#current-user-image').off();
         $('#image-preloader').removeClass('hide');
+        $('li[data-button="profile"] .main-icon').removeClass('hide')
+        $('li[data-button="profile"] .alt-icon').addClass('hide')
+        $('li[data-button="profile"] i').addClass('ignore');
 
         currentUser = {};
 
@@ -642,9 +645,12 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
         // Log in
 
         if (method !== 'initial') moodEngine.profileError();
+
         $('.not-logged-in').addClass('hide');
         $('.logged-in').removeClass('hide');
         $('.signup').addClass('also-hide');
+
+        $('li[data-button="profile"] i').removeClass('ignore');
 
         let id = currentUser.id;
 
@@ -821,26 +827,26 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
           case 'autoreload':
             mainIcon = disableSwitch ? '' : 'main-icon';
-            html = `<li data-button="autoreload"><a class="btn-floating menu-button waves-effect transparent" id="toggle-auto-reload"><i class="material-icons ${mainIcon} theme-text" data-icon="autoreload" data-default="autorenew"></i><i class="material-icons alt-icon theme-text hide" data-icon="switchversion" data-default="swap_calls"></i></a></li>`;
+            html = `<li data-button="autoreload"><a id="toggle-auto-reload" class="btn-floating menu-button waves-effect transparent"><i class="material-icons ${mainIcon} theme-text" data-icon="autoreload" data-default="autorenew"></i><i class="material-icons alt-icon theme-text hide" data-icon="switchversion" data-default="swap_calls"></i></a></li>`;
             break;
           case 'settings':
             hidden = hasUserSettings ? '' : 'hide';
-            html = `<li data-button="settings" class="${hidden}"><a class="btn-floating menu-button waves-effect transparent" id="settings-button"><i class="material-icons main-icon theme-text" data-icon="settings" data-default="settings"></i><i class="material-icons alt-icon theme-text hide" data-icon="setalldefault" data-default="clear_all"></i></a></li>`;
+            html = `<li data-button="settings" class="${hidden}"><a id="settings-button" class="btn-floating menu-button waves-effect transparent"><i class="material-icons main-icon theme-text" data-icon="settings" data-default="settings"></i><i class="material-icons alt-icon theme-text hide" data-icon="setalldefault" data-default="clear_all"></i></a></li>`;
             break;
           case 'profile':
-            html = `<li data-button="profile"><a class="btn-floating menu-button waves-effect transparent" id="profile-button"><i class="material-icons main-icon ignore theme-text" data-icon="profile" data-default="person"></i><i class="material-icons alt-icon ignore theme-text hide" data-icon="logout" data-default="exit_to_app"></i></a></li>`;
+            html = `<li data-button="profile"><a id="profile-button" class="ladda-button btn-floating menu-button waves-effect transparent" data-style="zoom-out"><i class="ladda-label material-icons main-icon ignore theme-text" data-icon="profile" data-default="person"></i><i class="ladda-label material-icons alt-icon ignore theme-text hide" data-icon="logout" data-default="exit_to_app"></i></a></li>`;
             break;
           case 'speak':
             hidden = fullSettings.speak_voice_accent ? '' : 'hide';
             html = `
               <li data-button="speak" class="${hidden}">
-                <a class="btn-floating menu-button waves-effect transparent" id="speak-quote-button"><i class="material-icons theme-text" data-icon="speak" data-default="volume_up"></i></a>
-                <a class="btn-floating menu-button waves-effect transparent hide" id="stop-speaking-button"><i class="material-icons theme-text" data-icon="stopspeak" data-default="stop"></i></a>
+                <a id="speak-quote-button" class="btn-floating menu-button waves-effect transparent"><i class="material-icons theme-text" data-icon="speak" data-default="volume_up"></i></a>
+                <a id="stop-speaking-button" class="btn-floating menu-button waves-effect transparent hide"><i class="material-icons theme-text" data-icon="stopspeak" data-default="stop"></i></a>
               </li>
             `;
             break;
           case 'rewind':
-            html = '<li data-button="rewind"><a class="btn-floating menu-button waves-effect transparent disabled" id="go-back-button"><i class="material-icons main-icon theme-text" data-icon="rewind" data-default="skip_previous"></i><i class="material-icons alt-icon theme-text hide" data-icon="fullrewind" data-default="first_page"></i></a></li>';
+            html = '<li data-button="rewind"><a id="go-back-button" class="btn-floating menu-button waves-effect transparent disabled"><i class="material-icons main-icon theme-text" data-icon="rewind" data-default="skip_previous"></i><i class="material-icons alt-icon theme-text hide" data-icon="fullrewind" data-default="first_page"></i></a></li>';
             break;
           default:
             html = '';
@@ -2638,11 +2644,12 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
   moodEngine.logIn = function() {
 
     let button = Ladda.create($('#profile-login-button')[0]);
+    let button2 = Ladda.create($('#profile-button')[0]);
 
     button.start();
-    moodEngine.profileError();
+    button2.start();
 
-    $('li[data-button="profile"] i').removeClass('ignore');
+    moodEngine.profileError();
 
     $.ajax({
       data: $('#login').serialize(),
@@ -2660,6 +2667,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
         }
 
         button.stop();
+        button2.stop();
 
       }
     });
@@ -2685,14 +2693,13 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
   moodEngine.logOut = function() {
 
     let button = Ladda.create($('#profile-logout-button')[0]);
+    let button2 = Ladda.create($('#profile-button')[0]);
 
     button.start();
+    button2.start();
+
     moodEngine.profileError();
     moodEngine.goToLogin();
-
-    $('li[data-button="profile"] .main-icon').removeClass('hide')
-    $('li[data-button="profile"] .alt-icon').addClass('hide')
-    $('li[data-button="profile"] i').addClass('ignore');
 
     let logoutSequence = setInterval(() => {
 
@@ -2710,7 +2717,8 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
           method: 'POST',
           url: `admin/logout/index.php`,
           complete: function() {
-            button.stop()
+            button.stop();
+            button2.stop();
           },
           success: function() {
             moodEngine.checkUser();
