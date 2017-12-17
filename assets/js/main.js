@@ -980,24 +980,24 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
     clearInterval(userCheck);
 
-    if (fullSettings.user_check_interval) {
+    if (fullSettings.user_sync_interval) {
 
-      if (fullSettings.user_check_interval >= 1000) {
+      if (fullSettings.user_sync_interval >= 1000) {
 
-        userCheck = setInterval(moodEngine.checkUser, fullSettings.user_check_interval);
+        userCheck = setInterval(moodEngine.checkUser, fullSettings.user_sync_interval);
 
       } else {
 
         let location;
 
-        if (localStorage.getItem('user_check_interval')) {
+        if (localStorage.getItem('user_sync_interval')) {
 
-          localStorage.removeItem('user_check_interval');
+          localStorage.removeItem('user_sync_interval');
           location = 'local';
 
         } else {
 
-          moodEngine.removeProfileSetting('user_check_interval');
+          moodEngine.removeProfileSetting('user_sync_interval');
           location = 'profile';
 
         }
@@ -2371,7 +2371,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         // User Check interval
 
-        if (name === 'user_check_interval' && parseInt($(this).val()) && $(this).val() < 1000) {
+        if (name === 'user_sync_interval' && parseInt($(this).val()) && $(this).val() < 1000) {
 
           $(this).addClass('invalid');
           invalidInputs.push(`${settings[name].label} Must Be Either 0 or 1000+`);
