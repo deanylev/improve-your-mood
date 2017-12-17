@@ -1210,7 +1210,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       Mousetrap.bind(fullSettings.profile_keys.map(k => `shift+${k}`), function(e) {
 
-        if (!appError) moodEngine.logOut();
+        if (!appError && Object.keys(currentUser).length) moodEngine.logOut();
 
       });
 
