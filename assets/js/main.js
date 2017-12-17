@@ -2650,7 +2650,8 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
   moodEngine.logIn = function() {
 
     let button = Ladda.create($('#profile-login-button')[0]);
-    let button2 = Ladda.create($('#profile-button')[0]);
+    let button2 = $('#profile-button').length ? 'profile-button' : 'profile-login-button';
+    button2 = Ladda.create($(`#${button2}`)[0]);
 
     button.start();
     button2.start();
@@ -2699,7 +2700,8 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
   moodEngine.logOut = function() {
 
     let button = Ladda.create($('#profile-logout-button')[0]);
-    let button2 = Ladda.create($('#profile-button')[0]);
+    let button2 = $('#profile-button').length ? 'profile-button' : 'profile-logout-button';
+    button2 = Ladda.create($(`#${button2}`)[0]);
 
     button.start();
     button2.start();
