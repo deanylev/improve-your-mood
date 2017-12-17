@@ -706,7 +706,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
             downloadButton.stop();
 
             moodEngine.log('log', 'Downloaded profile settings locally.');
-            moodEngine.notify('Settings Downloaded Locally Successfully.');
+            moodEngine.notify('Settings Downloaded Locally Successfully!');
 
           }
 
