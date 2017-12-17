@@ -976,7 +976,11 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
     });
 
-    // Check user automatically
+    // Hide sync button
+
+    fullSettings.hide_sync_button ? $('.manual-check').addClass('hide') : $('.manual-check').removeClass('hide');
+
+    // Sync user automatically
 
     clearInterval(userCheck);
 
