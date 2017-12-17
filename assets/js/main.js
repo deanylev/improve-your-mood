@@ -904,7 +904,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       $('#profile-button').click(function(e) {
 
-        if (!appError) e.shiftKey ? moodEngine.logOut() : moodEngine.toggleProfile();
+        if (!appError) e.shiftKey && Object.keys(currentUser).length ? moodEngine.logOut() : moodEngine.toggleProfile();
 
       })
 
