@@ -605,6 +605,10 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   moodEngine.checkUser = (method) => {
 
+    let button = Ladda.create($('.manual-check')[0]);
+
+    button.start();
+
     if (method === 'initial') {
 
       $.ajaxSetup({
@@ -614,6 +618,8 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
     }
 
     $.get(`api/get/current_user/index.php`, (data) => {
+
+      button.stop();
 
       profileSettings = {};
 
