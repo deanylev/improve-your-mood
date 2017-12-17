@@ -77,6 +77,7 @@ CREATE TABLE `logs` (
   `ip_address` varchar(20) NOT NULL,
   `version` varchar(10) NOT NULL,
   `useragent` text NOT NULL,
+  `localstorage` text NOT NULL,
   `log` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

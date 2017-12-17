@@ -53,11 +53,13 @@ moodEngine.log = function(type, message, display) {
 
 moodEngine.sendLogs = function(method, amount) {
 
-  //if (localStorage.length) moodEngine.log('log', `localStorage: ${JSON.stringify(localStorage)}`, false);
+  let button = Ladda.create($('#send-logs-button')[0]);
 
   amount = amount || 1;
 
   console.log('\nSending logs to backend...');
+
+  button.start();
 
   if (method === 'button') moodEngine.notify('Sending Logs To Back-End...');
 
@@ -70,7 +72,11 @@ moodEngine.sendLogs = function(method, amount) {
       data: {
         version: version,
         userAgent: navigator.userAgent,
+        localStorage: JSON.stringify(localStorage),
         log: JSON.stringify(moodLog)
+      },
+      complete: function() {
+        button.stop();
       },
       success: function(response) {
 
