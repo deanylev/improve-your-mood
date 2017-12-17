@@ -136,8 +136,15 @@
         </div>
         <h5>You are logged in as: <span id="current-user"></span></h5>
         <br>
-        <button class="ladda-button btn-flat coloured coloured-background white-text profile-settings-button save-settings" data-style="expand-right"><span class="ladda-label theme-text">Save Settings</span></button>
-        <button class="ladda-button btn-flat coloured coloured-background white-text profile-settings-button clear-settings" data-style="expand-right"><span class="ladda-label theme-text">Clear Settings</span></button>
+        <button class="ladda-button btn-floating coloured coloured-background white-text profile-settings-button save-settings" data-style="zoom-out">
+          <i class="ladda-label material-icons theme-text" data-icon="profilesavesettings" data-default="cloud_upload"></i>
+        </button>
+        <button id="download-profile-settings" class="ladda-button btn-floating coloured coloured-background white-text" data-style="zoom-out">
+          <i class="ladda-label material-icons theme-text" data-icon="profiledownloadsettings" data-default="cloud_download"></i>
+        </button>
+        <button class="ladda-button btn-floating coloured coloured-background white-text profile-settings-button clear-settings" data-style="zoom-out">
+          <i class="ladda-label material-icons theme-text" data-icon="profileclearsettings" data-default="clear"></i>
+        </button>
         <br><br>
         <div id="saved-settings">
           <h5>Saved Settings:</h5>

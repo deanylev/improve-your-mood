@@ -612,6 +612,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
   moodEngine.checkUser = (method) => {
 
     let button = Ladda.create($('.manual-check')[0]);
+    let downloadButton = Ladda.create($('#download-profile-settings')[0]);
 
     button.start();
 
@@ -620,6 +621,10 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       $.ajaxSetup({
         async: false
       });
+
+    } else if (method === 'downloadSettings') {
+
+      downloadButton.start();
 
     }
 
@@ -666,8 +671,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         $('#current-user').html(`<a href="admin/view/?type=users&amp;title=user&amp;id=${currentUser.id}" target="_blank">${currentUser.name}</a>`);
         $('#current-user-image').attr('src', `admin/users/image.php?id=${currentUser.id}`);
-        $('#saved-settings h5').addClass('hide');
-        $('button.clear-settings').addClass('hide');
+        $('button.clear-settings, #saved-settings h5, #download-profile-settings').addClass('hide');
         $('#saved-settings p').empty();
 
         $('#current-user-image').on('load', function() {
@@ -681,8 +685,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
           $.each(JSON.parse(data.settings), (key, val) => {
 
-            $('#saved-settings h5').removeClass('hide');
-            $('button.clear-settings').removeClass('hide');
+            $('#saved-settings h5, button.clear-settings, #download-profile-settings').removeClass('hide');
 
             try {
 
@@ -692,9 +695,20 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
             profileSettings[key] = val;
 
+            if (method === 'downloadSettings') localStorage.setItem(key, val);
+
             $('#saved-settings p').append(`<div><b>${key}:</b> ${val}<a class="delete-saved-setting" data-setting="${key}">&times;</a><br></div>`);
 
           });
+
+          if (method === 'downloadSettings') {
+
+            downloadButton.stop();
+
+            moodEngine.log('log', 'Downloaded profile settings locally.');
+            moodEngine.notify('Settings Downloaded Locally Successfully.');
+
+          }
 
         } catch (error) {}
 
@@ -2745,7 +2759,13 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   $('#profile-logout-button').click(moodEngine.logOut);
 
-  $('.profile-settings-button').click(function() {
+  $('#download-profile-settings').click(function() {
+
+    moodEngine.checkUser('downloadSettings');
+
+  });
+
+  $('.profile-settings-button').click(function(e) {
 
     let object = {};
     let successLog;
