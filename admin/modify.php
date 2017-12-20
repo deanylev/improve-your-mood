@@ -211,7 +211,7 @@
         $columns = $mysqli->query("DESCRIBE yourmood.{$table}");
         $list = "";
         while ($row = $columns->fetch_assoc()) {
-          if ($row["Field"] !== "id") {
+          if ($row["Field"] !== "id" && $row["Field"] !== "is_owner") {
             $list .= $row["Field"] . ",";
           }
         }
