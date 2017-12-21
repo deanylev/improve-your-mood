@@ -216,7 +216,7 @@
           }
         }
         $list = substr($list, 0, -1);
-        $query = "INSERT INTO yourmood.{$table} ($list) (SELECT $list FROM yourmood.{$table} WHERE id = '$id')";
+        $query = "INSERT INTO yourmood.{$table} ({$list}) (SELECT {$list} FROM yourmood.{$table} WHERE id = '{$id}')";
         $message = "Successfully cloned {$type}.";
         $goToID = true;
     } else {

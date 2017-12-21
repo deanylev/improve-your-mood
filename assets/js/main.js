@@ -2795,7 +2795,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       $.each(localStorage, (key, val) => {
 
-        if (settings[key]) object[key] = val;
+        if (settings[key] && key !== 'backend_address') object[key] = val;
 
       });
 
