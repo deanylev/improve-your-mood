@@ -656,6 +656,8 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
         $('li[data-button="profile"] .alt-icon').addClass('hide')
         $('li[data-button="profile"] i').addClass('ignore');
 
+        downloadButton.stop();
+
         currentUser = {};
 
       } else {
