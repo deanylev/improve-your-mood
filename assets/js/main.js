@@ -582,7 +582,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   // Delete setting from profile
 
-  moodEngine.removeProfileSetting = function(setting) {
+  moodEngine.removeProfileSetting = function(setting, button) {
 
     delete profileSettings[setting];
 
@@ -593,6 +593,11 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       },
       method: 'POST',
       url: `api/update/user_settings/index.php`,
+      complete: function() {
+        if (button) {
+          button.stop();
+        }
+      },
       success: function(response) {
         if (response === 'success') {
           moodEngine.log('log', `Cleared setting '${setting}' from profile.`);
@@ -699,7 +704,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
             if (method === 'downloadSettings') localStorage.setItem(key, val);
 
-            $('#saved-settings p').append(`<div><b>${key}:</b> ${val}<a class="delete-saved-setting" data-setting="${key}">&times;</a><br></div>`);
+            $('#saved-settings p').append(`<div><b>${key}:</b> ${val}<a class="ladda-button delete-saved-setting" data-setting="${key}" data-style="zoom-in" data-spinner-color="#f00"><span class="ladda-label">&times;</span></a><br></div>`);
 
           });
 
@@ -719,8 +724,11 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       $('.delete-saved-setting').off();
       $('.delete-saved-setting').click(function() {
 
+        let button = Ladda.create($(this)[0]);
         let setting = $(this).attr('data-setting');
-        moodEngine.removeProfileSetting(setting);
+
+        button.start();
+        moodEngine.removeProfileSetting(setting, button);
 
       });
 
