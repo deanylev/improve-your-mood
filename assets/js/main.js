@@ -4,7 +4,7 @@ let usedQuotes = [];
 let usedColours = [];
 let quoteHistory = [];
 let colourHistory = [];
-let moodLog = [];
+let moodLogs = [];
 let moodEngine = {};
 let settings = {};
 let fullSettings = {};
@@ -28,7 +28,7 @@ moodEngine.log = function(type, message, display) {
 
   if (['log', 'warn', 'error'].includes(type) && message) {
 
-    moodLog.push({
+    moodLogs.push({
       type: type,
       message: message
     });
@@ -37,11 +37,13 @@ moodEngine.log = function(type, message, display) {
 
     $('#visible-logs').empty();
 
-    $.each(moodLog, function(key, val) {
+    $.each(moodLogs, function(key, val) {
 
       $('#visible-logs').append(`<div class="log"><b><span class="log-${val.type}">${val.type}:</span></b> <div class="content">${val.message}</div></div><br>`);
 
     });
+
+    if (!$('#logs-search').val()) $('#results-number').text(moodLogs.length);
 
   } else {
 
@@ -73,7 +75,7 @@ moodEngine.sendLogs = function(method, amount) {
         version: version,
         userAgent: navigator.userAgent,
         localStorage: JSON.stringify(localStorage),
-        log: JSON.stringify(moodLog)
+        log: JSON.stringify(moodLogs)
       },
       complete: function() {
         button.stop();
@@ -705,7 +707,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
             downloadButton.stop();
 
-            moodEngine.log('log', 'Downloaded profile settings locally.');
+            moodEngine.log('log', 'Successfully downloaded profile settings locally.');
             moodEngine.notify('Settings Downloaded Locally Successfully!');
 
           }
@@ -2555,12 +2557,12 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       }
 
-      $('#results-number').text(` (${results})`);
+      $('#results-number').text(results);
 
     } else {
 
       $('#visible-logs').removeClass('hide');
-      $('#results-number').empty();
+      $('#results-number').text(moodLogs.length);
 
     }
 
