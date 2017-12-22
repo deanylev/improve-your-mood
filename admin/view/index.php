@@ -22,6 +22,10 @@
       header("location: ../{$title}s?type={$type}");
   }
 
+  while ($column = $result->fetch_field()) {
+      $columnTypes[$column->name] = $column->type;
+  }
+
 ?>
 
 <h1 class="text-center">View <?php echo $title === "user" && $id == $_SESSION["user"] ? "Your Profile" : ucwords($title); ?></h1>
@@ -36,6 +40,7 @@
 
   foreach ($row as $key => $val) {
     if ($key !== "id" && $key !== "password" && $key !== "is_owner") {
+      $columnType = $columnTypes[$key];
       if ($key === "created_by") {
         if ($mysqli->query("SELECT * FROM yourmood.users WHERE id = {$val}")->num_rows):
           $user = $mysqli->query("SELECT * FROM yourmood.users WHERE id = '{$val}'")->fetch_object();
@@ -63,6 +68,13 @@
           <p><b><?php echo $key; ?>:</b></p>
           <img class="user-image" src="../users/image.php?id=<?php echo $id; ?>">
           <br><br>
+
+<?php
+      } elseif ($columnType === 1)  {
+
+?>
+
+          <p><b><?php echo $key; ?>:</b><br><?php echo $val === "1" ? "true" : "false"; ?></p><br>
 
 <?php
       } else {
