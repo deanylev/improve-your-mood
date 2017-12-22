@@ -1495,6 +1495,12 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       modalOpen = true;
 
+      // Initialize the Materialize tooltip plugin
+
+      $('.tooltipped').tooltip({
+        html: true
+      });
+
     },
     complete: function() {
 
@@ -1611,6 +1617,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       let inputField = 'input-field';
       let inputCol = 's12';
       let resetInput = '';
+      let customHTML = val.custom_html || '';
 
       if (fullSettings.reset_input_buttons) {
 
@@ -1755,6 +1762,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
                     ${containerClose}
                     <span class="tooltipped" data-setting="${key}" data-position="bottom" data-delay="50">What's This? | </span>
                     <a class="black-text settings-link default-button" data-setting="${key}"><b>Set to Default</b></a>
+                    ${customHTML}
                   </div>
                   ${resetInput}
                 </div>
@@ -1835,6 +1843,15 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   });
 
+  // Set backend to local button
+
+  $('#set-backend-local').click(function() {
+
+    localStorage.setItem('backend_address', window.location.href);
+    window.location.reload();
+
+  });
+
   // Reset inputs button
 
   $('.reset-input').click(function() {
@@ -1860,12 +1877,6 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
     let value = `${settings[setting].description}<br>The default is ${text}.`;
 
     $(this).attr('data-tooltip', value);
-
-    // Initialize the Materialize tooltip plugin
-
-    $('.tooltipped').tooltip({
-      html: true
-    });
 
   });
 

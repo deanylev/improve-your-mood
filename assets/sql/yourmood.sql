@@ -105,6 +105,7 @@ CREATE TABLE `settings` (
   `max` int(6) NOT NULL,
   `label` text NOT NULL,
   `description` text NOT NULL,
+  `custom_html` text NOT NULL,
   `notes` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
