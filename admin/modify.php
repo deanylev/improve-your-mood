@@ -102,6 +102,8 @@
             $errors[] = (object) array("user" => "Can't be blank.");
           } elseif ($_POST["values"]["user"] !== str_replace(" ", "", $_POST["values"]["user"])) {
             $errors[] = (object) array("user" => "Can't contain spaces.");
+          } elseif (strlen($_POST["values"]["user"]) > 50) {
+            $errors[] = (object) array("user" => "Can't be over 50 characters.");
           } elseif ((isset($row) && $row["id"] !== $id)) {
             $errors[] = (object) array("user" => "Already in use.");
           }
