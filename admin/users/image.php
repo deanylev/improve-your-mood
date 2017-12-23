@@ -15,5 +15,7 @@
     $image = imagecreatefrompng("../uploads/images/user/placeholder.png");
   }
 
+  imagealphablending($image, true);
+  imagesavealpha($image, true);
   imagepng($image, null, 0);
   imagedestroy($image);

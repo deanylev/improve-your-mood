@@ -49,6 +49,10 @@ $('#password').on('keypress keydown keyup change', function() {
       strengthText.text(`(${text})`);
       strengthText.addClass(`text-${textClass}`);
 
+    } else {
+
+      strengthText.html('(too short)');
+
     }
 
   }

@@ -135,7 +135,7 @@
 ?>
 
     <div data-field="image">
-      <label>image<br>(square, png, < 2MB)</label>
+      <label>image<br><b>square (ideal), png, < 2MB</b></label>
       <div id="image"></div>
       <div class="validation-errors text-danger"></div>
       <input type="hidden" value="<?php echo $row["image"]; ?>" id="image_name" name="values[image]">
@@ -151,7 +151,7 @@
     <br>
     <div data-field="password">
       <div class="form-group">
-        <label for="password">password <span id="password_strength"></span></label>
+        <label for="password">password <b id="password_strength"></b></label>
         <input type="password" id="password" class="form-control" name="values[password]" placeholder="Unchanged" autocomplete="new-password"></input>
       </div>
       <div class="validation-errors text-danger"></div>

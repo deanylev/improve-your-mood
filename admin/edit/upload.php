@@ -32,10 +32,10 @@
             $uploadOk = 0;
         }
         // Must be square
-        if ($imageWidth !== $imageHeight) {
-            $message = (object) array("error" => "Image width and height must be the same.");
-            $uploadOk = 0;
-        }
+        // if ($imageWidth !== $imageHeight) {
+        //     $message = (object) array("error" => "Image width and height must be the same.");
+        //     $uploadOk = 0;
+        // }
         // Allow certain file formats
         if ($fileType != "png") {
             $message = (object) array("error" => "Must be a png image.");
