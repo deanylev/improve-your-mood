@@ -820,7 +820,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
     // Colour transitions
 
-    if (fullSettings.colour_reload_transition_time) $('.coloured').css('transition', `${fullSettings.colour_reload_transition_time}ms ease-out`);
+    $('.coloured').css('transition', `${fullSettings.colour_reload_transition_time || 0}ms ease-out`);
 
     // Build button menu
 
