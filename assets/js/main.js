@@ -1862,6 +1862,18 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   });
 
+  // Clear cache button
+
+  $('#clear-cache').click(function() {
+
+    localStorage.removeItem('cachedQuotes');
+    localStorage.removeItem('cachedColours');
+    localStorage.removeItem('cachedSettings');
+
+    window.location.reload();
+
+  });
+
   // Reset inputs button
 
   $('.reset-input').click(function() {
