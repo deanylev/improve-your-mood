@@ -18,7 +18,7 @@
   $imageFile = imagecreatefrompng($path);
 
   list($width, $height) = getimagesize($path);
-  $newWidth = $newHeight = isset($_GET["s"]) ? $_GET["s"] : 80;
+  $newWidth = $newHeight = isset($_GET["s"]) && is_numeric($_GET["s"]) ? $_GET["s"] : 80;
   $image = imagecreatetruecolor($newHeight, $newWidth);
 
   imagecolortransparent($image, imagecolorallocatealpha($image, 0, 0, 0, 127));
