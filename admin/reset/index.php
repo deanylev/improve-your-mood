@@ -22,12 +22,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Admin Panel - Reset</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="../assets/css/vendor/bootstrap.min.css?v=4.0.0">
+  <link rel="stylesheet" href="../assets/css/vendor/font-awesome.min.css?v=4.7.0">
   <link rel="stylesheet" href="../assets/css/main.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
-</head>
+  <script src="../../assets/js/vendor/jquery.min.js?v=3.2.1"></script>
+  <script src="../assets/js/vendor/bootstrap.min.js?v=4.0.0"></script></head>
 <body class="container bg-primary">
   <br>
   <?php

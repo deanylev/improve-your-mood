@@ -50,15 +50,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Admin Panel - <?php echo isset($userPage) ? ucwords($action) . " Your Profile" : $pageTitle; ?></title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/file-uploader/5.15.4/s3.jquery.fine-uploader/fine-uploader.min.css">
+  <link rel="stylesheet" href="../assets/css/vendor/bootstrap.min.css?v=4.0.0">
+  <link rel="stylesheet" href="../assets/css/vendor/font-awesome.min.css?v=4.7.0">
+  <link rel="stylesheet" href="../assets/css/vendor/fine-uploader.min.css?v=5.15.4">
   <link rel="stylesheet" href="../assets/css/main.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.0/jquery.mark.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.5/umd/popper.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/file-uploader/5.15.4/jquery.fine-uploader/jquery.fine-uploader.min.js"></script>
+  <script src="../../assets/js/vendor/jquery.min.js?v=3.2.1"></script>
+  <script src="../assets/js/vendor/jquery.mark.min.js?v=8.11.0"></script>
+  <script src="../assets/js/vendor/popper.min.js?v=1.12.5"></script>
+  <script src="../assets/js/vendor/bootstrap.min.js?v=4.0.0"></script>
+  <script src="../assets/js/vendor/jquery.fine-uploader.min.js?v=5.15.4"></script>
   <script type="text/template" id="qq-template">
     <div class="qq-uploader-selector qq-uploader" qq-drop-area-text="Drop files here">
         <div class="qq-upload-button-selector btn-dark btn-lg" style="margin: 0 auto; width: 105px;">
