@@ -16,6 +16,7 @@
     $userQuery = $mysqli->query("SELECT * FROM yourmood.users WHERE id='{$sessionUser}'");
     $userRow = $userQuery->fetch_assoc();
     $user["id"] = $userRow["id"];
+    $user["is_admin"] = $userRow["is_admin"] === "1" ? true : false;
     $user["name"] = $userRow["user"];
     $user["settings"] = htmlspecialchars_decode($userRow["app_settings"]);
     header("Content-Type: application/json");

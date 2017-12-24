@@ -652,6 +652,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
         $('#current-user-image').addClass('hide');
         $('#current-user-image').off();
         $('#image-preloader').removeClass('hide');
+        $('#admin-only').addClass('hide');
         $('li[data-button="profile"] .main-icon').removeClass('hide')
         $('li[data-button="profile"] .alt-icon').addClass('hide')
         $('li[data-button="profile"] i').addClass('ignore');
@@ -684,6 +685,8 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
         $('#current-user-image').attr('src', `admin/users/image.php?id=${currentUser.id}&s=90`);
         $('button.clear-settings, #saved-settings h5, #download-profile-settings').addClass('hide');
         $('#saved-settings p').empty();
+
+        if (currentUser.is_admin) $('#admin-only').removeClass('hide');
 
         $('#current-user-image').on('load', function() {
 
@@ -2699,6 +2702,13 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
   $.get('api/verify/admin_signup', (data) => {
 
     if (data === 'true') $('#admin-signup').removeClass('hide');
+
+  });
+
+  $('#view-logs').click(function() {
+
+    $('#profile-modal').modal('close');
+    $('#logs-modal').modal('open');
 
   });
 

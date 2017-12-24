@@ -62,7 +62,7 @@
       <div id="logs-search-results"></div>
     </div>
     <div class="modal-footer">
-      <button id="send-logs-button" class="ladda-button btn-flat coloured coloured-background white-text" data-style="expand-right"><span class="ladda-label theme-text">Send Logs</span></button>
+      <button id="send-logs-button" class="ladda-button btn-flat coloured coloured-background" data-style="expand-right"><span class="ladda-label theme-text">Send Logs</span></button>
     </div>
   </div>
   <div id="profile-modal" class="modal modal-fixed-footer">
@@ -136,13 +136,13 @@
         </div>
         <h5>You are logged in as: <span id="current-user"></span></h5>
         <br>
-        <button class="ladda-button btn-floating coloured coloured-background white-text profile-settings-button save-settings" data-style="zoom-out">
+        <button class="ladda-button btn-floating coloured coloured-background profile-settings-button save-settings" data-style="zoom-out">
           <i class="ladda-label material-icons theme-text" data-icon="profilesavesettings" data-default="cloud_upload"></i>
         </button>
-        <button id="download-profile-settings" class="ladda-button btn-floating coloured coloured-background white-text" data-style="zoom-out">
+        <button id="download-profile-settings" class="ladda-button btn-floating coloured coloured-background" data-style="zoom-out">
           <i class="ladda-label material-icons theme-text" data-icon="profiledownloadsettings" data-default="cloud_download"></i>
         </button>
-        <button class="ladda-button btn-floating coloured coloured-background white-text profile-settings-button clear-settings" data-style="zoom-out">
+        <button class="ladda-button btn-floating coloured coloured-background profile-settings-button clear-settings" data-style="zoom-out">
           <i class="ladda-label material-icons theme-text" data-icon="profileclearsettings" data-default="clear"></i>
         </button>
         <br><br>
@@ -150,15 +150,20 @@
           <h5>Saved Settings:</h5>
           <p></p>
         </div>
+        <div id="admin-only" class="hide">
+          <br>
+          <h5>Admin:</h5>
+          <button id="view-logs" class="btn coloured coloured-background waves-effect">View Logs</button>
+        </div>
       </div>
     </div>
     <div class="modal-footer">
       <button class="ladda-button left btn-floating btn-flat coloured coloured-background manual-check" data-style="zoom-out">
         <i class="ladda-label center material-icons prefix theme-text">refresh</i>
       </button>
-      <button id="profile-login-button" class="ladda-button btn-flat coloured coloured-background white-text login not-logged-in" data-style="expand-right"><span class="ladda-label theme-text">Log In</span></button>
-      <button id="profile-signup-button" class="ladda-button btn-flat coloured coloured-background white-text signup hide-also" data-style="expand-right"><span class="ladda-label theme-text">Sign Up</span></button>
-      <button id="profile-logout-button" class="ladda-button btn-flat coloured coloured-background white-text logged-in" data-style="expand-right"><span class="ladda-label theme-text">Log Out</span></button>
+      <button id="profile-login-button" class="ladda-button btn-flat coloured coloured-background login not-logged-in" data-style="expand-right"><span class="ladda-label theme-text">Log In</span></button>
+      <button id="profile-signup-button" class="ladda-button btn-flat coloured coloured-background signup hide-also" data-style="expand-right"><span class="ladda-label theme-text">Sign Up</span></button>
+      <button id="profile-logout-button" class="ladda-button btn-flat coloured coloured-background logged-in" data-style="expand-right"><span class="ladda-label theme-text">Log Out</span></button>
     </div>
   </div>
   <div class="container clickable">
