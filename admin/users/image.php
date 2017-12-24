@@ -21,8 +21,9 @@
   $newWidth = $newHeight = isset($_GET["s"]) ? $_GET["s"] : 80;
   $image = imagecreatetruecolor($newHeight, $newWidth);
 
-  imagecopyresampled($image, $imageFile, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
-  imagealphablending($image, true);
+  imagecolortransparent($image, imagecolorallocatealpha($image, 0, 0, 0, 127));
+  imagealphablending($image, false);
   imagesavealpha($image, true);
+  imagecopyresampled($image, $imageFile, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
   imagepng($image, null, 0);
   imagedestroy($image);
