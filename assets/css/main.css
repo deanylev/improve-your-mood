@@ -151,11 +151,6 @@ label:not(.active) b, #advanced-settings, .fade-in-on-load {
   font-size: 43px;
 }
 
-#current-user-image {
-  width: 90px;
-  height: 90px;
-}
-
 #image-preloader {
   margin-bottom: 20px;
 }

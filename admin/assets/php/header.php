@@ -169,7 +169,7 @@
           <div class="dropdown-divider"></div>
           <li class="nav-item d-lg-none <?php echo isset($userPage) && $userPage === "view" ? "active" : "" ?>">
             <a class="nav-link"  href="../view/?type=users&amp;title=user&amp;id=<?php echo $_SESSION["user"]; ?>">
-              <img class="nav-user-image" src="../users/image.php?id=<?php echo $_SESSION["user"]; ?>">
+              <img class="nav-user-image" src="../users/image.php?id=<?php echo $_SESSION["user"]; ?>&s=20">
               <span class="icon-text"><?php echo $currentUser["name"]; ?></span>
             </a>
           </li>
@@ -191,7 +191,7 @@
         <li class="nav-item">
           <div class="btn-group d-none d-lg-block d-xl-block">
             <a class="btn btn-primary <?php echo isset($userPage) && $userPage === "view" ? "active" : "" ?>" href="../view/?type=users&amp;title=user&amp;id=<?php echo $_SESSION["user"]; ?>">
-              <img class="nav-user-image" src="../users/image.php?id=<?php echo $_SESSION["user"]; ?>">
+              <img class="nav-user-image" src="../users/image.php?id=<?php echo $_SESSION["user"]; ?>&s=20">
               <span class="icon-text"><?php echo $currentUser["name"]; ?></span>
             </a>
             <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

@@ -681,7 +681,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
         if (id !== currentUser.id) moodEngine.log('log', `Logged in as '${currentUser.name}'.`);
 
         $('#current-user').html(`<a href="admin/view/?type=users&amp;title=user&amp;id=${currentUser.id}" target="_blank">${currentUser.name}</a>`);
-        $('#current-user-image').attr('src', `admin/users/image.php?id=${currentUser.id}`);
+        $('#current-user-image').attr('src', `admin/users/image.php?id=${currentUser.id}&s=90`);
         $('button.clear-settings, #saved-settings h5, #download-profile-settings').addClass('hide');
         $('#saved-settings p').empty();
 
