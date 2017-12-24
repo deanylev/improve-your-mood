@@ -248,7 +248,7 @@
         // Generate a random username/password for a new user
         $randomUsername = "user_" . uniqid();
         $randomPassword = md5(uniqid());
-        $mysqli->query("UPDATE yourmood.{$table} SET user = '{$randomUsername}', password = '{$randomPassword}' WHERE id = '{$newId}'");
+        $mysqli->query("UPDATE yourmood.{$table} SET user = '{$randomUsername}', password = '{$randomPassword}', created_at = '{$dateNow}' WHERE id = '{$newId}'");
       } elseif ($table === "colours") {
         // Default black colour
         $mysqli->query("UPDATE yourmood.{$table} SET colour = '000000' WHERE id = '{$newId}'");
