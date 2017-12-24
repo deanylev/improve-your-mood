@@ -1211,7 +1211,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       Mousetrap.bindGlobal(fullSettings.view_logs_keys, function(e) {
 
-        if (!appError && !modalOpen) $('#logs-modal').modal('open');
+        if (!appError) moodEngine.toggleLogs();
 
       });
 
@@ -1586,6 +1586,22 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
     } else {
 
       modalOpen ? $('#profile-modal').modal('close') : $('#profile-modal').modal('open');
+
+    }
+
+  };
+
+  // Function for closing and opening logs panel
+
+  moodEngine.toggleLogs = function(action) {
+
+    if (action) {
+
+      $('#logs-modal').modal(action);
+
+    } else {
+
+      modalOpen ? $('#logs-modal').modal('close') : $('#logs-modal').modal('open');
 
     }
 
@@ -2707,8 +2723,8 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   $('#view-logs').click(function() {
 
-    $('#profile-modal').modal('close');
-    $('#logs-modal').modal('open');
+    moodEngine.toggleProfile('close');
+    moodEngine.toggleLogs('open');
 
   });
 
