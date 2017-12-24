@@ -13,8 +13,8 @@
 
   if ($username === "") {
     $errors[] = (object) array("username" => "Can't be blank.");
-  } elseif ($username !== str_replace(" ", "", $username)) {
-    $errors[] = (object) array("username" => "Can't contain spaces.");
+  } elseif (!ctype_alnum($username)) {
+    $errors[] = (object) array("username" => "Can't contain non-alphanumeric characters.");
   } elseif (strlen($username) > 50) {
     $errors[] = (object) array("username" => "Can't be over 50 characters.");
   } elseif ($result->num_rows) {

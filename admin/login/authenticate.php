@@ -13,7 +13,7 @@
     $_COOKIE["login_attempts"] = 0;
   }
 
-  $authUser = $_POST["user"];
+  $authUser = addslashes($_POST["user"]);
   $authPass = $_POST["password"];
 
   $result = $mysqli->query("SELECT * FROM yourmood.users WHERE user='{$authUser}'");
