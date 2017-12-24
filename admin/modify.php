@@ -100,8 +100,8 @@
           }
           if ($_POST["values"]["user"] === "") {
             $errors[] = (object) array("user" => "Can't be blank.");
-          } elseif (!ctype_alnum($_POST["values"]["user"])) {
-            $errors[] = (object) array("user" => "Can't contain non-alphanumeric characters.");
+          } elseif (preg_match('/[^a-z_\-0-9]/i', $_POST["values"]["user"])) {
+            $errors[] = (object) array("user" => "Letters, numbers, dashes and underscores only.");
           } elseif (strlen($_POST["values"]["user"]) > 50) {
             $errors[] = (object) array("user" => "Can't be over 50 characters.");
           } elseif ((isset($row) && $row["id"] !== $id)) {
