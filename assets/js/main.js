@@ -1217,7 +1217,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       Mousetrap.bindGlobal(fullSettings.view_logs_keys, function(e) {
 
-        if (!appError) moodEngine.toggleLogs();
+        if (!appError && !$('#logs-search:focus').length) moodEngine.toggleLogs();
 
       });
 
