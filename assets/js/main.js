@@ -673,7 +673,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         $('li[data-button="profile"] i').removeClass('ignore');
 
-        $('#go-to-login').click();
+        moodEngine.goToLogin();
 
         let id = currentUser.id;
 
