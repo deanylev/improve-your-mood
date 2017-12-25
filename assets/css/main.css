@@ -127,7 +127,7 @@ label:not(.active) b, #advanced-settings, .fade-in-on-load {
 }
 
 .theme-text:not(.no-outline) {
-  text-shadow: -0.3px -0.3px 0 #000000, 0.3px -0.3px 0 #000000, -0.3px 0.3px 0 #000000, 0.3px 0.3px 0 #000000;
+  text-shadow: -0.1px -0.1px 0 #000000, 0.1px -0.1px 0 #000000, -0.1px 0.1px 0 #000000, 0.1px 0.1px 0 #000000;
 }
 
 #go-to-signup, #go-to-login {
