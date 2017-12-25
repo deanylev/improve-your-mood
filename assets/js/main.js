@@ -63,8 +63,6 @@ moodEngine.sendLogs = function(method, amount) {
 
   button.start();
 
-  if (method === 'button') moodEngine.notify('Sending Logs To Back-End...');
-
   for (i = 0; i < amount; i++) {
 
     $.ajax({
@@ -673,7 +671,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         $('li[data-button="profile"] i').removeClass('ignore');
 
-        moodEngine.goToLogin();
+        if (method !== 'initial') moodEngine.goToLogin();
 
         let id = currentUser.id;
 
