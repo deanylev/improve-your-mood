@@ -66,7 +66,6 @@
         }
         // Construct SQL statement
         foreach ($_POST["values"] as $key => $val) {
-            //$val = $key === "password" ? md5($val) : htmlspecialchars($val);
             switch ($key) {
               case "password":
                 $val = md5($val);
@@ -90,7 +89,7 @@
           $url = in_array("view", $actions) ? "view/?type={$table}&title={$type}&id={$id}" : "{$type}s?type={$table}";
         }
         if ($table === "users") {
-          $user = $_POST["values"]["user"];
+          $user = addslashes($_POST["values"]["user"]);
           $result = $mysqli->query("SELECT * FROM yourmood.{$table} WHERE user='{$user}'");
           if ($result->num_rows) {
             $row = $result->fetch_assoc();
