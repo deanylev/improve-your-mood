@@ -84,7 +84,7 @@
 
             <div class="form-group">
               <label for="<?php echo $key; ?>"><?php echo $key; ?></label>
-              <input type="text" class="form-control" id="<?php echo $key; ?>" value="<?php echo $val; ?>" name="values[<?php echo $key; ?>]">
+              <input type="text" class="form-control" id="<?php echo $key; ?>" value="<?php echo $val; ?>" name="values[<?php echo $key; ?>]" style="<?php echo $type === "colours" && $key === "colour" ? "background-color: #{$val};" : ""; ?>">
             </div>
 
 <?php

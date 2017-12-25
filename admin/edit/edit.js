@@ -131,3 +131,9 @@ $('#remove-image').click(function() {
   $('#image-preview').remove();
 
 });
+
+$('#colour').keyup(function() {
+
+  $(this).css('background-color', `#${$(this).val()}`);
+
+});

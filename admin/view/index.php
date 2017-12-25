@@ -83,7 +83,13 @@
 
           <p><b><?php echo $key; ?>:</b><br><?php echo $val; ?></p><br>
 
+<?php if ($title === "colour" && $key === "colour"): ?>
+
+          <p><b>preview:</b><br><div class="colour-preview" style="background-color: #<?php echo $val; ?>; margin: 0 auto;"></div></p><br>
+
 <?php
+
+        endif;
 
       }
     }
