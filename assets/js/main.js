@@ -686,7 +686,15 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
         $('button.clear-settings, #saved-settings h5, #download-profile-settings').addClass('hide');
         $('#saved-settings p').empty();
 
-        if (currentUser.is_admin) $('#admin-only').removeClass('hide');
+        if (currentUser.is_admin) {
+
+          $('#admin-only').removeClass('hide');
+
+        } else {
+
+          $('#admin-only').addClass('hide');
+
+        }
 
         $('#current-user-image').on('load', function() {
 
