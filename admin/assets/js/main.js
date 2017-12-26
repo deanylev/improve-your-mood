@@ -263,6 +263,7 @@ $('#export-button').click(function() {
 $('#import-button').click(function() {
 
   $('#import-field, #submit-import').toggleClass('d-none');
+  $('#import-response').empty();
 
 });
 
