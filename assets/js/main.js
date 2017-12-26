@@ -1337,9 +1337,23 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       Mousetrap.bindGlobal(fullSettings.speak_quote_keys, function(e) {
 
-        if (!appError && !modalOpen) {
+        if (!appError && !modalOpen) responsiveVoice.isPlaying() ? moodEngine.stopSpeaking() : moodEngine.speakQuote();
 
-          responsiveVoice.isPlaying() ? moodEngine.stopSpeaking() : moodEngine.speakQuote();
+      });
+
+    }
+
+    // Toggle Night Mode
+
+    if (typeof(fullSettings.night_mode_keys) === 'object') {
+
+      Mousetrap.bindGlobal(fullSettings.night_mode_keys, function(e) {
+
+        if (!appError && !$('#settings-modal input:not([type="range"]):not([type="checkbox"]):focus').length && !$('#logs-search:focus').length) {
+
+          localStorage.setItem('night_mode', !$('body').hasClass('night-mode'));
+          moodEngine.setSettings('nightModeToggle');
+          moodEngine.setInputs();
 
         }
 
@@ -1347,7 +1361,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
     }
 
-    if (!['initial', 'userCheck', 'settingsSync'].includes(method)) {
+    if (!['initial', 'userCheck', 'settingsSync', 'nightModeToggle'].includes(method)) {
 
       moodEngine.toggleSettings('close');
 
