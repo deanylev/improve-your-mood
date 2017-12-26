@@ -135,7 +135,7 @@
 
   endif;
 
-  if ($currentUser["is_admin"]):
+  if ($currentUser["is_admin"] && in_array("create", $actions)):
 
 ?>
 
