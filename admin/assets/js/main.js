@@ -237,3 +237,57 @@ $('#modal').on('hide.bs.modal', function() {
   $('.hidden-submit-input').remove();
 
 });
+
+$('#export-button').click(function() {
+
+  $('#export-code-button').addClass('d-none');
+  $('#export-status').removeClass('d-none');
+
+  $.ajax({
+    data: {
+      table: $(this).data('type'),
+      id: $(this).data('id')
+    },
+    method: 'POST',
+    url: '../export.php',
+    success: function(response) {
+      $('#export-status').addClass('d-none');
+      $('#export-code-button').attr('data-clipboard-text', response);
+      new Clipboard('#export-code-button');
+      $('#export-code-button').removeClass('d-none');
+    }
+  });
+
+});
+
+$('#import-button').click(function() {
+
+  $('#import-field, #submit-import').toggleClass('d-none');
+
+});
+
+$('#submit-import').click(function() {
+
+  if ($('#import-field').val()) {
+
+    $.ajax({
+      data: {
+        table: $(this).data('table'),
+        type: $(this).data('type'),
+        value: $('#import-field').val()
+      },
+      method: 'POST',
+      url: '../import.php',
+      success: function(response) {
+        response = JSON.parse(response);
+        if (response.status === 'success') {
+          window.location.href = response.url;
+        } else {
+          $('#import-response').text(response.status);
+        }
+      }
+    });
+
+  }
+
+});

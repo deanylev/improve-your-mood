@@ -129,7 +129,23 @@
 
 ?>
 
-<a class="btn btn-lg btn-success" href="../logout">Log Out</a>
+  <a class="btn btn-lg btn-success" href="../logout">Log Out</a>
+
+<?php
+
+  endif;
+
+  if ($currentUser["is_admin"]):
+
+?>
+
+  <button id="export-button" class="btn btn-lg btn-dark" type="button" data-type="<?php echo $type; ?>" data-id="<?php echo $id; ?>">Export</button>
+
+  <br><br>
+
+  <p id="export-status" class="d-none">Loading...</p>
+
+  <button id="export-code-button" class="btn btn-dark d-none" type="button">Copy Export Code</button>
 
 <?php endif; ?>
 

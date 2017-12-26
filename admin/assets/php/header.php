@@ -59,6 +59,7 @@
   <script src="../assets/js/vendor/popper.min.js?v=1.12.5"></script>
   <script src="../assets/js/vendor/bootstrap.min.js?v=4.0.0"></script>
   <script src="../assets/js/vendor/jquery.fine-uploader.min.js?v=5.15.4"></script>
+  <script src="../assets/js/vendor/clipboard.min.js?v=1.7.1"></script>
   <script type="text/template" id="qq-template">
     <div class="qq-uploader-selector qq-uploader" qq-drop-area-text="Drop files here">
         <div class="qq-upload-button-selector btn-dark btn-lg" style="margin: 0 auto; width: 105px;">
