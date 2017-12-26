@@ -679,7 +679,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         if (id !== currentUser.id) moodEngine.log('log', `Logged in as '${currentUser.name}'.`);
 
-        $('#current-user').html(`<a href="admin/view/?type=users&amp;title=user&amp;id=${currentUser.id}" target="_blank">${currentUser.name}</a>`);
+        $('#current-user').html(`<a class="mode-text" href="admin/view/?type=users&amp;title=user&amp;id=${currentUser.id}" target="_blank">${currentUser.name}</a>`);
         $('#current-user-image').attr('src', `admin/users/image.php?id=${currentUser.id}&s=90`);
         $('button.clear-settings, #saved-settings h5, #download-profile-settings').addClass('hide');
         $('#saved-settings p').empty();
@@ -968,6 +968,10 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
     // Theme colour
 
     moodEngine.setTheme(fullSettings.theme_colour);
+
+    // Night mode
+
+    fullSettings.night_mode ? $('body').addClass('night-mode') : $('body').removeClass('night-mode');
 
     // Touch / click gestures
 
@@ -1797,8 +1801,8 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
                     ${input}
                     ${label}
                     ${containerClose}
-                    <span class="tooltipped" data-setting="${key}" data-position="bottom" data-delay="50">What's This? | </span>
-                    <a class="black-text settings-link default-button" data-setting="${key}"><b>Set to Default</b></a>
+                    <span class="tooltipped mode-text" data-setting="${key}" data-position="bottom" data-delay="50">What's This? | </span>
+                    <a class="black-text settings-link default-button mode-text" data-setting="${key}"><b>Set to Default</b></a>
                     ${customHTML}
                   </div>
                   ${resetInput}
@@ -1885,6 +1889,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
   $('#set-backend-local').click(function() {
 
     localStorage.setItem('backend_address', window.location.href);
+    localStorage.setItem('keep_advanced_settings', true);
     window.location.reload();
 
   });

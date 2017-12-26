@@ -29,14 +29,14 @@
 <body class="coloured coloured-background">
   <div id="settings-modal" class="modal modal-fixed-footer">
     <ul class="tabs tabs-fixed-width"></ul>
-    <div class="modal-content">
+    <div class="modal-content mode-background">
       <h4 class="coloured coloured-text">Settings</h4>
       <br>
       <div class="row">
         <form id="settings-form" class="col s12"></form>
       </div>
     </div>
-    <div class="modal-footer">
+    <div class="modal-footer mode-background">
       <button class="left btn-floating btn-flat coloured coloured-background waves-effect reset-input reset-all">
         <i class="center material-icons prefix theme-text">refresh</i>
       </button>
@@ -48,7 +48,7 @@
     </div>
   </div>
   <div id="logs-modal" class="modal modal-fixed-footer bottom-sheet tall">
-    <div class="modal-content">
+    <div class="modal-content mode-background">
       <h4 class="coloured coloured-text">Logs (<span id="results-number"></span>)</h4>
       <form>
         <div class="row">
@@ -58,15 +58,15 @@
           </div>
         </div>
       </form>
-      <div id="visible-logs"></div>
-      <div id="logs-search-results"></div>
+      <div id="visible-logs" class="mode-text"></div>
+      <div id="logs-search-results" class="mode-text"></div>
     </div>
-    <div class="modal-footer">
+    <div class="modal-footer mode-background">
       <button id="send-logs-button" class="ladda-button btn-flat coloured coloured-background" data-style="expand-right"><span class="ladda-label theme-text">Send Logs</span></button>
     </div>
   </div>
   <div id="profile-modal" class="modal modal-fixed-footer">
-    <div class="modal-content">
+    <div class="modal-content mode-background">
       <h4 class="coloured coloured-text">User Profile</h4>
       <p class="red-text">
         <span id="profile-error"></span>
@@ -134,7 +134,7 @@
             </div>
           </div>
         </div>
-        <h5>You are logged in as: <span id="current-user"></span></h5>
+        <h5 class="mode-text">You are logged in as: <span id="current-user"></span></h5>
         <br>
         <button class="ladda-button btn-floating coloured coloured-background profile-settings-button save-settings" data-style="zoom-out">
           <i class="ladda-label material-icons theme-text" data-icon="profilesavesettings" data-default="cloud_upload"></i>
@@ -146,18 +146,18 @@
           <i class="ladda-label material-icons theme-text" data-icon="profileclearsettings" data-default="clear"></i>
         </button>
         <br><br>
-        <div id="saved-settings">
+        <div id="saved-settings" class="mode-text">
           <h5>Saved Settings:</h5>
           <p></p>
         </div>
         <div id="admin-only" class="hide">
           <br>
-          <h5>Admin:</h5>
+          <h5 class="mode-text">Admin:</h5>
           <button id="view-logs" class="btn coloured coloured-background waves-effect"><span class="theme-text">View Logs</span></button>
         </div>
       </div>
     </div>
-    <div class="modal-footer">
+    <div class="modal-footer mode-background">
       <button class="ladda-button left btn-floating btn-flat coloured coloured-background manual-check" data-style="zoom-out">
         <i class="ladda-label center material-icons prefix theme-text">refresh</i>
       </button>

@@ -29,6 +29,10 @@ label:not(.active) b, #advanced-settings, .fade-in-on-load {
   display: none;
 }
 
+input[type="range"] {
+  border: none !important;
+}
+
 .dropdown-content li span, .modal, .reset-input, label, #current-user a {
   color: black;
 }
@@ -126,8 +130,30 @@ label:not(.active) b, #advanced-settings, .fade-in-on-load {
   max-height: 55%;
 }
 
+.modal-footer {
+  height: auto !important;
+  z-index: 9999;
+}
+
 .theme-text:not(.no-outline) {
   text-shadow: -0.1px -0.1px 0 #000000, 0.1px -0.1px 0 #000000, -0.1px 0.1px 0 #000000, 0.1px 0.1px 0 #000000;
+}
+
+.night-mode .mode-background {
+  background-color: black;
+}
+
+.night-mode label, .night-mode input, .night-mode .mode-text {
+  color: white !important;
+}
+
+.night-mode .modal-footer {
+  border-top: 1px solid white !important;
+}
+
+.night-mode .chip {
+  background-color: #3d3d3d;
+  color: white;
 }
 
 #go-to-signup, #go-to-login {
