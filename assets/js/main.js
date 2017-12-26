@@ -2566,12 +2566,13 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
         $.each(localSettings, function(key, val) {
 
           let length = JSON.stringify(val).length;
+          let defaultValue = profileSettings[key] === undefined ? settings[key].value : profileSettings[key];
 
           if (length > 500) throw new Error(`Excessively long value length of ${length}.`);
 
           // If the set value is the same as the default, just remove it from localStorage and use backend value
 
-          if (val === settings[key].value || val === JSON.stringify(settings[key].value) || `[${val}]` === JSON.stringify(settings[key].value)) {
+          if (val === defaultValue || val === JSON.stringify(defaultValue) || `[${val}]` === JSON.stringify(defaultValue)) {
 
             localStorage.removeItem(key);
 
