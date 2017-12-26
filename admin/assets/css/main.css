@@ -102,6 +102,7 @@ div[data-field="image"] .validation-errors {
 
 #colour {
   color: white;
+  text-shadow: -0.5px -0.5px 0 #000000, 0.5px -0.5px 0 #000000, -0.5px 0.5px 0 #000000, 0.5px 0.5px 0 #000000;
 }
 
 @-webkit-keyframes shake {
