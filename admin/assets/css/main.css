@@ -100,6 +100,10 @@ div[data-field="image"] .validation-errors {
   margin-top: 10px;
 }
 
+* {
+  word-wrap: break-word;
+}
+
 #colour {
   color: white;
   text-shadow: -0.5px -0.5px 0 #000000, 0.5px -0.5px 0 #000000, -0.5px 0.5px 0 #000000, 0.5px 0.5px 0 #000000;
