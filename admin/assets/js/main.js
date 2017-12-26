@@ -270,6 +270,8 @@ $('#submit-import').click(function() {
 
   if ($('#import-field').val()) {
 
+    $('.fa-spinner').removeClass('d-none');
+
     $.ajax({
       data: {
         table: $(this).data('table'),
@@ -279,11 +281,17 @@ $('#submit-import').click(function() {
       method: 'POST',
       url: '../import.php',
       success: function(response) {
-        response = JSON.parse(response);
-        if (response.status === 'success') {
-          window.location.href = response.url;
-        } else {
-          $('#import-response').text(response.status);
+        try {
+          response = JSON.parse(response);
+          if (response.status === 'success') {
+            window.location.href = response.url;
+          } else {
+            $('#import-response').text(response.status);
+            $('.fa-spinner').addClass('d-none');
+          }
+        } catch (error) {
+          $('#import-response').text(response);
+          $('.fa-spinner').addClass('d-none');
         }
       }
     });
