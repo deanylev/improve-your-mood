@@ -1,4 +1,4 @@
-let appError, defaultMode, startTime, modalOpen, lastNum, disableSwitch, quoteNum, colourNum, isProd, userCheck, speakingCheck;
+let appError, defaultMode, startTime, modalOpen, lastNum, disableSwitch, quoteNum, colourNum, isProd, userCheck, speakingCheck, settingsSync;
 let colours = [];
 let usedQuotes = [];
 let usedColours = [];
@@ -24,7 +24,7 @@ $.ajaxSetup({
   cache: false
 });
 
-moodEngine.log = function(type, message, display) {
+moodEngine.log = (type, message, display) => {
 
   if (['log', 'warn', 'error'].includes(type) && message) {
 
@@ -53,7 +53,7 @@ moodEngine.log = function(type, message, display) {
 
 };
 
-moodEngine.sendLogs = function(method, amount) {
+moodEngine.sendLogs = (method, amount) => {
 
   let button = Ladda.create($('#send-logs-button')[0]);
 
@@ -100,6 +100,46 @@ moodEngine.notify = (message, interval) => {
 
   interval = interval || fullSettings.toast_interval;
   Materialize.toast(message, interval);
+
+};
+
+moodEngine.syncSettings = () => {
+
+  let button = Ladda.create($('#sync-settings')[0]);
+
+  moodEngine.log('log', 'Syncing settings with backend...');
+  button.start();
+
+
+  $.get(`${backendAddress}/api/get/settings/index.php`, (data) => {
+
+    $.each(data, function(key, val) {
+
+      let object = {};
+
+      $.each(val, function(key, val) {
+
+        try {
+
+          object[key] = JSON.parse(val);
+
+        } catch (error) {
+
+          object[key] = val;
+
+        }
+
+      });
+
+      settings[key] = object;
+
+    });
+
+    moodEngine.setSettings('settingsSync');
+    moodEngine.setInputs();
+    button.stop();
+
+  });
 
 };
 
@@ -616,7 +656,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   moodEngine.checkUser = (method) => {
 
-    let button = Ladda.create($('.manual-check')[0]);
+    let button = Ladda.create($('button.manual-check')[0]);
     let downloadButton = Ladda.create($('#download-profile-settings')[0]);
 
     button.start();
@@ -754,8 +794,6 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
     });
 
   }
-
-  $('.manual-check').click(moodEngine.checkUser);
 
   // Construct settings object from backend or local
 
@@ -901,34 +939,6 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       $('#button-menu').html(menuHTML);
 
-      // Set correct icons
-
-      if (!defaultMode && !fullSettings.button_icons) moodEngine.log('warn', 'Server has no icons, falling back to defaults...');
-
-      $('.material-icons').each(function() {
-
-        let icon;
-
-        if (fullSettings.button_icons && fullSettings.button_icons[$(this).attr('data-icon')]) {
-
-          icon = fullSettings.button_icons[$(this).attr('data-icon')]
-
-        } else {
-
-          if (fullSettings.button_icons && $(this).is('[data-icon]')) {
-
-            moodEngine.log('warn', `No icon for ${$(this).attr('data-icon')}, using default...`);
-
-          }
-
-          icon = $(this).attr('data-default');
-
-        }
-
-        $(this).text(icon);
-
-      });
-
       // Bind menu buttons
 
       $('#toggle-auto-reload').click(function(e) {
@@ -965,13 +975,51 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
     }
 
+    // Set correct icons
+
+    if (!defaultMode && !fullSettings.button_icons) moodEngine.log('warn', 'No icons provided, falling back to defaults...');
+
+    $('.material-icons').each(function() {
+
+      let icon;
+
+      if (fullSettings.button_icons && fullSettings.button_icons[$(this).attr('data-icon')]) {
+
+        icon = fullSettings.button_icons[$(this).attr('data-icon')]
+
+      } else {
+
+        if (fullSettings.button_icons && $(this).is('[data-icon]')) {
+
+          moodEngine.log('warn', `No icon for ${$(this).attr('data-icon')}, using default...`);
+
+        }
+
+        icon = $(this).attr('data-default');
+
+      }
+
+      $(this).text(icon);
+
+    });
+
     // Theme colour
 
     moodEngine.setTheme(fullSettings.theme_colour);
 
     // Night mode
 
-    fullSettings.night_mode ? $('body').addClass('night-mode') : $('body').removeClass('night-mode');
+    if (fullSettings.night_mode) {
+
+      $('body').addClass('night-mode');
+      $('.settings-sync-button').attr('data-spinner-color', 'white');
+
+    } else {
+
+      $('body').removeClass('night-mode');
+      $('.settings-sync-button').attr('data-spinner-color', 'black');
+
+    }
 
     // Touch / click gestures
 
@@ -1003,7 +1051,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
     // Hide sync button
 
-    fullSettings.hide_sync_button ? $('.manual-check').addClass('hide') : $('.manual-check').removeClass('hide');
+    fullSettings.hide_sync_button ? $('button.manual-check').addClass('hide') : $('button.manual-check').removeClass('hide');
 
     // Sync user automatically
 
@@ -1037,7 +1085,45 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
           window.location.reload();
 
-        }, 2000)
+        }, 2000);
+
+      }
+
+    }
+
+    // Sync settings automatically
+
+    clearInterval(settingsSync);
+
+    if (fullSettings.settings_sync_interval) {
+
+      if (fullSettings.settings_sync_interval >= 1000) {
+
+        settingsSync = setInterval(moodEngine.syncSettings, fullSettings.settings_sync_interval);
+
+      } else {
+
+        let location;
+
+        if (localStorage.getItem('settings_sync_interval')) {
+
+          localStorage.removeItem('settings_sync_interval');
+          location = 'local';
+
+        } else {
+
+          moodEngine.removeProfileSetting('settings_sync_interval');
+          location = 'profile';
+
+        }
+
+        moodEngine.error(null, `Settings sync interval is too low. Cleared from your ${location} settings.`, 4);
+
+        setTimeout(() => {
+
+          window.location.reload();
+
+        }, 2000);
 
       }
 
@@ -1261,7 +1347,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
     }
 
-    if (!['initial', 'userCheck'].includes(method)) {
+    if (!['initial', 'userCheck', 'settingsSync'].includes(method)) {
 
       moodEngine.toggleSettings('close');
 
@@ -1508,16 +1594,6 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       if (settings.tabs) $('ul.tabs').tabs();
 
-      // Scroll to the top of the modal
-
-      if (fullSettings.scroll_settings && $('#settings-modal').scrollTop) {
-
-        $('#settings-modal').animate({
-          scrollTop: 0
-        }, 200);
-
-      }
-
       modalOpen = true;
 
       // Initialize the Materialize tooltip plugin
@@ -1568,7 +1644,12 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
     if (action) {
 
-      if (action === 'open') moodEngine.setInputs();
+      if (action === 'open') {
+
+        moodEngine.setSettings()
+        moodEngine.setInputs();
+
+      }
 
       $('#settings-modal').modal(action);
 
@@ -1578,6 +1659,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
     } else {
 
+      moodEngine.setSettings()
       moodEngine.setInputs();
       $('#settings-modal').modal('open');
 
@@ -1650,7 +1732,6 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
     if (val.user) {
 
-      let indicator = val.optional || !fullSettings.optional_indicators ? '' : ' <b>*</b>';
       let container = '';
       let containerClose = '';
       let input;
@@ -1715,7 +1796,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       } else {
 
-        label = `<label for="${key}">${val.label}${indicator}</label>`;
+        label = `<label for="${key}">${val.label}</label>`;
 
         switch (val.input) {
 
@@ -1724,13 +1805,11 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
             break;
           case 'range':
             input = `<input type="range" name="${key}" class="settings-input" id="${key}" min="${val.min}" max="${val.max}">`;
-            indicator = '';
             container = '<p class="range-field">';
             containerClose = '</p>';
             break;
           case 'checkbox':
             input = `<input type="checkbox" name="${key}" class="settings-input filled-in" id="${key}">`;
-            indicator = '';
             container = '<p>';
             containerClose = '</p>';
             inputField = '';
@@ -1802,7 +1881,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
                     ${label}
                     ${containerClose}
                     <span class="tooltipped mode-text" data-setting="${key}" data-position="bottom" data-delay="50">What's This? | </span>
-                    <a class="black-text settings-link default-button mode-text" data-setting="${key}"><b>Set to Default</b></a>
+                    <a class="black-text settings-link default-button" data-setting="${key}"><b>Set to Default</b></a>
                     ${customHTML}
                   </div>
                   ${resetInput}
@@ -1888,11 +1967,20 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   $('#set-backend-local').click(function() {
 
+    localStorage.clear();
     localStorage.setItem('backend_address', window.location.href);
     localStorage.setItem('keep_advanced_settings', true);
     window.location.reload();
 
   });
+
+  // Manual user sync buttons
+
+  $('.manual-check').click(moodEngine.checkUser);
+
+  // Manual settings sync button
+
+  $('#sync-settings').click(moodEngine.syncSettings);
 
   // Clear cache button
 
@@ -2052,7 +2140,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
             timeout = setTimeout(() => {
 
-              if (!moodEngine.notAutoReloading() && !appError) moodEngine.reload('Auto');
+              if (!moodEngine.notAutoReloading() && !appError) moodEngine.reload('auto');
 
               autoReload();
 
@@ -2191,7 +2279,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   moodEngine.reload = function(method) {
 
-    if (!appError && (moodEngine.notAutoReloading() || method === 'Auto')) {
+    if (!appError && (moodEngine.notAutoReloading() || method === 'auto')) {
 
       // Reload the quote
 
@@ -2253,7 +2341,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       $('.fade-in-on-load').fadeIn();
 
-      if (method !== 'Auto') $('#go-back-button').removeClass('disabled');
+      if (method !== 'auto') $('#go-back-button').removeClass('disabled');
     }
 
   };
@@ -2266,7 +2354,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
     try {
 
-      moodEngine.reload('Auto');
+      moodEngine.reload('auto');
       $('#quote').addClass('scale-in');
       $('#application-preloader').remove();
       $('.fixed-action-btn').removeClass('hide');
@@ -2444,7 +2532,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         // User Check interval
 
-        if (name === 'user_sync_interval' && parseInt($(this).val()) && $(this).val() < 1000) {
+        if (name.endsWith('_sync_interval') && parseInt($(this).val()) && $(this).val() < 1000) {
 
           $(this).addClass('invalid');
           invalidInputs.push(`${settings[name].label} Must Be Either 0 or 1000+`);
@@ -2576,7 +2664,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       $('#footer-version').text(version);
       $('link[rel="icon"], link[rel="shortcut icon"]').attr('href', `assets/${version.toLowerCase()}_favicon.ico`);
 
-      moodEngine.reload('Auto');
+      moodEngine.reload('auto');
       moodEngine.rewind();
 
       moodEngine.log('log', `Switched version to ${version}.`);

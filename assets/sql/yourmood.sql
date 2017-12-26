@@ -95,7 +95,6 @@ CREATE TABLE `settings` (
   `setting` varchar(30) NOT NULL,
   `value` text NOT NULL,
   `user` tinyint(1) NOT NULL,
-  `optional` tinyint(1) NOT NULL,
   `advanced` tinyint(1) NOT NULL,
   `mobile` tinyint(1) NOT NULL,
   `input` varchar(10) NOT NULL,

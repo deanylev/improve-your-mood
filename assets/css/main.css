@@ -143,7 +143,7 @@ input[type="range"] {
   background-color: black;
 }
 
-.night-mode label, .night-mode input, .night-mode .mode-text {
+.night-mode label, .night-mode input, .night-mode .mode-text, .night-mode #settings-modal a {
   color: white !important;
 }
 
