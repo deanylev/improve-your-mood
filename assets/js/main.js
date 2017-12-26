@@ -2586,8 +2586,6 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         });
 
-        //throw new Error();
-
         // Set settings for new ones to come into effect
 
         moodEngine.setSettings(null, 'Settings Saved!');
