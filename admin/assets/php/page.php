@@ -81,7 +81,7 @@
     <button id="import-button" class="btn btn-lg btn-dark" type="button">Import <?php echo ucwords($title); ?></button>
     <input id="import-field" class="d-none" type="text" placeholder="Paste export code">
     <button id="submit-import" class="btn btn-dark d-none" type="button" data-table="<?php echo $table; ?>" data-type="<?php echo $title; ?>">Submit<i class="d-none fa fa-spinner fa-pulse fa-fw"></i></button>
-    &nbsp;<span id="import-response" class="text-danger"></span>
+    <span id="import-response" class="text-danger"></span>
   <?php endif; ?>
   <button id="delete-selected-button" class="btn btn-lg btn-danger submit d-none" type="button" data-title="<?php echo $title; ?>" data-action="deletemultiple" data-class="danger" data-toggle="modal" data-target="#modal">Delete Selected <?php echo ucwords($title); ?>s (<span id="selected-number"></span>)</button>
   <?php if (in_array("deleteall", $actions) && $result->num_rows): ?>

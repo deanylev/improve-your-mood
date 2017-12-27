@@ -305,11 +305,11 @@ $('#submit-import').click(function() {
           if (response.status === 'success') {
             window.location.href = response.url;
           } else {
-            $('#import-response').text(response.status);
+            $('#import-response').html(`&nbsp;${response.status}`);
             $('.fa-spinner').addClass('d-none');
           }
         } catch (error) {
-          $('#import-response').text(response);
+          $('#import-response').html(`&nbsp;${response}`);
           $('.fa-spinner').addClass('d-none');
         }
       }
