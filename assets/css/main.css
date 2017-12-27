@@ -9,7 +9,6 @@
 }
 
 body {
-  background-color: black;
   display: flex;
   min-height: 100vh;
   flex-direction: column;
@@ -17,7 +16,7 @@ body {
   overflow: hidden;
 }
 
-body, .footer-link {
+body, .footer-link, .night-mode .chip {
   color: white;
 }
 
@@ -49,7 +48,7 @@ input[type="range"] {
   color: black !important;
 }
 
-.footer-copyright, .tab a, .dropdown-content.select-dropdown li span {
+.footer-copyright, .tab a, .dropdown-content.select-dropdown li span, .night-mode label, .night-mode input, .night-mode .mode-text, .night-mode #settings-modal a, .night-mode .input-field input:focus+label {
   color: white !important;
 }
 
@@ -139,12 +138,8 @@ input[type="range"] {
   text-shadow: -0.1px -0.1px 0 #000000, 0.1px -0.1px 0 #000000, -0.1px 0.1px 0 #000000, 0.1px 0.1px 0 #000000;
 }
 
-.night-mode .mode-background {
+body, .night-mode .mode-background {
   background-color: black;
-}
-
-.night-mode label, .night-mode input, .night-mode .mode-text, .night-mode #settings-modal a {
-  color: white !important;
 }
 
 .night-mode .modal-footer {
@@ -153,7 +148,6 @@ input[type="range"] {
 
 .night-mode .chip {
   background-color: #3d3d3d;
-  color: white;
 }
 
 #go-to-signup, #go-to-login {
