@@ -21,7 +21,7 @@
       $values = "'{$dateNow}', '{$user}',";
 
       foreach ($value as $key => $val) {
-        $val = in_array($key, $uniqueKeys) && $mysqli->query("SELECT * FROM yourmood.{$table} WHERE {$key} = '{$val}'")->num_rows ? $val . "_" . uniqid() : addslashes($val);
+        $val = in_array($key, $uniqueKeys) && $val !== "" && $mysqli->query("SELECT * FROM yourmood.{$table} WHERE {$key} = '{$val}'")->num_rows ? $val . "_" . uniqid() : addslashes($val);
         if (!in_array($key, $forbiddenKeys)) {
           $keys .= "{$key},";
           $values .= "'{$val}',";
