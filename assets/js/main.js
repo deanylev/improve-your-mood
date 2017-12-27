@@ -1815,7 +1815,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
         switch (val.input) {
 
           case 'chips':
-            input = `<div class="chips left-align settings-input" name="${key}" data-optional="${val.optional}"></div>`;
+            input = `<div class="chips left-align settings-input" name="${key}" data-optional="1"></div>`;
             break;
           case 'range':
             input = `<input type="range" name="${key}" class="settings-input" id="${key}" min="${val.min}" max="${val.max}">`;
