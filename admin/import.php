@@ -33,9 +33,13 @@
 
       $mysqli->query("INSERT INTO yourmood.{$table} ($keys) VALUES ($values)");
       $id = $mysqli->insert_id;
-      $_SESSION["message"]["success"] = "Successfully imported {$type}.";
 
-      echo json_encode((object) array("status" => "success", "url" => "../view/?type={$table}&title={$type}&id={$id}"));
+      if ($mysqli->query("SELECT * FROM yourmood.{$table} WHERE id = '{$id}'")->num_rows) {
+        $_SESSION["message"]["success"] = "Successfully imported {$type}.";
+        echo json_encode((object) array("status" => "success", "url" => "../view/?type={$table}&title={$type}&id={$id}"));
+      } else {
+        echo json_encode((object) array("status" => "An error occured."));
+      }
     } else {
       echo json_encode((object) array("status" => "Invalid value."));
     }
