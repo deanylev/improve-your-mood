@@ -321,12 +321,13 @@ $('#submit-import').click(function() {
 
 function notify(text) {
 
-  $('#snackbar').text(text);
-  $('#snackbar').addClass('show');
+  let id = Date.now();
+
+  $('#toast-container').append(`<div id="${id}" class="toast show">${text}</div>`);
 
   setTimeout(() => {
 
-    $('#snackbar').removeClass('show');
+    $(`#${id}`).remove();
 
   }, 1000);
 

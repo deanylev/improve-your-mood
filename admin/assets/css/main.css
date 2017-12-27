@@ -109,7 +109,7 @@ div[data-field="image"] .validation-errors {
   text-shadow: -0.5px -0.5px 0 #000000, 0.5px -0.5px 0 #000000, -0.5px 0.5px 0 #000000, 0.5px 0.5px 0 #000000;
 }
 
-#snackbar {
+.toast {
   visibility: hidden;
   min-width: 250px;
   margin-left: -125px;
@@ -130,7 +130,7 @@ div[data-field="image"] .validation-errors {
   user-select: none;
 }
 
-#snackbar.show {
+.toast.show {
   visibility: visible;
   -webkit-animation: fadein 0.2s, fadeout 0.2s 0.8s;
   animation: fadein 0.2s, fadeout 0.2s 0.8s;
