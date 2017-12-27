@@ -1349,7 +1349,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       Mousetrap.bindGlobal(fullSettings.night_mode_keys, function(e) {
 
-        if (!appError && !$('#settings-modal input:not([type="range"]):not([type="checkbox"]):focus').length && !$('#logs-search:focus').length) {
+        if (!appError && !$('#settings-modal input:not([type="range"]):not([type="checkbox"]):focus').length && !$('#logs-search:focus').length && !$('#profile-modal input:focus').length) {
 
           localStorage.setItem('night_mode', !$('body').hasClass('night-mode'));
           moodEngine.setSettings('nightModeToggle');
