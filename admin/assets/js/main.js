@@ -238,6 +238,8 @@ $('#modal').on('hide.bs.modal', function() {
 
 });
 
+new Clipboard('#export-code-button');
+
 $('#export-button').click(function() {
 
   $('#export-code-button').addClass('d-none');
@@ -253,10 +255,15 @@ $('#export-button').click(function() {
     success: function(response) {
       $('#export-status').addClass('d-none');
       $('#export-code-button').attr('data-clipboard-text', response);
-      new Clipboard('#export-code-button');
       $('#export-code-button').removeClass('d-none');
     }
   });
+
+});
+
+$('#export-code-button').click(function() {
+
+  notify('Copied to Clipboard');
 
 });
 
@@ -264,6 +271,17 @@ $('#import-button').click(function() {
 
   $('#import-field, #submit-import').toggleClass('d-none');
   $('#import-response').empty();
+
+});
+
+$('#import-field').keydown(function(e) {
+
+  if (e.keyCode === 13) {
+
+    $('#submit-import').click();
+    return false;
+
+  }
 
 });
 
@@ -300,3 +318,16 @@ $('#submit-import').click(function() {
   }
 
 });
+
+function notify(text) {
+
+  $('#snackbar').text(text);
+  $('#snackbar').addClass('show');
+
+  setTimeout(() => {
+
+    $('#snackbar').removeClass('show');
+
+  }, 1000);
+
+}

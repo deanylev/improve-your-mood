@@ -8,6 +8,7 @@
     $file = fopen("../../assets/php/settings.ini", "w");
     fwrite($file, $config);
     fclose($file);
+    $_SESSION["message"]["success"] = "Successfully updated config.";
   }
 
   header("location: .");
