@@ -125,10 +125,10 @@
           }
           unset($_SESSION["last_image"]);
         } elseif ($table === "settings") {
-            $setting = $_POST["values"]["setting"];
+            $setting = addslashes($_POST["values"]["setting"]);
             $value = $_POST["values"]["value"];
             $input = $_POST["values"]["input"];
-            $label = $_POST["values"]["label"];
+            $label = addslashes($_POST["values"]["label"]);
             $validInputs = array("text", "number", "range", "checkbox", "radio", "chips", "switch", "select");
             $result = $mysqli->query("SELECT * FROM yourmood.{$table} WHERE setting='{$setting}'");
             if ($result->num_rows) {
