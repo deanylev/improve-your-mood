@@ -41,6 +41,8 @@
     }
   }
 
+  $userAction = $currentUser["is_admin"] ? "view" : "edit";
+
 ?>
 <!DOCTYPE html>
 <html lang="en" data-type="<?php echo isset($type) ? $type : "unknown"; ?>" data-items="<?php echo isset($items) ? $items : "unknown"; ?>">
@@ -121,55 +123,56 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="main-nav">
-      <?php if ($currentUser["is_admin"]): ?>
         <ul class="nav navbar-nav">
-          <li class="nav-item <?php echo $title === "user" ? "active" : "" ?>">
-            <a class="nav-link" href="../users">
-              <span class="fa fa-user"></span>
-              <span class="icon-text">Users</span>
-            </a>
-          </li>
-          <li class="nav-item <?php echo isset($type) && $type === "improve" ? "active" : "" ?>">
-            <a class="nav-link" href="../quotes?type=improve">
-              <span class="fa fa-quote-left"></span>
-              <span class="icon-text">Improve Quotes</span>
-            </a>
-          </li>
-          <li class="nav-item <?php echo isset($type) && $type === "decrease" ? "active" : "" ?>">
-            <a class="nav-link" href="../quotes?type=decrease">
-              <span class="fa fa-quote-right"></span>
-              <span class="icon-text">Decrease Quotes</span>
-            </a>
-          </li>
-          <li class="nav-item <?php echo $title === "colour" ? "active" : "" ?>">
-            <a class="nav-link" href="../colours">
-              <span class="fa fa-eyedropper"></span>
-              <span class="icon-text">Colours</span>
-            </a>
-          </li>
-          <li class="nav-item <?php echo $title === "setting" ? "active" : "" ?>">
-            <a class="nav-link" href="../settings">
-              <span class="fa fa-cog"></span>
-              <span class="icon-text">Settings</span>
-            </a>
-          </li>
-          <li class="nav-item <?php echo $title === "log" ? "active" : "" ?>">
-            <a class="nav-link" href="../logs">
-              <span class="fa fa-file-text"></span>
-              <span class="icon-text">Logs</span>
-            </a>
-          </li>
-          <?php if ($currentUser["is_owner"]): ?>
-            <li class="nav-item <?php echo $title === "config" ? "active" : "" ?>">
-              <a class="nav-link" href="../config">
-                <span class="fa fa-sliders"></span>
-                <span class="icon-text">Config</span>
+          <?php if ($currentUser["is_admin"]): ?>
+            <li class="nav-item <?php echo $title === "user" ? "active" : "" ?>">
+              <a class="nav-link" href="../users">
+                <span class="fa fa-user"></span>
+                <span class="icon-text">Users</span>
               </a>
             </li>
+            <li class="nav-item <?php echo isset($type) && $type === "improve" ? "active" : "" ?>">
+              <a class="nav-link" href="../quotes?type=improve">
+                <span class="fa fa-quote-left"></span>
+                <span class="icon-text">Improve Quotes</span>
+              </a>
+            </li>
+            <li class="nav-item <?php echo isset($type) && $type === "decrease" ? "active" : "" ?>">
+              <a class="nav-link" href="../quotes?type=decrease">
+                <span class="fa fa-quote-right"></span>
+                <span class="icon-text">Decrease Quotes</span>
+              </a>
+            </li>
+            <li class="nav-item <?php echo $title === "colour" ? "active" : "" ?>">
+              <a class="nav-link" href="../colours">
+                <span class="fa fa-eyedropper"></span>
+                <span class="icon-text">Colours</span>
+              </a>
+            </li>
+            <li class="nav-item <?php echo $title === "setting" ? "active" : "" ?>">
+              <a class="nav-link" href="../settings">
+                <span class="fa fa-cog"></span>
+                <span class="icon-text">Settings</span>
+              </a>
+            </li>
+            <li class="nav-item <?php echo $title === "log" ? "active" : "" ?>">
+              <a class="nav-link" href="../logs">
+                <span class="fa fa-file-text"></span>
+                <span class="icon-text">Logs</span>
+              </a>
+            </li>
+            <?php if ($currentUser["is_owner"]): ?>
+              <li class="nav-item <?php echo $title === "config" ? "active" : "" ?>">
+                <a class="nav-link" href="../config">
+                  <span class="fa fa-sliders"></span>
+                  <span class="icon-text">Config</span>
+                </a>
+              </li>
+            <?php endif; ?>
+            <div class="dropdown-divider"></div>
           <?php endif; ?>
-          <div class="dropdown-divider"></div>
           <li class="nav-item d-lg-none <?php echo isset($userPage) && $userPage === "view" ? "active" : "" ?>">
-            <a class="nav-link"  href="../view/?type=users&amp;title=user&amp;id=<?php echo $_SESSION["user"]; ?>">
+            <a class="nav-link" href="../<?php echo $userAction; ?>/?type=users&amp;title=user&amp;id=<?php echo $_SESSION["user"]; ?>">
               <img class="nav-user-image" src="../users/image.php?id=<?php echo $_SESSION["user"]; ?>&s=20">
               <span class="icon-text"><?php echo $currentUser["name"]; ?></span>
             </a>
@@ -187,11 +190,10 @@
             </a>
           </li>
         </ul>
-      <?php endif; ?>
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
           <div class="btn-group d-none d-lg-block d-xl-block">
-            <a class="btn btn-primary <?php echo isset($userPage) && $userPage === "view" ? "active" : "" ?>" href="../view/?type=users&amp;title=user&amp;id=<?php echo $_SESSION["user"]; ?>">
+            <a class="btn btn-primary <?php echo isset($userPage) && $userPage === "view" ? "active" : "" ?>" href="../<?php echo $userAction; ?>/?type=users&amp;title=user&amp;id=<?php echo $_SESSION["user"]; ?>">
               <img class="nav-user-image" src="../users/image.php?id=<?php echo $_SESSION["user"]; ?>&s=20">
               <span class="icon-text"><?php echo $currentUser["name"]; ?></span>
             </a>
