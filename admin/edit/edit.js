@@ -105,6 +105,14 @@ $('#image').fineUploader({
   deleteFile: {
     enabled: true,
     endpoint: 'upload.php'
+  },
+  callbacks: {
+    onSubmitted: function() {
+      $('#save-button').attr('disabled', true);
+    },
+    onComplete: function() {
+      $('#save-button').removeAttr('disabled');
+    }
   }
 }).on('error', function(event, id, name, reason) {
 
