@@ -661,17 +661,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
     button.start();
 
-    if (method === 'initial') {
-
-      $.ajaxSetup({
-        async: false
-      });
-
-    } else if (method === 'downloadSettings') {
-
-      downloadButton.start();
-
-    }
+    if (method === 'downloadSettings') downloadButton.start();
 
     $.get(`api/get/current_user/index.php`, (data) => {
 
@@ -787,10 +777,6 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       if (method !== 'initial') moodEngine.setSettings('userCheck');
 
-    });
-
-    $.ajaxSetup({
-      async: true
     });
 
   }
