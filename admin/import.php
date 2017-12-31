@@ -17,8 +17,18 @@
     $dateNow = date("Y-m-d H:i:s");
 
     if ($value && $table === $value->table) {
-      $keys = "created_at, created_by,";
-      $values = "'{$dateNow}', '{$user}',";
+      $keys = "";
+      $values = "";
+
+      if ($mysqli->query("SHOW COLUMNS FROM yourmood.{$table} LIKE 'created_at'")->num_rows) {
+        $keys .= "created_at,";
+        $values .= "'{$dateNow}',";
+      }
+
+      if ($mysqli->query("SHOW COLUMNS FROM yourmood.{$table} LIKE 'created_by'")->num_rows) {
+        $keys .= "created_by,";
+        $values .= "'{$user}',";
+      }
 
       foreach ($value as $key => $val) {
         $val = in_array($key, $uniqueKeys) && $val !== "" && $mysqli->query("SELECT * FROM yourmood.{$table} WHERE {$key} = '{$val}'")->num_rows ? $val . "_" . uniqid() : addslashes($val);
