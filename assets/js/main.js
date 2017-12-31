@@ -1366,7 +1366,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
     if (method !== 'initial' && currentSettings.reload_interval !== fullSettings.reload_interval && !moodEngine.notAutoReloading()) moodEngine.toggleAutoReload();
 
-    if ((userSettings || backendSettings || profileSettings) && method !== 'userCheck') moodEngine.log('log', `Settings set successfully. ${userSettings} user defined, ${userPSettings} profile defined, ${backendSettings} backend defined.`);
+    if ((userSettings || backendSettings || profileSettings) && method !== 'userCheck' && method !== 'engineInitialize') moodEngine.log('log', `Settings set successfully. ${userSettings} user defined, ${userPSettings} profile defined, ${backendSettings} backend defined.`);
 
     if (userSettings) $('.profile-settings-button.save-settings').removeClass('hide');
 
@@ -1644,12 +1644,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
     if (action) {
 
-      if (action === 'open') {
-
-        moodEngine.setSettings()
-        moodEngine.setInputs();
-
-      }
+      if (action === 'open') moodEngine.setInputs();
 
       $('#settings-modal').modal(action);
 
@@ -2354,6 +2349,8 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
     try {
 
+      moodEngine.checkUser();
+      moodEngine.setSettings('engineInitialize');
       moodEngine.reload('auto');
       $('#quote').addClass('scale-in');
       $('#application-preloader').remove();
