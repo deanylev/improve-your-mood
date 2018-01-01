@@ -10,13 +10,21 @@ let settings = {};
 let fullSettings = {};
 let profileSettings = {};
 let pullTime = {};
-let quotes = {};
 let currentUser = {};
+let quotes = {
+  'Improve': {},
+  'Decrease': {}
+};
 let backendAddress = localStorage.getItem('backend_address') || 'https://improveyourmood.xyz';
 let pageSSL = window.location.protocol === 'https:';
 let totalTime = performance.now();
 let version = window.location.href.includes('decreaseyourmood') ? 'Decrease' : 'Improve';
 let otherVersion = window.location.href.includes('decreaseyourmood') ? 'Improve' : 'Decrease';
+
+// Translation engine
+
+translate.engine = 'yandex';
+translate.key = 'trnsl.1.1.20180101T031754Z.c28fea4fa3550c09.4c509500dbfd0126be6e6e5ffb702cee055ca62c';
 
 // Disable JSON caching
 
@@ -296,6 +304,8 @@ moodEngine.setColour = function(colour) {
 
 moodEngine.setText = function(text) {
 
+  text = text || 'Loading translations...';
+
   if (fullSettings.text_reload_transition_time) {
 
     $('#quote').fadeOut(fullSettings.text_reload_transition_time / 2, function() {
@@ -395,7 +405,7 @@ if (localStorage.getItem('cachedQuotes') && localStorage.getItem('disable_cachin
 
   quotes = JSON.parse(localStorage.getItem('cachedQuotes'));
 
-  moodEngine.log('log', `Using ${quotes[version].length + quotes[otherVersion].length} cached quotes...`);
+  moodEngine.log('log', `Using ${quotes[version]['en'].length + quotes[otherVersion]['en'].length} cached quotes...`);
 
 } else {
 
@@ -413,11 +423,11 @@ if (localStorage.getItem('cachedQuotes') && localStorage.getItem('disable_cachin
 
     pullTime.quotes = Math.ceil(performance.now() - startTime);
 
-    quotes[version] = [];
+    quotes[version]['en'] = [];
 
     $.each(data, function(key, val) {
 
-      if ($.inArray(val, quotes[version]) === -1) quotes[version].push(val);
+      if ($.inArray(val, quotes[version]['en']) === -1) quotes[version]['en'].push(val);
 
     });
 
@@ -427,11 +437,11 @@ if (localStorage.getItem('cachedQuotes') && localStorage.getItem('disable_cachin
 
       pullTime.quotes += Math.ceil(performance.now() - startTime);
 
-      quotes[otherVersion] = [];
+      quotes[otherVersion]['en'] = [];
 
       $.each(data, function(key, val) {
 
-        if ($.inArray(val, quotes[otherVersion]) === -1) quotes[otherVersion].push(val);
+        if ($.inArray(val, quotes[otherVersion]['en']) === -1) quotes[otherVersion]['en'].push(val);
 
       });
 
@@ -442,11 +452,11 @@ if (localStorage.getItem('cachedQuotes') && localStorage.getItem('disable_cachin
 
     });
 
-    moodEngine.log('log', `Successfully pulled ${quotes.Improve.length + quotes.Decrease.length} quotes from backend in ${pullTime.quotes}ms.`);
+    moodEngine.log('log', `Successfully pulled ${quotes.Improve['en'].length + quotes.Decrease['en'].length} quotes from backend in ${pullTime.quotes}ms.`);
 
-    if (localStorage.getItem('disable_caching') !== 'true' && quotes[version].length > 1) {
+    if (localStorage.getItem('disable_caching') !== 'true' && quotes[version]['en'].length > 1) {
 
-      if (quotes[otherVersion].length > 1) {
+      if (quotes[otherVersion]['en'].length > 1) {
 
         localStorage.setItem('cachedQuotes', JSON.stringify(quotes));
 
@@ -601,6 +611,39 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
     settings[key] = object;
 
   });
+
+  if (settings.translation_languages) {
+
+    $.each(settings.translation_languages.value, function(key, val) {
+
+      let language = val;
+
+      quotes['Improve'][language] = [];
+      quotes['Decrease'][language] = [];
+
+      $.each(quotes['Improve']['en'], async (key, val) => {
+
+        let quote = await translate(val, {
+          to: language
+        });
+
+        quotes['Improve'][language].push(quote);
+
+      });
+
+      $.each(quotes['Decrease']['en'], async (key, val) => {
+
+        let quote = await translate(val, {
+          to: language
+        });
+
+        quotes['Decrease'][language].push(quote);
+
+      });
+
+    });
+
+  }
 
   moodEngine.log('log', `Successfully pulled ${Object.keys(settings).length} settings from backend in ${pullTime.settings}ms.`);
 
@@ -852,6 +895,10 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       }
 
     });
+
+    // Set default language to english
+
+    if (!fullSettings.quote_language) fullSettings.quote_language = 'en';
 
     // Colour transitions
 
@@ -1362,9 +1409,11 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       }
 
-    }
+      if (currentSettings.reload_interval !== fullSettings.reload_interval && !moodEngine.notAutoReloading()) moodEngine.toggleAutoReload();
 
-    if (method !== 'initial' && currentSettings.reload_interval !== fullSettings.reload_interval && !moodEngine.notAutoReloading()) moodEngine.toggleAutoReload();
+      if (currentSettings.quote_language !== fullSettings.quote_language) moodEngine.reload();
+
+    }
 
     if ((userSettings || backendSettings || profileSettings) && method !== 'userCheck' && method !== 'engineInitialize') moodEngine.log('log', `Settings set successfully. ${userSettings} user defined, ${userPSettings} profile defined, ${backendSettings} backend defined.`);
 
@@ -1490,13 +1539,21 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         if (settings[setting].options) {
 
-          $.each(settings[setting].options, function(key, val) {
+          if (Array.isArray(settings[setting].options)) {
 
-            if (val === value) index = key;
+            $.each(settings[setting].options, function(key, val) {
 
-          });
+              if (val === value) index = key;
 
-          $(`#${setting}_${index}`).prop('checked', true);
+            });
+
+            $(`#${setting}_${index}`).prop('checked', true);
+
+          } else {
+
+            $(`#${setting}_${value}`).prop('checked', true);
+
+          }
 
         } else {
 
@@ -1830,18 +1887,36 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
             label = '';
             inputField = '';
             settingKey = key;
+
             if (val.options) {
 
-              $.each(val.options, function(key, val) {
+              if (Array.isArray(val.options)) {
 
-                input += `
-                        <p>
-                          <input type="radio" name="${settingKey}" class="settings-input" value="${val}" id="${settingKey}_${key}">
-                          <label for="${settingKey}_${key}">${val}</label>
-                        </p>
-                        `;
+                $.each(val.options, function(key, val) {
 
-              });
+                  input += `
+                          <p>
+                            <input type="radio" name="${settingKey}" class="settings-input" value="${val}" id="${settingKey}_${key}">
+                            <label for="${settingKey}_${key}">${val}</label>
+                          </p>
+                          `;
+
+                });
+
+              } else {
+
+                $.each(val.options, function(key, val) {
+
+                  input += `
+                           <p>
+                             <input type="radio" name="${settingKey}" class="settings-input" value="${val}" id="${settingKey}_${val}">
+                             <label for="${settingKey}_${val}">${key}</label>
+                           </p>
+                           `;
+
+                });
+
+              }
 
             } else {
 
@@ -2184,7 +2259,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       colourHistory.pop();
       localStorage.setItem('lastColour', colourHistory[colourNum]);
 
-      let quote = quotes[version][quoteHistory[quoteNum]];
+      let quote = quotes[version][fullSettings.quote_language][quoteHistory[quoteNum]];
       let colour = colours[colourHistory[colourNum]];
 
       moodEngine.setText(quote);
@@ -2213,7 +2288,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       quoteHistory[0] = quote;
       colourHistory[0] = colour;
 
-      moodEngine.setText(quotes[version][quote]);
+      moodEngine.setText(quotes[version][fullSettings.quote_language][quote]);
       moodEngine.setColour(`#${colours[colour]}`);
 
       $('#go-back-button').addClass('disabled');
@@ -2280,7 +2355,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       // If backend has no quotes, throw an error
 
-      if (quotes[version].length < 2) throw new Error('There are no quotes.');
+      if (quotes[version]['en'].length < 2) throw new Error('There are no quotes.');
 
       // Clear error message in case there is one
 
@@ -2288,11 +2363,11 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       lastNum = JSON.parse(localStorage.getItem('lastQuote'));
 
-      if (usedQuotes.length === quotes[version].length) usedQuotes = [];
+      if (usedQuotes.length === quotes[version]['en'].length) usedQuotes = [];
 
       do {
 
-        quoteNum = Math.floor(quotes[version].length * Math.random());
+        quoteNum = Math.floor(quotes[version]['en'].length * Math.random());
 
       } while (lastNum === quoteNum || usedQuotes.includes(quoteNum));
 
@@ -2302,7 +2377,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       quoteHistory.push(quoteNum);
       localStorage.setItem('lastQuote', quoteNum);
 
-      let quote = quotes[version][quoteNum];
+      let quote = quotes[version][fullSettings.quote_language][quoteNum];
 
       // Display quote on the text element
 
