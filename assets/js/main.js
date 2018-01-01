@@ -1423,7 +1423,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
           localStorage.setItem('night_mode', !$('body').hasClass('night-mode'));
           moodEngine.setSettings('nightModeToggle');
-          moodEngine.setInputs();
+          moodEngine.setInputs('night_mode');
 
         }
 
