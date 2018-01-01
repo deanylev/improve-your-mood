@@ -2611,6 +2611,14 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         }
 
+        // Quote Language
+
+        if (name === 'quote_language' && $(this).is(':checked') && quotes['Improve'][$(this).val()].length !== quotes['Improve']['en'].length) {
+
+          invalidInputs.push(`Translations Are Still Loading. Please Try Again Shortly.`);
+
+        }
+
       }
 
     });
