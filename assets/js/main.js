@@ -18,7 +18,7 @@ let quotes = {
 let backendAddress = localStorage.getItem('backend_address') || 'https://improveyourmood.xyz';
 let pageSSL = window.location.protocol === 'https:';
 let totalTime = performance.now();
-let version = window.location.href.includes('decreaseyourmood') ? 'Decrease' : 'Improve';
+let version = window.location.href.includes('decreaseyourmood') || localStorage.getItem('decrease_default') === 'true' ? 'Decrease' : 'Improve';
 let otherVersion = window.location.href.includes('decreaseyourmood') ? 'Improve' : 'Decrease';
 
 // Translation engine
@@ -1450,6 +1450,12 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       if (currentSettings.quote_language !== fullSettings.quote_language) moodEngine.reload();
 
+      if (currentSettings.decrease_default !== fullSettings.decrease_default) {
+
+        fullSettings.decrease_default ? moodEngine.switchVersion('Decrease') : moodEngine.switchVersion('Improve');
+
+      }
+
     }
 
     if ((userSettings || backendSettings || profileSettings) && method !== 'userCheck' && method !== 'engineInitialize') moodEngine.log('log', `Settings set successfully. ${userSettings} user defined, ${userPSettings} profile defined, ${backendSettings} backend defined.`);
@@ -2765,12 +2771,22 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   // Switch Version
 
-  moodEngine.switchVersion = function() {
+  moodEngine.switchVersion = function(specifiedVersion) {
 
     if (!appError && !disableSwitch) {
 
-      version = version === 'Improve' ? 'Decrease' : 'Improve';
-      otherVersion = version === 'Improve' ? 'Improve' : 'Decrease';
+      if (specifiedVersion) {
+
+        version = specifiedVersion === 'Decrease' ? 'Decrease' : 'Improve';
+        otherVersion = specifiedVersion === 'Decrease' ? 'Improve' : 'Decrease';
+
+      } else {
+
+        version = version === 'Improve' ? 'Decrease' : 'Improve';
+        otherVersion = version === 'Improve' ? 'Improve' : 'Decrease';
+
+      }
+
       quoteHistory = [];
       colourHistory = [];
       usedQuotes = [];
