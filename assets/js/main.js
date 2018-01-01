@@ -405,7 +405,7 @@ if (localStorage.getItem('cachedQuotes') && localStorage.getItem('disable_cachin
 
   quotes = JSON.parse(localStorage.getItem('cachedQuotes'));
 
-  moodEngine.log('log', `Using ${quotes[version]['en'].length + quotes[otherVersion]['en'].length} cached quotes...`);
+  moodEngine.log('log', `Using ${quotes[version].en.length + quotes[otherVersion].en.length} cached quotes...`);
 
 } else {
 
@@ -423,11 +423,11 @@ if (localStorage.getItem('cachedQuotes') && localStorage.getItem('disable_cachin
 
     pullTime.quotes = Math.ceil(performance.now() - startTime);
 
-    quotes[version]['en'] = [];
+    quotes[version].en = [];
 
     $.each(data, function(key, val) {
 
-      if ($.inArray(val, quotes[version]['en']) === -1) quotes[version]['en'].push(val);
+      if ($.inArray(val, quotes[version].en) === -1) quotes[version].en.push(val);
 
     });
 
@@ -437,11 +437,11 @@ if (localStorage.getItem('cachedQuotes') && localStorage.getItem('disable_cachin
 
       pullTime.quotes += Math.ceil(performance.now() - startTime);
 
-      quotes[otherVersion]['en'] = [];
+      quotes[otherVersion].en = [];
 
       $.each(data, function(key, val) {
 
-        if ($.inArray(val, quotes[otherVersion]['en']) === -1) quotes[otherVersion]['en'].push(val);
+        if ($.inArray(val, quotes[otherVersion].en) === -1) quotes[otherVersion].en.push(val);
 
       });
 
@@ -452,11 +452,11 @@ if (localStorage.getItem('cachedQuotes') && localStorage.getItem('disable_cachin
 
     });
 
-    moodEngine.log('log', `Successfully pulled ${quotes.Improve['en'].length + quotes.Decrease['en'].length} quotes from backend in ${pullTime.quotes}ms.`);
+    moodEngine.log('log', `Successfully pulled ${quotes.Improve.en.length + quotes.Decrease.en.length} quotes from backend in ${pullTime.quotes}ms.`);
 
-    if (localStorage.getItem('disable_caching') !== 'true' && quotes[version]['en'].length > 1) {
+    if (localStorage.getItem('disable_caching') !== 'true' && quotes[version].en.length > 1) {
 
-      if (quotes[otherVersion]['en'].length > 1) {
+      if (quotes[otherVersion].en.length > 1) {
 
         localStorage.setItem('cachedQuotes', JSON.stringify(quotes));
 
@@ -614,34 +614,71 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   if (settings.translation_languages) {
 
-    $.each(settings.translation_languages.value, function(key, val) {
+    if (localStorage.getItem('cachedTranslations')) {
 
-      let language = val;
+      $.each(JSON.parse(localStorage.getItem('cachedTranslations')).Improve, function(key, val) {
 
-      quotes['Improve'][language] = [];
-      quotes['Decrease'][language] = [];
-
-      $.each(quotes['Improve']['en'], async (key, val) => {
-
-        let quote = await translate(val, {
-          to: language
-        });
-
-        quotes['Improve'][language].push(quote);
+        if (key !== 'en') quotes.Improve[key] = val;
 
       });
 
-      $.each(quotes['Decrease']['en'], async (key, val) => {
+      $.each(JSON.parse(localStorage.getItem('cachedTranslations')).Decrease, function(key, val) {
 
-        let quote = await translate(val, {
-          to: language
-        });
-
-        quotes['Decrease'][language].push(quote);
+        if (key !== 'en') quotes.Decrease[key] = val;
 
       });
 
-    });
+    } else {
+
+      $.each(settings.translation_languages.value, function(key, val) {
+
+        let language = val;
+
+        quotes.Improve[language] = [];
+        quotes.Decrease[language] = [];
+
+        $.each(quotes.Improve.en, async (key, val) => {
+
+          let quote = await translate(val, {
+            to: language
+          });
+
+          quotes.Improve[language].push(quote);
+
+        });
+
+        $.each(quotes.Decrease.en, async (key, val) => {
+
+          let quote = await translate(val, {
+            to: language
+          });
+
+          quotes.Decrease[language].push(quote);
+
+        });
+
+      });
+
+      let translationsLoaded = true;
+      let translationCheck = setInterval(() => {
+
+        $.each(settings.translation_languages.value, function(key, val) {
+
+          translationsLoaded = quotes.Improve.en.length === quotes.Improve[val].length && quotes.Decrease.en.length === quotes.Decrease[val].length
+
+        });
+
+        if (translationsLoaded) {
+
+          clearInterval(translationCheck);
+          localStorage.setItem('cachedTranslations', JSON.stringify(quotes));
+          moodEngine.log('log', 'Cached translations.')
+
+        }
+
+      }, 500)
+
+    }
 
   }
 
@@ -2355,7 +2392,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       // If backend has no quotes, throw an error
 
-      if (quotes[version]['en'].length < 2) throw new Error('There are no quotes.');
+      if (quotes[version].en.length < 2) throw new Error('There are no quotes.');
 
       // Clear error message in case there is one
 
@@ -2363,11 +2400,11 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       lastNum = JSON.parse(localStorage.getItem('lastQuote'));
 
-      if (usedQuotes.length === quotes[version]['en'].length) usedQuotes = [];
+      if (usedQuotes.length === quotes[version].en.length) usedQuotes = [];
 
       do {
 
-        quoteNum = Math.floor(quotes[version]['en'].length * Math.random());
+        quoteNum = Math.floor(quotes[version].en.length * Math.random());
 
       } while (lastNum === quoteNum || usedQuotes.includes(quoteNum));
 
@@ -2613,7 +2650,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         // Quote Language
 
-        if (name === 'quote_language' && $(this).is(':checked') && quotes['Improve'][$(this).val()].length !== quotes['Improve']['en'].length) {
+        if (name === 'quote_language' && $(this).is(':checked') && quotes.Improve[$(this).val()].length !== quotes.Improve.en.length) {
 
           invalidInputs.push(`Translations Are Still Loading. Please Try Again Shortly.`);
 
