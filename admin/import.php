@@ -6,8 +6,11 @@
     $decrypt = "chocolateMILK";
     $forbiddenKeys = array("table", "id", "created_at", "created_by", "is_owner", "image");
     $uniqueKeys = array("user", "setting", "label");
+
     $value = $_POST["value"];
     $value = rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, md5($decrypt), base64_decode($value), MCRYPT_MODE_CBC, md5(md5($decrypt))), "\0");
+    $value = json_decode($value);
+    $value = rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, md5($value->key), base64_decode($value->value), MCRYPT_MODE_CBC, md5(md5($value->key))), "\0");
     $value = json_decode($value);
 
     $table = $_POST["table"];
