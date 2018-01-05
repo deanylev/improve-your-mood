@@ -1,5 +1,7 @@
 <?php
 
+  error_reporting(E_ERROR | E_PARSE);
+
   include("assets/php/user.php");
 
   if ($currentUser["is_admin"] && !$currentUser["read_only"]) {
