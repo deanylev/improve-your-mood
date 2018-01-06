@@ -15,10 +15,11 @@
     $offset = $items * ($page - 1);
   }
   $limit = $numRows > $items ? "LIMIT {$offset}, {$items}" : "";
-  $result = $mysqli->query("SELECT * FROM yourmood.{$table} {$limit}");
+  $sort = $table === "settings" ? "ORDER BY position ASC" : "";
+  $result = $mysqli->query("SELECT * FROM yourmood.{$table} {$limit} {$sort}");
   $currentRows = $result->num_rows;
   $dbColumns = $mysqli->query("DESCRIBE yourmood.{$table}");
-  $forbiddenKeys = array("id", "active", "log", "localstorage", "password");
+  $forbiddenKeys = array("id", "active", "log", "localstorage", "password", "position");
 
 ?>
 
@@ -97,7 +98,7 @@
   <input type="hidden" name="table" value="<?php echo $table; ?>">
   <input type="hidden" name="type" value="<?php echo $title; ?>">
   <div class="table-responsive">
-    <table class="table table-striped show-on-load d-none">
+    <table class="table table-striped show-on-load d-none" data-type="<?php echo $type; ?>">
       <thead>
         <tr>
           <?php if (!$currentUser["read_only"]): ?>
@@ -123,7 +124,7 @@
             $fields = "";
 
             foreach ($row as $key => $val) {
-              if (!in_array($key, $forbiddenKeys)) {
+              if (!in_array($key, $forbiddenKeys) || $key === "id" || $key === "position") {
                 if ($key === "created_at" && $val === "0000-00-00 00:00:00") {
                   $val = "unknown";
                 } elseif ($key === "created_by") {

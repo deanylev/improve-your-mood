@@ -40,7 +40,7 @@
 <?php
 
   foreach ($row as $key => $val) {
-      if ($key !== "id" && $key !== "created_at" && $key !== "created_by" && $key !== "is_owner" && $key !== "password" && $key !== "image" && (($key !== "app_settings" && $key !== "items_per_page") || $currentUser["is_admin"]) && (($key !== "read_only" && $key !== "is_admin") || $id != $_SESSION["user"])) {
+      if ($key !== "id" && $key !== "created_at" && $key !== "created_by" && $key !== "position" && $key !== "is_owner" && $key !== "password" && $key !== "image" && (($key !== "app_settings" && $key !== "items_per_page") || $currentUser["is_admin"]) && (($key !== "read_only" && $key !== "is_admin") || $id != $_SESSION["user"])) {
         $columnType = $columnTypes[$key];
         $blockDiv = true;
 

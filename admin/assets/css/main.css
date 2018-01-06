@@ -20,7 +20,7 @@ footer {
   height: 20px;
 }
 
-.btn:not(:disabled) {
+.btn:not(:disabled), table[data-type="setting"] tbody tr {
   cursor: pointer;
 }
 

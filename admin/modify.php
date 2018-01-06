@@ -26,7 +26,7 @@
     } elseif (isset($_POST["deletemultiple"]) && in_array("delete", $actions)) {
         $statement = "";
         $length = sizeof($_POST["items"]);
-        foreach($_POST["items"] as $item) {
+        foreach ($_POST["items"] as $item) {
           $statement .= "id = '{$item}' OR ";
         }
         $statement = substr($statement, 0, -3);
@@ -220,6 +220,11 @@
         $query = "INSERT INTO yourmood.{$table} ({$list}) (SELECT {$list} FROM yourmood.{$table} WHERE id = '{$id}')";
         $message = "Successfully cloned {$type}.";
         $goToID = true;
+    } elseif (isset($_POST["positions"]) && $table === "settings") {
+        foreach ($_POST["values"] as $value) {
+          $mysqli->query("UPDATE yourmood.{$table} SET position = '{$value["position"]}' WHERE id = {$value["id"]}");
+        }
+        die();
     } else {
         $messageType = "danger";
         $message = "An error occured. (003)";
@@ -255,7 +260,8 @@
         // Random setting name
         $randomSettingName = "setting_" . uniqid();
         $randomSettingValue = uniqid();
-        $mysqli->query("UPDATE yourmood.{$table} SET setting = '{$randomSettingName}', value = '{$randomSettingValue}' WHERE id = '{$newId}'");
+        $position = $mysqli->query("SELECT * FROM yourmood.{$table} ORDER BY position DESC LIMIT 1")->fetch_object()->position + 1;
+        $mysqli->query("UPDATE yourmood.{$table} SET setting = '{$randomSettingName}', value = '{$randomSettingValue}', position = '{$position}' WHERE id = '{$newId}'");
       }
       $mysqli->query("UPDATE yourmood.{$table} SET active = 1, created_at = '{$dateNow}' WHERE id = '{$newId}'");
     } elseif (isset($_POST["clone"]) && in_array("clone", $actions)) {
@@ -267,7 +273,8 @@
           $settingName = $setting->setting . "_" . uniqid();
           $settingLabel = $setting->label . "_" . uniqid();
           $extra = $setting->label ? ", label = '{$settingLabel}' " : "";
-          $mysqli->query("UPDATE yourmood.{$table} SET setting = '{$settingName}'{$extra}WHERE id = '{$newId}'");
+          $position = $mysqli->query("SELECT * FROM yourmood.{$table} ORDER BY position DESC LIMIT 1")->fetch_object()->position + 1;
+          $mysqli->query("UPDATE yourmood.{$table} SET position = '{$position}', setting = '{$settingName}' {$extra} WHERE id = '{$newId}'");
         }
         $mysqli->query("UPDATE yourmood.{$table} SET created_at = '{$dateNow}' WHERE id = '{$newId}'");
     }

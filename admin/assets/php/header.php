@@ -57,6 +57,7 @@
   <link rel="stylesheet" href="../assets/css/vendor/fine-uploader.min.css?v=5.15.4">
   <link rel="stylesheet" href="../assets/css/main.css">
   <script src="../../assets/js/vendor/jquery.min.js?v=3.2.1"></script>
+  <script src="../../assets/js/vendor/jquery-ui.min.js?v=1.12.1"></script>
   <script src="../assets/js/vendor/jquery.mark.min.js?v=8.11.0"></script>
   <script src="../assets/js/vendor/popper.min.js?v=1.12.5"></script>
   <script src="../assets/js/vendor/bootstrap.min.js?v=4.0.0"></script>

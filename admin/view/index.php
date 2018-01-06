@@ -39,7 +39,7 @@
 <?php
 
   foreach ($row as $key => $val) {
-    if ($key !== "id" && $key !== "password" && $key !== "is_owner") {
+    if ($key !== "id" && $key !== "password" && $key !== "is_owner" && $key !== "position") {
       $columnType = $columnTypes[$key];
       if ($key === "created_by") {
         if ($mysqli->query("SELECT * FROM yourmood.users WHERE id = {$val}")->num_rows):

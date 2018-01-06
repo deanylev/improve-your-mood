@@ -92,6 +92,7 @@ CREATE TABLE `settings` (
   `created_at` datetime NOT NULL,
   `created_by` int(11) NOT NULL,
   `active` tinyint(1) NOT NULL,
+  `position` int(11) NOT NULL,
   `setting` varchar(30) NOT NULL,
   `value` text NOT NULL,
   `user` tinyint(1) NOT NULL,

@@ -5,11 +5,11 @@
 
   include("../../../assets/php/sql.php");
 
-  $result = $mysqli->query("SELECT * FROM yourmood.settings WHERE `active` = 1");
+  $result = $mysqli->query("SELECT * FROM yourmood.settings WHERE `active` = 1 ORDER BY position ASC");
 
   $settings = (object)array();
 
-  $forbiddenKeys = array("id", "active", "setting", "notes", "created_at", "created_by");
+  $forbiddenKeys = array("id", "active", "setting", "notes", "created_at", "created_by", "position");
 
   if ($result->num_rows > 0) {
       while ($row = $result->fetch_assoc()) {

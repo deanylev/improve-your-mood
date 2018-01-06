@@ -319,6 +319,29 @@ $('#submit-import').click(function() {
 
 });
 
+$('table[data-type="setting"] tbody').sortable({
+  update: function() {
+    let array = [];
+    $('table[data-type="setting"] tbody tr').each(function(index) {
+      $(this).attr('data-position', index);
+      array.push({
+        id: $(this).attr('data-id'),
+        position: $(this).attr('data-position')
+      });
+    });
+    $.ajax({
+      data: {
+        values: array,
+        positions: true,
+        table: 'settings',
+        no_message: true
+      },
+      method: 'POST',
+      url: '../modify.php'
+    });
+  }
+});
+
 function notify(text) {
 
   let id = Date.now();
