@@ -81,7 +81,7 @@
 
 ?>
 
-          <p><b><?php echo $key; ?>:</b><br><?php echo $val; ?></p><br>
+          <p><b><?php echo $key; ?>:</b><br><?php echo htmlspecialchars($val); ?></p><br>
 
 <?php if ($title === "colour" && $key === "colour"): ?>
 
