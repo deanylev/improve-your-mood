@@ -1,4 +1,4 @@
-let appError, defaultMode, startTime, modalOpen, lastNum, disableSwitch, quoteNum, colourNum, isProd, userCheck, speakingCheck, settingsSync;
+let appError, defaultMode, startTime, modalOpen, lastNum, disableSwitch, quoteNum, colourNum, isProd, userCheck, settingsSync;
 let colours = [];
 let usedQuotes = [];
 let usedColours = [];
@@ -2344,8 +2344,6 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
     responsiveVoice.cancel();
 
-    clearInterval(speakingCheck);
-
     $('#speak-quote-button').removeClass('hide');
     $('#stop-speaking-button').addClass('hide');
     $('#stop-speaking-button').off();
@@ -2363,24 +2361,15 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
         $('#speak-quote-button').addClass('hide');
         $('#stop-speaking-button').removeClass('hide');
 
-        speakingCheck = setInterval(() => {
-
-          if (!responsiveVoice.isPlaying()) {
-
-            moodEngine.stopSpeaking();
-
-          }
-
-        }, 500);
-
         $('#stop-speaking-button').click(moodEngine.stopSpeaking);
 
-        responsiveVoice.speak($('#quote').text(), fullSettings.speak_voice_accent);
+        responsiveVoice.speak($('#quote').text(), fullSettings.speak_voice_accent, {pitch: fullSettings.speak_voice_pitch, rate: fullSettings.speak_voice_rate, onend: moodEngine.stopSpeaking});
 
       } catch (error) {
 
-        moodEngine.log('error', `Cannot speak quote, invalid voice accent provided ('${fullSettings.speak_voice_accent}').`);
-        moodEngine.notify('Invalid Voice Accent Provided.')
+        moodEngine.stopSpeaking();
+        moodEngine.log('error', `Cannot speak quote. Error: ${error}`);
+        moodEngine.notify('An Error Occured.');
 
       }
 
