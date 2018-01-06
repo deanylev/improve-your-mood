@@ -1899,7 +1899,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
             input = `<div class="chips left-align settings-input" name="${key}" data-optional="1"></div>`;
             break;
           case 'range':
-            input = `<input type="range" name="${key}" class="settings-input" id="${key}" min="${val.min}" max="${val.max}">`;
+            input = `<input type="range" name="${key}" class="settings-input" id="${key}" min="${val.min}" max="${val.max}" step="${val.step || 1}">`;
             container = '<p class="range-field">';
             containerClose = '</p>';
             break;
