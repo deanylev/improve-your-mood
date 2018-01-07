@@ -15,7 +15,7 @@
     $offset = $items * ($page - 1);
   }
   $limit = $numRows > $items ? "LIMIT {$offset}, {$items}" : "";
-  $sort = $table === "settings" ? "ORDER BY position ASC" : "";
+  $sort = $table === "settings" ? "ORDER BY tab, position ASC" : "";
   $result = $mysqli->query("SELECT * FROM yourmood.{$table} {$limit} {$sort}");
   $currentRows = $result->num_rows;
   $dbColumns = $mysqli->query("DESCRIBE yourmood.{$table}");
