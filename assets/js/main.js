@@ -1566,7 +1566,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       let setting = $(this).attr('name');
       let value = fullSettings[setting];
 
-      setInputs.push(setting);
+      if (setInputs.indexOf(setting) < 0) setInputs.push(setting);
 
       if (($(this).is('select') && typeof(value) === 'boolean') || typeof(value) === 'object') {
 
