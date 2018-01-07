@@ -320,6 +320,7 @@ $('#submit-import').click(function() {
 });
 
 $('table[data-type="setting"] tbody').sortable({
+  axis: 'y',
   update: function() {
     let array = [];
     $('table[data-type="setting"] tbody tr').each(function(index) {
