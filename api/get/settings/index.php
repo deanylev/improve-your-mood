@@ -5,7 +5,7 @@
 
   include("../../../assets/php/sql.php");
 
-  $result = $mysqli->query("SELECT * FROM yourmood.settings WHERE `active` = 1 ORDER BY position ASC");
+  $result = $mysqli->query("SELECT * FROM yourmood.settings WHERE `active` = 1 ORDER BY tab, position ASC");
 
   $settings = (object)array();
 

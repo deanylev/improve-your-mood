@@ -114,7 +114,9 @@
           <?php endif; ?>
         </tr>
       </thead>
-      <tbody>
+      <?php if ($table !== "settings"): ?>
+        <tbody>
+      <?php endif; ?>
 
     <?php
 
@@ -141,6 +143,9 @@
 
     ?>
 
+        <?php if ($table === "settings" && $row["id"] === $mysqli->query("SELECT * FROM yourmood.{$table} WHERE tab = '{$row["tab"]}' ORDER BY position ASC LIMIT 1")->fetch_object()->id): ?>
+          <tbody data-tab="<?php echo $row["tab"]; ?>">
+        <?php endif; ?>
         <tr class="item"<?php echo $fields; ?>>
           <?php if (!$currentUser["read_only"]): ?>
             <td><input class="select-checkbox" type="checkbox" name="items[]" value="<?php echo $row["id"]; ?>"></td>
@@ -165,6 +170,9 @@
             <?php endif; ?>
           </td>
         </tr>
+        <?php if ($table === "settings" && $row["id"] === $mysqli->query("SELECT * FROM yourmood.{$table} WHERE tab = '{$row["tab"]}' ORDER BY position DESC LIMIT 1")->fetch_object()->id): ?>
+          </tbody>
+        <?php endif; ?>
 
     <?php
 
@@ -173,7 +181,9 @@
 
     ?>
 
+    <?php if ($table !== "settings"): ?>
       </tbody>
+    <?php endif; ?>
     </table>
   </div>
 </form>
