@@ -88,6 +88,10 @@ footer {
   color: white !important;
 }
 
+.odd {
+  background: #0000000d;
+}
+
 th.actions {
   margin-right: 75px;
 }

@@ -1,3 +1,5 @@
+$('tbody').parents('.table-responsive').find('tr:odd').addClass('odd');
+
 $('.pre-loader').addClass('d-none');
 $('.show-on-load').removeClass('d-none');
 
@@ -322,6 +324,8 @@ $('#submit-import').click(function() {
 $('table[data-type="setting"] tbody').sortable({
   axis: 'y',
   update: function() {
+    $('tr').removeClass('odd');
+    $('tbody').parents('.table-responsive').find('tr:odd').addClass('odd');
     let array = [];
     $('table[data-type="setting"] tbody tr').each(function(index) {
       $(this).attr('data-position', index);

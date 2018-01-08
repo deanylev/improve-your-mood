@@ -98,7 +98,7 @@
   <input type="hidden" name="table" value="<?php echo $table; ?>">
   <input type="hidden" name="type" value="<?php echo $title; ?>">
   <div class="table-responsive">
-    <table class="table table-striped show-on-load d-none" data-type="<?php echo $type; ?>">
+    <table class="table show-on-load d-none" data-type="<?php echo $type; ?>">
       <thead>
         <tr>
           <?php if (!$currentUser["read_only"]): ?>
