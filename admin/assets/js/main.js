@@ -52,7 +52,7 @@ checkBoxes.change(function() {
 
   $('#select-multiple-input').remove();
 
-  $('.multiple-item-button').addClass('d-none');
+  $('.multiple-item-button, #export-code-button').addClass('d-none');
   $('#import').removeClass('d-none');
 
   if (checked) {
