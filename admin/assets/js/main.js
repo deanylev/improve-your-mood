@@ -168,6 +168,9 @@ function search() {
 
   checkBoxes = $('.item:not(.d-none) .select-checkbox');
 
+  $('tr').removeClass('odd');
+  $('tbody').parents('.table-responsive').find('tr:odd').addClass('odd');
+
 }
 
 if ($('#search-bar').val()) search();
