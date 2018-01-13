@@ -253,7 +253,7 @@ $('#export-button').click(function() {
   $.ajax({
     data: {
       table: $(this).data('type'),
-      id: $(this).data('id')
+      items: [$(this).data('id')]
     },
     method: 'POST',
     url: '../export.php',
@@ -300,7 +300,7 @@ $('#submit-import').click(function() {
       data: {
         table: $(this).data('table'),
         type: $(this).data('type'),
-        value: $('#import-field').val()
+        values: $('#import-field').val()
       },
       method: 'POST',
       url: '../import.php',
