@@ -337,7 +337,7 @@ moodEngine.setTheme = function(colour) {
 
     `);
 
-  $('#quote').css('font-family', fullSettings.quote_font || 'Oxygen');
+  $('#quote').css('font-family', `${fullSettings.quote_font || 'Oxygen'}, Helvetica, Arial`);
 
 }
 
