@@ -52,7 +52,7 @@
           <input type="password" name="password_confirmation" class="form-control" id="password_confirmation">
           <p class="validation-errors text-danger" data-field="password_confirmation"></p>
         </div>
-        <?php if (isset($settings["CONFIG"]["admin_signup"]) && $settings["CONFIG"]["admin_signup"] === "1" && isset($settings["CONFIG"]["admin_key"]) && $settings["CONFIG"]["admin_key"]): ?>
+        <?php if (isset($settings["CONFIG"]["admin_signup"]) && $settings["CONFIG"]["admin_signup"] === "1" && isset($settings["KEYS"]["admin"]) && $settings["KEYS"]["admin"]): ?>
           <div class="form-group">
             <label for="admin_key">Admin Key (optional)</label>
             <input type="password" name="admin_key" class="form-control" id="admin_key">

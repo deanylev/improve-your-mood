@@ -29,8 +29,8 @@
     $errors[] = (object) array("password_confirmation" => "Doesn't match password.");
   }
 
-  if (isset($settings["CONFIG"]["admin_signup"]) && $settings["CONFIG"]["admin_signup"] === "1" && isset($settings["CONFIG"]["admin_key"]) && $settings["CONFIG"]["admin_key"] && isset($_POST["admin_key"]) && $_POST["admin_key"] !== "") {
-    if ($_POST["admin_key"] === $settings["CONFIG"]["admin_key"]) {
+  if (isset($settings["CONFIG"]["admin_signup"]) && $settings["CONFIG"]["admin_signup"] === "1" && isset($settings["KEYS"]["admin"]) && $settings["KEYS"]["admin"] && isset($_POST["admin_key"]) && $_POST["admin_key"] !== "") {
+    if ($_POST["admin_key"] === $settings["KEYS"]["admin"]) {
       $admin = 1;
     } else {
       $errors[] = (object) array("admin_key" => "Incorrect.");
