@@ -337,6 +337,8 @@ moodEngine.setTheme = function(colour) {
 
     `);
 
+  $('#quote').css('font-family', fullSettings.quote_font || 'Oxygen');
+
 }
 
 // Function for displaying and logging errors
@@ -2363,7 +2365,11 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         $('#stop-speaking-button').click(moodEngine.stopSpeaking);
 
-        responsiveVoice.speak($('#quote').text(), fullSettings.speak_voice_accent, {pitch: fullSettings.speak_voice_pitch, rate: fullSettings.speak_voice_rate, onend: moodEngine.stopSpeaking});
+        responsiveVoice.speak($('#quote').text(), fullSettings.speak_voice_accent, {
+          pitch: fullSettings.speak_voice_pitch,
+          rate: fullSettings.speak_voice_rate,
+          onend: moodEngine.stopSpeaking
+        });
 
       } catch (error) {
 
