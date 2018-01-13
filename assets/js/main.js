@@ -1,4 +1,4 @@
-let appError, defaultMode, startTime, modalOpen, lastNum, disableSwitch, quoteNum, colourNum, isProd, userCheck, settingsSync;
+let appError, defaultMode, startTime, modalOpen, lastNum, disableSwitch, quoteNum, colourNum, isProd, userCheck, settingsSync, inFlight;
 let colours = [];
 let usedQuotes = [];
 let usedColours = [];
@@ -1361,7 +1361,12 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       Mousetrap.bindGlobal(fullSettings.settings_keys, function(e) {
 
-        if (!appError && !$('#settings-modal input:not([type="range"]):not([type="checkbox"]):focus').length) moodEngine.toggleSettings();
+        if (!appError && !inFlight && !$('#settings-modal input:not([type="range"]):not([type="checkbox"]):focus').length) {
+
+          inFlight = true;
+          moodEngine.toggleSettings();
+
+        }
 
       });
 
@@ -1697,6 +1702,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       if (settings.tabs) $('ul.tabs').tabs();
 
       modalOpen = true;
+      inFlight = false;
 
       // Initialize the Materialize tooltip plugin
 
@@ -1710,6 +1716,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
       $('.thumb').remove();
 
       modalOpen = false;
+      inFlight = false;
 
     }
   });
