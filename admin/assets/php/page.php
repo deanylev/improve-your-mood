@@ -79,12 +79,19 @@
   <input type="hidden" name="type" value="<?php echo $title; ?>">
   <?php if (in_array("create", $actions)): ?>
     <button class="btn btn-lg btn-primary submit" type="button" data-action="new" data-undo="true" data-confirm="creating a new <?php echo $title; ?>" data-class="primary" data-toggle="modal" data-target="#modal">New <?php echo ucwords($title); ?></button>
-    <button id="import-button" class="btn btn-lg btn-dark" type="button">Import <?php echo ucwords($title); ?></button>
-    <input id="import-field" class="d-none" type="text" placeholder="Paste export code">
-    <button id="submit-import" class="btn btn-dark d-none" type="button" data-table="<?php echo $table; ?>" data-type="<?php echo $title; ?>">Submit<i class="d-none fa fa-spinner fa-pulse fa-fw"></i></button>
-    <span id="import-response" class="text-danger"></span>
+    <div id="import">
+      <button id="import-button" class="btn btn-lg btn-dark" type="button">Import <?php echo ucwords($title); ?></button>
+      <input id="import-field" class="d-none" type="text" placeholder="Paste export code">
+      <button id="submit-import" class="btn btn-dark d-none" type="button" data-table="<?php echo $table; ?>" data-type="<?php echo $title; ?>">Submit<i class="d-none fa fa-spinner fa-pulse fa-fw"></i></button>
+      <span id="import-response" class="text-danger"></span>
+    </div>
+    <div id="export" class="multiple-item-button d-none">
+      <button id="export-selected-button" class="btn btn-lg btn-dark" type="button" data-type="<?php echo $table; ?>">Export Selected <?php echo ucwords($title); ?>s (<span class="selected-number"></span>)</button>
+      <span id="export-status" class="d-none">Loading...</span>
+      <button id="export-code-button" class="btn btn-dark d-none" type="button">Copy Export Code</button>
+    </div>
   <?php endif; ?>
-  <button id="delete-selected-button" class="btn btn-lg btn-danger submit d-none" type="button" data-title="<?php echo $title; ?>" data-action="deletemultiple" data-class="danger" data-toggle="modal" data-target="#modal">Delete Selected <?php echo ucwords($title); ?>s (<span id="selected-number"></span>)</button>
+  <button id="delete-selected-button" class="btn btn-lg btn-danger submit multiple-item-button d-none" type="button" data-title="<?php echo $title; ?>" data-action="deletemultiple" data-class="danger" data-toggle="modal" data-target="#modal">Delete Selected <?php echo ucwords($title); ?>s (<span class="selected-number"></span>)</button>
   <?php if (in_array("deleteall", $actions) && $result->num_rows): ?>
     <button class="btn btn-lg btn-danger submit" type="button" data-action="deleteall" data-confirm="deleting all <?php echo $title; ?>s" data-class="danger" data-toggle="modal" data-target="#modal">Delete All <?php echo ucwords($title); ?>s</button>
   <?php endif; ?>

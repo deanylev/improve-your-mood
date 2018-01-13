@@ -47,25 +47,26 @@ checkBoxes.click(function(e) {
 checkBoxes.change(function() {
 
   let checked = $('.select-checkbox:checked').length;
-  let button = $('#delete-selected-button');
   let plural = checked === 1 ? '' : 's';
   let number = checked === 1 ? 'a' : checked;
 
   $('#select-multiple-input').remove();
 
-  button.addClass('d-none');
+  $('.multiple-item-button').addClass('d-none');
+  $('#import').removeClass('d-none');
 
   if (checked) {
 
-    button.removeClass('d-none');
+    $('.multiple-item-button').removeClass('d-none');
+    $('#import').addClass('d-none');
     $('#select-multiple-form').append('<input id="select-multiple-input" type="hidden" name="deletemultiple" value="true">');
-    $('#selected-number').text(checked);
+    $('.selected-number').text(checked);
 
   }
 
   $('#select-all-checkbox').prop('checked', checked === $('.select-checkbox').length);
 
-  button.attr('data-confirm', `deleting ${number} ${button.attr('data-title')}${plural}`);
+  $('#delete-selected-button').attr('data-confirm', `deleting ${number} ${$('#delete-selected-button').attr('data-title')}${plural}`);
 
 });
 
@@ -266,6 +267,33 @@ $('#export-button').click(function() {
 
 });
 
+$('#export-selected-button').click(function() {
+
+  $('#export-code-button').addClass('d-none');
+  $('#export-status').removeClass('d-none');
+
+  let values = [];
+
+  $('.select-checkbox:checked').each(function() {
+    values.push($(this).val());
+  });
+
+  $.ajax({
+    data: {
+      table: $(this).data('type'),
+      items: values
+    },
+    method: 'POST',
+    url: '../export.php',
+    success: function(response) {
+      $('#export-status').addClass('d-none');
+      $('#export-code-button').attr('data-clipboard-text', response);
+      $('#export-code-button').removeClass('d-none');
+    }
+  });
+
+});
+
 $('#export-code-button').click(function() {
 
   notify('Copied to Clipboard');
@@ -308,7 +336,11 @@ $('#submit-import').click(function() {
         try {
           response = JSON.parse(response);
           if (response.status === 'success') {
-            window.location.href = response.url;
+            if (response.url == 'none') {
+              window.location.reload();
+            } else {
+              window.location.href = response.url;
+            }
           } else {
             $('#import-response').html(`&nbsp;${response.status}`);
             $('.fa-spinner').addClass('d-none');

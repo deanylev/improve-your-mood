@@ -25,6 +25,10 @@
     $user = $_SESSION["user"];
     $dateNow = date("Y-m-d H:i:s");
 
+    $success = false;
+
+    $count = count($decodedValues);
+
     foreach ($decodedValues as $value) {
       if ($value && $table === $value->table) {
         $keys = "";
@@ -54,11 +58,22 @@
         $mysqli->query("INSERT INTO yourmood.{$table} ($keys) VALUES ($values)");
         $id = $mysqli->insert_id;
 
-        if ($mysqli->query("SELECT * FROM yourmood.{$table} WHERE id = '{$id}'")->num_rows) {
+        if ($count === 1) {
           $_SESSION["message"]["success"] = "Successfully imported {$type}.";
-          echo json_encode((object) array("status" => "success", "url" => "../view/?type={$table}&title={$type}&id={$id}"));
+          $url = "../view/?type={$table}&title={$type}&id={$id}";
         } else {
-          echo json_encode((object) array("status" => "An error occured."));
+          $_SESSION["message"]["success"] = "Successfully imported {$count} {$type}s.";
+          $url = "none";
+        }
+
+        if (!$success) {
+          if ($mysqli->query("SELECT * FROM yourmood.{$table} WHERE id = '{$id}'")->num_rows) {
+            echo json_encode((object) array("status" => "success", "url" => $url));
+          } else {
+            echo json_encode((object) array("status" => "An error occured."));
+          }
+
+          $success = true;
         }
       } else {
         echo json_encode((object) array("status" => "Invalid value."));

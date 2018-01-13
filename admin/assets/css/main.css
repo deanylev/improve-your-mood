@@ -113,6 +113,10 @@ div[data-field="image"] .validation-errors {
   text-shadow: -0.5px -0.5px 0 #000000, 0.5px -0.5px 0 #000000, -0.5px 0.5px 0 #000000, 0.5px 0.5px 0 #000000;
 }
 
+#import, #export {
+  display: inline;
+}
+
 .toast {
   visibility: hidden;
   min-width: 250px;
