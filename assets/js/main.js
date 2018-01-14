@@ -1,4 +1,6 @@
-let appError, defaultMode, startTime, modalOpen, lastNum, disableSwitch, quoteNum, colourNum, isProd, userCheck, settingsSync, inFlight;
+'use strict';
+
+let appError, defaultMode, startTime, modalOpen, lastNum, disableSwitch, quoteNum, colourNum, isProd, userCheck, settingsSync, inFlight, modifyColour, hexToRgbA, canChange;
 let colours = [];
 let usedQuotes = [];
 let usedColours = [];
@@ -45,7 +47,7 @@ moodEngine.log = (type, message, display) => {
 
     $('#visible-logs').empty();
 
-    $.each(moodLogs, function(key, val) {
+    $.each(moodLogs, (key, val) => {
 
       $('#visible-logs').append(`<div class="log"><b><span class="log-${val.type}">${val.type}:</span></b> <div class="content">${val.message}</div></div><br>`);
 
@@ -83,16 +85,16 @@ moodEngine.sendLogs = (method, amount) => {
         localStorage: JSON.stringify(localStorage),
         log: JSON.stringify(moodLogs)
       },
-      complete: function() {
+      complete: () => {
         button.stop();
       },
-      success: function(response) {
+      success: (response) => {
 
         console.log('\nLogs sent to backend successfully.');
         if (method === 'button') moodEngine.notify('Logs Sent To Back-End Successfully.');
 
       },
-      error: function(response) {
+      error: (response) => {
 
         console.log('\nFailed to send logs to backend.');
         if (method === 'button') moodEngine.notify('Failed To Send Logs to Back-End.');
@@ -120,11 +122,11 @@ moodEngine.syncSettings = () => {
 
   $.get(`${backendAddress}/api/get/settings/index.php`, (data) => {
 
-    $.each(data, function(key, val) {
+    $.each(data, (key, val) => {
 
       let object = {};
 
-      $.each(val, function(key, val) {
+      $.each(val, (key, val) => {
 
         try {
 
@@ -150,7 +152,7 @@ moodEngine.syncSettings = () => {
 
 };
 
-$(window).on('error', function(error) {
+$(window).on('error', (error) => {
 
   moodEngine.error(null, `${error.originalEvent.message} (LINE NUMBER: ${error.originalEvent.lineno})`, '0');
 
@@ -164,7 +166,7 @@ $(window).on('error', function(error) {
 
 });
 
-$(document).ready(function() {
+$(document).ready(() => {
 
   // Remove hash from URL
 
@@ -188,7 +190,7 @@ $(document).ready(function() {
 
   // Do it on resize too
 
-  $(window).resize(function() {
+  $(window).resize(() => {
 
     $('.js-margin').css('margin-top', $(document).height() / 4.5);
 
@@ -205,7 +207,7 @@ $(document).ready(function() {
 
   // Send Logs
 
-  $('#send-logs-button').click(function() {
+  $('#send-logs-button').click(() => {
 
     moodEngine.sendLogs('button');
 
@@ -213,7 +215,7 @@ $(document).ready(function() {
 
   // Logo click actions
 
-  $('#logo').click(function(e) {
+  $('#logo').click((e) => {
 
     if (e.detail === 3) moodEngine.toggleLogs();
 
@@ -223,7 +225,7 @@ $(document).ready(function() {
 
 // Function for modifiying hex
 
-function modifyColour(hex, lum) {
+modifyColour = (hex, lum) => {
 
   hex = hex.replace(/[^0-9a-f]/gi, '');
 
@@ -252,7 +254,7 @@ function modifyColour(hex, lum) {
 
 // Function for converting hex to rgba
 
-function hexToRgbA(hex, opacity) {
+hexToRgbA = (hex, opacity) => {
 
   let c;
 
@@ -276,7 +278,7 @@ function hexToRgbA(hex, opacity) {
 
 // Function for changing colour
 
-moodEngine.setColour = function(colour) {
+moodEngine.setColour = (colour) => {
 
   $('.coloured.coloured-background').css('background-color', colour);
   $('.coloured.coloured-text').css('color', colour);
@@ -309,7 +311,7 @@ moodEngine.setColour = function(colour) {
 
 // Function for setting text
 
-moodEngine.setText = function(text) {
+moodEngine.setText = (text) => {
 
   text = text || 'Loading translations...';
 
@@ -331,7 +333,7 @@ moodEngine.setText = function(text) {
 
 // Function for setting theme
 
-moodEngine.setTheme = function(colour) {
+moodEngine.setTheme = (colour) => {
 
   $('.theme-text').css('cssText', `color: ${colour} !important`);
   $('.js-margin').css('margin-top', $(document).height() / 4.5);
@@ -350,7 +352,7 @@ moodEngine.setTheme = function(colour) {
 
 // Function for displaying and logging errors
 
-moodEngine.error = function(display, log, code, type) {
+moodEngine.error = (display, log, code, type) => {
 
   moodEngine.setColour('black');
   moodEngine.setTheme('white');
@@ -434,7 +436,7 @@ if (localStorage.getItem('cachedQuotes') && localStorage.getItem('disable_cachin
 
     quotes[version].en = [];
 
-    $.each(data, function(key, val) {
+    $.each(data, (key, val) => {
 
       if ($.inArray(val, quotes[version].en) === -1) quotes[version].en.push(val);
 
@@ -448,7 +450,7 @@ if (localStorage.getItem('cachedQuotes') && localStorage.getItem('disable_cachin
 
       quotes[otherVersion].en = [];
 
-      $.each(data, function(key, val) {
+      $.each(data, (key, val) => {
 
         if ($.inArray(val, quotes[otherVersion].en) === -1) quotes[otherVersion].en.push(val);
 
@@ -521,7 +523,7 @@ if (localStorage.getItem('cachedColours') && localStorage.getItem('disable_cachi
 
     colours = [];
 
-    $.each(data, function(key, val) {
+    $.each(data, (key, val) => {
 
       if ($.inArray(val, colours) === -1) colours.push(val);
 
@@ -603,11 +605,11 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
     pullTime.settings = Math.ceil(performance.now() - startTime);
 
-    $.each(data, function(key, val) {
+    $.each(data, (key, val) => {
 
       let object = {};
 
-      $.each(val, function(key, val) {
+      $.each(val, (key, val) => {
 
         try {
 
@@ -631,13 +633,13 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
         moodEngine.log('log', 'Using cached translations...');
 
-        $.each(JSON.parse(localStorage.getItem('cachedTranslations')).Improve, function(key, val) {
+        $.each(JSON.parse(localStorage.getItem('cachedTranslations')).Improve, (key, val) => {
 
           if (key !== 'en') quotes.Improve[key] = val;
 
         });
 
-        $.each(JSON.parse(localStorage.getItem('cachedTranslations')).Decrease, function(key, val) {
+        $.each(JSON.parse(localStorage.getItem('cachedTranslations')).Decrease, (key, val) => {
 
           if (key !== 'en') quotes.Decrease[key] = val;
 
@@ -659,7 +661,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
         moodEngine.log('log', `${log}, fetching...`)
 
-        $.each(settings.translation_languages.value, function(key, val) {
+        $.each(settings.translation_languages.value, (key, val) => {
 
           let language = val;
 
@@ -691,7 +693,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
         let translationsLoaded = true;
         let translationCheck = setInterval(() => {
 
-          $.each(settings.translation_languages.value, function(key, val) {
+          $.each(settings.translation_languages.value, (key, val) => {
 
             translationsLoaded = quotes.Improve.en.length === quotes.Improve[val].length && quotes.Decrease.en.length === quotes.Decrease[val].length
 
@@ -729,7 +731,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
     // Delete setting from profile
 
-    moodEngine.removeProfileSetting = function(setting, button) {
+    moodEngine.removeProfileSetting = (setting, button) => {
 
       delete profileSettings[setting];
 
@@ -740,12 +742,12 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
         },
         method: 'POST',
         url: `api/update/user_settings/index.php`,
-        complete: function() {
+        complete: () => {
           if (button) {
             button.stop();
           }
         },
-        success: function(response) {
+        success: (response) => {
           if (response === 'success') {
             moodEngine.log('log', `Cleared setting '${setting}' from profile.`);
             moodEngine.checkUser();
@@ -753,7 +755,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
             moodEngine.profileError(response);
           }
         },
-        error: function(response) {
+        error: (response) => {
           moodEngine.profileError('Failed to clear setting.');
           moodEngine.log('error', `Failed to clear setting '${setting}' from profile.`);
         }
@@ -892,7 +894,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
     // Construct settings object from backend or local
 
-    moodEngine.setSettings = function(method, toast) {
+    moodEngine.setSettings = (method, toast) => {
 
       let buttonOrder;
 
@@ -907,7 +909,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
       if (method !== 'initial') {
 
-        $.each(fullSettings, function(key, val) {
+        $.each(fullSettings, (key, val) => {
 
           currentSettings[key] = val;
 
@@ -917,7 +919,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
       $('.profile-settings-button.save-settings').addClass('hide');
 
-      $.each(settings, function(key, val) {
+      $.each(settings, (key, val) => {
 
         if (localStorage.getItem(key)) {
 
@@ -980,7 +982,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
         let hasUserSettings = false;
 
-        $.each(settings, function(key, val) {
+        $.each(settings, (key, val) => {
 
           if (val.user) hasUserSettings = true;
 
@@ -995,7 +997,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
         }
 
-        $.each(fullSettings.button_order, function(key, val) {
+        $.each(fullSettings.button_order, (key, val) => {
 
           let html;
           let hidden;
@@ -1040,31 +1042,31 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
         // Bind menu buttons
 
-        $('#toggle-auto-reload').click(function(e) {
+        $('#toggle-auto-reload').click((e) => {
 
           e.shiftKey && !disableSwitch ? moodEngine.switchVersion() : moodEngine.toggleAutoReload();
 
         });
 
-        $('#settings-button').click(function(e) {
+        $('#settings-button').click((e) => {
 
           if (!appError) e.shiftKey ? moodEngine.setAllDefault() : moodEngine.toggleSettings();
 
         });
 
-        $('#profile-button').click(function(e) {
+        $('#profile-button').click((e) => {
 
           if (!appError) e.shiftKey && Object.keys(currentUser).length ? moodEngine.logOut() : moodEngine.toggleProfile();
 
         })
 
-        $('#speak-quote-button').click(function() {
+        $('#speak-quote-button').click(() => {
 
           moodEngine.speakQuote();
 
         });
 
-        $('#go-back-button').click(function(e) {
+        $('#go-back-button').click((e) => {
 
           e.shiftKey ? moodEngine.fullRewind() : moodEngine.rewind();
 
@@ -1108,7 +1110,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
       // Night mode
 
-      setTimeout(function() {
+      setTimeout(() => {
 
         if (fullSettings.night_mode) {
 
@@ -1128,7 +1130,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
       $('html').hammer().off();
 
-      $('html').hammer().on(fullSettings.reverse_swipe_direction ? 'swiperight' : 'swipeleft', function(ev) {
+      $('html').hammer().on(fullSettings.reverse_swipe_direction ? 'swiperight' : 'swipeleft', (ev) => {
 
         if (!appError & !modalOpen) {
 
@@ -1140,7 +1142,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
       });
 
-      $('html').hammer().on(fullSettings.reverse_swipe_direction ? 'swipeleft' : 'swiperight', function(ev) {
+      $('html').hammer().on(fullSettings.reverse_swipe_direction ? 'swipeleft' : 'swiperight', (ev) => {
 
         if (!appError && !modalOpen) {
 
@@ -1238,7 +1240,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
       // Shift click icons
 
-      Mousetrap.bind(['shift'], function(e) {
+      Mousetrap.bind(['shift'], (e) => {
 
         $('.main-icon:not(.ignore)').addClass('hide');
         $('.alt-icon:not(.ignore)').removeClass('hide');
@@ -1246,9 +1248,9 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
       }, 'keydown');
 
-      Mousetrap.bind(['shift'], function(e) {
+      Mousetrap.bind(['shift'], (e) => {
 
-        $('.menu-button').each(function() {
+        $('.menu-button').each(() => {
 
           $('.main-icon').removeClass('hide');
           $('.alt-icon').addClass('hide');
@@ -1260,13 +1262,13 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
       // Change Tabs
 
-      function canChange() {
+      canChange = () => {
 
         return !appError && modalOpen && !$('#settings-modal input:focus').length && !$('.chip.selected').length;
 
       }
 
-      Mousetrap.bind(['+left'], function(e) {
+      Mousetrap.bind(['+left'], (e) => {
 
         if (canChange()) {
 
@@ -1284,7 +1286,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
       });
 
-      Mousetrap.bind(['+right'], function(e) {
+      Mousetrap.bind(['+right'], (e) => {
 
         if (canChange()) {
 
@@ -1304,7 +1306,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
       // Save Settings
 
-      Mousetrap.bindGlobal(['+enter'], function(e, combo) {
+      Mousetrap.bindGlobal(['+enter'], (e, combo) => {
 
         if (modalOpen && $('#settings-modal').hasClass('open') && (!$('#settings-modal input:focus').parent().hasClass('chips') || !$('#settings-modal input:focus').val())) {
 
@@ -1318,7 +1320,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
       if (typeof(fullSettings.reload_keys) === 'object') {
 
-        Mousetrap.bindGlobal(fullSettings.reload_keys, function(e, combo) {
+        Mousetrap.bindGlobal(fullSettings.reload_keys, (e, combo) => {
 
           if (!appError && !modalOpen) {
 
@@ -1334,13 +1336,13 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
       if (typeof(fullSettings.back_keys) === 'object') {
 
-        Mousetrap.bind(fullSettings.back_keys, function(e) {
+        Mousetrap.bind(fullSettings.back_keys, (e) => {
 
           if (!appError && !modalOpen) moodEngine.rewind();
 
         });
 
-        Mousetrap.bind(fullSettings.back_keys.map(k => `shift+${k}`), function(e) {
+        Mousetrap.bind(fullSettings.back_keys.map(k => `shift+${k}`), (e) => {
 
           if (!appError && !modalOpen) moodEngine.fullRewind();
 
@@ -1352,13 +1354,13 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
       if (typeof(fullSettings.auto_reload_keys) === 'object') {
 
-        Mousetrap.bind(fullSettings.auto_reload_keys, function(e) {
+        Mousetrap.bind(fullSettings.auto_reload_keys, (e) => {
 
           if (!appError && !modalOpen) moodEngine.toggleAutoReload();
 
         });
 
-        Mousetrap.bind(fullSettings.auto_reload_keys.map(k => `shift+${k}`), function(e) {
+        Mousetrap.bind(fullSettings.auto_reload_keys.map(k => `shift+${k}`), (e) => {
 
           if (!appError && !modalOpen) moodEngine.switchVersion();
 
@@ -1370,7 +1372,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
       if (typeof(fullSettings.menu_keys) === 'object') {
 
-        Mousetrap.bind(fullSettings.menu_keys, function(e) {
+        Mousetrap.bind(fullSettings.menu_keys, (e) => {
 
           if (!appError && !modalOpen) {
 
@@ -1380,7 +1382,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
         });
 
-        Mousetrap.bind(fullSettings.menu_keys.map(k => `shift+${k}`), function(e) {
+        Mousetrap.bind(fullSettings.menu_keys.map(k => `shift+${k}`), (e) => {
 
           if (!appError && !modalOpen) moodEngine.changeMenuOrientation();
 
@@ -1392,7 +1394,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
       if (typeof(fullSettings.settings_keys) === 'object') {
 
-        Mousetrap.bindGlobal(fullSettings.settings_keys, function(e) {
+        Mousetrap.bindGlobal(fullSettings.settings_keys, (e) => {
 
           if (!appError && !inFlight && !$('#settings-modal input:not([type="range"]):not([type="checkbox"]):focus').length) {
 
@@ -1403,7 +1405,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
         });
 
-        Mousetrap.bindGlobal(fullSettings.settings_keys.map(k => `shift+${k}`), function(e) {
+        Mousetrap.bindGlobal(fullSettings.settings_keys.map(k => `shift+${k}`), (e) => {
 
           if (!appError && !modalOpen) moodEngine.setAllDefault();
 
@@ -1415,7 +1417,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
       if (typeof(fullSettings.view_logs_keys) === 'object') {
 
-        Mousetrap.bindGlobal(fullSettings.view_logs_keys, function(e) {
+        Mousetrap.bindGlobal(fullSettings.view_logs_keys, (e) => {
 
           if (!appError && !$('#logs-search:focus').length) moodEngine.toggleLogs();
 
@@ -1427,13 +1429,13 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
       if (typeof(fullSettings.profile_keys) === 'object') {
 
-        Mousetrap.bindGlobal(fullSettings.profile_keys, function(e) {
+        Mousetrap.bindGlobal(fullSettings.profile_keys, (e) => {
 
           if (!appError && !$('#profile-modal input:not([type="range"]):not([type="checkbox"]):focus').length) moodEngine.toggleProfile();
 
         });
 
-        Mousetrap.bind(fullSettings.profile_keys.map(k => `shift+${k}`), function(e) {
+        Mousetrap.bind(fullSettings.profile_keys.map(k => `shift+${k}`), (e) => {
 
           if (!appError && Object.keys(currentUser).length) moodEngine.logOut();
 
@@ -1445,7 +1447,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
       if (typeof(fullSettings.speak_quote_keys) === 'object') {
 
-        Mousetrap.bindGlobal(fullSettings.speak_quote_keys, function(e) {
+        Mousetrap.bindGlobal(fullSettings.speak_quote_keys, (e) => {
 
           if (!appError && !modalOpen) responsiveVoice.isPlaying() ? moodEngine.stopSpeaking() : moodEngine.speakQuote();
 
@@ -1457,7 +1459,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
       if (typeof(fullSettings.night_mode_keys) === 'object') {
 
-        Mousetrap.bindGlobal(fullSettings.night_mode_keys, function(e) {
+        Mousetrap.bindGlobal(fullSettings.night_mode_keys, (e) => {
 
           if (!appError && !$('#settings-modal input:not([type="range"]):not([type="checkbox"]):focus').length && !$('#logs-search:focus').length && !$('#profile-modal input:focus').length) {
 
@@ -1506,7 +1508,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
         moodEngine.log('log', 'Changed Settings:');
 
-        $.each(logs, function(key, val) {
+        $.each(logs, (key, val) => {
 
           moodEngine.log('log', val);
 
@@ -1523,19 +1525,15 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
     if (settings.tabs) {
 
-      $.each(settings.tabs.value, function(key, val) {
+      $.each(settings.tabs.value, (key, val) => {
 
         let name = val;
         let mobile = 'hide-on-med-and-down';
         tabHTML[name] = '';
 
-        $.each(settings, function(key, val) {
+        $.each(settings, (key, val) => {
 
-          if (val.user && val.tab === name && val.mobile) {
-
-            mobile = '';
-
-          }
+          if (val.user && val.tab === name && val.mobile) mobile = '';
 
         });
 
@@ -1569,7 +1567,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
     // Set inputs in modal
 
-    moodEngine.setInputs = function(input, method) {
+    moodEngine.setInputs = (input, method) => {
 
       let target;
       let success = true;
@@ -1624,7 +1622,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
             if (Array.isArray(settings[setting].options)) {
 
-              $.each(settings[setting].options, function(key, val) {
+              $.each(settings[setting].options, (key, val) => {
 
                 if (val === value) index = key;
 
@@ -1687,7 +1685,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
           let name = $(this).attr('name');
           let values = [];
 
-          $.each(fullSettings[name], function(key, val) {
+          $.each(fullSettings[name], (key, val) => {
 
             let object = {
               tag: val
@@ -1730,7 +1728,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
     // Initialize modal plugin
 
     $('#settings-modal').modal({
-      ready: function(modal, trigger) {
+      ready: (modal, trigger) => {
 
         if (settings.tabs) $('ul.tabs').tabs();
 
@@ -1744,7 +1742,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
         });
 
       },
-      complete: function() {
+      complete: () => {
 
         $('.thumb').remove();
 
@@ -1755,12 +1753,12 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
     });
 
     $('#logs-modal').modal({
-      ready: function(modal, trigger) {
+      ready: (modal, trigger) => {
 
         modalOpen = true;
 
       },
-      complete: function() {
+      complete: () => {
 
         modalOpen = false;
 
@@ -1768,12 +1766,12 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
     });
 
     $('#profile-modal').modal({
-      ready: function(modal, trigger) {
+      ready: (modal, trigger) => {
 
         modalOpen = true;
 
       },
-      complete: function() {
+      complete: () => {
 
         modalOpen = false;
 
@@ -1782,7 +1780,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
     // Function for closing and opening settings panel
 
-    moodEngine.toggleSettings = function(action) {
+    moodEngine.toggleSettings = (action) => {
 
       if (action) {
 
@@ -1806,7 +1804,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
     // Function for closing and opening profile panel
 
-    moodEngine.toggleProfile = function(action) {
+    moodEngine.toggleProfile = (action) => {
 
       if (action) {
 
@@ -1822,7 +1820,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
     // Function for closing and opening logs panel
 
-    moodEngine.toggleLogs = function(action) {
+    moodEngine.toggleLogs = (action) => {
 
       if (action) {
 
@@ -1841,7 +1839,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
     if (settings.button_order) {
 
       $('#button-menu').sortable({
-        stop: function(event, ui) {
+        stop: (event, ui) => {
 
           let array = $('#button-menu').sortable('toArray', {
             attribute: 'data-button'
@@ -1865,7 +1863,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
     // Build settings panel
 
-    $.each(settings, function(key, val) {
+    $.each(settings, (key, val) => {
 
       if (val.user) {
 
@@ -1877,6 +1875,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
         let inputCol = 's12';
         let resetInput = '';
         let customHTML = val.custom_html || '';
+        let settingKey;
 
         if (fullSettings.reset_input_buttons) {
 
@@ -1898,7 +1897,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
             if (Array.isArray(val.options)) {
 
-              $.each(val.options, function(key, val) {
+              $.each(val.options, (key, val) => {
 
                 options += `<option value="${val}">${val}</option>`;
 
@@ -1906,7 +1905,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
             } else {
 
-              $.each(val.options, function(key, val) {
+              $.each(val.options, (key, val) => {
 
                 options += `<option value="${val}">${key}</option>`;
 
@@ -1977,7 +1976,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
                 if (Array.isArray(val.options)) {
 
-                  $.each(val.options, function(key, val) {
+                  $.each(val.options, (key, val) => {
 
                     input += `
                           <p>
@@ -1990,7 +1989,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
                 } else {
 
-                  $.each(val.options, function(key, val) {
+                  $.each(val.options, (key, val) => {
 
                     input += `
                            <p>
@@ -2072,7 +2071,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
     if (settings.tabs) {
 
-      $.each(tabHTML, function(key, val) {
+      $.each(tabHTML, (key, val) => {
 
         $(`#tab-${key}`).html(val);
 
@@ -2120,7 +2119,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
     // Set backend to local button
 
-    $('#set-backend-local').click(function() {
+    $('#set-backend-local').click(() => {
 
       localStorage.clear();
       localStorage.setItem('backend_address', window.location.href);
@@ -2139,7 +2138,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
     // Clear cache button
 
-    $('#clear-cache').click(function() {
+    $('#clear-cache').click(() => {
 
       localStorage.removeItem('cachedQuotes');
       localStorage.removeItem('cachedColours');
@@ -2177,7 +2176,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
     });
 
-    moodEngine.changeMenuOrientation = function() {
+    moodEngine.changeMenuOrientation = () => {
 
       $('.fixed-action-btn').toggleClass('horizontal');
       $('#menu-button .alt-icon').toggleClass('inactive-icon');
@@ -2191,7 +2190,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
     // Menu Button
 
-    $('#menu-button').click(function(e) {
+    $('#menu-button').click((e) => {
 
       if (e.shiftKey) moodEngine.changeMenuOrientation();
 
@@ -2221,7 +2220,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
       });
 
-      $.each($(`.chips[name="${name}"]`).material_chip('data'), function(key, val) {
+      $.each($(`.chips[name="${name}"]`).material_chip('data'), (key, val) => {
 
         let newVal = $.trim(val.tag);
 
@@ -2261,7 +2260,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
     // Allows other functions to check if currently auto reloading
 
-    moodEngine.notAutoReloading = function() {
+    moodEngine.notAutoReloading = () => {
 
       return $('main').hasClass('manual-reload');
 
@@ -2271,7 +2270,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
     // Toggle auto reload when the button is clicked
 
-    moodEngine.toggleAutoReload = function() {
+    moodEngine.toggleAutoReload = () => {
 
       if (!appError) {
 
@@ -2291,7 +2290,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
             moodEngine.log('log', `Set timeout for auto reload to ${fullSettings.reload_interval}ms.`);
 
-            (autoReload = function() {
+            (autoReload = () => {
 
               timeout = setTimeout(() => {
 
@@ -2332,7 +2331,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
     // Go back when the button is clicked
 
-    moodEngine.rewind = function() {
+    moodEngine.rewind = () => {
 
       if (moodEngine.notAutoReloading() && quoteHistory.length > 1 && !appError) {
 
@@ -2358,7 +2357,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
     // Go to starting quote & colour
 
-    moodEngine.fullRewind = function() {
+    moodEngine.fullRewind = () => {
 
       if (quoteHistory.length > 1) {
 
@@ -2382,7 +2381,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
     };
 
-    moodEngine.stopSpeaking = function() {
+    moodEngine.stopSpeaking = () => {
 
       responsiveVoice.cancel();
 
@@ -2394,7 +2393,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
     // Speak Quote
 
-    moodEngine.speakQuote = function() {
+    moodEngine.speakQuote = () => {
 
       if (!appError) {
 
@@ -2425,7 +2424,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
     // Reload the engine (generate new quote/colour)
 
-    moodEngine.reload = function(method) {
+    moodEngine.reload = (method) => {
 
       if (!appError && (moodEngine.notAutoReloading() || method === 'auto')) {
 
@@ -2524,7 +2523,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
     }
 
-    $('.clickable').click(function() {
+    $('.clickable').click(() => {
 
       moodEngine.reload();
 
@@ -2532,7 +2531,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
     // Manually choose the text and colour from the console
 
-    moodEngine.manualReload = function(text, colour) {
+    moodEngine.manualReload = (text, colour) => {
 
       moodEngine.setText(text);
       moodEngine.setColour(`#${colour}`);
@@ -2541,9 +2540,9 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
     // Set all settings to default
 
-    moodEngine.setAllDefault = function() {
+    moodEngine.setAllDefault = () => {
 
-      $.each(settings, function(key, val) {
+      $.each(settings, (key, val) => {
 
         if (!(val.advanced && fullSettings.keep_advanced_settings)) localStorage.removeItem(key);
 
@@ -2553,7 +2552,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
     };
 
-    $('.set-all-default').click(function(e) {
+    $('.set-all-default').click((e) => {
 
       if (e.shiftKey) $('.profile-settings-button.clear-settings').click();
       moodEngine.setAllDefault();
@@ -2562,7 +2561,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
     // When user trys to save settings
 
-    moodEngine.saveSettings = function() {
+    moodEngine.saveSettings = () => {
 
       let localSettings = {};
       let spaceInputs = [];
@@ -2580,7 +2579,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
           let array = [];
 
-          $.each($(this).material_chip('data'), function(key, val) {
+          $.each($(this).material_chip('data'), (key, val) => {
 
             array.push(val.tag);
 
@@ -2708,7 +2707,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
         try {
 
-          $.each(localSettings, function(key, val) {
+          $.each(localSettings, (key, val) => {
 
             let length = JSON.stringify(val).length;
             let defaultValue = profileSettings[key] === undefined ? settings[key].value : profileSettings[key];
@@ -2777,7 +2776,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
         if (invalidInputs.length) {
 
-          $.each(invalidInputs, function(key, val) {
+          $.each(invalidInputs, (key, val) => {
 
             moodEngine.notify(val);
 
@@ -2789,7 +2788,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
     };
 
-    $('#save-settings-button').click(function(e) {
+    $('#save-settings-button').click((e) => {
 
       moodEngine.saveSettings();
 
@@ -2799,7 +2798,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
     // Forms are just for show, don't allow submitting
 
-    $('form').submit(function() {
+    $('form').submit(() => {
 
       return false;
 
@@ -2807,7 +2806,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
     // Switch Version
 
-    moodEngine.switchVersion = function(specifiedVersion) {
+    moodEngine.switchVersion = (specifiedVersion) => {
 
       if (!appError && !disableSwitch) {
 
@@ -2889,7 +2888,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
     });
 
-    moodEngine.profileError = function(error) {
+    moodEngine.profileError = (error) => {
 
       if (error) {
 
@@ -2906,13 +2905,13 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
     }
 
-    $('#clear-profile-error').click(function() {
+    $('#clear-profile-error').click(() => {
 
       moodEngine.profileError();
 
     });
 
-    moodEngine.goToLogin = function() {
+    moodEngine.goToLogin = () => {
 
       moodEngine.profileError();
       $('.signup').addClass('hide-also');
@@ -2920,13 +2919,13 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
     }
 
-    $('#go-to-login').click(function() {
+    $('#go-to-login').click(() => {
 
       moodEngine.goToLogin();
 
     });
 
-    $('#go-to-signup').click(function() {
+    $('#go-to-signup').click(() => {
 
       moodEngine.profileError();
       $('.login').addClass('hide-also');
@@ -2936,7 +2935,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
     // User Signup
 
-    moodEngine.signUp = function() {
+    moodEngine.signUp = () => {
 
       let button = Ladda.create($('#profile-signup-button')[0]);
 
@@ -2949,7 +2948,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
         data: $('#signup').serialize(),
         method: 'POST',
         url: `admin/signup/signup.php`,
-        success: function(response) {
+        success: (response) => {
 
           $('.validation-errors').empty();
 
@@ -2957,7 +2956,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
             response = JSON.parse(response);
 
-            $.each(response, function(key, val) {
+            $.each(response, (key, val) => {
 
               let field = Object.keys(val)[0];
               let append = $(`.validation-errors[data-field="${field}"]`).is(':empty') ? val[field] : `<br>${val[field]}`;
@@ -2988,7 +2987,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
     });
 
-    $('#view-logs').click(function() {
+    $('#view-logs').click(() => {
 
       moodEngine.toggleProfile('close');
       moodEngine.toggleLogs('open');
@@ -2997,7 +2996,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
     // User Login
 
-    moodEngine.logIn = function() {
+    moodEngine.logIn = () => {
 
       let button = Ladda.create($('#profile-login-button')[0]);
       let button2 = $('#profile-button').length ? 'profile-button' : 'profile-login-button';
@@ -3012,7 +3011,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
         data: $('#login').serialize(),
         method: 'POST',
         url: `admin/login/authenticate.php`,
-        success: function(response) {
+        success: (response) => {
           if (response === 'success') {
 
             moodEngine.checkUser();
@@ -3033,13 +3032,13 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
     $('#profile-login-button').click(moodEngine.logIn);
 
-    $('#login').keydown(function(e) {
+    $('#login').keydown((e) => {
 
       if (e.keyCode === 13) moodEngine.logIn();
 
     });
 
-    $('#signup').keydown(function(e) {
+    $('#signup').keydown((e) => {
 
       if (e.keyCode === 13) moodEngine.signUp();
 
@@ -3047,7 +3046,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
     // User Logout
 
-    moodEngine.logOut = function() {
+    moodEngine.logOut = () => {
 
       let button = Ladda.create($('#profile-logout-button')[0]);
       let button2 = $('#profile-button').length ? 'profile-button' : 'profile-logout-button';
@@ -3074,14 +3073,14 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
             },
             method: 'POST',
             url: `admin/logout/index.php`,
-            complete: function() {
+            complete: () => {
               button.stop();
               button2.stop();
             },
-            success: function() {
+            success: () => {
               moodEngine.checkUser();
             },
-            error: function() {
+            error: () => {
               moodEngine.profileError('Failed to log out.');
               moodEngine.log('error', 'Failed to log out.')
             }
@@ -3095,7 +3094,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
     $('#profile-logout-button').click(moodEngine.logOut);
 
-    $('#download-profile-settings').click(function() {
+    $('#download-profile-settings').click(() => {
 
       moodEngine.checkUser('downloadSettings');
 
@@ -3138,10 +3137,10 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
         },
         method: 'POST',
         url: `api/update/user_settings/index.php`,
-        complete: function() {
+        complete: () => {
           button.stop();
         },
-        success: function(response) {
+        success: (response) => {
           if (response === 'success') {
             moodEngine.log('log', successLog);
             moodEngine.notify(successToast);
@@ -3150,7 +3149,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
             moodEngine.profileError(response);
           }
         },
-        error: function(response) {
+        error: (response) => {
           moodEngine.profileError(failLog);
           moodEngine.log('error', failLog);
         }
