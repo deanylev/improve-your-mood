@@ -615,72 +615,93 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   if (settings.translation_languages) {
 
-    if (localStorage.getItem('cachedTranslations')) {
+    $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
-      $.each(JSON.parse(localStorage.getItem('cachedTranslations')).Improve, function(key, val) {
+      let verification = data;
 
-        if (key !== 'en') quotes.Improve[key] = val;
+      if (localStorage.getItem('cachedTranslations') && localStorage.getItem('verifyTranslations') === verification) {
 
-      });
+        moodEngine.log('log', 'Using cached translations...');
 
-      $.each(JSON.parse(localStorage.getItem('cachedTranslations')).Decrease, function(key, val) {
+        $.each(JSON.parse(localStorage.getItem('cachedTranslations')).Improve, function(key, val) {
 
-        if (key !== 'en') quotes.Decrease[key] = val;
-
-      });
-
-    } else {
-
-      $.each(settings.translation_languages.value, function(key, val) {
-
-        let language = val;
-
-        quotes.Improve[language] = [];
-        quotes.Decrease[language] = [];
-
-        $.each(quotes.Improve.en, async (key, val) => {
-
-          let quote = await translate(val, {
-            to: language
-          });
-
-          quotes.Improve[language].push(quote);
+          if (key !== 'en') quotes.Improve[key] = val;
 
         });
 
-        $.each(quotes.Decrease.en, async (key, val) => {
+        $.each(JSON.parse(localStorage.getItem('cachedTranslations')).Decrease, function(key, val) {
 
-          let quote = await translate(val, {
-            to: language
-          });
-
-          quotes.Decrease[language].push(quote);
+          if (key !== 'en') quotes.Decrease[key] = val;
 
         });
 
-      });
+      } else {
 
-      let translationsLoaded = true;
-      let translationCheck = setInterval(() => {
+        let log;
 
-        $.each(settings.translation_languages.value, function(key, val) {
+        if (localStorage.getItem('cachedTranslations')) {
 
-          translationsLoaded = quotes.Improve.en.length === quotes.Improve[val].length && quotes.Decrease.en.length === quotes.Decrease[val].length
+          log = `Translation keys don't match, '${localStorage.getItem('verifyTranslations')}' vs '${verification}'`;
 
-        });
+        } else {
 
-        if (translationsLoaded) {
-
-          clearInterval(translationCheck);
-          localStorage.setItem('cachedTranslations', JSON.stringify(quotes));
-          moodEngine.log('log', 'Cached translations.')
+          log = `No cached translations`;
 
         }
 
-      }, 500)
+        moodEngine.log('log', `${log}, fetching...`)
 
-    }
+        $.each(settings.translation_languages.value, function(key, val) {
 
+          let language = val;
+
+          quotes.Improve[language] = [];
+          quotes.Decrease[language] = [];
+
+          $.each(quotes.Improve.en, async (key, val) => {
+
+            let quote = await translate(val, {
+              to: language
+            });
+
+            quotes.Improve[language].push(quote);
+
+          });
+
+          $.each(quotes.Decrease.en, async (key, val) => {
+
+            let quote = await translate(val, {
+              to: language
+            });
+
+            quotes.Decrease[language].push(quote);
+
+          });
+
+        });
+
+        let translationsLoaded = true;
+        let translationCheck = setInterval(() => {
+
+          $.each(settings.translation_languages.value, function(key, val) {
+
+            translationsLoaded = quotes.Improve.en.length === quotes.Improve[val].length && quotes.Decrease.en.length === quotes.Decrease[val].length
+
+          });
+
+          if (translationsLoaded) {
+
+            clearInterval(translationCheck);
+            localStorage.setItem('cachedTranslations', JSON.stringify(quotes));
+            localStorage.setItem('verifyTranslations', verification);
+            moodEngine.log('log', 'Cached translations.')
+
+          }
+
+        }, 500)
+
+      }
+    });
   }
 
   moodEngine.log('log', `Successfully pulled ${Object.keys(settings).length} settings from backend in ${pullTime.settings}ms.`);
