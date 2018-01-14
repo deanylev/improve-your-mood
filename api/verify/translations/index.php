@@ -1,5 +1,7 @@
 <?php
 
+ header("Access-Control-Allow-Origin: *");
+
  include("../../../assets/php/sql.php");
 
  $query = $mysqli->query("SELECT * FROM yourmood.settings WHERE setting = 'translation_languages'");
