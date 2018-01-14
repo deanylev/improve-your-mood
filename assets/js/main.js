@@ -696,7 +696,9 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
             clearInterval(translationCheck);
             localStorage.setItem('cachedTranslations', JSON.stringify(quotes));
             localStorage.setItem('verifyTranslations', translationVerification);
-            moodEngine.log('log', 'Cached translations.')
+            moodEngine.log('log', 'Cached translations.');
+
+            if ($('#quote').text() === 'Loading translations...') moodEngine.reload();
 
           }
 
