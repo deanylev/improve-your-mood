@@ -1080,17 +1080,21 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
     // Night mode
 
-    if (fullSettings.night_mode) {
+    setTimeout(function() {
 
-      $('body').addClass('night-mode');
-      $('.settings-sync-button').attr('data-spinner-color', 'white');
+      if (fullSettings.night_mode) {
 
-    } else {
+        $('body').addClass('night-mode');
+        $('.settings-sync-button').attr('data-spinner-color', 'white');
 
-      $('body').removeClass('night-mode');
-      $('.settings-sync-button').attr('data-spinner-color', 'black');
+      } else {
 
-    }
+        $('body').removeClass('night-mode');
+        $('.settings-sync-button').attr('data-spinner-color', 'black');
+
+      }
+
+    }, method === 'nightModeToggle' ? 0 : 200);
 
     // Touch / click gestures
 
