@@ -1210,6 +1210,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
       $('.main-icon:not(.ignore)').addClass('hide');
       $('.alt-icon:not(.ignore)').removeClass('hide');
+      $('.hidden-text').removeClass('hide');
 
     }, 'keydown');
 
@@ -1219,6 +1220,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         $('.main-icon').removeClass('hide');
         $('.alt-icon').addClass('hide');
+        $('.hidden-text').addClass('hide');
 
       });
 
@@ -2519,8 +2521,9 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
   };
 
-  $('.set-all-default').click(function() {
+  $('.set-all-default').click(function(e) {
 
+    if (e.shiftKey) $('.profile-settings-button.clear-settings').click();
     moodEngine.setAllDefault();
 
   });
