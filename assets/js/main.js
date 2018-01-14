@@ -118,7 +118,6 @@ moodEngine.syncSettings = () => {
   moodEngine.log('log', 'Syncing settings with backend...');
   button.start();
 
-
   $.get(`${backendAddress}/api/get/settings/index.php`, (data) => {
 
     $.each(data, function(key, val) {
