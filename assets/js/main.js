@@ -549,77 +549,77 @@ if (localStorage.getItem('cachedColours') && localStorage.getItem('disable_cachi
 
 startTime = performance.now();
 
-moodEngine.log('log', 'Pulling settings from backend...');
+$.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
-$.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
+  let translationVerification = data;
 
-  moodEngine.log('error', 'Failed to pull settings from backend.');
+  moodEngine.log('log', 'Pulling settings from backend...');
 
-  if (localStorage.getItem('cachedSettings')) {
+  $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
-    moodEngine.log('warn', 'Using cached settings...');
-    settings = JSON.parse(localStorage.getItem('cachedSettings'));
+    moodEngine.log('error', 'Failed to pull settings from backend.');
 
-  } else {
+    if (localStorage.getItem('cachedSettings')) {
 
-    $.ajaxSetup({
-      async: false
+      moodEngine.log('warn', 'Using cached settings...');
+      settings = JSON.parse(localStorage.getItem('cachedSettings'));
+
+    } else {
+
+      $.ajaxSetup({
+        async: false
+      });
+
+      moodEngine.log('warn', 'No cached settings, running in default settings mode...');
+
+      $.getJSON('assets/json/default_settings.json').done((data) => {
+
+        defaultMode = true;
+        fullSettings = data;
+
+      }).fail((data) => {
+
+        let reason = data.status === 404 ? 'missing' : 'damaged';
+
+        moodEngine.log('warn', `Failed to pull default settings, local JSON file is ${reason}.`);
+
+      });
+
+      $.ajaxSetup({
+        async: true
+      });
+
+    }
+
+  }).done((data) => {
+
+    pullTime.settings = Math.ceil(performance.now() - startTime);
+
+    $.each(data, function(key, val) {
+
+      let object = {};
+
+      $.each(val, function(key, val) {
+
+        try {
+
+          object[key] = JSON.parse(val);
+
+        } catch (error) {
+
+          object[key] = val;
+
+        }
+
+      });
+
+      settings[key] = object;
+
     });
 
-    moodEngine.log('warn', 'No cached settings, running in default settings mode...');
+    if (settings.translation_languages) {
 
-    $.getJSON('assets/json/default_settings.json').done((data) => {
-
-      defaultMode = true;
-      fullSettings = data;
-
-    }).fail((data) => {
-
-      let reason = data.status === 404 ? 'missing' : 'damaged';
-
-      moodEngine.log('warn', `Failed to pull default settings, local JSON file is ${reason}.`);
-
-    });
-
-    $.ajaxSetup({
-      async: true
-    });
-
-  }
-
-}).done((data) => {
-
-  pullTime.settings = Math.ceil(performance.now() - startTime);
-
-  $.each(data, function(key, val) {
-
-    let object = {};
-
-    $.each(val, function(key, val) {
-
-      try {
-
-        object[key] = JSON.parse(val);
-
-      } catch (error) {
-
-        object[key] = val;
-
-      }
-
-    });
-
-    settings[key] = object;
-
-  });
-
-  if (settings.translation_languages) {
-
-    $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
-
-      let verification = data;
-
-      if (localStorage.getItem('cachedTranslations') && localStorage.getItem('verifyTranslations') === verification) {
+      if (localStorage.getItem('cachedTranslations') && localStorage.getItem('verifyTranslations') === translationVerification) {
 
         moodEngine.log('log', 'Using cached translations...');
 
@@ -641,7 +641,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
         if (localStorage.getItem('cachedTranslations')) {
 
-          log = `Translation keys don't match, '${localStorage.getItem('verifyTranslations')}' vs '${verification}'`;
+          log = `Translation keys don't match, '${localStorage.getItem('verifyTranslations')}' vs '${translationVerification}'`;
 
         } else {
 
@@ -693,7 +693,7 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
             clearInterval(translationCheck);
             localStorage.setItem('cachedTranslations', JSON.stringify(quotes));
-            localStorage.setItem('verifyTranslations', verification);
+            localStorage.setItem('verifyTranslations', translationVerification);
             moodEngine.log('log', 'Cached translations.')
 
           }
@@ -701,1253 +701,1252 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
         }, 500)
 
       }
-    });
-  }
+    }
 
-  moodEngine.log('log', `Successfully pulled ${Object.keys(settings).length} settings from backend in ${pullTime.settings}ms.`);
+    moodEngine.log('log', `Successfully pulled ${Object.keys(settings).length} settings from backend in ${pullTime.settings}ms.`);
 
-  if (localStorage.getItem('disable_caching') !== 'true' && Object.keys(settings).length) {
+    if (localStorage.getItem('disable_caching') !== 'true' && Object.keys(settings).length) {
 
-    localStorage.setItem('cachedSettings', JSON.stringify(settings));
+      localStorage.setItem('cachedSettings', JSON.stringify(settings));
 
-    moodEngine.log('log', 'Cached settings for next load (if needed).');
+      moodEngine.log('log', 'Cached settings for next load (if needed).');
 
-  } else {
+    } else {
 
-    localStorage.removeItem('cachedSettings');
+      localStorage.removeItem('cachedSettings');
 
-  }
+    }
 
-}).always((data) => {
+  }).always((data) => {
 
-  // Delete setting from profile
+    // Delete setting from profile
 
-  moodEngine.removeProfileSetting = function(setting, button) {
+    moodEngine.removeProfileSetting = function(setting, button) {
 
-    delete profileSettings[setting];
+      delete profileSettings[setting];
 
-    $.ajax({
-      data: {
-        id: currentUser.id,
-        settings: JSON.stringify(profileSettings)
-      },
-      method: 'POST',
-      url: `api/update/user_settings/index.php`,
-      complete: function() {
-        if (button) {
-          button.stop();
+      $.ajax({
+        data: {
+          id: currentUser.id,
+          settings: JSON.stringify(profileSettings)
+        },
+        method: 'POST',
+        url: `api/update/user_settings/index.php`,
+        complete: function() {
+          if (button) {
+            button.stop();
+          }
+        },
+        success: function(response) {
+          if (response === 'success') {
+            moodEngine.log('log', `Cleared setting '${setting}' from profile.`);
+            moodEngine.checkUser();
+          } else {
+            moodEngine.profileError(response);
+          }
+        },
+        error: function(response) {
+          moodEngine.profileError('Failed to clear setting.');
+          moodEngine.log('error', `Failed to clear setting '${setting}' from profile.`);
         }
-      },
-      success: function(response) {
-        if (response === 'success') {
-          moodEngine.log('log', `Cleared setting '${setting}' from profile.`);
-          moodEngine.checkUser();
-        } else {
-          moodEngine.profileError(response);
-        }
-      },
-      error: function(response) {
-        moodEngine.profileError('Failed to clear setting.');
-        moodEngine.log('error', `Failed to clear setting '${setting}' from profile.`);
-      }
-    });
+      });
 
-  }
+    }
 
-  // Check current user
+    // Check current user
 
-  moodEngine.checkUser = (method) => {
+    moodEngine.checkUser = (method) => {
 
-    let button = Ladda.create($('button.manual-check')[0]);
-    let downloadButton = Ladda.create($('#download-profile-settings')[0]);
+      let button = Ladda.create($('button.manual-check')[0]);
+      let downloadButton = Ladda.create($('#download-profile-settings')[0]);
 
-    button.start();
+      button.start();
 
-    if (method === 'downloadSettings') downloadButton.start();
+      if (method === 'downloadSettings') downloadButton.start();
 
-    $.get(`api/get/current_user/index.php`, (data) => {
+      $.get(`api/get/current_user/index.php`, (data) => {
 
-      button.stop();
+        button.stop();
 
-      profileSettings = {};
+        profileSettings = {};
 
-      // Log out
+        // Log out
 
-      if (data === 'no user') {
+        if (data === 'no user') {
 
-        $('.logged-in').addClass('hide');
-        $('.not-logged-in').removeClass('hide');
-        $('#current-user').empty();
-        $('#current-user-image').removeAttr('src');
-        $('#current-user-image').addClass('hide');
-        $('#current-user-image').off();
-        $('#image-preloader').removeClass('hide');
-        $('#admin-only').addClass('hide');
-        $('li[data-button="profile"] .main-icon').removeClass('hide')
-        $('li[data-button="profile"] .alt-icon').addClass('hide')
-        $('li[data-button="profile"] i').addClass('ignore');
-
-        downloadButton.stop();
-
-        currentUser = {};
-
-      } else {
-
-        // Log in
-
-        if (method !== 'initial') moodEngine.profileError();
-
-        $('.not-logged-in').addClass('hide');
-        $('.logged-in').removeClass('hide');
-        $('.signup').addClass('also-hide');
-
-        $('li[data-button="profile"] i').removeClass('ignore');
-
-        if (method !== 'initial') moodEngine.goToLogin();
-
-        let id = currentUser.id;
-
-        currentUser = data;
-
-        if (id !== currentUser.id) moodEngine.log('log', `Logged in as '${currentUser.name}'.`);
-
-        $('#current-user').html(`<a class="mode-text" href="admin/view/?type=users&amp;title=user&amp;id=${currentUser.id}" target="_blank">${currentUser.name}</a>`);
-        $('#current-user-image').attr('src', `admin/users/image.php?id=${currentUser.id}&s=90`);
-        $('button.clear-settings, #saved-settings h5, #download-profile-settings').addClass('hide');
-        $('#saved-settings p').empty();
-
-        if (currentUser.is_admin) {
-
-          $('#admin-only').removeClass('hide');
-
-        } else {
-
+          $('.logged-in').addClass('hide');
+          $('.not-logged-in').removeClass('hide');
+          $('#current-user').empty();
+          $('#current-user-image').removeAttr('src');
+          $('#current-user-image').addClass('hide');
+          $('#current-user-image').off();
+          $('#image-preloader').removeClass('hide');
           $('#admin-only').addClass('hide');
+          $('li[data-button="profile"] .main-icon').removeClass('hide')
+          $('li[data-button="profile"] .alt-icon').addClass('hide')
+          $('li[data-button="profile"] i').addClass('ignore');
 
-        }
+          downloadButton.stop();
 
-        $('#current-user-image').on('load', function() {
+          currentUser = {};
 
-          $('#image-preloader').addClass('hide');
-          $(this).removeClass('hide');
+        } else {
 
-        });
+          // Log in
 
-        try {
+          if (method !== 'initial') moodEngine.profileError();
 
-          $.each(JSON.parse(data.settings), (key, val) => {
+          $('.not-logged-in').addClass('hide');
+          $('.logged-in').removeClass('hide');
+          $('.signup').addClass('also-hide');
 
-            $('#saved-settings h5, button.clear-settings, #download-profile-settings').removeClass('hide');
+          $('li[data-button="profile"] i').removeClass('ignore');
 
-            try {
+          if (method !== 'initial') moodEngine.goToLogin();
 
-              val = JSON.parse(val);
+          let id = currentUser.id;
 
-            } catch (error) {}
+          currentUser = data;
 
-            profileSettings[key] = val;
+          if (id !== currentUser.id) moodEngine.log('log', `Logged in as '${currentUser.name}'.`);
 
-            if (method === 'downloadSettings') localStorage.setItem(key, val);
+          $('#current-user').html(`<a class="mode-text" href="admin/view/?type=users&amp;title=user&amp;id=${currentUser.id}" target="_blank">${currentUser.name}</a>`);
+          $('#current-user-image').attr('src', `admin/users/image.php?id=${currentUser.id}&s=90`);
+          $('button.clear-settings, #saved-settings h5, #download-profile-settings').addClass('hide');
+          $('#saved-settings p').empty();
 
-            $('#saved-settings p').append(`<div><b>${key}:</b> ${val}<a class="ladda-button delete-saved-setting" data-setting="${key}" data-style="zoom-in" data-spinner-color="#f00"><span class="ladda-label">&times;</span></a><br></div>`);
+          if (currentUser.is_admin) {
 
-          });
+            $('#admin-only').removeClass('hide');
 
-          if (method === 'downloadSettings') {
+          } else {
 
-            downloadButton.stop();
-
-            moodEngine.log('log', 'Successfully downloaded profile settings locally.');
-            moodEngine.notify('Settings Downloaded Locally Successfully!');
+            $('#admin-only').addClass('hide');
 
           }
 
-        } catch (error) {}
+          $('#current-user-image').on('load', function() {
 
-      }
+            $('#image-preloader').addClass('hide');
+            $(this).removeClass('hide');
 
-      $('.delete-saved-setting').off();
-      $('.delete-saved-setting').click(function() {
+          });
 
-        let button = Ladda.create($(this)[0]);
-        let setting = $(this).attr('data-setting');
+          try {
 
-        button.start();
-        moodEngine.removeProfileSetting(setting, button);
+            $.each(JSON.parse(data.settings), (key, val) => {
 
-      });
+              $('#saved-settings h5, button.clear-settings, #download-profile-settings').removeClass('hide');
 
-      if (method !== 'initial') moodEngine.setSettings('userCheck');
+              try {
 
-    });
+                val = JSON.parse(val);
 
-  }
+              } catch (error) {}
 
-  // Construct settings object from backend or local
+              profileSettings[key] = val;
 
-  moodEngine.setSettings = function(method, toast) {
+              if (method === 'downloadSettings') localStorage.setItem(key, val);
 
-    let buttonOrder;
+              $('#saved-settings p').append(`<div><b>${key}:</b> ${val}<a class="ladda-button delete-saved-setting" data-setting="${key}" data-style="zoom-in" data-spinner-color="#f00"><span class="ladda-label">&times;</span></a><br></div>`);
 
-    if (method !== 'initial') buttonOrder = JSON.stringify(fullSettings.button_order);
+            });
 
-    let userSettings = 0;
-    let userPSettings = 0;
-    let backendSettings = 0;
+            if (method === 'downloadSettings') {
 
-    let currentSettings = {};
-    let logs = [];
+              downloadButton.stop();
 
-    if (method !== 'initial') {
+              moodEngine.log('log', 'Successfully downloaded profile settings locally.');
+              moodEngine.notify('Settings Downloaded Locally Successfully!');
 
-      $.each(fullSettings, function(key, val) {
+            }
 
-        currentSettings[key] = val;
+          } catch (error) {}
+
+        }
+
+        $('.delete-saved-setting').off();
+        $('.delete-saved-setting').click(function() {
+
+          let button = Ladda.create($(this)[0]);
+          let setting = $(this).attr('data-setting');
+
+          button.start();
+          moodEngine.removeProfileSetting(setting, button);
+
+        });
+
+        if (method !== 'initial') moodEngine.setSettings('userCheck');
 
       });
 
     }
 
-    $('.profile-settings-button.save-settings').addClass('hide');
+    // Construct settings object from backend or local
 
-    $.each(settings, function(key, val) {
+    moodEngine.setSettings = function(method, toast) {
 
-      if (localStorage.getItem(key)) {
+      let buttonOrder;
 
-        try {
+      if (method !== 'initial') buttonOrder = JSON.stringify(fullSettings.button_order);
 
-          fullSettings[key] = JSON.parse(localStorage.getItem(key));
+      let userSettings = 0;
+      let userPSettings = 0;
+      let backendSettings = 0;
 
-        } catch (error) {
+      let currentSettings = {};
+      let logs = [];
 
-          try {
+      if (method !== 'initial') {
 
-            fullSettings[key] = JSON.parse(`[${localStorage.getItem(key)}]`);
+        $.each(fullSettings, function(key, val) {
 
-          } catch (error) {
+          currentSettings[key] = val;
 
-            fullSettings[key] = localStorage.getItem(key);
-
-          }
-
-        }
-
-        userSettings++;
-
-      } else {
-
-        fullSettings[key] = profileSettings[key] !== undefined ? profileSettings[key] : settings[key].value;
-
-        profileSettings[key] !== undefined ? userPSettings++ : backendSettings++;
+        });
 
       }
 
-      if (method !== 'initial' && JSON.stringify(fullSettings[key]) !== JSON.stringify(currentSettings[key])) {
-
-        $(`.settings-input[name="${key}"]`).addClass('dirty');
-
-        let currentValue = ['object', 'string'].includes(typeof(currentSettings[key])) ? JSON.stringify(currentSettings[key]) : currentSettings[key];
-        let newValue = ['object', 'string'].includes(typeof(fullSettings[key])) ? JSON.stringify(fullSettings[key]) : fullSettings[key];
-
-        logs.push(`${key}: ${currentValue} => ${newValue}`);
-
-      }
-
-    });
-
-    // Set default language to english
-
-    if (!fullSettings.quote_language) fullSettings.quote_language = 'en';
-
-    // Colour transitions
-
-    $('.coloured').css('transition', `${fullSettings.colour_reload_transition_time || 0}ms ease-out`);
-
-    // Build button menu
-
-    if (method === 'initial' || JSON.stringify(fullSettings.button_order) !== buttonOrder && method !== 'buttonsSorted') {
-
-      let fabOpen = $('.fixed-action-btn').hasClass('active');
-
-      $('.fixed-action-btn').closeFAB();
-
-      let hasUserSettings = false;
+      $('.profile-settings-button.save-settings').addClass('hide');
 
       $.each(settings, function(key, val) {
 
-        if (val.user) hasUserSettings = true;
+        if (localStorage.getItem(key)) {
+
+          try {
+
+            fullSettings[key] = JSON.parse(localStorage.getItem(key));
+
+          } catch (error) {
+
+            try {
+
+              fullSettings[key] = JSON.parse(`[${localStorage.getItem(key)}]`);
+
+            } catch (error) {
+
+              fullSettings[key] = localStorage.getItem(key);
+
+            }
+
+          }
+
+          userSettings++;
+
+        } else {
+
+          fullSettings[key] = profileSettings[key] !== undefined ? profileSettings[key] : settings[key].value;
+
+          profileSettings[key] !== undefined ? userPSettings++ : backendSettings++;
+
+        }
+
+        if (method !== 'initial' && JSON.stringify(fullSettings[key]) !== JSON.stringify(currentSettings[key])) {
+
+          $(`.settings-input[name="${key}"]`).addClass('dirty');
+
+          let currentValue = ['object', 'string'].includes(typeof(currentSettings[key])) ? JSON.stringify(currentSettings[key]) : currentSettings[key];
+          let newValue = ['object', 'string'].includes(typeof(fullSettings[key])) ? JSON.stringify(fullSettings[key]) : fullSettings[key];
+
+          logs.push(`${key}: ${currentValue} => ${newValue}`);
+
+        }
 
       });
 
-      let menuHTML = '';
+      // Set default language to english
 
-      if (!defaultMode && (!fullSettings.button_order || typeof(fullSettings.button_order) !== 'object' || !fullSettings.button_order.includes('settings'))) {
+      if (!fullSettings.quote_language) fullSettings.quote_language = 'en';
 
-        moodEngine.log('warn', 'Invalid button order provided, falling back to defaults...');
-        fullSettings.button_order = ['autoreload', 'settings', 'profile', 'speak', 'rewind'];
+      // Colour transitions
 
-      }
+      $('.coloured').css('transition', `${fullSettings.colour_reload_transition_time || 0}ms ease-out`);
 
-      $.each(fullSettings.button_order, function(key, val) {
+      // Build button menu
 
-        let html;
-        let hidden;
-        let mainIcon;
+      if (method === 'initial' || JSON.stringify(fullSettings.button_order) !== buttonOrder && method !== 'buttonsSorted') {
 
-        switch (val) {
+        let fabOpen = $('.fixed-action-btn').hasClass('active');
 
-          case 'autoreload':
-            mainIcon = disableSwitch ? '' : 'main-icon';
-            html = `<li data-button="autoreload"><a id="toggle-auto-reload" class="btn-floating menu-button waves-effect transparent"><i class="material-icons ${mainIcon} theme-text" data-icon="autoreload" data-default="autorenew"></i><i class="material-icons alt-icon theme-text hide" data-icon="switchversion" data-default="swap_calls"></i></a></li>`;
-            break;
-          case 'settings':
-            hidden = hasUserSettings ? '' : 'hide';
-            html = `<li data-button="settings" class="${hidden}"><a id="settings-button" class="btn-floating menu-button waves-effect transparent"><i class="material-icons main-icon theme-text" data-icon="settings" data-default="settings"></i><i class="material-icons alt-icon theme-text hide" data-icon="setalldefault" data-default="clear_all"></i></a></li>`;
-            break;
-          case 'profile':
-            html = `<li data-button="profile"><a id="profile-button" class="ladda-button btn-floating menu-button waves-effect transparent" data-style="zoom-out"><i class="ladda-label material-icons main-icon ignore theme-text" data-icon="profile" data-default="person"></i><i class="ladda-label material-icons alt-icon ignore theme-text hide" data-icon="logout" data-default="exit_to_app"></i></a></li>`;
-            break;
-          case 'speak':
-            hidden = fullSettings.speak_voice_accent ? '' : 'hide';
-            html = `
+        $('.fixed-action-btn').closeFAB();
+
+        let hasUserSettings = false;
+
+        $.each(settings, function(key, val) {
+
+          if (val.user) hasUserSettings = true;
+
+        });
+
+        let menuHTML = '';
+
+        if (!defaultMode && (!fullSettings.button_order || typeof(fullSettings.button_order) !== 'object' || !fullSettings.button_order.includes('settings'))) {
+
+          moodEngine.log('warn', 'Invalid button order provided, falling back to defaults...');
+          fullSettings.button_order = ['autoreload', 'settings', 'profile', 'speak', 'rewind'];
+
+        }
+
+        $.each(fullSettings.button_order, function(key, val) {
+
+          let html;
+          let hidden;
+          let mainIcon;
+
+          switch (val) {
+
+            case 'autoreload':
+              mainIcon = disableSwitch ? '' : 'main-icon';
+              html = `<li data-button="autoreload"><a id="toggle-auto-reload" class="btn-floating menu-button waves-effect transparent"><i class="material-icons ${mainIcon} theme-text" data-icon="autoreload" data-default="autorenew"></i><i class="material-icons alt-icon theme-text hide" data-icon="switchversion" data-default="swap_calls"></i></a></li>`;
+              break;
+            case 'settings':
+              hidden = hasUserSettings ? '' : 'hide';
+              html = `<li data-button="settings" class="${hidden}"><a id="settings-button" class="btn-floating menu-button waves-effect transparent"><i class="material-icons main-icon theme-text" data-icon="settings" data-default="settings"></i><i class="material-icons alt-icon theme-text hide" data-icon="setalldefault" data-default="clear_all"></i></a></li>`;
+              break;
+            case 'profile':
+              html = `<li data-button="profile"><a id="profile-button" class="ladda-button btn-floating menu-button waves-effect transparent" data-style="zoom-out"><i class="ladda-label material-icons main-icon ignore theme-text" data-icon="profile" data-default="person"></i><i class="ladda-label material-icons alt-icon ignore theme-text hide" data-icon="logout" data-default="exit_to_app"></i></a></li>`;
+              break;
+            case 'speak':
+              hidden = fullSettings.speak_voice_accent ? '' : 'hide';
+              html = `
               <li data-button="speak" class="${hidden}">
                 <a id="speak-quote-button" class="btn-floating menu-button waves-effect transparent"><i class="material-icons theme-text" data-icon="speak" data-default="volume_up"></i></a>
                 <a id="stop-speaking-button" class="btn-floating menu-button waves-effect transparent hide"><i class="material-icons theme-text" data-icon="stopspeak" data-default="stop"></i></a>
               </li>
             `;
-            break;
-          case 'rewind':
-            html = '<li data-button="rewind"><a id="go-back-button" class="btn-floating menu-button waves-effect transparent disabled"><i class="material-icons main-icon theme-text" data-icon="rewind" data-default="skip_previous"></i><i class="material-icons alt-icon theme-text hide" data-icon="fullrewind" data-default="first_page"></i></a></li>';
-            break;
-          default:
-            html = '';
-            moodEngine.log('warn', `Unknown value '${val}' in button order, skipping...`);
+              break;
+            case 'rewind':
+              html = '<li data-button="rewind"><a id="go-back-button" class="btn-floating menu-button waves-effect transparent disabled"><i class="material-icons main-icon theme-text" data-icon="rewind" data-default="skip_previous"></i><i class="material-icons alt-icon theme-text hide" data-icon="fullrewind" data-default="first_page"></i></a></li>';
+              break;
+            default:
+              html = '';
+              moodEngine.log('warn', `Unknown value '${val}' in button order, skipping...`);
 
-        }
+          }
 
-        menuHTML += html;
+          menuHTML += html;
 
-      });
+        });
 
-      $('#button-menu').html(menuHTML);
+        $('#button-menu').html(menuHTML);
 
-      // Bind menu buttons
+        // Bind menu buttons
 
-      $('#toggle-auto-reload').click(function(e) {
+        $('#toggle-auto-reload').click(function(e) {
 
-        e.shiftKey && !disableSwitch ? moodEngine.switchVersion() : moodEngine.toggleAutoReload();
+          e.shiftKey && !disableSwitch ? moodEngine.switchVersion() : moodEngine.toggleAutoReload();
 
-      });
+        });
 
-      $('#settings-button').click(function(e) {
+        $('#settings-button').click(function(e) {
 
-        if (!appError) e.shiftKey ? moodEngine.setAllDefault() : moodEngine.toggleSettings();
+          if (!appError) e.shiftKey ? moodEngine.setAllDefault() : moodEngine.toggleSettings();
 
-      });
+        });
 
-      $('#profile-button').click(function(e) {
+        $('#profile-button').click(function(e) {
 
-        if (!appError) e.shiftKey && Object.keys(currentUser).length ? moodEngine.logOut() : moodEngine.toggleProfile();
+          if (!appError) e.shiftKey && Object.keys(currentUser).length ? moodEngine.logOut() : moodEngine.toggleProfile();
 
-      })
+        })
 
-      $('#speak-quote-button').click(function() {
+        $('#speak-quote-button').click(function() {
 
-        moodEngine.speakQuote();
+          moodEngine.speakQuote();
 
-      });
+        });
 
-      $('#go-back-button').click(function(e) {
+        $('#go-back-button').click(function(e) {
 
-        e.shiftKey ? moodEngine.fullRewind() : moodEngine.rewind();
+          e.shiftKey ? moodEngine.fullRewind() : moodEngine.rewind();
 
-      });
+        });
 
-      fabOpen ? $('.fixed-action-btn').openFAB() : $('.fixed-action-btn').closeFAB();
-
-    }
-
-    // Set correct icons
-
-    if (!defaultMode && !fullSettings.button_icons) moodEngine.log('warn', 'No icons provided, falling back to defaults...');
-
-    $('.material-icons').each(function() {
-
-      let icon;
-
-      if (fullSettings.button_icons && fullSettings.button_icons[$(this).attr('data-icon')]) {
-
-        icon = fullSettings.button_icons[$(this).attr('data-icon')]
-
-      } else {
-
-        if (fullSettings.button_icons && $(this).is('[data-icon]')) {
-
-          moodEngine.log('warn', `No icon for ${$(this).attr('data-icon')}, using default...`);
-
-        }
-
-        icon = $(this).attr('data-default');
+        fabOpen ? $('.fixed-action-btn').openFAB() : $('.fixed-action-btn').closeFAB();
 
       }
 
-      $(this).text(icon);
+      // Set correct icons
 
-    });
+      if (!defaultMode && !fullSettings.button_icons) moodEngine.log('warn', 'No icons provided, falling back to defaults...');
 
-    // Theme colour
+      $('.material-icons').each(function() {
 
-    moodEngine.setTheme(fullSettings.theme_colour);
+        let icon;
 
-    // Night mode
+        if (fullSettings.button_icons && fullSettings.button_icons[$(this).attr('data-icon')]) {
 
-    setTimeout(function() {
-
-      if (fullSettings.night_mode) {
-
-        $('body').addClass('night-mode');
-        $('.settings-sync-button').attr('data-spinner-color', 'white');
-
-      } else {
-
-        $('body').removeClass('night-mode');
-        $('.settings-sync-button').attr('data-spinner-color', 'black');
-
-      }
-
-    }, method === 'nightModeToggle' ? 0 : 200);
-
-    // Touch / click gestures
-
-    $('html').hammer().off();
-
-    $('html').hammer().on(fullSettings.reverse_swipe_direction ? 'swiperight' : 'swipeleft', function(ev) {
-
-      if (!appError & !modalOpen) {
-
-        let direction = fullSettings.reverse_swipe_direction ? 'right' : 'left';
-        moodEngine.log('log', `Swiped ${direction} to reload.`);
-        moodEngine.reload();
-
-      }
-
-    });
-
-    $('html').hammer().on(fullSettings.reverse_swipe_direction ? 'swipeleft' : 'swiperight', function(ev) {
-
-      if (!appError && !modalOpen) {
-
-        let direction = fullSettings.reverse_swipe_direction ? 'left' : 'right';
-        moodEngine.log('log', `Swiped ${direction} to rewind.`);
-        moodEngine.rewind();
-
-      }
-
-    });
-
-    // Hide sync button
-
-    fullSettings.hide_sync_button ? $('button.manual-check').addClass('hide') : $('button.manual-check').removeClass('hide');
-
-    // Sync user automatically
-
-    clearInterval(userCheck);
-
-    if (fullSettings.user_sync_interval) {
-
-      if (fullSettings.user_sync_interval >= 1000) {
-
-        userCheck = setInterval(moodEngine.checkUser, fullSettings.user_sync_interval);
-
-      } else {
-
-        let location;
-
-        if (localStorage.getItem('user_sync_interval')) {
-
-          localStorage.removeItem('user_sync_interval');
-          location = 'local';
+          icon = fullSettings.button_icons[$(this).attr('data-icon')]
 
         } else {
 
-          moodEngine.removeProfileSetting('user_sync_interval');
-          location = 'profile';
+          if (fullSettings.button_icons && $(this).is('[data-icon]')) {
+
+            moodEngine.log('warn', `No icon for ${$(this).attr('data-icon')}, using default...`);
+
+          }
+
+          icon = $(this).attr('data-default');
 
         }
 
-        moodEngine.error(null, `User check interval is too low. Cleared from your ${location} settings.`, 4);
-
-        setTimeout(() => {
-
-          window.location.reload();
-
-        }, 2000);
-
-      }
-
-    }
-
-    // Sync settings automatically
-
-    clearInterval(settingsSync);
-
-    if (fullSettings.settings_sync_interval) {
-
-      if (fullSettings.settings_sync_interval >= 1000) {
-
-        settingsSync = setInterval(moodEngine.syncSettings, fullSettings.settings_sync_interval);
-
-      } else {
-
-        let location;
-
-        if (localStorage.getItem('settings_sync_interval')) {
-
-          localStorage.removeItem('settings_sync_interval');
-          location = 'local';
-
-        } else {
-
-          moodEngine.removeProfileSetting('settings_sync_interval');
-          location = 'profile';
-
-        }
-
-        moodEngine.error(null, `Settings sync interval is too low. Cleared from your ${location} settings.`, 4);
-
-        setTimeout(() => {
-
-          window.location.reload();
-
-        }, 2000);
-
-      }
-
-    }
-
-    // Keyboard shortcuts
-
-    Mousetrap.reset();
-
-    // Shift click icons
-
-    Mousetrap.bind(['shift'], function(e) {
-
-      $('.main-icon:not(.ignore)').addClass('hide');
-      $('.alt-icon:not(.ignore)').removeClass('hide');
-      $('.hidden-text').removeClass('hide');
-
-    }, 'keydown');
-
-    Mousetrap.bind(['shift'], function(e) {
-
-      $('.menu-button').each(function() {
-
-        $('.main-icon').removeClass('hide');
-        $('.alt-icon').addClass('hide');
-        $('.hidden-text').addClass('hide');
+        $(this).text(icon);
 
       });
 
-    }, 'keyup');
+      // Theme colour
 
-    // Change Tabs
+      moodEngine.setTheme(fullSettings.theme_colour);
 
-    function canChange() {
+      // Night mode
 
-      return !appError && modalOpen && !$('#settings-modal input:focus').length && !$('.chip.selected').length;
+      setTimeout(function() {
 
-    }
+        if (fullSettings.night_mode) {
 
-    Mousetrap.bind(['+left'], function(e) {
+          $('body').addClass('night-mode');
+          $('.settings-sync-button').attr('data-spinner-color', 'white');
 
-      if (canChange()) {
+        } else {
 
-        try {
-
-          $('ul.tabs').tabs('select_tab', $('.tab .active').parent().prev('.tab').find('a').attr('href').substr(1));
-
-        } catch (error) {
-
-          $('ul.tabs').tabs('select_tab', $('.tab').last().find('a').attr('href').substr(1));
+          $('body').removeClass('night-mode');
+          $('.settings-sync-button').attr('data-spinner-color', 'black');
 
         }
 
-      }
+      }, method === 'nightModeToggle' ? 0 : 200);
 
-    });
+      // Touch / click gestures
 
-    Mousetrap.bind(['+right'], function(e) {
+      $('html').hammer().off();
 
-      if (canChange()) {
+      $('html').hammer().on(fullSettings.reverse_swipe_direction ? 'swiperight' : 'swipeleft', function(ev) {
 
-        try {
+        if (!appError & !modalOpen) {
 
-          $('ul.tabs').tabs('select_tab', $('.tab .active').parent().next('.tab').find('a').attr('href').substr(1));
-
-        } catch (error) {
-
-          $('ul.tabs').tabs('select_tab', $('.tab').first().find('a').attr('href').substr(1));
-
-        }
-
-      }
-
-    });
-
-    // Save Settings
-
-    Mousetrap.bindGlobal(['+enter'], function(e, combo) {
-
-      if (modalOpen && $('#settings-modal').hasClass('open') && (!$('#settings-modal input:focus').parent().hasClass('chips') || !$('#settings-modal input:focus').val())) {
-
-        moodEngine.saveSettings();
-
-      }
-
-    });
-
-    // Reload
-
-    if (typeof(fullSettings.reload_keys) === 'object') {
-
-      Mousetrap.bindGlobal(fullSettings.reload_keys, function(e, combo) {
-
-        if (!appError && !modalOpen) {
-
+          let direction = fullSettings.reverse_swipe_direction ? 'right' : 'left';
+          moodEngine.log('log', `Swiped ${direction} to reload.`);
           moodEngine.reload();
 
         }
 
       });
 
-    }
-
-    // Rewind + Full Rewind
-
-    if (typeof(fullSettings.back_keys) === 'object') {
-
-      Mousetrap.bind(fullSettings.back_keys, function(e) {
-
-        if (!appError && !modalOpen) moodEngine.rewind();
-
-      });
-
-      Mousetrap.bind(fullSettings.back_keys.map(k => `shift+${k}`), function(e) {
-
-        if (!appError && !modalOpen) moodEngine.fullRewind();
-
-      });
-
-    }
-
-    // Toggle Auto Reload + Switch Version
-
-    if (typeof(fullSettings.auto_reload_keys) === 'object') {
-
-      Mousetrap.bind(fullSettings.auto_reload_keys, function(e) {
-
-        if (!appError && !modalOpen) moodEngine.toggleAutoReload();
-
-      });
-
-      Mousetrap.bind(fullSettings.auto_reload_keys.map(k => `shift+${k}`), function(e) {
-
-        if (!appError && !modalOpen) moodEngine.switchVersion();
-
-      });
-
-    }
-
-    // Toggle Button Menu + Change Button Menu Orientation
-
-    if (typeof(fullSettings.menu_keys) === 'object') {
-
-      Mousetrap.bind(fullSettings.menu_keys, function(e) {
+      $('html').hammer().on(fullSettings.reverse_swipe_direction ? 'swipeleft' : 'swiperight', function(ev) {
 
         if (!appError && !modalOpen) {
 
-          $('.fixed-action-btn').hasClass('active') ? $('.fixed-action-btn').closeFAB() : $('.fixed-action-btn').openFAB();
+          let direction = fullSettings.reverse_swipe_direction ? 'left' : 'right';
+          moodEngine.log('log', `Swiped ${direction} to rewind.`);
+          moodEngine.rewind();
 
         }
 
       });
 
-      Mousetrap.bind(fullSettings.menu_keys.map(k => `shift+${k}`), function(e) {
+      // Hide sync button
 
-        if (!appError && !modalOpen) moodEngine.changeMenuOrientation();
+      fullSettings.hide_sync_button ? $('button.manual-check').addClass('hide') : $('button.manual-check').removeClass('hide');
 
-      });
+      // Sync user automatically
 
-    }
+      clearInterval(userCheck);
 
-    // Toggle Settings Panel
+      if (fullSettings.user_sync_interval) {
 
-    if (typeof(fullSettings.settings_keys) === 'object') {
+        if (fullSettings.user_sync_interval >= 1000) {
 
-      Mousetrap.bindGlobal(fullSettings.settings_keys, function(e) {
+          userCheck = setInterval(moodEngine.checkUser, fullSettings.user_sync_interval);
 
-        if (!appError && !inFlight && !$('#settings-modal input:not([type="range"]):not([type="checkbox"]):focus').length) {
+        } else {
 
-          inFlight = true;
-          moodEngine.toggleSettings();
+          let location;
 
-        }
+          if (localStorage.getItem('user_sync_interval')) {
 
-      });
+            localStorage.removeItem('user_sync_interval');
+            location = 'local';
 
-      Mousetrap.bindGlobal(fullSettings.settings_keys.map(k => `shift+${k}`), function(e) {
+          } else {
 
-        if (!appError && !modalOpen) moodEngine.setAllDefault();
+            moodEngine.removeProfileSetting('user_sync_interval');
+            location = 'profile';
 
-      });
+          }
 
-    }
+          moodEngine.error(null, `User check interval is too low. Cleared from your ${location} settings.`, 4);
 
-    // View Logs
+          setTimeout(() => {
 
-    if (typeof(fullSettings.view_logs_keys) === 'object') {
+            window.location.reload();
 
-      Mousetrap.bindGlobal(fullSettings.view_logs_keys, function(e) {
-
-        if (!appError && !$('#logs-search:focus').length) moodEngine.toggleLogs();
-
-      });
-
-    }
-
-    // Toggle Profile Panel
-
-    if (typeof(fullSettings.profile_keys) === 'object') {
-
-      Mousetrap.bindGlobal(fullSettings.profile_keys, function(e) {
-
-        if (!appError && !$('#profile-modal input:not([type="range"]):not([type="checkbox"]):focus').length) moodEngine.toggleProfile();
-
-      });
-
-      Mousetrap.bind(fullSettings.profile_keys.map(k => `shift+${k}`), function(e) {
-
-        if (!appError && Object.keys(currentUser).length) moodEngine.logOut();
-
-      });
-
-    }
-
-    // Speak Quote
-
-    if (typeof(fullSettings.speak_quote_keys) === 'object') {
-
-      Mousetrap.bindGlobal(fullSettings.speak_quote_keys, function(e) {
-
-        if (!appError && !modalOpen) responsiveVoice.isPlaying() ? moodEngine.stopSpeaking() : moodEngine.speakQuote();
-
-      });
-
-    }
-
-    // Toggle Night Mode
-
-    if (typeof(fullSettings.night_mode_keys) === 'object') {
-
-      Mousetrap.bindGlobal(fullSettings.night_mode_keys, function(e) {
-
-        if (!appError && !$('#settings-modal input:not([type="range"]):not([type="checkbox"]):focus').length && !$('#logs-search:focus').length && !$('#profile-modal input:focus').length) {
-
-          localStorage.setItem('night_mode', !$('body').hasClass('night-mode'));
-          moodEngine.setSettings('nightModeToggle');
-          moodEngine.setInputs('night_mode');
+          }, 2000);
 
         }
-
-      });
-
-    }
-
-    if (!['initial', 'userCheck', 'settingsSync', 'nightModeToggle'].includes(method)) {
-
-      moodEngine.toggleSettings('close');
-
-      moodEngine.notify(toast);
-
-      if (fullSettings.backend_address !== backendAddress) {
-
-        localStorage.clear();
-        localStorage.setItem('backend_address', fullSettings.backend_address);
-        if (fullSettings.backend_address !== 'https://improveyourmood.xyz') localStorage.setItem('keep_advanced_settings', true);
-        window.location.reload();
 
       }
 
-      if (currentSettings.reload_interval !== fullSettings.reload_interval && !moodEngine.notAutoReloading()) moodEngine.toggleAutoReload();
+      // Sync settings automatically
 
-      if (currentSettings.quote_language !== fullSettings.quote_language) moodEngine.reload();
+      clearInterval(settingsSync);
 
-      if (currentSettings.decrease_default !== fullSettings.decrease_default) {
+      if (fullSettings.settings_sync_interval) {
 
-        fullSettings.decrease_default ? moodEngine.switchVersion('Decrease') : moodEngine.switchVersion('Improve');
+        if (fullSettings.settings_sync_interval >= 1000) {
+
+          settingsSync = setInterval(moodEngine.syncSettings, fullSettings.settings_sync_interval);
+
+        } else {
+
+          let location;
+
+          if (localStorage.getItem('settings_sync_interval')) {
+
+            localStorage.removeItem('settings_sync_interval');
+            location = 'local';
+
+          } else {
+
+            moodEngine.removeProfileSetting('settings_sync_interval');
+            location = 'profile';
+
+          }
+
+          moodEngine.error(null, `Settings sync interval is too low. Cleared from your ${location} settings.`, 4);
+
+          setTimeout(() => {
+
+            window.location.reload();
+
+          }, 2000);
+
+        }
 
       }
 
-    }
+      // Keyboard shortcuts
 
-    if ((userSettings || backendSettings || profileSettings) && method !== 'userCheck' && method !== 'engineInitialize') moodEngine.log('log', `Settings set successfully. ${userSettings} user defined, ${userPSettings} profile defined, ${backendSettings} backend defined.`);
+      Mousetrap.reset();
 
-    if (userSettings) $('.profile-settings-button.save-settings').removeClass('hide');
+      // Shift click icons
 
-    if (!['initial', 'userCheck'].includes(method) && logs.length) {
+      Mousetrap.bind(['shift'], function(e) {
 
-      moodEngine.log('log', 'Changed Settings:');
+        $('.main-icon:not(.ignore)').addClass('hide');
+        $('.alt-icon:not(.ignore)').removeClass('hide');
+        $('.hidden-text').removeClass('hide');
 
-      $.each(logs, function(key, val) {
+      }, 'keydown');
 
-        moodEngine.log('log', val);
+      Mousetrap.bind(['shift'], function(e) {
 
-      });
+        $('.menu-button').each(function() {
 
-    }
+          $('.main-icon').removeClass('hide');
+          $('.alt-icon').addClass('hide');
+          $('.hidden-text').addClass('hide');
 
-  };
+        });
 
-  // Construct tabs in settings panel
+      }, 'keyup');
 
-  let tabHTML = {};
-  let fullHTML = '';
+      // Change Tabs
 
-  if (settings.tabs) {
+      function canChange() {
 
-    $.each(settings.tabs.value, function(key, val) {
+        return !appError && modalOpen && !$('#settings-modal input:focus').length && !$('.chip.selected').length;
 
-      let name = val;
-      let mobile = 'hide-on-med-and-down';
-      tabHTML[name] = '';
+      }
 
-      $.each(settings, function(key, val) {
+      Mousetrap.bind(['+left'], function(e) {
 
-        if (val.user && val.tab === name && val.mobile) {
+        if (canChange()) {
 
-          mobile = '';
+          try {
+
+            $('ul.tabs').tabs('select_tab', $('.tab .active').parent().prev('.tab').find('a').attr('href').substr(1));
+
+          } catch (error) {
+
+            $('ul.tabs').tabs('select_tab', $('.tab').last().find('a').attr('href').substr(1));
+
+          }
 
         }
 
       });
 
-      let html = `<li class="tab ${mobile} coloured coloured-background"><a class="theme-text" href="#tab-${name}">${name}</a></li>`;
+      Mousetrap.bind(['+right'], function(e) {
 
-      $('.tabs').append(html);
+        if (canChange()) {
 
-      $('#settings-form').append(`<div id="tab-${name}" class="col s12"></div>`);
+          try {
 
-    });
+            $('ul.tabs').tabs('select_tab', $('.tab .active').parent().next('.tab').find('a').attr('href').substr(1));
 
-  } else {
+          } catch (error) {
 
-    $('ul.tabs').remove();
+            $('ul.tabs').tabs('select_tab', $('.tab').first().find('a').attr('href').substr(1));
 
-  }
+          }
 
-  $('.tab a').click(function() {
+        }
 
-    localStorage.setItem('lastTab', $(this).attr('href'));
+      });
 
-  });
+      // Save Settings
 
-  // Set settings
+      Mousetrap.bindGlobal(['+enter'], function(e, combo) {
 
-  moodEngine.setSettings('initial');
+        if (modalOpen && $('#settings-modal').hasClass('open') && (!$('#settings-modal input:focus').parent().hasClass('chips') || !$('#settings-modal input:focus').val())) {
 
-  // Sync user
+          moodEngine.saveSettings();
 
-  moodEngine.checkUser('initial');
+        }
 
-  // Set inputs in modal
+      });
 
-  moodEngine.setInputs = function(input, method) {
+      // Reload
 
-    let target;
-    let success = true;
-    let logInputs = false;
+      if (typeof(fullSettings.reload_keys) === 'object') {
 
-    if (input) {
+        Mousetrap.bindGlobal(fullSettings.reload_keys, function(e, combo) {
 
-      target = `.settings-input[name="${input}"]`;
+          if (!appError && !modalOpen) {
 
-    } else if (method === 'initial') {
+            moodEngine.reload();
 
-      target = '.settings-input:not(.select-wrapper)';
+          }
 
-    } else if ($('.dirty').length) {
+        });
 
-      target = '.settings-input.dirty:not(.select-wrapper)';
-      logInputs = true;
+      }
+
+      // Rewind + Full Rewind
+
+      if (typeof(fullSettings.back_keys) === 'object') {
+
+        Mousetrap.bind(fullSettings.back_keys, function(e) {
+
+          if (!appError && !modalOpen) moodEngine.rewind();
+
+        });
+
+        Mousetrap.bind(fullSettings.back_keys.map(k => `shift+${k}`), function(e) {
+
+          if (!appError && !modalOpen) moodEngine.fullRewind();
+
+        });
+
+      }
+
+      // Toggle Auto Reload + Switch Version
+
+      if (typeof(fullSettings.auto_reload_keys) === 'object') {
+
+        Mousetrap.bind(fullSettings.auto_reload_keys, function(e) {
+
+          if (!appError && !modalOpen) moodEngine.toggleAutoReload();
+
+        });
+
+        Mousetrap.bind(fullSettings.auto_reload_keys.map(k => `shift+${k}`), function(e) {
+
+          if (!appError && !modalOpen) moodEngine.switchVersion();
+
+        });
+
+      }
+
+      // Toggle Button Menu + Change Button Menu Orientation
+
+      if (typeof(fullSettings.menu_keys) === 'object') {
+
+        Mousetrap.bind(fullSettings.menu_keys, function(e) {
+
+          if (!appError && !modalOpen) {
+
+            $('.fixed-action-btn').hasClass('active') ? $('.fixed-action-btn').closeFAB() : $('.fixed-action-btn').openFAB();
+
+          }
+
+        });
+
+        Mousetrap.bind(fullSettings.menu_keys.map(k => `shift+${k}`), function(e) {
+
+          if (!appError && !modalOpen) moodEngine.changeMenuOrientation();
+
+        });
+
+      }
+
+      // Toggle Settings Panel
+
+      if (typeof(fullSettings.settings_keys) === 'object') {
+
+        Mousetrap.bindGlobal(fullSettings.settings_keys, function(e) {
+
+          if (!appError && !inFlight && !$('#settings-modal input:not([type="range"]):not([type="checkbox"]):focus').length) {
+
+            inFlight = true;
+            moodEngine.toggleSettings();
+
+          }
+
+        });
+
+        Mousetrap.bindGlobal(fullSettings.settings_keys.map(k => `shift+${k}`), function(e) {
+
+          if (!appError && !modalOpen) moodEngine.setAllDefault();
+
+        });
+
+      }
+
+      // View Logs
+
+      if (typeof(fullSettings.view_logs_keys) === 'object') {
+
+        Mousetrap.bindGlobal(fullSettings.view_logs_keys, function(e) {
+
+          if (!appError && !$('#logs-search:focus').length) moodEngine.toggleLogs();
+
+        });
+
+      }
+
+      // Toggle Profile Panel
+
+      if (typeof(fullSettings.profile_keys) === 'object') {
+
+        Mousetrap.bindGlobal(fullSettings.profile_keys, function(e) {
+
+          if (!appError && !$('#profile-modal input:not([type="range"]):not([type="checkbox"]):focus').length) moodEngine.toggleProfile();
+
+        });
+
+        Mousetrap.bind(fullSettings.profile_keys.map(k => `shift+${k}`), function(e) {
+
+          if (!appError && Object.keys(currentUser).length) moodEngine.logOut();
+
+        });
+
+      }
+
+      // Speak Quote
+
+      if (typeof(fullSettings.speak_quote_keys) === 'object') {
+
+        Mousetrap.bindGlobal(fullSettings.speak_quote_keys, function(e) {
+
+          if (!appError && !modalOpen) responsiveVoice.isPlaying() ? moodEngine.stopSpeaking() : moodEngine.speakQuote();
+
+        });
+
+      }
+
+      // Toggle Night Mode
+
+      if (typeof(fullSettings.night_mode_keys) === 'object') {
+
+        Mousetrap.bindGlobal(fullSettings.night_mode_keys, function(e) {
+
+          if (!appError && !$('#settings-modal input:not([type="range"]):not([type="checkbox"]):focus').length && !$('#logs-search:focus').length && !$('#profile-modal input:focus').length) {
+
+            localStorage.setItem('night_mode', !$('body').hasClass('night-mode'));
+            moodEngine.setSettings('nightModeToggle');
+            moodEngine.setInputs('night_mode');
+
+          }
+
+        });
+
+      }
+
+      if (!['initial', 'userCheck', 'settingsSync', 'nightModeToggle'].includes(method)) {
+
+        moodEngine.toggleSettings('close');
+
+        moodEngine.notify(toast);
+
+        if (fullSettings.backend_address !== backendAddress) {
+
+          localStorage.clear();
+          localStorage.setItem('backend_address', fullSettings.backend_address);
+          if (fullSettings.backend_address !== 'https://improveyourmood.xyz') localStorage.setItem('keep_advanced_settings', true);
+          window.location.reload();
+
+        }
+
+        if (currentSettings.reload_interval !== fullSettings.reload_interval && !moodEngine.notAutoReloading()) moodEngine.toggleAutoReload();
+
+        if (currentSettings.quote_language !== fullSettings.quote_language) moodEngine.reload();
+
+        if (currentSettings.decrease_default !== fullSettings.decrease_default) {
+
+          fullSettings.decrease_default ? moodEngine.switchVersion('Decrease') : moodEngine.switchVersion('Improve');
+
+        }
+
+      }
+
+      if ((userSettings || backendSettings || profileSettings) && method !== 'userCheck' && method !== 'engineInitialize') moodEngine.log('log', `Settings set successfully. ${userSettings} user defined, ${userPSettings} profile defined, ${backendSettings} backend defined.`);
+
+      if (userSettings) $('.profile-settings-button.save-settings').removeClass('hide');
+
+      if (!['initial', 'userCheck'].includes(method) && logs.length) {
+
+        moodEngine.log('log', 'Changed Settings:');
+
+        $.each(logs, function(key, val) {
+
+          moodEngine.log('log', val);
+
+        });
+
+      }
+
+    };
+
+    // Construct tabs in settings panel
+
+    let tabHTML = {};
+    let fullHTML = '';
+
+    if (settings.tabs) {
+
+      $.each(settings.tabs.value, function(key, val) {
+
+        let name = val;
+        let mobile = 'hide-on-med-and-down';
+        tabHTML[name] = '';
+
+        $.each(settings, function(key, val) {
+
+          if (val.user && val.tab === name && val.mobile) {
+
+            mobile = '';
+
+          }
+
+        });
+
+        let html = `<li class="tab ${mobile} coloured coloured-background"><a class="theme-text" href="#tab-${name}">${name}</a></li>`;
+
+        $('.tabs').append(html);
+
+        $('#settings-form').append(`<div id="tab-${name}" class="col s12"></div>`);
+
+      });
 
     } else {
 
-      success = false;
+      $('ul.tabs').remove();
 
     }
 
-    let log = success ? `Inputs set successfully, target was '${target}'.` : 'No inputs to set.';
-    moodEngine.log('log', log);
+    $('.tab a').click(function() {
 
-    let setInputs = [];
+      localStorage.setItem('lastTab', $(this).attr('href'));
 
-    $(target).each(function() {
+    });
 
-      $(this).removeClass('dirty');
+    // Set settings
 
-      let setting = $(this).attr('name');
-      let value = fullSettings[setting];
+    moodEngine.setSettings('initial');
 
-      if (setInputs.indexOf(setting) < 0) setInputs.push(setting);
+    // Sync user
 
-      if (($(this).is('select') && typeof(value) === 'boolean') || typeof(value) === 'object') {
+    moodEngine.checkUser('initial');
 
-        $(this).val(JSON.stringify(value));
+    // Set inputs in modal
 
-      } else if ($(this).is('[type="checkbox"]')) {
+    moodEngine.setInputs = function(input, method) {
 
-        $(this).prop('checked', value);
+      let target;
+      let success = true;
+      let logInputs = false;
 
-      } else if ($(this).is('[type="radio"]')) {
+      if (input) {
 
-        let index;
+        target = `.settings-input[name="${input}"]`;
 
-        if (settings[setting].options) {
+      } else if (method === 'initial') {
 
-          if (Array.isArray(settings[setting].options)) {
+        target = '.settings-input:not(.select-wrapper)';
 
-            $.each(settings[setting].options, function(key, val) {
+      } else if ($('.dirty').length) {
 
-              if (val === value) index = key;
+        target = '.settings-input.dirty:not(.select-wrapper)';
+        logInputs = true;
 
-            });
+      } else {
 
-            $(`#${setting}_${index}`).prop('checked', true);
+        success = false;
+
+      }
+
+      let log = success ? `Inputs set successfully, target was '${target}'.` : 'No inputs to set.';
+      moodEngine.log('log', log);
+
+      let setInputs = [];
+
+      $(target).each(function() {
+
+        $(this).removeClass('dirty');
+
+        let setting = $(this).attr('name');
+        let value = fullSettings[setting];
+
+        if (setInputs.indexOf(setting) < 0) setInputs.push(setting);
+
+        if (($(this).is('select') && typeof(value) === 'boolean') || typeof(value) === 'object') {
+
+          $(this).val(JSON.stringify(value));
+
+        } else if ($(this).is('[type="checkbox"]')) {
+
+          $(this).prop('checked', value);
+
+        } else if ($(this).is('[type="radio"]')) {
+
+          let index;
+
+          if (settings[setting].options) {
+
+            if (Array.isArray(settings[setting].options)) {
+
+              $.each(settings[setting].options, function(key, val) {
+
+                if (val === value) index = key;
+
+              });
+
+              $(`#${setting}_${index}`).prop('checked', true);
+
+            } else {
+
+              $(`#${setting}_${value}`).prop('checked', true);
+
+            }
 
           } else {
+
+            value = JSON.stringify(value);
 
             $(`#${setting}_${value}`).prop('checked', true);
 
           }
 
+        } else if ($(this).is('[type="range"]') && method !== 'initial' && modalOpen) {
+
+          let input = $(this);
+          let max = parseInt(input.attr('max'));
+          let amount = max > 250 ? max / 250 : 1;
+          let currentValue = Math.ceil((parseInt(input.val()) + 1) / amount) * amount;
+          let method = currentValue > value ? 'decrease' : 'increase';
+
+          input.attr('disabled', true);
+
+          let interval = setInterval(() => {
+
+            method === 'decrease' ? currentValue -= amount : currentValue += amount;
+
+            input.val(currentValue);
+
+            if ((method === 'decrease' && currentValue <= value) || (method === 'increase' && currentValue >= value)) {
+
+              clearInterval(interval);
+              input.val(value);
+              input.removeAttr('disabled');
+
+            }
+
+          }, 1);
+
         } else {
 
-          value = JSON.stringify(value);
-
-          $(`#${setting}_${value}`).prop('checked', true);
+          $(this).val(value);
 
         }
 
-      } else if ($(this).is('[type="range"]') && method !== 'initial' && modalOpen) {
+        if ($(this).is('input') && !$(this).is('[type="checkbox"]')) $(this).parent().find('label').addClass('active');
+        $(this).removeClass('invalid');
+        $('select').material_select();
 
-        let input = $(this);
-        let max = parseInt(input.attr('max'));
-        let amount = max > 250 ? max / 250 : 1;
-        let currentValue = Math.ceil((parseInt(input.val()) + 1) / amount) * amount;
-        let method = currentValue > value ? 'decrease' : 'increase';
+        if ($(this).hasClass('chips')) {
 
-        input.attr('disabled', true);
+          let name = $(this).attr('name');
+          let values = [];
 
-        let interval = setInterval(() => {
+          $.each(fullSettings[name], function(key, val) {
 
-          method === 'decrease' ? currentValue -= amount : currentValue += amount;
+            let object = {
+              tag: val
+            }
 
-          input.val(currentValue);
+            values.push(object);
 
-          if ((method === 'decrease' && currentValue <= value) || (method === 'increase' && currentValue >= value)) {
+          });
 
-            clearInterval(interval);
-            input.val(value);
-            input.removeAttr('disabled');
+          // Materialize Chips
 
-          }
+          $(`div[name="${name}"]`).material_chip({
+            data: values
+          });
 
-        }, 1);
+          // Clear chip input values when unfocused
+
+          $('.chips input').focusout(function() {
+
+            $(this).val('');
+
+          });
+
+          // Remove delete button from settings chip
+
+          $('.chip').each(function() {
+
+            if ($(this).contents().get(0).nodeValue === 'settings') $(this).find('i').remove();
+
+          });
+
+        }
+
+      });
+
+      if (logInputs) moodEngine.log('log', `Affected inputs were: ${setInputs.join(', ')}`);
+
+    }
+
+    // Initialize modal plugin
+
+    $('#settings-modal').modal({
+      ready: function(modal, trigger) {
+
+        if (settings.tabs) $('ul.tabs').tabs();
+
+        modalOpen = true;
+        inFlight = false;
+
+        // Initialize the Materialize tooltip plugin
+
+        $('.tooltipped').tooltip({
+          html: true
+        });
+
+      },
+      complete: function() {
+
+        $('.thumb').remove();
+
+        modalOpen = false;
+        inFlight = false;
+
+      }
+    });
+
+    $('#logs-modal').modal({
+      ready: function(modal, trigger) {
+
+        modalOpen = true;
+
+      },
+      complete: function() {
+
+        modalOpen = false;
+
+      }
+    });
+
+    $('#profile-modal').modal({
+      ready: function(modal, trigger) {
+
+        modalOpen = true;
+
+      },
+      complete: function() {
+
+        modalOpen = false;
+
+      }
+    });
+
+    // Function for closing and opening settings panel
+
+    moodEngine.toggleSettings = function(action) {
+
+      if (action) {
+
+        if (action === 'open') moodEngine.setInputs();
+
+        $('#settings-modal').modal(action);
+
+      } else if (modalOpen) {
+
+        $('#settings-modal').modal('close');
 
       } else {
 
-        $(this).val(value);
+        moodEngine.setSettings()
+        moodEngine.setInputs();
+        $('#settings-modal').modal('open');
 
       }
 
-      if ($(this).is('input') && !$(this).is('[type="checkbox"]')) $(this).parent().find('label').addClass('active');
-      $(this).removeClass('invalid');
-      $('select').material_select();
+    };
 
-      if ($(this).hasClass('chips')) {
+    // Function for closing and opening profile panel
 
-        let name = $(this).attr('name');
-        let values = [];
+    moodEngine.toggleProfile = function(action) {
 
-        $.each(fullSettings[name], function(key, val) {
+      if (action) {
 
-          let object = {
-            tag: val
+        $('#profile-modal').modal(action);
+
+      } else {
+
+        modalOpen ? $('#profile-modal').modal('close') : $('#profile-modal').modal('open');
+
+      }
+
+    };
+
+    // Function for closing and opening logs panel
+
+    moodEngine.toggleLogs = function(action) {
+
+      if (action) {
+
+        $('#logs-modal').modal(action);
+
+      } else {
+
+        modalOpen ? $('#logs-modal').modal('close') : $('#logs-modal').modal('open');
+
+      }
+
+    };
+
+    // Initialize sortable menu
+
+    if (settings.button_order) {
+
+      $('#button-menu').sortable({
+        stop: function(event, ui) {
+
+          let array = $('#button-menu').sortable('toArray', {
+            attribute: 'data-button'
+          });
+
+          if (JSON.stringify(array) === JSON.stringify(settings.button_order.value)) {
+
+            localStorage.removeItem('button_order');
+
+          } else {
+
+            localStorage.setItem('button_order', JSON.stringify(array));
           }
 
-          values.push(object);
+          moodEngine.setSettings('buttonsSorted');
 
-        });
-
-        // Materialize Chips
-
-        $(`div[name="${name}"]`).material_chip({
-          data: values
-        });
-
-        // Clear chip input values when unfocused
-
-        $('.chips input').focusout(function() {
-
-          $(this).val('');
-
-        });
-
-        // Remove delete button from settings chip
-
-        $('.chip').each(function() {
-
-          if ($(this).contents().get(0).nodeValue === 'settings') $(this).find('i').remove();
-
-        });
-
-      }
-
-    });
-
-    if (logInputs) moodEngine.log('log', `Affected inputs were: ${setInputs.join(', ')}`);
-
-  }
-
-  // Initialize modal plugin
-
-  $('#settings-modal').modal({
-    ready: function(modal, trigger) {
-
-      if (settings.tabs) $('ul.tabs').tabs();
-
-      modalOpen = true;
-      inFlight = false;
-
-      // Initialize the Materialize tooltip plugin
-
-      $('.tooltipped').tooltip({
-        html: true
+        }
       });
 
-    },
-    complete: function() {
-
-      $('.thumb').remove();
-
-      modalOpen = false;
-      inFlight = false;
-
-    }
-  });
-
-  $('#logs-modal').modal({
-    ready: function(modal, trigger) {
-
-      modalOpen = true;
-
-    },
-    complete: function() {
-
-      modalOpen = false;
-
-    }
-  });
-
-  $('#profile-modal').modal({
-    ready: function(modal, trigger) {
-
-      modalOpen = true;
-
-    },
-    complete: function() {
-
-      modalOpen = false;
-
-    }
-  });
-
-  // Function for closing and opening settings panel
-
-  moodEngine.toggleSettings = function(action) {
-
-    if (action) {
-
-      if (action === 'open') moodEngine.setInputs();
-
-      $('#settings-modal').modal(action);
-
-    } else if (modalOpen) {
-
-      $('#settings-modal').modal('close');
-
-    } else {
-
-      moodEngine.setSettings()
-      moodEngine.setInputs();
-      $('#settings-modal').modal('open');
-
     }
 
-  };
+    // Build settings panel
 
-  // Function for closing and opening profile panel
+    $.each(settings, function(key, val) {
 
-  moodEngine.toggleProfile = function(action) {
+      if (val.user) {
 
-    if (action) {
+        let container = '';
+        let containerClose = '';
+        let input;
+        let label;
+        let inputField = 'input-field';
+        let inputCol = 's12';
+        let resetInput = '';
+        let customHTML = val.custom_html || '';
 
-      $('#profile-modal').modal(action);
+        if (fullSettings.reset_input_buttons) {
 
-    } else {
-
-      modalOpen ? $('#profile-modal').modal('close') : $('#profile-modal').modal('open');
-
-    }
-
-  };
-
-  // Function for closing and opening logs panel
-
-  moodEngine.toggleLogs = function(action) {
-
-    if (action) {
-
-      $('#logs-modal').modal(action);
-
-    } else {
-
-      modalOpen ? $('#logs-modal').modal('close') : $('#logs-modal').modal('open');
-
-    }
-
-  };
-
-  // Initialize sortable menu
-
-  if (settings.button_order) {
-
-    $('#button-menu').sortable({
-      stop: function(event, ui) {
-
-        let array = $('#button-menu').sortable('toArray', {
-          attribute: 'data-button'
-        });
-
-        if (JSON.stringify(array) === JSON.stringify(settings.button_order.value)) {
-
-          localStorage.removeItem('button_order');
-
-        } else {
-
-          localStorage.setItem('button_order', JSON.stringify(array));
-        }
-
-        moodEngine.setSettings('buttonsSorted');
-
-      }
-    });
-
-  }
-
-  // Build settings panel
-
-  $.each(settings, function(key, val) {
-
-    if (val.user) {
-
-      let container = '';
-      let containerClose = '';
-      let input;
-      let label;
-      let inputField = 'input-field';
-      let inputCol = 's12';
-      let resetInput = '';
-      let customHTML = val.custom_html || '';
-
-      if (fullSettings.reset_input_buttons) {
-
-        inputCol = 'm11 s10'
-        resetInput = `
+          inputCol = 'm11 s10'
+          resetInput = `
                   <div class="col m1 s2">
                     <a class="btn-floating btn-flat coloured coloured-background waves-effect reset-input" data-setting="${key}">
                       <i class="center material-icons prefix theme-text" style="color: ${fullSettings.theme_colour}">refresh</i>
                     </a>
                   </div>`;
 
-      }
+        }
 
-      if (val.input === 'select') {
+        if (val.input === 'select') {
 
-        let options = '';
+          let options = '';
 
-        if (val.options && typeof(val.options) === 'object') {
+          if (val.options && typeof(val.options) === 'object') {
 
-          if (Array.isArray(val.options)) {
+            if (Array.isArray(val.options)) {
 
-            $.each(val.options, function(key, val) {
+              $.each(val.options, function(key, val) {
 
-              options += `<option value="${val}">${val}</option>`;
+                options += `<option value="${val}">${val}</option>`;
 
-            });
+              });
+
+            } else {
+
+              $.each(val.options, function(key, val) {
+
+                options += `<option value="${val}">${key}</option>`;
+
+              });
+
+            }
 
           } else {
 
-            $.each(val.options, function(key, val) {
-
-              options += `<option value="${val}">${key}</option>`;
-
-            });
-
-          }
-
-        } else {
-
-          options = `
+            options = `
                   <option value="false">No</option>
                   <option value="true">Yes</option>
                   `;
 
-        }
+          }
 
-        input = `
+          input = `
                   <select class="settings-input" name="${key}">${options}</select>
                   `;
 
-        label = `
+          label = `
                   <label>${val.label}</label>
                   `;
 
-      } else {
+        } else {
 
-        label = `<label for="${key}">${val.label}</label>`;
+          label = `<label for="${key}">${val.label}</label>`;
 
-        switch (val.input) {
+          switch (val.input) {
 
-          case 'chips':
-            input = `<div class="chips left-align settings-input" name="${key}" data-optional="1"></div>`;
-            break;
-          case 'range':
-            input = `<input type="range" name="${key}" class="settings-input" id="${key}" min="${val.min}" max="${val.max}" step="${val.step || 1}">`;
-            container = '<p class="range-field">';
-            containerClose = '</p>';
-            break;
-          case 'checkbox':
-            input = `<input type="checkbox" name="${key}" class="settings-input filled-in" id="${key}">`;
-            container = '<p>';
-            containerClose = '</p>';
-            inputField = '';
-            break;
-          case 'switch':
-            inputField = '';
-            label = '';
-            input = `
+            case 'chips':
+              input = `<div class="chips left-align settings-input" name="${key}" data-optional="1"></div>`;
+              break;
+            case 'range':
+              input = `<input type="range" name="${key}" class="settings-input" id="${key}" min="${val.min}" max="${val.max}" step="${val.step || 1}">`;
+              container = '<p class="range-field">';
+              containerClose = '</p>';
+              break;
+            case 'checkbox':
+              input = `<input type="checkbox" name="${key}" class="settings-input filled-in" id="${key}">`;
+              container = '<p>';
+              containerClose = '</p>';
+              inputField = '';
+              break;
+            case 'switch':
+              inputField = '';
+              label = '';
+              input = `
                       <label class="left">${val.label}</label><br>
                       <div class="switch left">
                         <label>
@@ -1959,46 +1958,46 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
                       </div>
                       <br><br>
                       `;
-            break;
-          case 'radio':
-            input = `<label class="left">${val.label}</label><br>`;
-            label = '';
-            inputField = '';
-            settingKey = key;
+              break;
+            case 'radio':
+              input = `<label class="left">${val.label}</label><br>`;
+              label = '';
+              inputField = '';
+              settingKey = key;
 
-            if (val.options) {
+              if (val.options) {
 
-              if (Array.isArray(val.options)) {
+                if (Array.isArray(val.options)) {
 
-                $.each(val.options, function(key, val) {
+                  $.each(val.options, function(key, val) {
 
-                  input += `
+                    input += `
                           <p>
                             <input type="radio" name="${settingKey}" class="settings-input" value="${val}" id="${settingKey}_${key}">
                             <label for="${settingKey}_${key}">${val}</label>
                           </p>
                           `;
 
-                });
+                  });
 
-              } else {
+                } else {
 
-                $.each(val.options, function(key, val) {
+                  $.each(val.options, function(key, val) {
 
-                  input += `
+                    input += `
                            <p>
                              <input type="radio" name="${settingKey}" class="settings-input" value="${val}" id="${settingKey}_${val}">
                              <label for="${settingKey}_${val}">${key}</label>
                            </p>
                            `;
 
-                });
+                  });
 
-              }
+                }
 
-            } else {
+              } else {
 
-              input += `
+                input += `
                       <p>
                         <input type="radio" name="${settingKey}" class="settings-input" value="false" id="${settingKey}_false">
                         <label for="${settingKey}_false">No</label>
@@ -2009,19 +2008,19 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
                       </p>
                       `;
 
-            }
-            break;
-          default:
-            input = `<input type="${val.input}" name="${key}" class="settings-input mousetrap" id="${key}" data-optional="${val.optional}">`;
-            break;
+              }
+              break;
+            default:
+              input = `<input type="${val.input}" name="${key}" class="settings-input mousetrap" id="${key}" data-optional="${val.optional}">`;
+              break;
+
+          }
 
         }
 
-      }
+        let mobile = val.mobile ? '' : 'hide-on-med-and-down';
 
-      let mobile = val.mobile ? '' : 'hide-on-med-and-down';
-
-      let html = `
+        let html = `
                 <div class="row ${mobile}">
                   <div class="${inputField} col ${inputCol}">
                     ${container}
@@ -2037,657 +2036,214 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
                 <br>
                 `;
 
-      if (settings.tabs) {
+        if (settings.tabs) {
 
-        if (settings.tabs.value.includes(val.tab)) {
+          if (settings.tabs.value.includes(val.tab)) {
 
-          tabHTML[val.tab] += html;
+            tabHTML[val.tab] += html;
 
-        } else if (!val.tab) {
+          } else if (!val.tab) {
 
-          moodEngine.log('warn', `${key} is missing a tab value, it will not be included in the modal.`);
+            moodEngine.log('warn', `${key} is missing a tab value, it will not be included in the modal.`);
+
+          } else {
+
+            moodEngine.log('warn', `${key} has a tab value '${val.tab}' that does not exist, it will not be included in the modal.`);
+
+          }
 
         } else {
 
-          moodEngine.log('warn', `${key} has a tab value '${val.tab}' that does not exist, it will not be included in the modal.`);
+          fullHTML += html;
 
         }
 
-      } else {
-
-        fullHTML += html;
-
       }
-
-    }
-
-  });
-
-  if (settings.tabs) {
-
-    $.each(tabHTML, function(key, val) {
-
-      $(`#tab-${key}`).html(val);
 
     });
 
-    // Preselect last tab
+    if (settings.tabs) {
 
-    if (fullSettings.keep_tab) $(`.tab a[href="${localStorage.getItem('lastTab')}"]`).addClass('active')
+      $.each(tabHTML, function(key, val) {
 
-    // Initialize Tabs
+        $(`#tab-${key}`).html(val);
 
-    $('ul.tabs').tabs();
+      });
 
-  } else {
+      // Preselect last tab
 
-    $('#settings-form').html(fullHTML);
+      if (fullSettings.keep_tab) $(`.tab a[href="${localStorage.getItem('lastTab')}"]`).addClass('active')
 
-  }
+      // Initialize Tabs
 
-  // Record dirty inputs
-
-  $('.settings-input, .input').change(function() {
-
-    if ($(this).is('[type="radio"]')) {
-
-      $(this).closest('.row').find('[type="radio"]').addClass('dirty');
+      $('ul.tabs').tabs();
 
     } else {
+
+      $('#settings-form').html(fullHTML);
+
+    }
+
+    // Record dirty inputs
+
+    $('.settings-input, .input').change(function() {
+
+      if ($(this).is('[type="radio"]')) {
+
+        $(this).closest('.row').find('[type="radio"]').addClass('dirty');
+
+      } else {
+
+        $(this).addClass('dirty');
+
+      }
+
+    });
+
+    // Set desired settings to default using the attr on the default button
+
+    $('.default-button').click(function() {
+
+      let setting = $(this).attr('data-setting');
+      localStorage.removeItem(setting);
+      moodEngine.setSettings(null, `Set ${settings[setting].label} to Default!`);
+
+    });
+
+    // Set backend to local button
+
+    $('#set-backend-local').click(function() {
+
+      localStorage.clear();
+      localStorage.setItem('backend_address', window.location.href);
+      localStorage.setItem('keep_advanced_settings', true);
+      window.location.reload();
+
+    });
+
+    // Manual user sync buttons
+
+    $('.manual-check').click(moodEngine.checkUser);
+
+    // Manual settings sync button
+
+    $('#sync-settings').click(moodEngine.syncSettings);
+
+    // Clear cache button
+
+    $('#clear-cache').click(function() {
+
+      localStorage.removeItem('cachedQuotes');
+      localStorage.removeItem('cachedColours');
+      localStorage.removeItem('cachedSettings');
+
+      window.location.reload();
+
+    });
+
+    // Reset inputs button
+
+    $('.reset-input').click(function() {
+
+      $('input').focusout();
+      $('.thumb').remove();
+
+      let setting = $(this).attr('data-setting');
+      moodEngine.setInputs(setting);
+
+    });
+
+    // Set correct input values
+
+    moodEngine.setInputs(null, 'initial');
+
+    // Add defaults to tooltips
+
+    $('.tooltipped').each(function() {
+
+      let setting = $(this).attr('data-setting');
+      let text = Array.isArray(settings[setting].value) ? settings[setting].value.join(', ') : settings[setting].value;;
+      let value = `${settings[setting].description}<br>The default is ${text}.`;
+
+      $(this).attr('data-tooltip', value);
+
+    });
+
+    moodEngine.changeMenuOrientation = function() {
+
+      $('.fixed-action-btn').toggleClass('horizontal');
+      $('#menu-button .alt-icon').toggleClass('inactive-icon');
+
+      localStorage.setItem('vertical_menu', !$('.fixed-action-btn').hasClass('horizontal'));
+
+      // Keep the button menu closed
+      $('.fixed-action-btn').openFAB();
+
+    };
+
+    // Menu Button
+
+    $('#menu-button').click(function(e) {
+
+      if (e.shiftKey) moodEngine.changeMenuOrientation();
+
+    });
+
+    // When chips are added, clean up values in array
+
+    $('.chips').on('chip.add', function(e, chip) {
 
       $(this).addClass('dirty');
 
-    }
-
-  });
-
-  // Set desired settings to default using the attr on the default button
-
-  $('.default-button').click(function() {
-
-    let setting = $(this).attr('data-setting');
-    localStorage.removeItem(setting);
-    moodEngine.setSettings(null, `Set ${settings[setting].label} to Default!`);
-
-  });
-
-  // Set backend to local button
-
-  $('#set-backend-local').click(function() {
-
-    localStorage.clear();
-    localStorage.setItem('backend_address', window.location.href);
-    localStorage.setItem('keep_advanced_settings', true);
-    window.location.reload();
-
-  });
-
-  // Manual user sync buttons
-
-  $('.manual-check').click(moodEngine.checkUser);
-
-  // Manual settings sync button
-
-  $('#sync-settings').click(moodEngine.syncSettings);
-
-  // Clear cache button
-
-  $('#clear-cache').click(function() {
-
-    localStorage.removeItem('cachedQuotes');
-    localStorage.removeItem('cachedColours');
-    localStorage.removeItem('cachedSettings');
-
-    window.location.reload();
-
-  });
-
-  // Reset inputs button
-
-  $('.reset-input').click(function() {
-
-    $('input').focusout();
-    $('.thumb').remove();
-
-    let setting = $(this).attr('data-setting');
-    moodEngine.setInputs(setting);
-
-  });
-
-  // Set correct input values
-
-  moodEngine.setInputs(null, 'initial');
-
-  // Add defaults to tooltips
-
-  $('.tooltipped').each(function() {
-
-    let setting = $(this).attr('data-setting');
-    let text = Array.isArray(settings[setting].value) ? settings[setting].value.join(', ') : settings[setting].value;;
-    let value = `${settings[setting].description}<br>The default is ${text}.`;
-
-    $(this).attr('data-tooltip', value);
-
-  });
-
-  moodEngine.changeMenuOrientation = function() {
-
-    $('.fixed-action-btn').toggleClass('horizontal');
-    $('#menu-button .alt-icon').toggleClass('inactive-icon');
-
-    localStorage.setItem('vertical_menu', !$('.fixed-action-btn').hasClass('horizontal'));
-
-    // Keep the button menu closed
-    $('.fixed-action-btn').openFAB();
-
-  };
-
-  // Menu Button
-
-  $('#menu-button').click(function(e) {
-
-    if (e.shiftKey) moodEngine.changeMenuOrientation();
-
-  });
-
-  // When chips are added, clean up values in array
-
-  $('.chips').on('chip.add', function(e, chip) {
-
-    $(this).addClass('dirty');
-
-    let name = $(this).attr('name');
-
-    $('.chip').each(function() {
-
-      $(this).contents().get(0).nodeValue = $.trim($(this).contents().get(0).nodeValue);
-
-      if (!$(this).contents().get(0).nodeValue) {
-
-        $(this).remove();
-
-      } else if ($(this).contents().get(0).nodeValue === 'settings') {
-
-        $(this).find('i').remove();
-
-      }
-
-    });
-
-    $.each($(`.chips[name="${name}"]`).material_chip('data'), function(key, val) {
-
-      let newVal = $.trim(val.tag);
-
-      $(`.chips[name="${name}"]`).material_chip('data')[key].tag = newVal;
-
-      if (!newVal) $(`.chips[name="${name}"]`).material_chip('data').splice(key, 1);
-
-    });
-
-  });
-
-  // Don't allow deleting the settings chip
-
-  $('.chips').on('chip.delete', function(e, chip) {
-
-    $(this).addClass('dirty');
-
-    if (chip.tag === 'settings') {
-
-      $('.chips[name="button_order"]').material_chip('data').push({
-        tag: 'settings'
-      });
-
-      if ($('.chips[name="button_order"] .chip').length) {
-
-        $('<div class="chip">settings</div>').insertAfter($('.chips[name="button_order"] .chip').last());
-
-      } else {
-
-        $('.chips[name="button_order"]').prepend('<div class="chip">settings</div>');
-
-      }
-
-    }
-
-  });
-
-  // Allows other functions to check if currently auto reloading
-
-  moodEngine.notAutoReloading = function() {
-
-    return $('main').hasClass('manual-reload');
-
-  };
-
-  let timeout, autoReload;
-
-  // Toggle auto reload when the button is clicked
-
-  moodEngine.toggleAutoReload = function() {
-
-    if (!appError) {
-
-      let toggle = moodEngine.notAutoReloading() ? 'Enabled' : 'Disabled';
-      let icon_text = moodEngine.notAutoReloading() ? 'close' : 'autorenew';
-      let icon = $('#toggle-auto-reload i.main-icon');
-
-      try {
-
-        // Enabling
-
-        if (moodEngine.notAutoReloading()) {
-
-          if (typeof(fullSettings.reload_interval) !== 'number') throw new Error('Reload interval is not a number.');
-
-          $('#go-back-button').addClass('disabled');
-
-          moodEngine.log('log', `Set timeout for auto reload to ${fullSettings.reload_interval}ms.`);
-
-          (autoReload = function() {
-
-            timeout = setTimeout(() => {
-
-              if (!moodEngine.notAutoReloading() && !appError) moodEngine.reload('auto');
-
-              autoReload();
-
-            }, fullSettings.reload_interval);
-
-          })();
-
-          // Disabling
-
-        } else {
-
-          moodEngine.log('log', 'Cleared auto reload timeout.');
-
-          clearTimeout(timeout);
-
-          if (quoteHistory.length > 1) $('#go-back-button').removeClass('disabled');
-
-        }
-
-        icon.text(icon_text);
-        $('main').toggleClass('manual-reload');
-        moodEngine.notify(`Auto Reload ${toggle}!`);
-
-      } catch (error) {
-
-        moodEngine.notify(`Failed To Enable Auto Reload.`);
-        moodEngine.log('error', `Couldn't enable auto reload. ${error}`);
-
-      }
-
-    }
-
-  };
-
-  // Go back when the button is clicked
-
-  moodEngine.rewind = function() {
-
-    if (moodEngine.notAutoReloading() && quoteHistory.length > 1 && !appError) {
-
-      quoteNum = quoteHistory.length - 2;
-      quoteHistory.pop();
-      localStorage.setItem('lastQuote', quoteHistory[quoteNum]);
-
-      colourNum = colourHistory.length - 2;
-      colourHistory.pop();
-      localStorage.setItem('lastColour', colourHistory[colourNum]);
-
-      let quote = quotes[version][fullSettings.quote_language][quoteHistory[quoteNum]];
-      let colour = colours[colourHistory[colourNum]];
-
-      moodEngine.setText(quote);
-      moodEngine.setColour(`#${colour}`);
-
-    }
-
-    if (quoteHistory.length === 1 || !moodEngine.notAutoReloading()) $('#go-back-button').addClass('disabled');
-
-  };
-
-  // Go to starting quote & colour
-
-  moodEngine.fullRewind = function() {
-
-    if (quoteHistory.length > 1) {
-
-      let quote = quoteHistory[0];
-      let colour = colourHistory[0];
-
-      usedQuotes = [];
-      quoteHistory = [];
-      colourHistory = [];
-
-      usedQuotes[0] = quote;
-      quoteHistory[0] = quote;
-      colourHistory[0] = colour;
-
-      moodEngine.setText(quotes[version][fullSettings.quote_language][quote]);
-      moodEngine.setColour(`#${colours[colour]}`);
-
-      $('#go-back-button').addClass('disabled');
-
-    }
-
-  };
-
-  moodEngine.stopSpeaking = function() {
-
-    responsiveVoice.cancel();
-
-    $('#speak-quote-button').removeClass('hide');
-    $('#stop-speaking-button').addClass('hide');
-    $('#stop-speaking-button').off();
-
-  }
-
-  // Speak Quote
-
-  moodEngine.speakQuote = function() {
-
-    if (!appError) {
-
-      try {
-
-        $('#speak-quote-button').addClass('hide');
-        $('#stop-speaking-button').removeClass('hide');
-
-        $('#stop-speaking-button').click(moodEngine.stopSpeaking);
-
-        responsiveVoice.speak($('#quote').text(), fullSettings.speak_voice_accent, {
-          pitch: fullSettings.speak_voice_pitch,
-          rate: fullSettings.speak_voice_rate,
-          onend: moodEngine.stopSpeaking
-        });
-
-      } catch (error) {
-
-        moodEngine.stopSpeaking();
-        moodEngine.log('error', `Cannot speak quote. Error: ${error}`);
-        moodEngine.notify('An Error Occured.');
-
-      }
-
-    }
-
-  };
-
-  // Reload the engine (generate new quote/colour)
-
-  moodEngine.reload = function(method) {
-
-    if (!appError && (moodEngine.notAutoReloading() || method === 'auto')) {
-
-      // Reload the quote
-
-      // If backend has no quotes, throw an error
-
-      if (quotes[version].en.length < 2) throw new Error('There are no quotes.');
-
-      // Clear error message in case there is one
-
-      $('#error-message').empty();
-
-      lastNum = JSON.parse(localStorage.getItem('lastQuote'));
-
-      if (usedQuotes.length === quotes[version].en.length) usedQuotes = [];
-
-      do {
-
-        quoteNum = Math.floor(quotes[version].en.length * Math.random());
-
-      } while (lastNum === quoteNum || usedQuotes.includes(quoteNum));
-
-      // Add quote to used quotes, quote history and localStorage
-
-      usedQuotes.push(quoteNum);
-      quoteHistory.push(quoteNum);
-      localStorage.setItem('lastQuote', quoteNum);
-
-      let quote = quotes[version][fullSettings.quote_language][quoteNum];
-
-      // Display quote on the text element
-
-      moodEngine.setText(quote);
-
-      // Reload the colour
-
-      // If backend has no colours, throw an error
-
-      if (colours.length < 2) throw new Error('There are no colours.');
-
-      lastNum = JSON.parse(localStorage.getItem('lastColour'));
-
-      do {
-
-        colourNum = Math.floor(colours.length * Math.random());
-
-      } while (lastNum === colourNum);
-
-      // Add colour to used colours, colour history and localStorage
-
-      usedColours.push(colourNum);
-      colourHistory.push(colourNum);
-      localStorage.setItem('lastColour', colourNum);
-
-      let colour = colours[colourNum];
-
-      // Apply colour to background
-
-      moodEngine.setColour(`#${colour}`);
-
-      $('.fade-in-on-load').fadeIn();
-
-      if (method !== 'auto') $('#go-back-button').removeClass('disabled');
-    }
-
-  };
-
-  // Try to initialize the MoodEngine if there are no errors
-
-  if (!appError) {
-
-    moodEngine.log('log', 'Initializing MoodEngine...');
-
-    try {
-
-      moodEngine.checkUser();
-      moodEngine.setSettings('engineInitialize');
-      moodEngine.reload('auto');
-      $('#quote').addClass('scale-in');
-      $('#application-preloader').remove();
-      $('.fixed-action-btn').removeClass('hide');
-      moodEngine.log('log', 'MoodEngine initialized.');
-      let totalLoadTime = Math.ceil(performance.now() - totalTime);
-      moodEngine.log('log', `Total load time: ${totalLoadTime}ms.`);
-      if (totalLoadTime > 10000) moodEngine.log('warn', 'Loading took very long, probably due to a slow connection.');
-
-      // If an error, display/log it
-
-    } catch (error) {
-
-      error = error.toString();
-      moodEngine.error('Failed to initialize MoodEngine.', error, 3);
-
-    }
-
-  }
-
-  $('.clickable').click(function() {
-
-    moodEngine.reload();
-
-  });
-
-  // Manually choose the text and colour from the console
-
-  moodEngine.manualReload = function(text, colour) {
-
-    moodEngine.setText(text);
-    moodEngine.setColour(`#${colour}`);
-
-  };
-
-  // Set all settings to default
-
-  moodEngine.setAllDefault = function() {
-
-    $.each(settings, function(key, val) {
-
-      if (!(val.advanced && fullSettings.keep_advanced_settings)) localStorage.removeItem(key);
-
-    });
-
-    moodEngine.setSettings(null, 'Set All Settings to Default!');
-
-  };
-
-  $('.set-all-default').click(function(e) {
-
-    if (e.shiftKey) $('.profile-settings-button.clear-settings').click();
-    moodEngine.setAllDefault();
-
-  });
-
-  // When user trys to save settings
-
-  moodEngine.saveSettings = function() {
-
-    let localSettings = {};
-    let spaceInputs = [];
-    let emptyInputs = [];
-    let invalidInputs = [];
-    let noSave;
-
-    $('.settings-input:not(.select-wrapper)').each(function() {
-
       let name = $(this).attr('name');
 
-      // Construct the object using values
+      $('.chip').each(function() {
 
-      if ($(this).hasClass('chips')) {
+        $(this).contents().get(0).nodeValue = $.trim($(this).contents().get(0).nodeValue);
 
-        let array = [];
+        if (!$(this).contents().get(0).nodeValue) {
 
-        $.each($(this).material_chip('data'), function(key, val) {
+          $(this).remove();
 
-          array.push(val.tag);
+        } else if ($(this).contents().get(0).nodeValue === 'settings') {
 
+          $(this).find('i').remove();
+
+        }
+
+      });
+
+      $.each($(`.chips[name="${name}"]`).material_chip('data'), function(key, val) {
+
+        let newVal = $.trim(val.tag);
+
+        $(`.chips[name="${name}"]`).material_chip('data')[key].tag = newVal;
+
+        if (!newVal) $(`.chips[name="${name}"]`).material_chip('data').splice(key, 1);
+
+      });
+
+    });
+
+    // Don't allow deleting the settings chip
+
+    $('.chips').on('chip.delete', function(e, chip) {
+
+      $(this).addClass('dirty');
+
+      if (chip.tag === 'settings') {
+
+        $('.chips[name="button_order"]').material_chip('data').push({
+          tag: 'settings'
         });
 
-        localSettings[name] = JSON.stringify(array);
+        if ($('.chips[name="button_order"] .chip').length) {
 
-      } else if ($(this).is('[type="checkbox"]')) {
-
-        localSettings[name] = $(this).is(':checked');
-
-      } else if ($(this).is('[type="radio"]')) {
-
-        localSettings[name] = $(`.settings-input[name="${name}"]:checked`).val();
-
-      } else {
-
-        localSettings[name] = $(this).val();
-
-      }
-
-      // Detect if input is blank
-
-      if (!$(this).is('select') && !$(this).is('[type="radio"]')) {
-
-        $(this).addClass('invalid');
-
-        if ($(this).attr('data-optional') !== '1' && ((!$(this).hasClass('chips') && !$(this).val() || $(this).val() === 'null') || $(this).hasClass('chips') && !$(this).material_chip('data').length)) {
-
-          emptyInputs.push(` ${settings[name].label}`);
-          $(this).next('label').attr('data-error', 'Can\'t be empty.');
-
-        } else if ($(this).val().indexOf(' ') >= 0 && !$(this).is('select')) {
-
-          spaceInputs.push(` ${settings[name].label}`);
-          $(this).next('label').attr('data-error', 'Can\'t contain spaces.');
+          $('<div class="chip">settings</div>').insertAfter($('.chips[name="button_order"] .chip').last());
 
         } else {
 
-          $(this).removeClass('invalid');
-          $(this).next('label').attr('data-error', '');
-
-        }
-
-      }
-
-      // Custom Validations
-
-      if ($(this).val() && $(this).val().indexOf(' ') < 0) {
-
-        // Backend Address
-
-        if (name === 'backend_address' && $(this).val() !== backendAddress) {
-
-          if (!$(this).val().startsWith('http://') && !$(this).val().startsWith('https://')) {
-
-            let prefix = $(this).val() === 'improveyourmood.xyz' || pageSSL ? 'https://' : 'http://';
-            $(this).val(prefix + $(this).val());
-            noSave = true;
-            moodEngine.saveSettings();
-
-          } else if (pageSSL && $(this).val().startsWith('http://')) {
-
-            invalidInputs.push(`${settings[name].label} Must Be SSL Enabled.`);
-
-          } else {
-
-            moodEngine.log('log', `Testing custom back-end address '${$(this).val()}'...`);
-
-            $.ajaxSetup({
-              async: false
-            });
-
-            $.getJSON(`${$(this).val()}/api/get/colours/index.php`).fail((data) => {
-
-              let sslMessage = pageSSL && !$(this).val().startsWith('https://') ? ' Make Sure It Is SSL Enabled.' : '';
-              moodEngine.log('warn', `Custom back-end address '${$(this).val()}' is invalid.`);
-              $(this).addClass('invalid');
-              $(this).next('label').attr('data-error', 'Address is invalid.');
-              invalidInputs.push(`${settings[name].label} '${$(this).val()}' Is Invalid.${sslMessage}`);
-
-            });
-
-            $.ajaxSetup({
-              async: true
-            });
-
-          }
-
-        }
-
-        // Button Order
-
-        if (name === 'button_order' && settings.button_order.value.includes('settings') && !localSettings.button_order.includes('settings')) {
-
-          $(this).addClass('invalid');
-          invalidInputs.push(`${settings[name].label} Needs to Include Settings`);
-
-        }
-
-        // User Check interval
-
-        if (name.endsWith('_sync_interval') && parseInt($(this).val()) && $(this).val() < 1000) {
-
-          $(this).addClass('invalid');
-          invalidInputs.push(`${settings[name].label} Must Be Either 0 or 1000+`);
-
-        }
-
-        // Quote Language
-
-        if (name === 'quote_language' && $(this).is(':checked') && quotes.Improve[$(this).val()].length !== quotes.Improve.en.length) {
-
-          invalidInputs.push(`Translations Are Still Loading. Please Try Again Shortly.`);
+          $('.chips[name="button_order"]').prepend('<div class="chip">settings</div>');
 
         }
 
@@ -2695,458 +2251,903 @@ $.getJSON(`${backendAddress}/api/get/settings/index.php`).fail((data) => {
 
     });
 
-    // If all inputs are not blank nor invalid
+    // Allows other functions to check if currently auto reloading
 
-    if (!spaceInputs.length && !emptyInputs.length && !invalidInputs.length && !noSave) {
+    moodEngine.notAutoReloading = function() {
 
-      try {
+      return $('main').hasClass('manual-reload');
 
-        $.each(localSettings, function(key, val) {
+    };
 
-          let length = JSON.stringify(val).length;
-          let defaultValue = profileSettings[key] === undefined ? settings[key].value : profileSettings[key];
+    let timeout, autoReload;
 
-          if (length > 500) throw new Error(`Excessively long value length of ${length}.`);
+    // Toggle auto reload when the button is clicked
 
-          // If the set value is the same as the default, just remove it from localStorage and use backend value
+    moodEngine.toggleAutoReload = function() {
 
-          if (val === defaultValue || val === JSON.stringify(defaultValue) || `[${val}]` === JSON.stringify(defaultValue)) {
+      if (!appError) {
 
-            localStorage.removeItem(key);
-
-            // Otherwise set it in localStorage
-
-          } else {
-
-            localStorage.setItem(key, val);
-
-          }
-
-        });
-
-        // Set settings for new ones to come into effect
-
-        moodEngine.setSettings(null, 'Settings Saved!');
-        moodEngine.toggleSettings('close');
-
-        // Catch any unexpected errors and display/log them
-
-      } catch (error) {
-
-        moodEngine.notify('Unable to Save Settings. An Error Occurred.');
-        moodEngine.log('error', `Couldn't save settings. ${error}`);
-
-      }
-
-    } else {
-
-      if (spaceInputs.length) {
-
-        if (spaceInputs.length === 1) {
-
-          moodEngine.notify(`${spaceInputs} Contains Spaces.`);
-
-        } else {
-
-          moodEngine.notify(`${spaceInputs.length} Fields Contain Spaces.`);
-
-        }
-
-      }
-
-      if (emptyInputs.length) {
-
-        if (emptyInputs.length === 1) {
-
-          moodEngine.notify(`${emptyInputs} Is Empty.`);
-
-        } else {
-
-          moodEngine.notify(`${emptyInputs.length} Fields Are Empty.`);
-
-        }
-
-      }
-
-      if (invalidInputs.length) {
-
-        $.each(invalidInputs, function(key, val) {
-
-          moodEngine.notify(val);
-
-        });
-
-      }
-
-    }
-
-  };
-
-  $('#save-settings-button').click(function(e) {
-
-    moodEngine.saveSettings();
-
-    if (e.shiftKey) window.location.reload();
-
-  });
-
-  // Forms are just for show, don't allow submitting
-
-  $('form').submit(function() {
-
-    return false;
-
-  });
-
-  // Switch Version
-
-  moodEngine.switchVersion = function(specifiedVersion) {
-
-    if (!appError && !disableSwitch) {
-
-      if (specifiedVersion) {
-
-        version = specifiedVersion === 'Decrease' ? 'Decrease' : 'Improve';
-        otherVersion = specifiedVersion === 'Decrease' ? 'Improve' : 'Decrease';
-
-      } else {
-
-        version = version === 'Improve' ? 'Decrease' : 'Improve';
-        otherVersion = version === 'Improve' ? 'Improve' : 'Decrease';
-
-      }
-
-      quoteHistory = [];
-      colourHistory = [];
-      usedQuotes = [];
-
-      $('title').text(`${version} Your Mood`);
-      $('#logo-version').text(version.toLowerCase());
-      $('#footer-version').text(version);
-      $('link[rel="icon"], link[rel="shortcut icon"]').attr('href', `assets/${version.toLowerCase()}_favicon.ico`);
-
-      moodEngine.reload('auto');
-      moodEngine.rewind();
-
-      moodEngine.log('log', `Switched version to ${version}.`);
-      moodEngine.notify(`Switched to ${version} Your Mood!`);
-
-    }
-
-  };
-
-  // Log Searching
-
-  $('#logs-search').on('keypress keydown keyup change', function() {
-
-    $('#logs-search-results').empty();
-
-    let value = $(this).val().toLowerCase();
-
-    if (value) {
-
-      $('#visible-logs').addClass('hide');
-
-      let string = '';
-      let results = 0;
-
-      $('.log').each(function() {
-
-        if ($(this).find('.content').text().toLowerCase().includes(value)) {
-
-          string += `${$(this).html()}<br>`;
-          results++;
-
-        }
-
-      });
-
-      if (results) {
-
-        $('#logs-search-results').html(string);
-
-      } else {
-
-        $('#logs-search-results').html('<h5>No Results</h5>');
-
-      }
-
-      $('#results-number').text(results);
-
-    } else {
-
-      $('#visible-logs').removeClass('hide');
-      $('#results-number').text(moodLogs.length);
-
-    }
-
-  });
-
-  moodEngine.profileError = function(error) {
-
-    if (error) {
-
-      $('#profile-error').text(error);
-      $('#clear-profile-error').removeClass('hide');
-
-    } else {
-
-      $('#profile-error').empty();
-      $('.validation-errors').empty();
-      $('#clear-profile-error').addClass('hide');
-
-    }
-
-  }
-
-  $('#clear-profile-error').click(function() {
-
-    moodEngine.profileError();
-
-  });
-
-  moodEngine.goToLogin = function() {
-
-    moodEngine.profileError();
-    $('.signup').addClass('hide-also');
-    $('.login').removeClass('hide-also');
-
-  }
-
-  $('#go-to-login').click(function() {
-
-    moodEngine.goToLogin();
-
-  });
-
-  $('#go-to-signup').click(function() {
-
-    moodEngine.profileError();
-    $('.login').addClass('hide-also');
-    $('.signup').removeClass('hide-also');
-
-  });
-
-  // User Signup
-
-  moodEngine.signUp = function() {
-
-    let button = Ladda.create($('#profile-signup-button')[0]);
-
-    button.start();
-    moodEngine.profileError();
-
-    $('.validation-errors').empty();
-
-    $.ajax({
-      data: $('#signup').serialize(),
-      method: 'POST',
-      url: `admin/signup/signup.php`,
-      success: function(response) {
-
-        $('.validation-errors').empty();
+        let toggle = moodEngine.notAutoReloading() ? 'Enabled' : 'Disabled';
+        let icon_text = moodEngine.notAutoReloading() ? 'close' : 'autorenew';
+        let icon = $('#toggle-auto-reload i.main-icon');
 
         try {
 
-          response = JSON.parse(response);
+          // Enabling
 
-          $.each(response, function(key, val) {
+          if (moodEngine.notAutoReloading()) {
 
-            let field = Object.keys(val)[0];
-            let append = $(`.validation-errors[data-field="${field}"]`).is(':empty') ? val[field] : `<br>${val[field]}`;
-            $(`.validation-errors[data-field="${field}"]`).append(append);
+            if (typeof(fullSettings.reload_interval) !== 'number') throw new Error('Reload interval is not a number.');
 
+            $('#go-back-button').addClass('disabled');
+
+            moodEngine.log('log', `Set timeout for auto reload to ${fullSettings.reload_interval}ms.`);
+
+            (autoReload = function() {
+
+              timeout = setTimeout(() => {
+
+                if (!moodEngine.notAutoReloading() && !appError) moodEngine.reload('auto');
+
+                autoReload();
+
+              }, fullSettings.reload_interval);
+
+            })();
+
+            // Disabling
+
+          } else {
+
+            moodEngine.log('log', 'Cleared auto reload timeout.');
+
+            clearTimeout(timeout);
+
+            if (quoteHistory.length > 1) $('#go-back-button').removeClass('disabled');
+
+          }
+
+          icon.text(icon_text);
+          $('main').toggleClass('manual-reload');
+          moodEngine.notify(`Auto Reload ${toggle}!`);
+
+        } catch (error) {
+
+          moodEngine.notify(`Failed To Enable Auto Reload.`);
+          moodEngine.log('error', `Couldn't enable auto reload. ${error}`);
+
+        }
+
+      }
+
+    };
+
+    // Go back when the button is clicked
+
+    moodEngine.rewind = function() {
+
+      if (moodEngine.notAutoReloading() && quoteHistory.length > 1 && !appError) {
+
+        quoteNum = quoteHistory.length - 2;
+        quoteHistory.pop();
+        localStorage.setItem('lastQuote', quoteHistory[quoteNum]);
+
+        colourNum = colourHistory.length - 2;
+        colourHistory.pop();
+        localStorage.setItem('lastColour', colourHistory[colourNum]);
+
+        let quote = quotes[version][fullSettings.quote_language][quoteHistory[quoteNum]];
+        let colour = colours[colourHistory[colourNum]];
+
+        moodEngine.setText(quote);
+        moodEngine.setColour(`#${colour}`);
+
+      }
+
+      if (quoteHistory.length === 1 || !moodEngine.notAutoReloading()) $('#go-back-button').addClass('disabled');
+
+    };
+
+    // Go to starting quote & colour
+
+    moodEngine.fullRewind = function() {
+
+      if (quoteHistory.length > 1) {
+
+        let quote = quoteHistory[0];
+        let colour = colourHistory[0];
+
+        usedQuotes = [];
+        quoteHistory = [];
+        colourHistory = [];
+
+        usedQuotes[0] = quote;
+        quoteHistory[0] = quote;
+        colourHistory[0] = colour;
+
+        moodEngine.setText(quotes[version][fullSettings.quote_language][quote]);
+        moodEngine.setColour(`#${colours[colour]}`);
+
+        $('#go-back-button').addClass('disabled');
+
+      }
+
+    };
+
+    moodEngine.stopSpeaking = function() {
+
+      responsiveVoice.cancel();
+
+      $('#speak-quote-button').removeClass('hide');
+      $('#stop-speaking-button').addClass('hide');
+      $('#stop-speaking-button').off();
+
+    }
+
+    // Speak Quote
+
+    moodEngine.speakQuote = function() {
+
+      if (!appError) {
+
+        try {
+
+          $('#speak-quote-button').addClass('hide');
+          $('#stop-speaking-button').removeClass('hide');
+
+          $('#stop-speaking-button').click(moodEngine.stopSpeaking);
+
+          responsiveVoice.speak($('#quote').text(), fullSettings.speak_voice_accent, {
+            pitch: fullSettings.speak_voice_pitch,
+            rate: fullSettings.speak_voice_rate,
+            onend: moodEngine.stopSpeaking
           });
 
         } catch (error) {
 
-          moodEngine.checkUser();
-          $('.signup input').val('');
-          $('.signup').addClass('hide-also');
+          moodEngine.stopSpeaking();
+          moodEngine.log('error', `Cannot speak quote. Error: ${error}`);
+          moodEngine.notify('An Error Occured.');
 
         }
 
-        button.stop();
+      }
+
+    };
+
+    // Reload the engine (generate new quote/colour)
+
+    moodEngine.reload = function(method) {
+
+      if (!appError && (moodEngine.notAutoReloading() || method === 'auto')) {
+
+        // Reload the quote
+
+        // If backend has no quotes, throw an error
+
+        if (quotes[version].en.length < 2) throw new Error('There are no quotes.');
+
+        // Clear error message in case there is one
+
+        $('#error-message').empty();
+
+        lastNum = JSON.parse(localStorage.getItem('lastQuote'));
+
+        if (usedQuotes.length === quotes[version].en.length) usedQuotes = [];
+
+        do {
+
+          quoteNum = Math.floor(quotes[version].en.length * Math.random());
+
+        } while (lastNum === quoteNum || usedQuotes.includes(quoteNum));
+
+        // Add quote to used quotes, quote history and localStorage
+
+        usedQuotes.push(quoteNum);
+        quoteHistory.push(quoteNum);
+        localStorage.setItem('lastQuote', quoteNum);
+
+        let quote = quotes[version][fullSettings.quote_language][quoteNum];
+
+        // Display quote on the text element
+
+        moodEngine.setText(quote);
+
+        // Reload the colour
+
+        // If backend has no colours, throw an error
+
+        if (colours.length < 2) throw new Error('There are no colours.');
+
+        lastNum = JSON.parse(localStorage.getItem('lastColour'));
+
+        do {
+
+          colourNum = Math.floor(colours.length * Math.random());
+
+        } while (lastNum === colourNum);
+
+        // Add colour to used colours, colour history and localStorage
+
+        usedColours.push(colourNum);
+        colourHistory.push(colourNum);
+        localStorage.setItem('lastColour', colourNum);
+
+        let colour = colours[colourNum];
+
+        // Apply colour to background
+
+        moodEngine.setColour(`#${colour}`);
+
+        $('.fade-in-on-load').fadeIn();
+
+        if (method !== 'auto') $('#go-back-button').removeClass('disabled');
+      }
+
+    };
+
+    // Try to initialize the MoodEngine if there are no errors
+
+    if (!appError) {
+
+      moodEngine.log('log', 'Initializing MoodEngine...');
+
+      try {
+
+        moodEngine.checkUser();
+        moodEngine.setSettings('engineInitialize');
+        moodEngine.reload('auto');
+        $('#quote').addClass('scale-in');
+        $('#application-preloader').remove();
+        $('.fixed-action-btn').removeClass('hide');
+        moodEngine.log('log', 'MoodEngine initialized.');
+        let totalLoadTime = Math.ceil(performance.now() - totalTime);
+        moodEngine.log('log', `Total load time: ${totalLoadTime}ms.`);
+        if (totalLoadTime > 10000) moodEngine.log('warn', 'Loading took very long, probably due to a slow connection.');
+
+        // If an error, display/log it
+
+      } catch (error) {
+
+        error = error.toString();
+        moodEngine.error('Failed to initialize MoodEngine.', error, 3);
 
       }
+
+    }
+
+    $('.clickable').click(function() {
+
+      moodEngine.reload();
+
     });
 
-  }
+    // Manually choose the text and colour from the console
 
-  $('#profile-signup-button').click(moodEngine.signUp);
+    moodEngine.manualReload = function(text, colour) {
 
-  $.get('api/verify/admin_signup', (data) => {
+      moodEngine.setText(text);
+      moodEngine.setColour(`#${colour}`);
 
-    if (data === 'true') $('#admin-signup').removeClass('hide');
+    };
 
-  });
+    // Set all settings to default
 
-  $('#view-logs').click(function() {
+    moodEngine.setAllDefault = function() {
 
-    moodEngine.toggleProfile('close');
-    moodEngine.toggleLogs('open');
+      $.each(settings, function(key, val) {
 
-  });
+        if (!(val.advanced && fullSettings.keep_advanced_settings)) localStorage.removeItem(key);
 
-  // User Login
+      });
 
-  moodEngine.logIn = function() {
+      moodEngine.setSettings(null, 'Set All Settings to Default!');
 
-    let button = Ladda.create($('#profile-login-button')[0]);
-    let button2 = $('#profile-button').length ? 'profile-button' : 'profile-login-button';
-    button2 = Ladda.create($(`#${button2}`)[0]);
+    };
 
-    button.start();
-    button2.start();
+    $('.set-all-default').click(function(e) {
 
-    moodEngine.profileError();
+      if (e.shiftKey) $('.profile-settings-button.clear-settings').click();
+      moodEngine.setAllDefault();
 
-    $.ajax({
-      data: $('#login').serialize(),
-      method: 'POST',
-      url: `admin/login/authenticate.php`,
-      success: function(response) {
-        if (response === 'success') {
+    });
 
-          moodEngine.checkUser();
+    // When user trys to save settings
+
+    moodEngine.saveSettings = function() {
+
+      let localSettings = {};
+      let spaceInputs = [];
+      let emptyInputs = [];
+      let invalidInputs = [];
+      let noSave;
+
+      $('.settings-input:not(.select-wrapper)').each(function() {
+
+        let name = $(this).attr('name');
+
+        // Construct the object using values
+
+        if ($(this).hasClass('chips')) {
+
+          let array = [];
+
+          $.each($(this).material_chip('data'), function(key, val) {
+
+            array.push(val.tag);
+
+          });
+
+          localSettings[name] = JSON.stringify(array);
+
+        } else if ($(this).is('[type="checkbox"]')) {
+
+          localSettings[name] = $(this).is(':checked');
+
+        } else if ($(this).is('[type="radio"]')) {
+
+          localSettings[name] = $(`.settings-input[name="${name}"]:checked`).val();
 
         } else {
 
-          moodEngine.profileError(response);
+          localSettings[name] = $(this).val();
 
         }
 
-        button.stop();
-        button2.stop();
+        // Detect if input is blank
 
-      }
-    });
+        if (!$(this).is('select') && !$(this).is('[type="radio"]')) {
 
-  }
+          $(this).addClass('invalid');
 
-  $('#profile-login-button').click(moodEngine.logIn);
+          if ($(this).attr('data-optional') !== '1' && ((!$(this).hasClass('chips') && !$(this).val() || $(this).val() === 'null') || $(this).hasClass('chips') && !$(this).material_chip('data').length)) {
 
-  $('#login').keydown(function(e) {
+            emptyInputs.push(` ${settings[name].label}`);
+            $(this).next('label').attr('data-error', 'Can\'t be empty.');
 
-    if (e.keyCode === 13) moodEngine.logIn();
+          } else if ($(this).val().indexOf(' ') >= 0 && !$(this).is('select')) {
 
-  });
+            spaceInputs.push(` ${settings[name].label}`);
+            $(this).next('label').attr('data-error', 'Can\'t contain spaces.');
 
-  $('#signup').keydown(function(e) {
+          } else {
 
-    if (e.keyCode === 13) moodEngine.signUp();
+            $(this).removeClass('invalid');
+            $(this).next('label').attr('data-error', '');
 
-  });
+          }
 
-  // User Logout
+        }
 
-  moodEngine.logOut = function() {
+        // Custom Validations
 
-    let button = Ladda.create($('#profile-logout-button')[0]);
-    let button2 = $('#profile-button').length ? 'profile-button' : 'profile-logout-button';
-    button2 = Ladda.create($(`#${button2}`)[0]);
+        if ($(this).val() && $(this).val().indexOf(' ') < 0) {
 
-    button.start();
-    button2.start();
+          // Backend Address
 
-    moodEngine.profileError();
-    moodEngine.goToLogin();
+          if (name === 'backend_address' && $(this).val() !== backendAddress) {
 
-    let logoutSequence = setInterval(() => {
+            if (!$(this).val().startsWith('http://') && !$(this).val().startsWith('https://')) {
 
-      if (!Object.keys(currentUser).length) {
+              let prefix = $(this).val() === 'improveyourmood.xyz' || pageSSL ? 'https://' : 'http://';
+              $(this).val(prefix + $(this).val());
+              noSave = true;
+              moodEngine.saveSettings();
 
-        clearInterval(logoutSequence);
-        moodEngine.log('log', 'Logged out.');
+            } else if (pageSSL && $(this).val().startsWith('http://')) {
+
+              invalidInputs.push(`${settings[name].label} Must Be SSL Enabled.`);
+
+            } else {
+
+              moodEngine.log('log', `Testing custom back-end address '${$(this).val()}'...`);
+
+              $.ajaxSetup({
+                async: false
+              });
+
+              $.getJSON(`${$(this).val()}/api/get/colours/index.php`).fail((data) => {
+
+                let sslMessage = pageSSL && !$(this).val().startsWith('https://') ? ' Make Sure It Is SSL Enabled.' : '';
+                moodEngine.log('warn', `Custom back-end address '${$(this).val()}' is invalid.`);
+                $(this).addClass('invalid');
+                $(this).next('label').attr('data-error', 'Address is invalid.');
+                invalidInputs.push(`${settings[name].label} '${$(this).val()}' Is Invalid.${sslMessage}`);
+
+              });
+
+              $.ajaxSetup({
+                async: true
+              });
+
+            }
+
+          }
+
+          // Button Order
+
+          if (name === 'button_order' && settings.button_order.value.includes('settings') && !localSettings.button_order.includes('settings')) {
+
+            $(this).addClass('invalid');
+            invalidInputs.push(`${settings[name].label} Needs to Include Settings`);
+
+          }
+
+          // User Check interval
+
+          if (name.endsWith('_sync_interval') && parseInt($(this).val()) && $(this).val() < 1000) {
+
+            $(this).addClass('invalid');
+            invalidInputs.push(`${settings[name].label} Must Be Either 0 or 1000+`);
+
+          }
+
+          // Quote Language
+
+          if (name === 'quote_language' && $(this).is(':checked') && quotes.Improve[$(this).val()].length !== quotes.Improve.en.length) {
+
+            invalidInputs.push(`Translations Are Still Loading. Please Try Again Shortly.`);
+
+          }
+
+        }
+
+      });
+
+      // If all inputs are not blank nor invalid
+
+      if (!spaceInputs.length && !emptyInputs.length && !invalidInputs.length && !noSave) {
+
+        try {
+
+          $.each(localSettings, function(key, val) {
+
+            let length = JSON.stringify(val).length;
+            let defaultValue = profileSettings[key] === undefined ? settings[key].value : profileSettings[key];
+
+            if (length > 500) throw new Error(`Excessively long value length of ${length}.`);
+
+            // If the set value is the same as the default, just remove it from localStorage and use backend value
+
+            if (val === defaultValue || val === JSON.stringify(defaultValue) || `[${val}]` === JSON.stringify(defaultValue)) {
+
+              localStorage.removeItem(key);
+
+              // Otherwise set it in localStorage
+
+            } else {
+
+              localStorage.setItem(key, val);
+
+            }
+
+          });
+
+          // Set settings for new ones to come into effect
+
+          moodEngine.setSettings(null, 'Settings Saved!');
+          moodEngine.toggleSettings('close');
+
+          // Catch any unexpected errors and display/log them
+
+        } catch (error) {
+
+          moodEngine.notify('Unable to Save Settings. An Error Occurred.');
+          moodEngine.log('error', `Couldn't save settings. ${error}`);
+
+        }
 
       } else {
 
-        $.ajax({
-          data: {
-            no_message: true
-          },
-          method: 'POST',
-          url: `admin/logout/index.php`,
-          complete: function() {
-            button.stop();
-            button2.stop();
-          },
-          success: function() {
-            moodEngine.checkUser();
-          },
-          error: function() {
-            moodEngine.profileError('Failed to log out.');
-            moodEngine.log('error', 'Failed to log out.')
+        if (spaceInputs.length) {
+
+          if (spaceInputs.length === 1) {
+
+            moodEngine.notify(`${spaceInputs} Contains Spaces.`);
+
+          } else {
+
+            moodEngine.notify(`${spaceInputs.length} Fields Contain Spaces.`);
+
           }
-        });
+
+        }
+
+        if (emptyInputs.length) {
+
+          if (emptyInputs.length === 1) {
+
+            moodEngine.notify(`${emptyInputs} Is Empty.`);
+
+          } else {
+
+            moodEngine.notify(`${emptyInputs.length} Fields Are Empty.`);
+
+          }
+
+        }
+
+        if (invalidInputs.length) {
+
+          $.each(invalidInputs, function(key, val) {
+
+            moodEngine.notify(val);
+
+          });
+
+        }
 
       }
 
-    }, 400);
+    };
 
-  }
+    $('#save-settings-button').click(function(e) {
 
-  $('#profile-logout-button').click(moodEngine.logOut);
+      moodEngine.saveSettings();
 
-  $('#download-profile-settings').click(function() {
+      if (e.shiftKey) window.location.reload();
 
-    moodEngine.checkUser('downloadSettings');
+    });
 
-  });
+    // Forms are just for show, don't allow submitting
 
-  $('.profile-settings-button').click(function(e) {
+    $('form').submit(function() {
 
-    let object = {};
-    let successLog;
-    let successToast;
-    let failLog;
-    let button = Ladda.create($(this)[0]);
+      return false;
 
-    button.start();
+    });
 
-    if ($(this).hasClass('clear-settings')) {
+    // Switch Version
 
-      successLog = 'Successfully cleared settings from profile.';
-      successToast = 'Settings Cleared Successfully!';
-      failLog = 'Failed to clear settings from profile.';
+    moodEngine.switchVersion = function(specifiedVersion) {
 
-    } else {
+      if (!appError && !disableSwitch) {
 
-      successLog = 'Successfully saved settings to profile.';
-      successToast = 'Settings Saved Successfully!';
-      failLog = 'Failed to save settings to profile.';
+        if (specifiedVersion) {
 
-      $.each(localStorage, (key, val) => {
+          version = specifiedVersion === 'Decrease' ? 'Decrease' : 'Improve';
+          otherVersion = specifiedVersion === 'Decrease' ? 'Improve' : 'Decrease';
 
-        if (settings[key] && key !== 'backend_address') object[key] = val;
+        } else {
 
+          version = version === 'Improve' ? 'Decrease' : 'Improve';
+          otherVersion = version === 'Improve' ? 'Improve' : 'Decrease';
+
+        }
+
+        quoteHistory = [];
+        colourHistory = [];
+        usedQuotes = [];
+
+        $('title').text(`${version} Your Mood`);
+        $('#logo-version').text(version.toLowerCase());
+        $('#footer-version').text(version);
+        $('link[rel="icon"], link[rel="shortcut icon"]').attr('href', `assets/${version.toLowerCase()}_favicon.ico`);
+
+        moodEngine.reload('auto');
+        moodEngine.rewind();
+
+        moodEngine.log('log', `Switched version to ${version}.`);
+        moodEngine.notify(`Switched to ${version} Your Mood!`);
+
+      }
+
+    };
+
+    // Log Searching
+
+    $('#logs-search').on('keypress keydown keyup change', function() {
+
+      $('#logs-search-results').empty();
+
+      let value = $(this).val().toLowerCase();
+
+      if (value) {
+
+        $('#visible-logs').addClass('hide');
+
+        let string = '';
+        let results = 0;
+
+        $('.log').each(function() {
+
+          if ($(this).find('.content').text().toLowerCase().includes(value)) {
+
+            string += `${$(this).html()}<br>`;
+            results++;
+
+          }
+
+        });
+
+        if (results) {
+
+          $('#logs-search-results').html(string);
+
+        } else {
+
+          $('#logs-search-results').html('<h5>No Results</h5>');
+
+        }
+
+        $('#results-number').text(results);
+
+      } else {
+
+        $('#visible-logs').removeClass('hide');
+        $('#results-number').text(moodLogs.length);
+
+      }
+
+    });
+
+    moodEngine.profileError = function(error) {
+
+      if (error) {
+
+        $('#profile-error').text(error);
+        $('#clear-profile-error').removeClass('hide');
+
+      } else {
+
+        $('#profile-error').empty();
+        $('.validation-errors').empty();
+        $('#clear-profile-error').addClass('hide');
+
+      }
+
+    }
+
+    $('#clear-profile-error').click(function() {
+
+      moodEngine.profileError();
+
+    });
+
+    moodEngine.goToLogin = function() {
+
+      moodEngine.profileError();
+      $('.signup').addClass('hide-also');
+      $('.login').removeClass('hide-also');
+
+    }
+
+    $('#go-to-login').click(function() {
+
+      moodEngine.goToLogin();
+
+    });
+
+    $('#go-to-signup').click(function() {
+
+      moodEngine.profileError();
+      $('.login').addClass('hide-also');
+      $('.signup').removeClass('hide-also');
+
+    });
+
+    // User Signup
+
+    moodEngine.signUp = function() {
+
+      let button = Ladda.create($('#profile-signup-button')[0]);
+
+      button.start();
+      moodEngine.profileError();
+
+      $('.validation-errors').empty();
+
+      $.ajax({
+        data: $('#signup').serialize(),
+        method: 'POST',
+        url: `admin/signup/signup.php`,
+        success: function(response) {
+
+          $('.validation-errors').empty();
+
+          try {
+
+            response = JSON.parse(response);
+
+            $.each(response, function(key, val) {
+
+              let field = Object.keys(val)[0];
+              let append = $(`.validation-errors[data-field="${field}"]`).is(':empty') ? val[field] : `<br>${val[field]}`;
+              $(`.validation-errors[data-field="${field}"]`).append(append);
+
+            });
+
+          } catch (error) {
+
+            moodEngine.checkUser();
+            $('.signup input').val('');
+            $('.signup').addClass('hide-also');
+
+          }
+
+          button.stop();
+
+        }
       });
 
     }
 
-    $.ajax({
-      data: {
-        id: currentUser.id,
-        settings: JSON.stringify(object)
-      },
-      method: 'POST',
-      url: `api/update/user_settings/index.php`,
-      complete: function() {
-        button.stop();
-      },
-      success: function(response) {
-        if (response === 'success') {
-          moodEngine.log('log', successLog);
-          moodEngine.notify(successToast);
-          moodEngine.checkUser();
-        } else {
-          moodEngine.profileError(response);
+    $('#profile-signup-button').click(moodEngine.signUp);
+
+    $.get('api/verify/admin_signup', (data) => {
+
+      if (data === 'true') $('#admin-signup').removeClass('hide');
+
+    });
+
+    $('#view-logs').click(function() {
+
+      moodEngine.toggleProfile('close');
+      moodEngine.toggleLogs('open');
+
+    });
+
+    // User Login
+
+    moodEngine.logIn = function() {
+
+      let button = Ladda.create($('#profile-login-button')[0]);
+      let button2 = $('#profile-button').length ? 'profile-button' : 'profile-login-button';
+      button2 = Ladda.create($(`#${button2}`)[0]);
+
+      button.start();
+      button2.start();
+
+      moodEngine.profileError();
+
+      $.ajax({
+        data: $('#login').serialize(),
+        method: 'POST',
+        url: `admin/login/authenticate.php`,
+        success: function(response) {
+          if (response === 'success') {
+
+            moodEngine.checkUser();
+
+          } else {
+
+            moodEngine.profileError(response);
+
+          }
+
+          button.stop();
+          button2.stop();
+
         }
-      },
-      error: function(response) {
-        moodEngine.profileError(failLog);
-        moodEngine.log('error', failLog);
+      });
+
+    }
+
+    $('#profile-login-button').click(moodEngine.logIn);
+
+    $('#login').keydown(function(e) {
+
+      if (e.keyCode === 13) moodEngine.logIn();
+
+    });
+
+    $('#signup').keydown(function(e) {
+
+      if (e.keyCode === 13) moodEngine.signUp();
+
+    });
+
+    // User Logout
+
+    moodEngine.logOut = function() {
+
+      let button = Ladda.create($('#profile-logout-button')[0]);
+      let button2 = $('#profile-button').length ? 'profile-button' : 'profile-logout-button';
+      button2 = Ladda.create($(`#${button2}`)[0]);
+
+      button.start();
+      button2.start();
+
+      moodEngine.profileError();
+      moodEngine.goToLogin();
+
+      let logoutSequence = setInterval(() => {
+
+        if (!Object.keys(currentUser).length) {
+
+          clearInterval(logoutSequence);
+          moodEngine.log('log', 'Logged out.');
+
+        } else {
+
+          $.ajax({
+            data: {
+              no_message: true
+            },
+            method: 'POST',
+            url: `admin/logout/index.php`,
+            complete: function() {
+              button.stop();
+              button2.stop();
+            },
+            success: function() {
+              moodEngine.checkUser();
+            },
+            error: function() {
+              moodEngine.profileError('Failed to log out.');
+              moodEngine.log('error', 'Failed to log out.')
+            }
+          });
+
+        }
+
+      }, 400);
+
+    }
+
+    $('#profile-logout-button').click(moodEngine.logOut);
+
+    $('#download-profile-settings').click(function() {
+
+      moodEngine.checkUser('downloadSettings');
+
+    });
+
+    $('.profile-settings-button').click(function(e) {
+
+      let object = {};
+      let successLog;
+      let successToast;
+      let failLog;
+      let button = Ladda.create($(this)[0]);
+
+      button.start();
+
+      if ($(this).hasClass('clear-settings')) {
+
+        successLog = 'Successfully cleared settings from profile.';
+        successToast = 'Settings Cleared Successfully!';
+        failLog = 'Failed to clear settings from profile.';
+
+      } else {
+
+        successLog = 'Successfully saved settings to profile.';
+        successToast = 'Settings Saved Successfully!';
+        failLog = 'Failed to save settings to profile.';
+
+        $.each(localStorage, (key, val) => {
+
+          if (settings[key] && key !== 'backend_address') object[key] = val;
+
+        });
+
       }
+
+      $.ajax({
+        data: {
+          id: currentUser.id,
+          settings: JSON.stringify(object)
+        },
+        method: 'POST',
+        url: `api/update/user_settings/index.php`,
+        complete: function() {
+          button.stop();
+        },
+        success: function(response) {
+          if (response === 'success') {
+            moodEngine.log('log', successLog);
+            moodEngine.notify(successToast);
+            moodEngine.checkUser();
+          } else {
+            moodEngine.profileError(response);
+          }
+        },
+        error: function(response) {
+          moodEngine.profileError(failLog);
+          moodEngine.log('error', failLog);
+        }
+      });
+
     });
 
   });
