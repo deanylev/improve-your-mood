@@ -213,14 +213,6 @@ $(document).ready(() => {
 
   });
 
-  // Logo click actions
-
-  $('#logo').click((e) => {
-
-    if (e.detail === 3) moodEngine.toggleLogs();
-
-  });
-
 });
 
 // Function for modifiying hex
@@ -1833,6 +1825,14 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
       }
 
     };
+
+    // Show the logs panel when triple clicking the logo
+
+    $('#logo').click((e) => {
+
+      if (e.detail === 3) moodEngine.toggleLogs();
+
+    });
 
     // Initialize sortable menu
 
