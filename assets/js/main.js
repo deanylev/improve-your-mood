@@ -211,6 +211,14 @@ $(document).ready(function() {
 
   });
 
+  // Logo click actions
+
+  $('#logo').click(function(e) {
+
+    if (e.detail === 3) moodEngine.toggleLogs();
+
+  });
+
 });
 
 // Function for modifiying hex
