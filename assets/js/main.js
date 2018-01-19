@@ -106,10 +106,10 @@ moodEngine.sendLogs = (method, amount) => {
 
 };
 
-moodEngine.notify = (message, interval) => {
+moodEngine.notify = (message, interval, className) => {
 
   interval = interval || fullSettings.toast_interval;
-  Materialize.toast(message, interval);
+  Materialize.toast(message, interval, className);
 
 };
 
@@ -152,19 +152,19 @@ moodEngine.syncSettings = () => {
 
 };
 
-$(window).on('error', (error) => {
-
-  moodEngine.error(null, `${error.originalEvent.message} (LINE NUMBER: ${error.originalEvent.lineno})`, '0');
-
-  if (localStorage.length) {
-
-    localStorage.clear();
-
-    $('#error-message').text('Your settings have been cleared to try resolve the issue, please reload.');
-
-  }
-
-});
+// $(window).on('error', (error) => {
+//
+//   moodEngine.error(null, `${error.originalEvent.message} (LINE NUMBER: ${error.originalEvent.lineno})`, '0');
+//
+//   if (localStorage.length) {
+//
+//     localStorage.clear();
+//
+//     $('#error-message').text('Your settings have been cleared to try resolve the issue, please reload.');
+//
+//   }
+//
+// });
 
 $(document).ready(() => {
 
@@ -2563,7 +2563,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
     // When user trys to save settings
 
-    moodEngine.saveSettings = () => {
+    moodEngine.saveSettings = (ignoreTranslations) => {
 
       let localSettings = {};
       let spaceInputs = [];
@@ -2693,9 +2693,9 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
           // Quote Language
 
-          if (name === 'quote_language' && $(this).is(':checked') && quotes.Improve[$(this).val()].length !== quotes.Improve.en.length) {
+          if (!ignoreTranslations && name === 'quote_language' && $(this).is(':checked') && quotes.Improve[$(this).val()].length !== quotes.Improve.en.length) {
 
-            invalidInputs.push(`Translations Are Still Loading. Please Try Again Shortly.`);
+            invalidInputs.push(`Translations Are Still Loading. Please Try Again Shortly. <button class="btn-flat toast-action save-anyway">Save Anyway</button>`);
 
           }
 
@@ -2748,6 +2748,8 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
       } else {
 
+        Materialize.Toast.removeAll();
+
         if (spaceInputs.length) {
 
           if (spaceInputs.length === 1) {
@@ -2778,9 +2780,17 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
         if (invalidInputs.length) {
 
+          $('.save-anyway').off();
+
           $.each(invalidInputs, (key, val) => {
 
             moodEngine.notify(val);
+
+          });
+
+          $('.save-anyway').click((e) => {
+
+            moodEngine.saveSettings(true);
 
           });
 
