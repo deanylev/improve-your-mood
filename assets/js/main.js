@@ -392,7 +392,7 @@ moodEngine.error = (display, log, code, type) => {
 
 };
 
-console.log(`%c${version.toLowerCase()} your mood 6`, 'font-family: "Oxygen"; font-size: 20px;');
+console.log(`%c${version.toLowerCase()} your mood 6`, 'font-family: Arial; font-size: 20px;');
 console.log('――――――――――――――――――――――――――――――');
 moodEngine.log('log', `Pulling from: ${backendAddress}`);
 
