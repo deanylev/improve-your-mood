@@ -15,8 +15,8 @@
         password = YourPassword<br>
         [KEYS]<br>
         cookie = {$cookieKey}<br>
-        admin = {$adminKey}
-        [CONFIG]
+        admin = {$adminKey}<br>
+        [CONFIG]<br>
         admin_signup = false
       </b>");
     } else {
@@ -34,8 +34,8 @@
       password = YourPassword<br>
       [KEYS]<br>
       cookie = {$cookieKey}<br>
-      admin = {$adminKey}
-      [CONFIG]
+      admin = {$adminKey}<br>
+      [CONFIG]<br>
       admin_signup = false
     </b>");
   } else {
