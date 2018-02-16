@@ -3,6 +3,8 @@
   session_start();
 
   include("../assets/php/sql.php");
+
+  $rootDir = true;  
   include("assets/php/user.php");
 
   $user = $mysqli->query("SELECT * FROM yourmood.users WHERE id = '{$_GET["id"]}'");

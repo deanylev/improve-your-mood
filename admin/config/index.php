@@ -3,10 +3,11 @@
   $singular = true;
   $title = "config";
   include("../assets/php/header.php");
-  $file = fopen("../../assets/php/settings.ini", "r");
-  $config = fread($file, filesize("../../assets/php/settings.ini"));
+  $path = "../../assets/php/settings.ini";
+  $file = fopen($path, "r");
+  $config = fread($file, filesize($path));
   fclose($file);
-  $lineCount = count(file("../../assets/php/settings.ini"));
+  $lineCount = count(file($path));
 
 ?>
 

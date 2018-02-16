@@ -21,6 +21,7 @@
     $currentUser["read_only"] = $userRow["read_only"];
     $currentUser["items_per_page"] = intval($userRow["items_per_page"]);
   } else {
-    header("location: ../logout");
+    $dirPrefix = isset($rootDir) ? "" : "../";
+    header("location: {$dirPrefix}logout");
     die();
   }
