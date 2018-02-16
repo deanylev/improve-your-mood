@@ -135,6 +135,16 @@
 
   endif;
 
+  if ($type === "users" && !$mysqli->query("SELECT * FROM yourmood.users WHERE id = '{$id}'")->fetch_object()->is_admin):
+
+?>
+
+  <a class="btn btn-lg btn-success" href="../log_in_as.php?id=<?php echo $id; ?>">Log In As</a>
+
+<?php
+
+  endif;
+
   if ($currentUser["is_admin"] && in_array("create", $actions)):
 
 ?>
