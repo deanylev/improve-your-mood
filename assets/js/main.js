@@ -73,7 +73,7 @@ moodEngine.sendLogs = (method, amount) => {
 
   button.start();
 
-  for (i = 0; i < amount; i++) {
+  for (let i = 0; i < amount; i++) {
 
     $.ajax({
       type: 'POST',
@@ -232,7 +232,7 @@ modifyColour = (hex, lum) => {
   let c, i;
   let rgb = '#';
 
-  for (i = 0; i < 3; i++) {
+  for (let i = 0; i < 3; i++) {
 
     c = parseInt(hex.substr(i * 2, 2), 16);
     c = Math.round(Math.min(Math.max(0, c + (c * lum)), 255)).toString(16);
