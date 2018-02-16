@@ -1,7 +1,7 @@
 {
   "toast_interval": 1500,
   "reload_interval": 3000,
-  "button_order": ["autoreload", "settings", "speak", "rewind"],
+  "button_order": ["autoreload", "settings", "profile", "speak", "rewind"],
   "reload_keys": ["space"],
   "view_logs_keys": ["l o g"],
   "back_keys": ["backspace"],
