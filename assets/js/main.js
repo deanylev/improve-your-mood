@@ -2093,6 +2093,10 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
     }
 
+    // Hide local backend button
+
+    if (localStorage.getItem('backend_address') === window.location.href) $('#set-backend-local').addClass('hide');
+
     // Record dirty inputs
 
     $('.settings-input, .input').change(function() {
@@ -2123,10 +2127,22 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
     $('#set-backend-local').click(() => {
 
-      localStorage.clear();
-      localStorage.setItem('backend_address', window.location.href);
-      localStorage.setItem('keep_advanced_settings', true);
-      window.location.reload();
+      if (localStorage.getItem('backend_address') !== window.location.href) {
+
+        $.getJSON(`${window.location.href}/api/get/colours/index.php`).done(() => {
+
+          localStorage.clear();
+          localStorage.setItem('backend_address', window.location.href);
+          localStorage.setItem('keep_advanced_settings', true);
+          window.location.reload();
+
+        }).fail(() => {
+
+          moodEngine.notify('Your Local Back-End Is Not Set Up.');
+
+        });
+
+      }
 
     });
 
