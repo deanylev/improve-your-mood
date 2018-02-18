@@ -768,7 +768,7 @@ $.get(`${backendAddress}/api/verify/translations/index.php`, (data) => {
 
       if (method === 'downloadSettings') downloadButton.start();
 
-      $.get(`api/get/current_user/index.php`, (data) => {
+      $.get('api/get/current_user/index.php', (data) => {
 
         button.stop();
 
