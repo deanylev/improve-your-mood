@@ -1,8 +1,6 @@
 <?php
 
-  include("../../../assets/php/settings.php");
-
-  if (isset($settings["CONFIG"]["admin_signup"]) && $settings["CONFIG"]["admin_signup"] === "1" && isset($settings["KEYS"]["admin"]) && $settings["KEYS"]["admin"]) {
+  if (getenv("ADMIN_SIGNUP") === "1" && getenv("ADMIN_KEY")) {
     echo "true";
   } else {
     echo "false";

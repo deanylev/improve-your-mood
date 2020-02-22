@@ -1,8 +1,6 @@
 <?php
 
-  include("settings.php");
-
-  $key = $settings["KEYS"]["cookie"];
+  $key = getenv("COOKIE_KEY");
 
   function encryptCookie($value)
   {

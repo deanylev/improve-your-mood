@@ -3,7 +3,6 @@
   session_start();
 
   include("../../assets/php/sql.php");
-  include("../../assets/php/settings.php");
 
   $username = $_POST["username"];
   $password = $_POST["password"];
@@ -29,8 +28,8 @@
     $errors[] = (object) array("password_confirmation" => "Doesn't match password.");
   }
 
-  if (isset($settings["CONFIG"]["admin_signup"]) && $settings["CONFIG"]["admin_signup"] === "1" && isset($settings["KEYS"]["admin"]) && $settings["KEYS"]["admin"] && isset($_POST["admin_key"]) && $_POST["admin_key"] !== "") {
-    if ($_POST["admin_key"] === $settings["KEYS"]["admin"]) {
+  if (getenv("ADMIN_SIGNUP") === "1" && getenv("ADMIN_KEY") && isset($_POST["admin_key"]) && $_POST["admin_key"] !== "") {
+    if ($_POST["admin_key"] === getenv("ADMIN_KEY")) {
       $admin = 1;
     } else {
       $errors[] = (object) array("admin_key" => "Incorrect.");

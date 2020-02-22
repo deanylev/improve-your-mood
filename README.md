@@ -4,22 +4,19 @@
 
 Includes both the back-end and front-end.
 
-To get started, clone the repo into your desired web server, make a new file in /assets/php/ called `settings.ini` and in it, enter both your MySQL credentials and a random cookie encryption key in this format:
+To get started, clone the repo into your desired web server, and set these env vars:
 
 ```
-[MYSQL]
-host = YourHost
-username = YourUsername
-password = YourPassword
-[KEYS]
-cookie = LongRandomValue (eg. ejr890e9ah8453h89rnudfn)
+MYSQL_HOST (default "localhost")
+MYSQL_USERNAME (default "root")
+MYSQL_PASSWORD (default "")
+MYSQL_NAME (default "yourmood")
+COOKIE_KEY
 ```
-
-(if writing permissions are enabled on the directory, this file will be created automatically with these placeholder values when you first visit /admin/ in your web browser.)
 
 Then, make a new table in your DB called `yourmood` and import the provided `yourmood.sql` file (in the /assets/sql/ folder).
 
-Make sure your web server is configured to use the provided `.htaccess` file, as it forbids external access to this settings file (otherwise your credentials could be viewed by anyone).
+Make sure your web server is configured to use the provided `.htaccess` file.
 
 If you would like to point the app to your custom back-end, you simply open the settings panel, go into Advanced Settings, and enter your desired address (this needs to be the folder of wherever you've installed Improve Your Mood, eg. `localhost/improveyourmood_web`). The application will perform an AJAX call to your address to verify its validity.
 
