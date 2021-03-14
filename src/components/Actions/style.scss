@@ -1,0 +1,13 @@
+.Actions {
+  > .speedDial {
+    > button,
+    > div > button {
+      background: transparent;
+      color: #fff;
+
+      &:disabled {
+        background: rgba(#000, 0.1);
+      }
+    }
+  }
+}

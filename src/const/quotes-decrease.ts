@@ -1,0 +1,20 @@
+export default [
+  'Do you have to leave so soon? I was just about to poison the tea.',
+  'Dumbass.',
+  'Hey, you have something on your chin... 3rd one down.',
+  'I hear when you were a child, your mother wanted to hire somebody to take care of you, but the mafia wanted too much.',
+  'I like the sound you make when you shut up.',
+  'I would ask how old you are, but I know you can\'t count that high.',
+  'If you really want to know about mistakes, you should ask your parents.',
+  'If you were twice as smart, you\'d still be stupid.',
+  'It looks like your face caught on fire, and someone tried to put it out with a fork.',
+  'Out of 100,000 sperm, you were the fastest?',
+  'Shut up, you\'ll never be the man your mother is.',
+  'We all sprang from apes, but you didn\'t spring far enough.',
+  'You are so ugly, that when your mama dropped you off at school, she got a fine for littering.',
+  'You must have been born on a highway, because that\'s where most accidents happen.',
+  'You\'re a failed abortion, whose birth certificate is an apology from the condom factory.',
+  'You\'re so ugly, Hello Kitty said goodbye to you.',
+  'You\'re so ugly, that when you popped out, the doctor said, \'Aww what a treasure\', and your mother said, \'Yeah, let\'s bury it\'.',
+  'Your family tree is a cactus, because everybody on it is a prick.'
+] as const;

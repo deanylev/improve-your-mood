@@ -1,4 +1,0 @@
-# this is purely so these files aren't accessible to Apache
-.gitignore
-Dockerfile
-README.md
