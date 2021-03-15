@@ -1,6 +1,7 @@
 import { Component, MouseEvent } from 'react';
 
 import { GlobalHotKeys } from 'react-hotkeys';
+import { RouteComponentProps } from 'react-router-dom';
 
 import Actions from 'src/components/Actions';
 import colours from 'src/const/colours';
@@ -33,8 +34,6 @@ interface HistoryItem {
   quote: Quote;
 }
 
-interface Props {}
-
 interface State {
   actionsOpen: boolean;
   autoReload: boolean;
@@ -49,7 +48,7 @@ interface State {
 const AUTO_RELOAD_MS = 3000;
 const QUOTE_TRANSITION_MS = 400;
 
-export default class MoodEngine extends Component<Props, State> {
+export default class MoodEngine extends Component<RouteComponentProps, State> {
   private autoReloadTimeout : null | number = null;
 
   get responsiveVoice() {
@@ -60,17 +59,19 @@ export default class MoodEngine extends Component<Props, State> {
     return this.state.history[this.state.history.length - 2];
   }
 
-  constructor(props: Props) {
+  constructor(props: RouteComponentProps) {
     super(props);
 
+    const { autoReload, decreaseMood } = this.parseLocationHash();
+
     const colour = this.getRandomColour();
-    const quote = this.getRandomQuote(false);
+    const quote = this.getRandomQuote(decreaseMood);
 
     this.state = {
       actionsOpen: false,
-      autoReload: false,
+      autoReload,
       colour,
-      decreaseMood: false,
+      decreaseMood,
       history: [{
         colour,
         quote
@@ -85,6 +86,10 @@ export default class MoodEngine extends Component<Props, State> {
     this.toggleAutoReload = this.toggleAutoReload.bind(this);
     this.toggleMood = this.toggleMood.bind(this);
     this.toggleSpeakQuote = this.toggleSpeakQuote.bind(this);
+
+    if (autoReload) {
+      this.resetAutoReloadTimeout();
+    }
   }
 
   cancelSpeaking() {
@@ -128,9 +133,9 @@ export default class MoodEngine extends Component<Props, State> {
       return;
     }
 
-    this.setState({
-      history: this.state.history.slice(0, -1)
-    }, () => {
+    this.setState((state) => ({
+      history: state.history.slice(0, -1)
+    }), () => {
       this.resetAutoReloadTimeout();
       this.setDisplay(secondLastHistoryItem.colour, secondLastHistoryItem.quote, false);
     });
@@ -140,6 +145,14 @@ export default class MoodEngine extends Component<Props, State> {
     event.stopPropagation();
   }
 
+  parseLocationHash() {
+    const options = this.props.location.hash.slice(1).split('&');
+    return {
+      autoReload: options.includes('auto-reload'),
+      decreaseMood: options.includes('decrease-mood')
+    };
+  }
+
   reload(userAction: boolean) {
     if (userAction) {
       this.resetAutoReloadTimeout();
@@ -147,15 +160,15 @@ export default class MoodEngine extends Component<Props, State> {
 
     const colour = this.getRandomColour();
     const quote = this.getRandomQuote(this.state.decreaseMood);
-    this.setState({
+    this.setState((state) => ({
       history: [
-        ...this.state.history,
+        ...state.history,
         {
           colour,
           quote
         }
       ]
-    }, () => {
+    }), () => {
       this.setDisplay(colour, quote, userAction);
     });
   }
@@ -215,11 +228,11 @@ export default class MoodEngine extends Component<Props, State> {
 
   setDisplay(colour: Colour, quote: Quote, closeActions: boolean) {
     this.cancelSpeaking();
-    this.setState({
-      actionsOpen: closeActions ? false : this.state.actionsOpen,
+    this.setState((state) => ({
+      actionsOpen: closeActions ? false : state.actionsOpen,
       colour,
       quoteTransparent: true
-    }, () => {
+    }), () => {
       setTimeout(() => {
         this.setState({
           quote,
@@ -257,25 +270,24 @@ export default class MoodEngine extends Component<Props, State> {
   }
 
   toggleActionsOpen() {
-    this.setState({
-      actionsOpen: !this.state.actionsOpen
-    });
+    this.setState((state) => ({
+      actionsOpen: !state.actionsOpen
+    }));
   }
 
   toggleAutoReload() {
-    const autoReload = !this.state.autoReload;
-    this.setState({
-      autoReload
-    }, () => {
+    this.setState((state) => ({
+      autoReload: !state.autoReload
+    }), () => {
       this.resetAutoReloadTimeout();
     });
   }
 
   toggleMood() {
-    this.setState({
-      decreaseMood: !this.state.decreaseMood,
+    this.setState((state) => ({
+      decreaseMood: !state.decreaseMood,
       history: []
-    }, () => {
+    }), () => {
       this.reload(true);
     });
   }

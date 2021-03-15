@@ -1,8 +1,12 @@
+import { BrowserRouter, Route } from 'react-router-dom';
+
 import MoodEngine from 'src/components/MoodEngine';
 
 function App() {
   return (
-    <MoodEngine />
+    <BrowserRouter>
+      <Route component={MoodEngine} path="/" />
+    </BrowserRouter>
   );
 }
 
