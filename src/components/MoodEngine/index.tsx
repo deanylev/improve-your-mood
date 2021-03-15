@@ -50,6 +50,8 @@ const QUOTE_TRANSITION_MS = 400;
 
 export default class MoodEngine extends Component<RouteComponentProps, State> {
   private autoReloadTimeout : null | number = null;
+  private usedColours: Colour[] = [];
+  private usedQuotes: Quote[] = [];
 
   get responsiveVoice() {
     return (window as typeof window & { responsiveVoice: ResponsiveVoice }).responsiveVoice;
@@ -110,21 +112,26 @@ export default class MoodEngine extends Component<RouteComponentProps, State> {
     return Math.floor(array.length * Math.random());
   }
 
-  getRandomArrayValue<T>(array: readonly T[], currentValue?: T) {
+  getRandomArrayValue<T>(array: readonly T[], usedValues: T[], currentValue?: T) {
+    if (array.length === usedValues.length) {
+      usedValues.length = 0;
+    }
+
     while (true) {
       const value = array[this.getRandomArrayIndex(array)];
-      if (value !== currentValue) {
+      if (value !== currentValue && !usedValues.includes(value)) {
+        usedValues.push(value);
         return value;
       }
     }
   }
 
   getRandomColour() {
-    return this.getRandomArrayValue(colours, this.state?.colour);
+    return this.getRandomArrayValue(colours, this.usedColours, this.state?.colour);
   }
 
   getRandomQuote(decreaseMood: boolean) {
-    return this.getRandomArrayValue(decreaseMood ? quotesDecrease : quotesImprove, this.state?.quote);
+    return this.getRandomArrayValue(decreaseMood ? quotesDecrease : quotesImprove, this.usedQuotes, this.state?.quote);
   }
 
   goBack() {
@@ -288,6 +295,7 @@ export default class MoodEngine extends Component<RouteComponentProps, State> {
       decreaseMood: !state.decreaseMood,
       history: []
     }), () => {
+      this.usedQuotes = [];
       this.reload(true);
     });
   }
